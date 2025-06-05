@@ -1,0 +1,2526 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxuryHaven - Đặt Phòng Khách Sạn Trực Tuyến</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Thêm SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+    <style>
+    body {
+        background: #f5f6fa;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        padding: 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+
+    /* Updated Navbar Styles */
+    .nav-flex {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 80px;
+        padding: 0 20px;
+        gap: 20px;
+    }
+
+    .navbar-brand img {
+        height: 60px;
+        width: auto;
+        padding: 5px 0;
+    }
+
+    .nav-search {
+        flex: 0 1 300px;
+        margin: 0 20px;
+    }
+
+    .search-input-group {
+        display: flex;
+        align-items: center;
+        background: #f7f7f7;
+        border-radius: 24px;
+        padding: 6px 16px;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .search-input-group:focus-within {
+        background: #fff;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .search-input-group input {
+        border: none;
+        background: transparent;
+        padding: 8px 12px;
+        font-size: 0.95rem;
+        width: 100%;
+        outline: none;
+    }
+
+    .search-input-group button {
+        background: none;
+        border: none;
+        color: #1a237e;
+        padding: 0;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .search-input-group button:hover {
+        color: #0d47a1;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+
+    .logo {
+        font-size: 40px;
+        font-weight: 800;
+        background: linear-gradient(45deg, #1a237e, #0d47a1);
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -1px;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .nav-links li a {
+        color: #1a237e;
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        padding: 8px 0;
+        transition: all 0.3s ease;
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .nav-links li a:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background: linear-gradient(45deg, #1a237e, #0d47a1);
+        transition: width 0.3s ease;
+    }
+
+    .nav-links li a:hover:after,
+    .nav-links li a.active:after {
+        width: 100%;
+    }
+
+    .language-switch {
+        font-size: 1.2rem;
+        padding: 0 5px;
+    }
+
+    .btn-outline-primary {
+        padding: 8px 15px;
+        font-size: 0.95rem;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 1200px) {
+        .nav-links {
+            gap: 15px;
+        }
+        
+        .nav-search {
+            flex: 0 1 250px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .nav-search {
+            display: none;
+        }
+        
+        .nav-links li a {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .nav-links {
+            display: none;
+        }
+        
+        .navbar-brand img {
+            height: 50px;
+        }
+    }
+
+    /* Dropdown Styles */
+    .dropdown {
+        position: relative;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.98);
+        min-width: 220px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        border-radius: 12px;
+        padding: 12px 0;
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+        opacity: 1;
+        transform: translateX(-50%) translateY(8px);
+    }
+
+    .dropdown-content a {
+        color: #1a237e;
+        padding: 12px 24px;
+        display: block;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        position: relative;
+        z-index: 1;
+    }
+
+    .dropdown-content a:hover {
+        background: rgba(26, 35, 126, 0.05);
+        color: #0d47a1;
+        transform: translateX(5px);
+    }
+
+    /* User Dropdown Styles */
+    #user-dropdown .dropdown-menu {
+        background: rgba(255, 255, 255, 0.98);
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        padding: 8px 0;
+    }
+
+    #user-dropdown .dropdown-item {
+        color: #1a237e;
+        padding: 12px 24px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    #user-dropdown .dropdown-item:hover {
+        background: rgba(26, 35, 126, 0.05);
+        color: #0d47a1;
+        transform: translateX(5px);
+    }
+
+    #user-dropdown .dropdown-item i {
+        margin-right: 8px;
+        color: #1a237e;
+    }
+
+    .btn-outline-primary {
+        background: transparent;
+        border: 2px solid #1a237e;
+        color: #1a237e;
+        padding: 8px 24px;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: linear-gradient(45deg, #1a237e, #0d47a1);
+        border-color: transparent;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)), url('images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg') center/cover no-repeat;
+        height: 100vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-content {
+        text-align: center;
+        width: 100%;
+        max-width: 1200px;
+        padding: 0 20px;
+        margin-top: 20px;
+    }
+
+    .nautica-script {
+        font-family: 'Nautica Script Bold', cursive;
+        font-size: 6em;
+        font-weight: bold;
+        color: #cddae6;
+        text-align: center;
+        position: absolute;
+        width: 100%;
+        top: 45%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        margin-bottom: 0;
+        line-height: 0.8;
+    }
+
+    .hero-content h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #fff;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        line-height: 1.2;
+    }
+
+    .hero-content p {
+        font-size: 1.4rem;
+        color: #f5f6fa;
+        margin: 0;
+        text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .search-container {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+        padding: 24px 20px 12px 20px;
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+    }
+    .search-tabs {
+        display: flex;
+        gap: 24px;
+        margin-bottom: 18px;
+        border-bottom: 2px solid #eee;
+    }
+    .search-tab {
+        background: none;
+        border: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #222;
+        padding: 0 0 10px 0;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+    .search-tab.active {
+        color: #ff6600;
+        border-bottom: 3px solid #ff6600;
+    }
+    .search-form {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 0;
+    }
+    .search-input-group {
+        display: flex;
+        align-items: center;
+        background: #f7f7f7;
+        border-radius: 8px;
+        padding: 0 10px;
+        flex: 1 1 180px;
+        min-width: 180px;
+    }
+    .search-input-group i {
+        color: #888;
+        margin-right: 6px;
+    }
+    .search-input-group input,
+    .search-input-group select {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        padding: 10px 0;
+        font-size: 1rem;
+    }
+    .btn-search {
+        min-width: 120px;
+        font-weight: 600;
+        border-radius: 8px;
+        margin-top: 8px;
+    }
+    #show-filters {
+        background: #f1f1f1;
+        color: #1976d2;
+        border: none;
+    }
+    #show-filters i {
+        color: #1976d2;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #003366;
+        margin: 48px 0 32px 0;
+        text-align: center;
+        letter-spacing: -1px;
+    }
+
+    .popular-destinations, .special-offers, .hotel-categories, .why-choose-us {
+        background: #f5f6fa;
+        padding: 32px 0 24px 0;
+    }
+    .destination-card, .offer-card, .category-card, .feature-card {
+        border-radius: 18px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        overflow: hidden;
+        background: #fff;
+        margin-bottom: 24px;
+        transition: box-shadow 0.2s;
+    }
+    .destination-card:hover, .offer-card:hover, .category-card:hover, .feature-card:hover {
+        box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+    }
+    .destination-card img, .offer-card img, .category-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+    }
+    .destination-info, .category-content, .offer-content-overlay {
+        padding: 18px 16px 12px 16px;
+        color: white;
+        text-align: left;
+    }
+    .destination-info h3, .category-content h3, .offer-content-overlay h3, .offer-content-overlay h4 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #003366;
+    }
+    .destination-info p, .category-content p, .offer-content-overlay p {
+        font-size: 1rem;
+        color: white;
+        margin-bottom: 0;
+    }
+    .offer-card.large img {
+        height: 260px;
+    }
+    .offer-content-overlay .price {
+        color: #ffe066;
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+
+    .why-choose-us .feature-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        padding: 32px 18px;
+        text-align: center;
+        height: 100%;
+    }
+    .why-choose-us .icon-wrapper {
+        margin-bottom: 12px;
+    }
+    .why-choose-us .icon-wrapper i {
+        color: #ff6600;
+        font-size: 2.2rem;
+    }
+    .why-choose-us h3 {
+        color: #003366;
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+    .why-choose-us p {
+        color: #555;
+        font-size: 1rem;
+    }
+
+    .footer {
+        background: #003366;
+        color: #fff;
+        padding: 40px 0 0 0;
+        margin-top: 40px;
+    }
+    .footer h4 {
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+    .footer ul {
+        list-style: none;
+        padding: 0;
+    }
+    .footer ul li a {
+        color: #e0e0e0;
+        text-decoration: none;
+        font-size: 1rem;
+    }
+    .footer ul li a:hover {
+        color: #ffe066;
+    }
+    .footer-bottom {
+        border-top: 1px solid #1a237e;
+        margin-top: 24px;
+        padding: 16px 0 0 0;
+        text-align: center;
+        color: #e0e0e0;
+        font-size: 0.95rem;
+    }
+    .social-links a {
+        color: #fff;
+        font-size: 1.3rem;
+        margin-right: 12px;
+    }
+    .social-links a:hover {
+        color: #ffe066;
+    }
+
+    /* Bố cục section và card chuyên nghiệp, đồng nhất */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    /* Card grid layout */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: -12px;
+        margin-right: -12px;
+    }
+    .col-md-3, .col-md-6 {
+        padding-left: 12px;
+        padding-right: 12px;
+        margin-bottom: 32px;
+    }
+    .col-md-3 {
+        width: 25%;
+    }
+    .col-md-6 {
+        width: 50%;
+    }
+
+    /* Card style */
+    .destination-card, .category-card, .feature-card, .offer-card {
+        border-radius: 18px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        background: #fff;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: box-shadow 0.2s;
+    }
+    .destination-card img, .category-card img, .offer-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+    }
+    .destination-info, .category-content, .offer-content-overlay {
+        padding: 18px 16px 12px 16px;
+        color: #222;
+        text-align: left;
+        flex: 1 1 auto;
+    }
+    .destination-info h3, .category-content h3, .offer-content-overlay h3, .offer-content-overlay h4 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: white;
+    }
+    .destination-info p, .category-content p, .offer-content-overlay p {
+        font-size: 1rem;
+        color: white;
+        margin-bottom: 0;
+    }
+
+    /* --- SPECIAL OFFERS LAYOUT --- */
+    .special-offers .row {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 24px;
+        align-items: stretch;
+        height: 400px;
+        min-height: 400px;
+    }
+    .special-offers .col-offer-big {
+        width: 52%;
+        display: flex;
+    }
+    .special-offers .col-offer-small {
+        width: 48%;
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+        height: 100%;
+    }
+    .special-offers .offer-card.big {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    .special-offers .offer-card.small {
+        width: 49.5%;
+        height: 80%;
+        position: relative;
+        display: flex;
+    }
+    .special-offers .offer-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .special-offers .offer-content-overlay {
+        position: absolute;
+        left: 0; right: 0; bottom: 0;
+        width: 100%;
+        background: linear-gradient(to top, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.05) 100%);
+        color: #fff;
+        padding: 24px 24px 18px 24px;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+    .special-offers .offer-content-overlay h3,
+    .special-offers .offer-content-overlay h4 {
+        color: #fff;
+        font-weight: 800;
+        font-size: 1.6rem;
+        margin-bottom: 4px;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+    .special-offers .offer-content-overlay p {
+        color: #fff;
+        font-size: 1.1rem;
+        margin-bottom: 2px;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    .special-offers .offer-content-overlay .price {
+        color: #ffe066;
+        font-size: 1.2rem;
+        font-weight: 700;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    @media (max-width: 991px) {
+        .special-offers .row {
+            flex-direction: column;
+            height: auto;
+            min-height: 0;
+        }
+        .special-offers .col-offer-big,
+        .special-offers .col-offer-small {
+            width: 100%;
+            height: auto;
+        }
+        .special-offers .col-offer-small {
+            flex-direction: row;
+            gap: 8px;
+        }
+        .special-offers .offer-card.big,
+        .special-offers .offer-card.small {
+            height: 180px;
+            min-height: 0;
+        }
+    }
+
+    /* Why choose us: 4 cột đều nhau */
+    .why-choose-us .row {
+        gap: 0;
+    }
+    .why-choose-us .col-md-3 {
+        width: 25%;
+        display: flex;
+    }
+    .why-choose-us .feature-card {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 32px 18px;
+    }
+
+    /* Footer chia 4 cột đều nhau */
+    .footer .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: -12px;
+        margin-right: -12px;
+    }
+    .footer .col-md-3 {
+        width: 25%;
+        padding-left: 12px;
+        padding-right: 12px;
+        margin-bottom: 24px;
+    }
+
+    /* Responsive */
+    @media (max-width: 991px) {
+        .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
+            width: 50%;
+        }
+        .col-md-6 {
+            width: 100%;
+        }
+    }
+    @media (max-width: 767px) {
+        .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
+            width: 100%;
+        }
+        .container {
+            padding-left: 6px;
+            padding-right: 6px;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            margin: 32px 0 18px 0;
+        }
+    }
+
+    /* --- HOTEL CATEGORIES LAYOUT --- */
+    .hotel-categories {
+        background: #f5f6fa;
+        padding: 48px 0;
+    }
+
+    .hotel-categories .category-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hotel-categories .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .hotel-categories .category-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        transition: transform 0.3s ease;
+    }
+
+    .hotel-categories .category-card:hover img {
+        transform: scale(1.1);
+    }
+
+    .hotel-categories .category-content {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #fff;
+    }
+
+    .hotel-categories .category-content h3 {
+        color: #003366;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .hotel-categories .category-content p {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 0;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 991px) {
+        .hotel-categories .category-card img {
+            height: 180px;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .hotel-categories .category-card img {
+            height: 160px;
+        }
+    }
+
+    /* Nền mờ với hình ảnh lớn */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 8px;
+        position: relative;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 10px;
+    }
+    .close:hover {
+        color: black;
+    }
+    .auth-tab {
+        padding: 10px 20px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 16px;
+        color: #666;
+    }
+    .auth-tab.active {
+        color: #ffd700;
+        border-bottom: 2px solid #ffd700;
+    }
+    .auth-form {
+        margin-top: 20px;
+    }
+    .auth-form input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .auth-form button {
+        width: 100%;
+        padding: 12px;
+        background: #ffd700;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    .auth-form button:hover {
+        background: #ffd700;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .input-icon {
+        position: relative;
+    }
+    .input-icon i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888;
+        font-size: 1rem;
+    }
+    .input-icon input {
+        padding-left: 38px;
+        width: 100%;
+        height: 42px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+    .btn-gradient {
+        width: 100%;
+        background: linear-gradient(90deg, #00c853, #00bfae);
+        color: #fff;
+        border: none;
+        border-radius: 24px;
+        padding: 12px 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        transition: background 0.2s;
+    }
+    .btn-gradient:hover {
+        background: linear-gradient(90deg, #00bfae, #00c853);
+    }
+    .login-links {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.98rem;
+        margin-top: 8px;
+    }
+    .login-links a {
+        color: #1a237e;
+        text-decoration: underline;
+    }
+    .login-links a:hover {
+        color: #00bfae;
+    }
+
+    /* Combo tốt nhất styles */
+    .summer-mood {
+        padding: 48px 0 32px 0; 
+        background: linear-gradient(120deg, #fdf6e3 0%, #e0f7fa 100%);
+    }
+
+    .summer-grid {
+        display: grid; 
+        grid-template-columns: repeat(4, 1fr); 
+        gap: 28px; 
+        margin-bottom: 18px;
+    }
+
+    .summer-card {
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 16px 0 rgba(42,110,220,0.08);
+        transition: all 0.3s ease;
+        position: relative;
+        height: 320px;
+    }
+
+    .summer-card:hover {
+        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.18);
+        transform: translateY(-8px);
+    }
+
+    .summer-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .combo-info {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(120deg,rgba(255,255,255,0.92) 60%,rgba(255,255,255,0.85) 100%);
+        color: #222;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px 0 rgba(42,110,220,0.10);
+        padding: 24px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+
+    .combo-info h3 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #1a237e;
+        text-shadow: none;
+    }
+
+    .combo-info p {
+        font-size: 1.08rem;
+        margin-bottom: 16px;
+        color: #444;
+    }
+
+    .combo-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .combo-features span {
+        background: rgba(26, 35, 126, 0.05);
+        color: #1a237e;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .combo-features i {
+        color: #0d47a1;
+    }
+
+    .tour-price {
+        color: #ffd700;
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin: 10px 0;
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #1a237e, #0d47a1);
+        border: none;
+        padding: 8px 24px;
+        color: white;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
+    }
+
+    @media (max-width: 1200px) {
+        .summer-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .summer-grid {
+            grid-template-columns: 1fr;
+        }
+        .summer-card {
+            height: 280px;
+        }
+        .combo-info {
+            padding: 16px;
+        }
+        .combo-info h3 {
+            font-size: 1.3rem;
+        }
+        .combo-features span {
+            font-size: 0.85rem;
+        }
+    }
+
+    /* Combo tốt nhất */
+    .best-combo {
+        padding: 48px 0 32px 0;
+        background: linear-gradient(120deg, #f3f4f6 0%, #fff 100%);
+    }
+    .combo-slider {
+        margin: 0 -24px;
+    }
+    .combo-card {
+        background: #fff;
+        overflow: hidden;
+        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.10);
+        margin: 0 auto;
+    }
+    .slider-container {
+        position: relative;
+        height: 500px;
+        overflow: hidden;
+    }
+    .slider {
+        display: flex;
+        transition: transform 0.5s ease;
+        height: 100%;
+    }
+    .slide {
+        position: relative;
+        flex: 0 0 100%;
+        height: 100%;
+        width: 100vw;
+    }
+    .slider-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .combo-info {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        background: linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0.15) 60%, transparent 100%);
+        color: #fff;
+        text-align: center;
+    }
+    .combo-info h3 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 16px;
+        color: #fff;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    .combo-info p {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        color: #f0f0f0;
+        max-width: 800px;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .combo-features {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        max-width: 800px;
+    }
+    .combo-features span {
+        color: #ffd700;
+        font-size: 1.2rem;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .combo-price {
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    .old-price {
+        color: #ccc;
+        text-decoration: line-through;
+        font-size: 1.3rem;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .new-price {
+        color: #ffd700;
+        font-size: 2rem;
+        font-weight: 700;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .combo-btn {
+        font-size: 1.2rem;
+        padding: 14px 42px;
+        border-radius: 8px;
+        background: #ffd700;
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 2px 8px 0 rgba(255,152,0,0.10);
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+    .combo-btn:hover {
+        background: transparent;
+        border-color: #fff;
+        transform: translateY(-2px);
+    }
+    .slider-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.85);
+        color: #2a6edc;
+        border: none;
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        box-shadow: 0 2px 8px 0 rgba(42,110,220,0.10);
+        cursor: pointer;
+        z-index: 3;
+        transition: background 0.2s, color 0.2s;
+    }
+    .combo-center-text {
+        text-align: center;
+    }
+    .slider-btn.prev {left: 18px;}
+    .slider-btn.next {right: 18px;}
+    .slider-btn:hover {background: #2a6edc; color: #fff;}
+    .slider-dots {
+        position: absolute;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 4;
+    }
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.5);
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .dot.active {
+        background: #fff;
+    }
+    @media (max-width: 900px) {
+        .slider-container {
+            height: 400px;
+        }
+        .combo-info h3 {
+            font-size: 1.8rem;
+        }
+        .combo-info p {
+            font-size: 1.1rem;
+        }
+        .combo-features span {
+            font-size: 1rem;
+        }
+        .new-price {
+            font-size: 1.6rem;
+        }
+        .combo-btn {
+            padding: 12px 32px;
+            font-size: 1.1rem;
+        }
+    }
+    @media (max-width: 600px) {
+        .slider-container {
+            height: 300px;
+        }
+        .combo-info h3 {
+            font-size: 1.5rem;
+        }
+        .combo-info p {
+            font-size: 1rem;
+        }
+        .combo-features {
+            gap: 16px;
+        }
+        .combo-features span {
+            font-size: 0.9rem;
+        }
+        .new-price {
+            font-size: 1.4rem;
+        }
+        .combo-btn {
+            padding: 10px 28px;
+            font-size: 1rem;
+        }
+    }
+
+    /* Banner giảm giá */
+    .banner-sale {
+        background: url('https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+        min-height: 320px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 48px 0;
+        border-radius: 24px;
+        position: relative;
+        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.10);
+        overflow: hidden;
+    }
+    .banner-sale-overlay {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(120deg, rgba(0,153,247,0.45) 0%, rgba(241,23,18,0.35) 100%);
+        z-index: 1;
+        border-radius: 24px;
+    }
+    .banner-sale-content {
+        position: relative;
+        z-index: 2;
+        color: #fff;
+        text-align: center;
+        max-width: 520px;
+        padding: 32px 24px 28px 24px;
+        background: rgba(0,0,0,0.18);
+        border-radius: 20px;
+        box-shadow: 0 2px 16px 0 rgba(255,152,0,0.10);
+    }
+    .banner-sale-icon {
+        margin-bottom: 12px;
+    }
+    .banner-sale-content h2 {
+        font-size: 2.1rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #ffd700;
+        text-shadow: 0 2px 8px rgba(255,215,0,0.10);
+    }
+    .banner-sale-desc {
+        font-size: 1.15rem;
+        margin-bottom: 18px;
+        color: #fffbe7;
+    }
+    .banner-sale-list {
+        text-align: left;
+        margin: 0 auto 18px auto;
+        display: inline-block;
+        font-size: 1.05rem;
+        color: #fff;
+    }
+    .banner-sale-list li {
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .banner-sale-list span {
+        color: rgba(0,153,247,0.45);
+        font-size: 1.1rem;
+    }
+    .banner-sale-price {
+        display: block;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+        color: #fff;
+    }
+    .banner-sale-btn {
+        font-size: 1.1rem;
+        padding: 12px 36px;
+        border-radius: 8px;
+        background: #ffd700;
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 2px 8px 0 rgba(255,152,0,0.10);
+        border: none;
+        transition: background 0.2s;
+    }
+    .banner-sale-btn:hover {
+        background: #ffd700;
+    }
+    .banner-sale-note {
+        margin-top: 12px;
+        font-size: 0.98rem;
+        color: #fffbe7;
+        opacity: 0.85;
+    }
+
+    /* Summer Mood Section */
+    .summer-mood {
+        padding: 48px 0 32px 0; 
+        background: linear-gradient(120deg, #fdf6e3 0%, #e0f7fa 100%);
+    }
+    .summer-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 28px;
+        margin-bottom: 18px;
+    }
+    @media (max-width: 1000px) {
+        .summer-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 600px) {
+        .summer-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    .summer-card {
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 16px 0 rgba(42,110,220,0.08);
+        transition: box-shadow 0.2s, transform 0.2s;
+        position: relative;
+        height: 320px;
+    }
+    .summer-card:hover {
+        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.18);
+        transform: translateY(-8px) scale(1.03);
+    }
+    .summer-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .summer-info {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        background: linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0.15) 60%, transparent 100%);
+        color: #fff;
+        text-align: center;
+    }
+    .summer-info h3 {
+        margin: 0 0 8px 0;
+        color: #fff;
+        font-size: 1.3rem;
+        font-weight: 700;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    .summer-info p {
+        font-size: 1rem;
+        color: #f0f0f0;
+        margin-bottom: 8px;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    /* Favorite Destinations */
+    .favorite-destinations {
+        padding: 48px 0;
+        background: linear-gradient(120deg, #fdf6e3 0%, #fff8e1 100%);
+    }
+    .golden-spiral-grid {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        gap: 20px;
+        height: 800px;
+        position: relative;
+    }
+    .destination-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .destination-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .destination-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    .destination-card:hover img {
+        transform: scale(1.1);
+    }
+    .destination-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        color: white;
+    }
+    .destination-info h3 {
+        margin: 0 0 8px 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    .destination-info p {
+        margin: 0;
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+    /* Golden Spiral Layout */
+    .destination-card.large {
+        grid-column: 1 / 6;
+        grid-row: 1 / 6;
+    }
+    .destination-card.medium {
+        grid-column: 6 / 9;
+        grid-row: 1 / 4;
+    }
+    .destination-card.small:nth-of-type(3) {
+        grid-column: 6 / 9;
+        grid-row: 4 / 6;
+    }
+    .destination-card.small:nth-of-type(4) {
+        grid-column: 1 / 4;
+        grid-row: 6 / 9;
+    }
+    .destination-card.small:nth-of-type(5) {
+        grid-column: 4 / 9;
+        grid-row: 6 / 9;
+    }
+    @media (max-width: 768px) {
+        .golden-spiral-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(5, 300px);
+            height: auto;
+            gap: 16px;
+        }
+        .destination-card.large,
+        .destination-card.medium,
+        .destination-card.small {
+            grid-column: 1;
+            grid-row: auto;
+        }
+    }
+
+    /* Banner Sale */
+    .banner-sale {
+        background: url('https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+        min-height: 320px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 48px 0;
+        border-radius: 24px;
+        position: relative;
+        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.10);
+        overflow: hidden;
+    }
+    .banner-sale-overlay {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(120deg, rgba(0,153,247,0.45) 0%, rgba(241,23,18,0.35) 100%);
+        z-index: 1;
+        border-radius: 24px;
+    }
+    .banner-sale-content {
+        position: relative;
+        z-index: 2;
+        color: #fff;
+        text-align: center;
+        max-width: 520px;
+        padding: 32px 24px 28px 24px;
+        background: rgba(0,0,0,0.18);
+        border-radius: 20px;
+        box-shadow: 0 2px 16px 0 rgba(255,152,0,0.10);
+    }
+    .banner-sale-icon {
+        margin-bottom: 12px;
+    }
+    .banner-sale-content h2 {
+        font-size: 2.1rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #ffd700;
+        text-shadow: 0 2px 8px rgba(255,215,0,0.10);
+    }
+    .banner-sale-desc {
+        font-size: 1.15rem;
+        margin-bottom: 18px;
+        color: #fffbe7;
+    }
+    .banner-sale-list {
+        text-align: left;
+        margin: 0 auto 18px auto;
+        display: inline-block;
+        font-size: 1.05rem;
+        color: #fff;
+    }
+    .banner-sale-list li {
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .banner-sale-list span {
+        color: #ffd700;
+        font-size: 1.1rem;
+    }
+    .banner-sale-price {
+        display: block;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+        color: #fff;
+    }
+    .banner-sale-btn {
+        font-size: 1.1rem;
+        padding: 12px 36px;
+        border-radius: 8px;
+        background: #ffd700;
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 2px 8px 0 rgba(255,152,0,0.10);
+        border: none;
+        transition: background 0.2s;
+    }
+    .banner-sale-btn:hover {
+        background: rgba(0,153,247,0.45);
+    }
+    .banner-sale-note {
+        margin-top: 12px;
+        font-size: 0.98rem;
+        color: #fffbe7;
+        opacity: 0.85;
+    }
+    @media (max-width: 700px) {
+        .banner-sale-content {padding: 18px 6px;}
+        .banner-sale {min-height: 220px;}
+    }
+
+    .combo-center-text {
+        text-align: center;
+        margin-bottom: 24px;
+        color: #666;
+    }
+    
+    </style>
+    <style>
+        @font-face {
+          font-family: 'Nautica Script Bold';
+          src: url('fonts/nautica-bold.otf') format('opentype');
+          font-weight: bold;
+          font-style: normal;
+        }
+        .nautica-script {
+          font-family: 'Nautica Script Bold', cursive;
+          font-size: 6em;
+          font-weight: bold;
+          color: #cddae6;
+          text-align: center;
+        }
+      </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-flex">
+                <!-- Logo -->
+                <a class="navbar-brand" href="#">
+                    <img src="images/LuxuryHaven.png" alt="LuxuryHaven Logo">
+                </a>
+
+                <!-- Search Box -->
+                <div class="nav-search">
+                    <div class="search-input-group">
+                        <input type="text" placeholder="Tìm kiếm...">
+                        <button type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <ul class="nav-links">
+                        <li><a href="index.html" class="active">Trang chủ</a></li>
+                        <li><a href="hotel.html" >Khách sạn</a></li>
+                    
+                        <li class="dropdown"><a href="tours.html">Tours</a></li>
+                        
+                        <li class="dropdown"><a href="prioritize.html">Ưu đãi</a></li>
+                        <li class="dropdown"><a href="travel_guide.html">Cẩm nang du lịch</a></li>
+                        <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
+                        <li class="dropdown"><a href="vuichoi.html">🌐</a></li>
+
+                        <li>
+                            <div class="d-flex align-items-center">
+                                <div class="dropdown" id="user-dropdown" style="display:none;">
+                                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-user"></i> <span id="user-name"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="member.html"><i class="fas fa-user-circle"></i> Tài khoản</a></li>
+                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                                    </ul>
+                                </div>
+                                <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
+                                    <i class="fas fa-user"></i> Đăng nhập
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Search -->
+    <section class="hero-section">
+        <p class="nautica-script">LuxuryHaven</p>
+        <div class="hero-content"><br><br><br><br><br><br><br><br>
+            
+            <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
+            <p>Đặt phòng khách sạn, tour du lịch, vé máy bay với giá tốt nhất</p>
+        </div><br><br><br><br><br><br><br><br>
+    </section>
+
+    <!-- Tầm nhìn & Sứ mệnh -->
+    <section class="vision-mission-section animate-on-scroll">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="section-title">Tầm nhìn & Sứ mệnh</h2>
+                    <div class="vision-mission-box mx-auto">
+                        <h4><i class="fas fa-eye"></i> Tầm nhìn</h4>
+                        <p>Trở thành nền tảng đặt phòng khách sạn và du lịch hàng đầu Việt Nam, mang đến trải nghiệm tiện lợi, an toàn và đẳng cấp cho mọi khách hàng.</p>
+                        <h4><i class="fas fa-bullseye"></i> Sứ mệnh</h4>
+                        <p>LuxuryHaven cam kết kết nối khách hàng với những dịch vụ lưu trú, nghỉ dưỡng và giải trí chất lượng nhất, lấy sự hài lòng và tin tưởng của khách hàng làm trung tâm cho mọi hoạt động.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Destinations -->
+    <section class="popular-destinations py-5">
+        <div class="container">
+            <h2 class="section-title mb-4">Điểm đến phổ biến</h2>
+            <div class="row g-4">
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="destination-card h-100 text-center shadow-sm">
+                        <div class="ratio ratio-16x9 mb-3">
+                            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Hà Nội" class="img-fluid rounded-top object-fit-cover" loading="lazy">
+                        </div>
+                        <div class="destination-info">
+                            <h3 class="fw-bold mb-1">Hà Nội</h3>
+                            <p class="text-muted mb-0">1,234 khách sạn</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="destination-card h-100 text-center shadow-sm">
+                        <div class="ratio ratio-16x9 mb-3">
+                            <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80" alt="Hồ Chí Minh" class="img-fluid rounded-top object-fit-cover" loading="lazy">
+                        </div>
+                        <div class="destination-info">
+                            <h3 class="fw-bold mb-1">Hồ Chí Minh</h3>
+                            <p class="text-muted mb-0">2,345 khách sạn</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="destination-card h-100 text-center shadow-sm">
+                        <div class="ratio ratio-16x9 mb-3">
+                            <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=80" alt="Đà Nẵng" class="img-fluid rounded-top object-fit-cover" loading="lazy">
+                        </div>
+                        <div class="destination-info">
+                            <h3 class="fw-bold mb-1">Đà Nẵng</h3>
+                            <p class="text-muted mb-0">1,567 khách sạn</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="destination-card h-100 text-center shadow-sm">
+                        <div class="ratio ratio-16x9 mb-3">
+                            <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=600&q=80" alt="Nha Trang" class="img-fluid rounded-top object-fit-cover" loading="lazy">
+                        </div>
+                        <div class="destination-info">
+                            <h3 class="fw-bold mb-1">Nha Trang</h3>
+                            <p class="text-muted mb-0">987 khách sạn</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Combo tốt nhất -->
+    <section class="best-combo">
+        <div class="container">
+            <h2 class="section-title">Combo tốt nhất</h2>
+            <p class="combo-center-text">Đừng bỏ lỡ cơ hội trải nghiệm kỳ nghỉ trong mơ với mức giá tốt nhất! </p>
+            <div class="combo-slider">
+                <div class="combo-card">
+                    <div class="slider-container">
+                        <div class="slider">
+                            <div class="slide">
+                                <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80" alt="Combo Phú Quốc 1" class="slider-image">
+                                <div class="combo-info">
+                                    <h3>Combo Nghỉ Dưỡng Phú Quốc 5 Sao</h3>
+                                    <p>3N2Đ - Vinpearl Resort & Spa + Vé máy bay khứ hồi + Ăn sáng</p>
+                                    <div class="combo-features">
+                                        <span>✓ Đón tiễn sân bay</span>
+                                        <span>✓ Tặng vé vui chơi</span>
+                                        <span>✓ Miễn phí spa</span>
+                                    </div>
+                                    <div class="combo-price">
+                                        <span class="old-price">6.900.000đ</span>
+                                        <span class="new-price">4.900.000đ/người</span>
+                                    </div>
+                                    <a href="#" class="combo-btn">Đặt ngay</a>
+                                </div>
+                            </div>
+                            <div class="slide">
+                                <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80" alt="Combo Phú Quốc 2" class="slider-image">
+                                <div class="combo-info">
+                                    <h3>Khám Phá Thiên Đường Nghỉ Dưỡng</h3>
+                                    <p>4N3Đ - Ocean Resort & Spa + Vé máy bay khứ hồi + Full board</p>
+                                    <div class="combo-features">
+                                        <span>✓ Villa riêng biệt</span>
+                                        <span>✓ Ăn 3 bữa</span>
+                                        <span>✓ Tour đảo VIP</span>
+                                    </div>
+                                    <div class="combo-price">
+                                        <span class="old-price">8.900.000đ</span>
+                                        <span class="new-price">6.900.000đ/người</span>
+                                    </div>
+                                    <a href="#" class="combo-btn">Đặt ngay</a>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="slider-btn prev" onclick="prevSlide(this)">&lt;</button>
+                        <button class="slider-btn next" onclick="nextSlide(this)">&gt;</button>
+                        <div class="slider-dots">
+                            <span class="dot active" onclick="currentSlide(this, 0)"></span>
+                            <span class="dot" onclick="currentSlide(this, 1)"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner giảm giá -->
+    <h2 class="section-title">Ưu đãi đặc biệt</h2>
+                <p class="combo-center-text">Đặt phòng hôm nay để tận hưởng ưu đãi có hạn tại Phan Thiết.</p>
+
+    <section class="banner-sale" style="background: url('https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;">
+        <div class="banner-sale-overlay"></div>
+        <div class="banner-sale-content">
+            <div class="banner-sale-icon">
+                <svg width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#ff9800"/><path d="M32.5 18.5l-13 13M19 19h10v10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h2>Ưu đãi đặc biệt - Giảm giá 35%</h2>
+            <p class="banner-sale-desc">Khám phá vẻ đẹp biển <b>Phan Thiết</b> với giá cực tốt! Đặt phòng ngay hôm nay để nhận ưu đãi độc quyền từ VistaStay.</p>
+            <ul class="banner-sale-list">
+                <li><span>✔</span> Resort 4 sao view biển</li>
+                <li><span>✔</span> Xe đưa đón tận nơi</li>
+                <li><span>✔</span> Tour khám phá Mũi Né</li>
+                <li><span>✔</span> Buffet sáng đa dạng</li>
+            </ul>
+            <span class="banner-sale-price">Chỉ từ <b>2.990.000đ</b> / 2N1Đ</span>
+            <a href="#" class="btn btn-primary banner-sale-btn">Đặt ngay</a>
+            <div class="banner-sale-note">* Áp dụng cho đặt phòng từ 01/05 - 30/06/2025</div>
+        </div>
+    </section>
+
+    <!-- Bật mood mùa hè - Xách vali lên và đi! -->
+    <section class="summer-mood">
+        <div class="container">
+            <h2 class="section-title">Bật mood mùa hè - Xách vali lên và đi!</h2>
+                        <p class="combo-center-text">Đặt ngay để khám phá những trải nghiệm biển cả và nghỉ dưỡng sang trọng.</p>
+
+            <div class="summer-grid">
+                
+                <div class="summer-card">
+                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=90" alt="Club Sailing Nha Trang">
+                    <div class="summer-info">
+                        <h3>Club Sailing</h3>
+                        <p>Câu lạc bộ thể thao biển cao cấp</p>
+                        <span class="tour-price">Từ 890.000đ/người</span>
+                    </div>
+                </div>
+                <div class="summer-card">
+                    <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=400&q=90" alt="Tour Đà Nẵng">
+                    <div class="summer-info">
+                        <h3>Tour nghỉ dưỡng sang trọng</h3>
+                        <p>3N2Đ - Trọn gói vé máy bay, khách sạn 4 sao</p>
+                        <span class="tour-price">4.890.000đ/người</span>
+                    </div>
+                </div>
+                
+                <div class="summer-card">
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=90" alt="Melia Resort Vũng Tàu">
+                    <div class="summer-info">
+                        <h3>Melia Resort </h3>
+                        <p>Resort 5 sao - Bãi biển riêng, spa cao cấp</p>
+                        <span class="tour-price">3.200.000đ/đêm</span>
+                    </div>
+                </div>
+                    
+                <div class="summer-card">
+                    <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=400&q=91" alt="Quà Tặng Kỳ Nghỉ">
+                    <div class="summer-info">
+                        <h3>Quà Tặng Kỳ Nghỉ</h3>
+                        <p>Voucher du thuyền 5 sao, bữa tối hải sản</p>
+                        <span class="tour-price">5.990.000đ/cặp</span>
+                    </div>
+                </div>
+                    
+            </div>
+        </div>
+    </section>
+
+    <!-- Điểm đến yêu thích -->
+    <section class="favorite-destinations">
+        <div class="container">
+            <h2 class="section-title">Điểm đến yêu thích</h2>
+                        <p class="combo-center-text">Khám phá những điểm đến tuyệt đẹp của Việt Nam!</p>
+
+            <div class="golden-spiral-grid">
+                <div class="destination-card large">
+                    <img src="https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80" alt="Phú Quốc">
+                    <div class="destination-info">
+                        <h3>Phú Quốc</h3>
+                        <p>Thiên đường biển đảo với bãi cát trắng mịn</p>
+                    </div>
+                </div>
+                <div class="destination-card medium">
+                    <img src="https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=600&q=80" alt="Hạ Long">
+                    <div class="destination-info">
+                        <h3>Vịnh Hạ Long</h3>
+                        <p>Di sản thiên nhiên thế giới</p>
+                    </div>
+                </div>
+                <div class="destination-card small">
+                    <img src="https://images.unsplash.com/photo-1465156799763-2c087c332922?auto=format&fit=crop&w=400&q=80" alt="Sapa">
+                    <div class="destination-info">
+                        <h3>Sapa</h3>
+                        <p>Thành phố trong sương</p>
+                    </div>
+                </div>
+                <div class="destination-card small">
+                    <img src="https://images.unsplash.com/photo-1583417319070-4a69db38a482?auto=format&fit=crop&w=400&q=80" alt="Đà Nẵng">
+                    <div class="destination-info">
+                        <h3>Đà Nẵng</h3>
+                        <p>Thành phố đáng sống</p>
+                    </div>
+                </div>
+                <div class="destination-card small">
+                    <img src="https://images.unsplash.com/photo-1583417319070-4a69db38a482?auto=format&fit=crop&w=400&q=80" alt="Nha Trang">
+                    <div class="destination-info">
+                        <h3>Nha Trang</h3>
+                        <p>Thiên đường biển xanh</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-choose-us py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">Tại sao chọn chúng tôi?</h2>
+            <div class="row g-4">
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="feature-card text-center p-4 h-100 shadow-sm rounded-3">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-shield-alt fa-2x text-primary" aria-label="Đặt phòng an toàn"></i>
+                        </div>
+                        <h3 class="h5 mb-2 fw-bold">Đặt phòng an toàn</h3>
+                        <p class="mb-0 text-muted">Thanh toán bảo mật, hủy phòng linh hoạt</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="feature-card text-center p-4 h-100 shadow-sm rounded-3">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-tag fa-2x text-success" aria-label="Giá tốt nhất"></i>
+                        </div>
+                        <h3 class="h5 mb-2 fw-bold">Giá tốt nhất</h3>
+                        <p class="mb-0 text-muted">Cam kết giá tốt nhất cho mọi đặt phòng</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="feature-card text-center p-4 h-100 shadow-sm rounded-3">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-headset fa-2x text-warning" aria-label="Hỗ trợ 24/7"></i>
+                        </div>
+                        <h3 class="h5 mb-2 fw-bold">Hỗ trợ 24/7</h3>
+                        <p class="mb-0 text-muted">Đội ngũ hỗ trợ luôn sẵn sàng giúp đỡ</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="feature-card text-center p-4 h-100 shadow-sm rounded-3">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-star fa-2x text-danger" aria-label="Đánh giá thực"></i>
+                        </div>
+                        <h3 class="h5 mb-2 fw-bold">Đánh giá thực</h3>
+                        <p class="mb-0 text-muted">Đánh giá từ khách hàng thực tế</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section py-5 bg-white">
+        <div class="container">
+            <div class="row g-4 align-items-center justify-content-center">
+                <div class="col-12 col-lg-5 d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start">
+                    <h2 class="section-title mb-3 w-100 text-center">Liên hệ với chúng tôi</h2>
+                    <p class="mb-4 text-muted w-100 text-center">LuxuryHaven luôn sẵn sàng hỗ trợ bạn 24/7. Hãy liên hệ với chúng tôi nếu bạn có bất kỳ thắc mắc hoặc yêu cầu nào!</p>
+                    <ul class="list-unstyled mb-4 w-100" style="max-width:400px;margin:0 auto;">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-primary" aria-label="Địa chỉ"></i> 123 Đường Lớn, Quận 1, TP. Hồ Chí Minh</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2 text-primary" aria-label="Email"></i> support@luxuryhaven.vn</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2 text-primary" aria-label="Điện thoại"></i> 1900 1234 567</li>
+                        <li><i class="fas fa-clock me-2 text-primary" aria-label="Giờ làm việc"></i> 08:00 - 22:00 (Thứ 2 - Chủ nhật)</li>
+                    </ul>
+                </div>
+                <div class="col-12 col-lg-7">
+                    <div class="card shadow-sm border-0 p-4">
+                        <form id="contact-form">
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label for="contact-name" class="form-label">Họ và tên</label>
+                                    <input type="text" class="form-control" id="contact-name" placeholder="Nhập họ và tên" required>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="contact-email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="contact-email" placeholder="Nhập email" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="contact-message" class="form-label">Nội dung liên hệ</label>
+                                    <textarea class="form-control" id="contact-message" rows="4" placeholder="Nhập nội dung liên hệ" required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary px-4">Gửi liên hệ</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Contact Section -->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h4>Về LuxuryHaven</h4>
+                    <ul>
+                        <li><a href="footer\about.html">Giới thiệu</a></li>
+                        <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
+                        <li><a href="footer\news.html">Tin tức</a></li>
+                        <li><a href="footer\contact.html">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Hỗ trợ</h4>
+                    <ul>
+                        <li><a href="footer\help-center.html">Trung tâm trợ giúp</a></li>
+                        <li><a href="footer\privacy-policy.html">Chính sách bảo mật</a></li>
+                        <li><a href="footer\terms.html">Điều khoản sử dụng</a></li>
+                        <li><a href="footer\cookie-policy.html">Chính sách cookie</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Đối tác</h4>
+                    <ul>
+                        <li><a href="footer\partner.html">Đăng ký làm đối tác</a></li>
+                        <li><a href="footer\marketing.html">Chương trình tiếp thị</a></li>
+                        <li><a href="footer\affiliate.html">Affiliate</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Theo dõi chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 LuxuryHaven. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+<div id="auth-modal" class="modal">
+    <div class="modal-content" style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
+        <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
+        
+        <div id="auth-forms">
+            <form id="login-form" class="auth-form" style="text-align:center;">
+                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                    <label for="login-email" style="font-weight: 500;">Email</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                    <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
+                    </div>
+                </div>
+                <button type="submit" class="btn-gradient">Đăng nhập</button>
+                <div class="login-links">
+                    <a href="#" id="to-register">Không có tài khoản?</a>
+                    <a href="#" id="to-forgot">Quên mật khẩu?</a>
+                </div>
+            </form>
+
+            <form id="register-form" class="auth-form" style="display: none; text-align:center;">
+                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                    <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                    <label for="register-email" style="font-weight: 500;">Email</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                    <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                    <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu" required />
+                    </div>
+                </div>
+                <button type="submit" class="btn-gradient">Đăng ký</button>
+                <div class="login-links">
+                    <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
+                </div>
+            </form>
+
+            <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
+                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                    <label for="forgot-email" style="font-weight: 500;">Email</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+                    </div>
+                </div>
+                <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
+                <div class="login-links">
+                    <a href="#" id="back-to-login">Quay lại đăng nhập</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+    // Firebase config và xử lý xác thực
+    const firebaseConfig = {
+        apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+        authDomain: "websitedatphongkhachsan.firebaseapp.com",
+        databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+        projectId: "websitedatphongkhachsan",
+        storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+        messagingSenderId: "732884739524",
+        appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+        measurementId: "G-RC61EXTZH7"
+    };
+
+    // Khởi tạo Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Đợi DOM load xong
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lấy các elements
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const forgotForm = document.getElementById('forgot-form');
+        const closeAuthModal = document.getElementById('close-auth-modal');
+        const openLoginModal = document.getElementById('open-login-modal');
+        const userDropdown = document.getElementById('user-dropdown');
+        const userName = document.getElementById('user-name');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // Xử lý đăng nhập
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                firebase.auth().signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        document.getElementById('auth-modal').style.display = 'none';
+                        
+                        // Kiểm tra nếu là admin
+                        if (email === 'quantrikhachsan@gmail.com') {
+                            Swal.fire({
+                                title: 'Đăng nhập thành công!',
+                                text: 'Chào mừng Admin!',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22'
+                            }).then(() => {
+                                window.location.href = 'admin-dashboard.html';
+                            });
+                        } else if (email === 'nhanvien2@luxuryhaven.com') {
+                            Swal.fire({
+                                title: 'Đăng nhập thành công!',
+                                text: 'Chào mừng Nhân viên!',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22'
+                            }).then(() => {
+                                window.location.href = 'admin-dashboard.html';
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Đăng nhập thành công!',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        Swal.fire({
+                            title: 'Lỗi đăng nhập!',
+                            text: error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    });
+            });
+        }
+
+        // Xử lý đăng ký
+        if (registerForm) {
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+                const username = document.getElementById('register-username').value;
+
+                if (password.length < 6) {
+                    Swal.fire({
+                        title: 'Lỗi đăng ký!',
+                        text: 'Mật khẩu phải có ít nhất 6 ký tự.',
+                        icon: 'error',
+                        confirmButtonColor: '#e67e22'
+                    });
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    Swal.fire({
+                        title: 'Lỗi đăng ký!',
+                        text: 'Mật khẩu nhập lại không khớp.',
+                        icon: 'error',
+                        confirmButtonColor: '#e67e22'
+                    });
+                    return;
+                }
+
+                firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        return userCredential.user.updateProfile({
+                            displayName: username
+                        });
+                    })
+                    .then(() => {
+                        document.getElementById('auth-modal').style.display = 'none';
+                        Swal.fire({
+                            title: 'Đăng ký thành công!',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    })
+                    .catch((error) => {
+                        Swal.fire({
+                            title: 'Lỗi đăng ký!',
+                            text: error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    });
+            });
+        }
+
+        // Xử lý quên mật khẩu
+        if (forgotForm) {
+            forgotForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('forgot-email').value;
+
+                firebase.auth().sendPasswordResetEmail(email)
+                    .then(() => {
+                        Swal.fire({
+                            title: 'Email đã được gửi!',
+                            text: 'Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    })
+                    .catch((error) => {
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    });
+            });
+        }
+
+        // Xử lý chuyển đổi giữa các form
+        document.getElementById('to-register').addEventListener('click', function(e) {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            forgotForm.style.display = 'none';
+        });
+
+        document.getElementById('to-login').addEventListener('click', function(e) {
+            e.preventDefault();
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+            forgotForm.style.display = 'none';
+        });
+
+        document.getElementById('to-forgot').addEventListener('click', function(e) {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'none';
+            forgotForm.style.display = 'block';
+        });
+
+        document.getElementById('back-to-login').addEventListener('click', function(e) {
+            e.preventDefault();
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+            forgotForm.style.display = 'none';
+        });
+
+        // Xử lý đóng modal
+        if (closeAuthModal) {
+            closeAuthModal.addEventListener('click', () => {
+                document.getElementById('auth-modal').style.display = 'none';
+            });
+        }
+
+        // Xử lý mở modal đăng nhập
+        if (openLoginModal) {
+            openLoginModal.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('auth-modal').style.display = 'block';
+            });
+        }
+
+        // Đóng modal khi click ra ngoài
+        window.onclick = function(event) {
+            const modal = document.getElementById('auth-modal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+
+        // Theo dõi trạng thái đăng nhập
+        firebase.auth().onAuthStateChanged(function(user) {
+            const loginBtn = document.getElementById('open-login-modal');
+            if (user) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (userDropdown) userDropdown.style.display = 'block';
+                if (userName) userName.textContent = user.displayName || user.email;
+            } else {
+                if (loginBtn) loginBtn.style.display = 'block';
+                if (userDropdown) userDropdown.style.display = 'none';
+            }
+        });
+
+        // Xử lý đăng xuất
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                firebase.auth().signOut().then(() => {
+                    Swal.fire({
+                        title: 'Đăng xuất thành công!',
+                        icon: 'success',
+                        confirmButtonColor: '#e67e22'
+                    });
+                }).catch((error) => {
+                    Swal.fire({
+                        title: 'Lỗi đăng xuất!',
+                        text: error.message,
+                        icon: 'error',
+                        confirmButtonColor: '#e67e22'
+                    });
+                });
+            });
+        }
+    });
+
+    // Khởi tạo EmailJS với public key
+    (function() {
+        emailjs.init("yI6xhpzYSnD3AGzbX");
+    })();
+
+    // Xử lý form liên hệ
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Lấy thông tin từ form
+        const name = document.getElementById('contact-name').value;
+        const email = document.getElementById('contact-email').value;
+        const message = document.getElementById('contact-message').value;
+
+        // Hiển thị loading
+        Swal.fire({
+            title: 'Đang gửi...',
+            text: 'Vui lòng đợi trong giây lát',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Gửi email
+        emailjs.send("service_6spwxxw", "template_vcjlg02", {
+            to_email: "quantrikhachsan001@gmail.com",
+            from_name: name,
+            from_email: email,
+            message: message
+        })
+        .then(function() {
+            // Thành công
+            Swal.fire({
+                title: 'Gửi thành công!',
+                text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
+                icon: 'success',
+                confirmButtonColor: '#e67e22'
+            });
+            // Reset form
+            document.getElementById('contact-form').reset();
+        })
+        .catch(function(error) {
+            // Thất bại
+            Swal.fire({
+                title: 'Lỗi!',
+                text: 'Không thể gửi email. Vui lòng thử lại sau.',
+                icon: 'error',
+                confirmButtonColor: '#e67e22'
+            });
+            console.error("Error sending email:", error);
+        });
+    });
+
+    let autoSlideInterval;
+    let currentSlideIndex = 0;
+
+    function startAutoSlide() {
+        stopAutoSlide(); // Clear any existing interval
+        autoSlideInterval = setInterval(() => {
+            document.querySelectorAll('.slider-container').forEach(container => {
+                const nextBtn = container.querySelector('.next');
+                if (nextBtn) nextSlide(nextBtn);
+            });
+        }, 4000); // Chuyển slide mỗi 4 giây
+    }
+
+    function stopAutoSlide() {
+        if (autoSlideInterval) {
+            clearInterval(autoSlideInterval);
+        }
+    }
+
+    function nextSlide(btn) {
+        const container = btn.closest('.slider-container');
+        const slider = container.querySelector('.slider');
+        const dots = container.querySelectorAll('.dot');
+        const slides = container.querySelectorAll('.slide');
+        
+        currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+        updateSlider(slider, dots, currentSlideIndex);
+    }
+
+    function prevSlide(btn) {
+        const container = btn.closest('.slider-container');
+        const slider = container.querySelector('.slider');
+        const dots = container.querySelectorAll('.dot');
+        const slides = container.querySelectorAll('.slide');
+        
+        currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+        updateSlider(slider, dots, currentSlideIndex);
+    }
+
+    function currentSlide(dot, index) {
+        const container = dot.closest('.slider-container');
+        const slider = container.querySelector('.slider');
+        const dots = container.querySelectorAll('.dot');
+        
+        currentSlideIndex = index;
+        updateSlider(slider, dots, index);
+    }
+
+    function updateSlider(slider, dots, index) {
+        const sliderWidth = slider.offsetWidth;
+        slider.style.transform = `translateX(${-index * sliderWidth}px)`;
+        
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+    }
+
+    // Khởi động auto slide và xử lý các sự kiện khi trang load xong
+    document.addEventListener('DOMContentLoaded', () => {
+        startAutoSlide();
+        
+        // Thêm sự kiện hover để dừng/tiếp tục auto slide
+        document.querySelectorAll('.slider-container').forEach(container => {
+            container.addEventListener('mouseenter', stopAutoSlide);
+            container.addEventListener('mouseleave', startAutoSlide);
+        });
+    });
+    </script>
+</body>
+</html>
+
+

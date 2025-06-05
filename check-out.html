@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán - Luxury Haven</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .checkout-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        .checkout-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .order-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .payment-method {
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .payment-method:hover {
+            border-color: #0d6efd;
+        }
+        .payment-method.selected {
+            border-color: #0d6efd;
+            background-color: #f8f9fa;
+        }
+        .btn-checkout {
+            background-color: #0d6efd;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            width: 100%;
+        }
+        .btn-checkout:hover {
+            background-color: #0b5ed7;
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <h1 class="text-center mb-4">Thanh Toán</h1>
+        
+        <div class="row">
+            <!-- Form Thanh Toán -->
+            <div class="col-md-8">
+                <div class="checkout-form">
+                    <h3 class="mb-4">Thông Tin Thanh Toán</h3>
+                    <form id="checkoutForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">Họ</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">Tên</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Số Điện Thoại</label>
+                            <input type="tel" class="form-control" id="phone" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Địa Chỉ</label>
+                            <input type="text" class="form-control" id="address" required>
+                        </div>
+
+                    
+                        <h4 class="mt-4 mb-3">Phương Thức Thanh Toán</h4>
+                        <div class="payment-methods">
+                            <div class="payment-method" onclick="selectPayment('credit')">
+                                <input type="radio" name="payment" id="credit" value="credit">
+                                <label for="credit">Thẻ Tín Dụng</label>
+                                <i class="fas fa-credit-card float-end"></i>
+                                <div id="creditDetails" class="payment-details mt-3" style="display: none;">
+                                    <div class="mb-3">
+                                        <label for="cardNumber" class="form-label">Số thẻ</label>
+                                        <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="expiryDate" class="form-label">Ngày hết hạn</label>
+                                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="cvv" class="form-label">CVV</label>
+                                            <input type="text" class="form-control" id="cvv" placeholder="123">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="cardName" class="form-label">Tên chủ thẻ</label>
+                                        <input type="text" class="form-control" id="cardName" placeholder="NGUYEN VAN A">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-method" onclick="selectPayment('momo')">
+                                <input type="radio" name="payment" id="momo" value="momo">
+                                <label for="momo">Ví MoMo</label>
+                                <i class="fas fa-wallet float-end"></i>
+                                <div id="momoDetails" class="payment-details mt-3" style="display: none;">
+                                    <div class="text-center">
+                                        <div class="momo-qr-placeholder mb-3" style="width: 200px; height: 200px; margin: 0 auto; background: #f8f9fa; display: flex; align-items: center; justify-content: center; border: 1px solid #dee2e6;">
+                                            <i class="fas fa-qrcode fa-3x text-muted"></i>
+                                        </div>
+                                        <p>Quét mã QR bằng ứng dụng MoMo để thanh toán</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-method" onclick="selectPayment('bank')">
+                                <input type="radio" name="payment" id="bank" value="bank">
+                                <label for="bank">Chuyển Khoản Ngân Hàng</label>
+                                <i class="fas fa-university float-end"></i>
+                                <div id="bankDetails" class="payment-details mt-3" style="display: none;">
+                                    <div class="bank-info">
+                                        <p><strong>Ngân hàng:</strong> Vietcombank</p>
+                                        <p><strong>Số tài khoản:</strong> 1234567890</p>
+                                        <p><strong>Chủ tài khoản:</strong> CONG TY TNHH LUXURY HAVEN</p>
+                                        <p><strong>Số tiền:</strong> <span id="bankAmount"></span></p>
+                                        <p><strong>Nội dung chuyển khoản:</strong> <span id="transferContent"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tổng Kết Đơn Hàng -->
+            <div class="col-md-4">
+                <div class="order-summary">
+                    <h3 class="mb-4">Tổng Kết Đơn Hàng</h3>
+                    <div class="hotel-info mb-4">
+                        <h5 id="hotelName">Đang tải...</h5>
+                        <p class="mb-1" id="roomType">Đang tải...</p>
+                        <p class="mb-1" id="stayInfo">Đang tải...</p>
+                        <p class="mb-1" id="checkInOut">Đang tải...</p>
+                    </div>
+                    
+                    <div class="price-details">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Giá phòng</span>
+                            <span id="roomPrice">Đang tải...</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Thuế và phí</span>
+                            <span id="taxAndFees">Đang tải...</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Tổng cộng</strong>
+                            <strong id="totalPrice">Đang tải...</strong>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-checkout" onclick="processCheckout()">
+                        Xác Nhận Thanh Toán
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, get, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        // Đặt biến urlParams và bookingId ở ngoài cùng để dùng chung
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = urlParams.get('bookingId');
+
+        // Hàm format tiền tệ
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+
+        // Lấy thông tin đặt phòng từ Firebase
+        async function loadBookingInfo() {
+            if (!bookingId) {
+                alert('Không tìm thấy thông tin đặt phòng!');
+                return;
+            }
+
+            try {
+                const bookingRef = ref(database, `bookings/${bookingId}`);
+                const snapshot = await get(bookingRef);
+                const bookingData = snapshot.val();
+
+                if (!bookingData) {
+                    alert('Không tìm thấy thông tin đặt phòng!');
+                    return;
+                }
+
+                // Cập nhật thông tin khách sạn
+                document.getElementById('hotelName').textContent = bookingData.hotelName || 'Luxury Haven Hotel';
+                document.getElementById('roomType').textContent = `Phòng ${bookingData.roomType || 'Deluxe'}`;
+                document.getElementById('stayInfo').textContent = 
+                    `${bookingData.nights || 2} đêm - ${bookingData.guests || 2} người`;
+                document.getElementById('checkInOut').textContent = 
+                    `Check-in: ${bookingData.checkIn || '14:00'} - Check-out: ${bookingData.checkOut || '12:00'}`;
+
+                // Cập nhật thông tin giá
+                const roomPrice = bookingData.roomPrice || 2000000;
+                const taxAndFees = bookingData.taxAndFees || 200000;
+                const totalPrice = roomPrice + taxAndFees;
+
+                document.getElementById('roomPrice').textContent = formatCurrency(roomPrice);
+                document.getElementById('taxAndFees').textContent = formatCurrency(taxAndFees);
+                document.getElementById('totalPrice').textContent = formatCurrency(totalPrice);
+
+                // Tự động điền thông tin người dùng nếu có
+                if (bookingData.userInfo) {
+                    document.getElementById('firstName').value = bookingData.userInfo.firstName || '';
+                    document.getElementById('lastName').value = bookingData.userInfo.lastName || '';
+                    document.getElementById('email').value = bookingData.userInfo.email || '';
+                    document.getElementById('phone').value = bookingData.userInfo.phone || '';
+                    document.getElementById('address').value = bookingData.userInfo.address || '';
+                    document.getElementById('city').value = bookingData.userInfo.city || '';
+                    document.getElementById('zipCode').value = bookingData.userInfo.zipCode || '';
+                }
+            } catch (error) {
+                console.error('Error loading booking info:', error);
+                alert('Có lỗi xảy ra khi tải thông tin đặt phòng!');
+            }
+        }
+
+        // Hàm chọn phương thức thanh toán
+        window.selectPayment = function(method) {
+            // Ẩn tất cả các chi tiết thanh toán
+            document.querySelectorAll('.payment-details').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Xóa trạng thái selected của tất cả các phương thức
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Hiển thị chi tiết của phương thức được chọn
+            document.querySelector(`#${method}Details`).style.display = 'block';
+            document.querySelector(`#${method}`).parentElement.classList.add('selected');
+            document.querySelector(`#${method}`).checked = true;
+
+            // Cập nhật thông tin chuyển khoản nếu cần
+            if (method === 'bank') {
+                const totalPrice = document.getElementById('totalPrice').textContent;
+                document.getElementById('bankAmount').textContent = totalPrice;
+                document.getElementById('transferContent').textContent = `THANH TOAN ${bookingId}`;
+            }
+        }
+
+        // Hàm xử lý thanh toán
+        window.processCheckout = async function() {
+            const form = document.getElementById('checkoutForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const paymentMethod = document.querySelector('input[name="payment"]:checked');
+            if (!paymentMethod) {
+                alert('Vui lòng chọn phương thức thanh toán');
+                return;
+            }
+
+            try {
+                // Thu thập thông tin thanh toán
+                const paymentInfo = {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    address: document.getElementById('address').value,
+                    city: document.getElementById('city').value,
+                    zipCode: document.getElementById('zipCode').value,
+                    paymentMethod: paymentMethod.value,
+                    timestamp: serverTimestamp()
+                };
+
+                // Thêm thông tin thanh toán cụ thể cho từng phương thức
+                switch(paymentMethod.value) {
+                    case 'credit':
+                        paymentInfo.cardInfo = {
+                            last4Digits: document.getElementById('cardNumber').value.slice(-4),
+                            expiryDate: document.getElementById('expiryDate').value,
+                            cardName: document.getElementById('cardName').value
+                        };
+                        break;
+                    case 'bank':
+                        paymentInfo.bankInfo = {
+                            accountNumber: '1234567890',
+                            bankName: 'Vietcombank',
+                            transferContent: document.getElementById('transferContent').textContent
+                        };
+                        break;
+                }
+
+                // Cập nhật thông tin thanh toán vào Firebase
+                const paymentRef = ref(database, `bookings/${bookingId}/payment`);
+                await set(paymentRef, paymentInfo);
+
+                // Cập nhật trạng thái đặt phòng
+                const bookingRef = ref(database, `bookings/${bookingId}`);
+                await set(bookingRef, {
+                    status: 'confirmed',
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+
+                alert('Thanh toán thành công!');
+                window.location.href = `confirmation.html?bookingId=${bookingId}`;
+            } catch (error) {
+                console.error('Error processing payment:', error);
+                alert('Có lỗi xảy ra khi xử lý thanh toán!');
+            }
+        }
+
+        // Load thông tin đặt phòng khi trang được tải
+        function loadBookingData() {
+            if (bookingId) {
+                loadBookingInfo();
+            } else {
+                // Lấy dữ liệu từ localStorage
+                let bookingData = null;
+                try {
+                    bookingData = JSON.parse(localStorage.getItem('bookingData'));
+                } catch (error) {
+                    console.error('Error parsing booking data:', error);
+                }
+
+                if (!bookingData) {
+                    alert('Không tìm thấy thông tin đặt phòng!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                // Cập nhật thông tin hiển thị dựa trên loại đặt phòng
+                if (bookingData.type === 'hotel') {
+                    document.getElementById('hotelName').textContent = bookingData.hotelName;
+                    document.getElementById('roomType').textContent = `Phòng ${bookingData.roomType}`;
+                    document.getElementById('stayInfo').textContent = `${bookingData.nights} đêm - ${bookingData.guests} người`;
+                    document.getElementById('checkInOut').textContent = 
+                        `Check-in: ${bookingData.checkIn} - Check-out: ${bookingData.checkOut}`;
+                } else if (bookingData.type === 'tour') {
+                    document.getElementById('hotelName').textContent = bookingData.tourName;
+                    document.getElementById('roomType').textContent = `Tour ${bookingData.location}`;
+                    document.getElementById('stayInfo').textContent = `${bookingData.duration} - ${bookingData.guests} người`;
+                    document.getElementById('checkInOut').textContent = `Ngày khởi hành: ${bookingData.checkIn}`;
+                }
+
+                // Cập nhật thông tin giá
+                const price = bookingData.price || 0;
+                const taxAndFees = 200000;
+                const total = price + taxAndFees;
+
+                document.getElementById('roomPrice').textContent = formatCurrency(price);
+                document.getElementById('taxAndFees').textContent = formatCurrency(taxAndFees);
+                document.getElementById('totalPrice').textContent = formatCurrency(total);
+
+                // Lấy thông tin người dùng từ Firebase
+                const user = auth.currentUser;
+                if (user) {
+                    const userRef = ref(database, `users/${user.uid}`);
+                    get(userRef).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const userData = snapshot.val();
+                            // Tách tên thành họ và tên
+                            const nameParts = userData.name.split(' ');
+                            const lastName = nameParts.pop() || '';
+                            const firstName = nameParts.join(' ');
+
+                            // Điền thông tin vào form
+                            document.getElementById('firstName').value = firstName;
+                            document.getElementById('lastName').value = lastName;
+                            document.getElementById('email').value = userData.email || '';
+                            document.getElementById('phone').value = userData.phone || '';
+                            document.getElementById('address').value = userData.address || '';
+                            document.getElementById('city').value = userData.city || '';
+                            document.getElementById('zipCode').value = userData.zipCode || '';
+                        }
+                    }).catch((error) => {
+                        console.error('Error loading user data:', error);
+                    });
+                }
+
+                // Xóa dữ liệu khỏi localStorage sau khi đã sử dụng
+                localStorage.removeItem('bookingData');
+            }
+        }
+
+        // Gọi hàm khi trang được tải
+        window.onload = loadBookingData;
+
+        // Lấy thông tin user từ Firebase và tự động điền vào form
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userRef = ref(database, `users/${user.uid}`);
+                try {
+                    const snapshot = await get(userRef);
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        // Tách họ và tên
+                        const nameParts = (userData.name || '').split(' ');
+                        const lastName = nameParts.pop() || '';
+                        const firstName = nameParts.join(' ');
+                        document.getElementById('firstName').value = firstName;
+                        document.getElementById('lastName').value = lastName;
+                        document.getElementById('email').value = userData.email || '';
+                        document.getElementById('phone').value = userData.phone || '';
+                        document.getElementById('address').value = userData.address || '';
+                        // Nếu có thêm city, zipCode thì điền tiếp
+                        if (userData.city) document.getElementById('city').value = userData.city;
+                        if (userData.zipCode) document.getElementById('zipCode').value = userData.zipCode;
+                    }
+                } catch (error) {
+                    console.error('Error loading user data:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
