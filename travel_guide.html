@@ -2025,6 +2025,13 @@
   box-shadow: 0 2px 8px rgba(26,35,126,0.08);
   margin: 0;
 }
+.modal-backdrop.show {
+    z-index: 1050 !important;
+}
+.modal.show {
+    z-index: 1060 !important;
+    display: block;
+}
     </style>
 </head>
 <body>
@@ -2034,7 +2041,7 @@
             <div class="nav-flex">
                 <!-- Logo -->
                 <a class="navbar-brand" href="#">
-                    <img src="images/LuxuryHaven.png" alt="LuxuryHaven Logo">
+                    <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
                 </a>
 
                 <!-- Search Box -->
@@ -2054,9 +2061,9 @@
                         <li class="dropdown"><a href="tours.html">Tours</a></li>
                         
                         <li class="dropdown"><a href="prioritize.html">Ưu đãi</a></li>
-                        <li class="dropdown"><a href="travel_guide.html" class="highlight-black">Cẩm nang du lịch</a></li>
+                        <li class="dropdown"><a href="travel_guide.html" class="active">Cẩm nang du lịch</a></li>
                         <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
-                        <li class="dropdown"><a href="vuichoi.html">🌐</a></li>
+                        <!-- <li class="dropdown"><a href="vuichoi.html">🌐</a></li> -->
 
                         <li>
                             <div class="d-flex align-items-center">
@@ -2082,7 +2089,7 @@
 
     <!-- Hero Section with Search -->
     <section class="hero-section">
-        <p class="nautica-script">LuxuryHaven</p>
+        <p class="nautica-script">LuxuryHavenTravel</p>
         <div class="hero-content"><br><br><br><br><br><br><br><br>
             
             <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
@@ -2124,7 +2131,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
-                    <h4>Về LuxuryHaven</h4>
+                    <h4>Về LuxuryHavenTravel</h4>
                     <ul>
                         <li><a href="footer\about.html">Giới thiệu</a></li>
                         <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
@@ -2537,9 +2544,9 @@
             <h2 class="section-title">Cẩm nang du lịch nổi bật</h2>
             <div class="featured-guides-list">
           `;
-          guides.forEach(g => {
+          guides.forEach((g, idx) => {
             html += `
-              <div class="featured-guide-card">
+              <div class="featured-guide-card" data-guide-idx="${idx}">
                 <div class="featured-guide-title">${g.title}</div>
                 <div class="featured-guide-desc">${g.overview}</div>
               </div>
@@ -2547,6 +2554,34 @@
           });
           html += '</div>';
           document.getElementById(containerId).innerHTML = html;
+
+          // Gắn sự kiện click cho từng card
+          document.querySelectorAll('.featured-guide-card').forEach(card => {
+            card.addEventListener('click', function() {
+              const idx = this.getAttribute('data-guide-idx');
+              const guide = guides[idx];
+              let modalHtml = `<div class='modal fade' id='guideDetailModal' tabindex='-1' aria-labelledby='guideDetailModalLabel' aria-hidden='true'>
+                <div class='modal-dialog modal-lg'>
+                  <div class='modal-content'>
+                    <div class='modal-header'>
+                      <h5 class='modal-title' id='guideDetailModalLabel'>${guide.title}</h5>
+                      <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Đóng'></button>
+                    </div>
+                    <div class='modal-body'>
+                      <div><b>Mô tả:</b> ${guide.overview || ''}</div>
+                      <div style='margin-top:12px;'>${guide.content || ''}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+              // Xóa modal cũ nếu có
+              const oldModal = document.getElementById('guideDetailModal');
+              if (oldModal) oldModal.remove();
+              document.body.insertAdjacentHTML('beforeend', modalHtml);
+              var modal = new bootstrap.Modal(document.getElementById('guideDetailModal'));
+              modal.show();
+            });
+          });
         }
 
         // Hàm render những cẩm nang mới nhất (5 guide mới nhất từ latestGuides)

@@ -3,13 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuxuryHaven - Đặt Phòng Khách Sạn Trực Tuyến</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Đăng ký làm đối tác - Khách sạn của chúng tôi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Thêm SweetAlert2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
-    <style>
+     <style>
+        @font-face {
+          font-family: 'Nautica Script Bold';
+          src: url('../fonts/nautica-bold.otf') format('opentype');
+          font-weight: bold;
+          font-style: normal;
+        }
+        .nautica-script {
+          font-family: 'Nautica Script Bold', cursive;
+          font-size: 6em;
+          font-weight: bold;
+          color: #cddae6;
+          text-align: center;
+        }
+      </style>
+   <style>
     body {
         background: #f5f6fa;
         font-family: 'Segoe UI', Arial, sans-serif;
@@ -268,7 +280,7 @@
 
     /* Hero Section */
     .hero-section {
-        background: linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)), url('images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg') center/cover no-repeat;
+        background: linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)), url('../images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg') center/cover no-repeat;
         height: 100vh;
         position: relative;
         display: flex;
@@ -403,7 +415,7 @@
 
     .popular-destinations, .special-offers, .hotel-categories, .why-choose-us {
         background: #f5f6fa;
-        padding: 24px 0 24px 0;
+        padding: 32px 0 24px 0;
     }
     .destination-card, .offer-card, .category-card, .feature-card {
         border-radius: 18px;
@@ -516,11 +528,11 @@
 
     /* Bố cục section và card chuyên nghiệp, đồng nhất */
     .container {
-    max-width: 100vw;
-    margin: 0 auto;
-    padding: 0;
-    box-sizing: border-box;
-}
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
 
     /* Card grid layout */
     .row {
@@ -1033,716 +1045,456 @@
         box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
     }
 
-    /* Hero Section */
-    .hero-section {
-        background: linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)), url('images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg') center/cover no-repeat;
-        height: 100vh;
-        position: relative;
+    /* Tin tức du lịch */
+    .news-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .news-container h1 {
+      text-align: center;
+      margin-bottom: 32px;
+      font-size: 2.2rem;
+      color: #2a6edc;
+      font-weight: 800;
+    }
+    .news-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      justify-content: center;
+      width: 100%;
+    }
+    .news-item {
+      background: #fff;
+      color: #003366;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(42,110,220,0.13);
+      padding: 32px 28px 24px 28px;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      font-size: 1.08rem;
+      position: relative;
+      transition: box-shadow 0.2s, transform 0.2s;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+    .news-item h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #2a6edc;
+    }
+    .news-date {
+      font-size: 0.98rem;
+      color: #888;
+      margin-bottom: 8px;
+      display: block;
+    }
+    @media (max-width: 1200px) {
+      .news-list {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 900px) {
+      .news-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      .news-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Banner giảm giá */
+    .banner-sale {
+        background: url('https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+        min-height: 320px;
         display: flex;
         align-items: center;
         justify-content: center;
+        margin: 48px 0;
+        border-radius: 24px;
+        position: relative;
+        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.10);
+        overflow: hidden;
     }
-
-    .hero-content {
-        text-align: center;
-        width: 100%;
-        max-width: 1200px;
-        padding: 0 20px;
-        margin-top: 20px;
-    }
-
-    .nautica-script {
-        font-family: 'Nautica Script Bold', cursive;
-        font-size: 6em;
-        font-weight: bold;
-        color: #cddae6;
-        text-align: center;
+    .banner-sale-overlay {
+        content: '';
         position: absolute;
-        width: 100%;
-        top: 45%;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 2;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        margin-bottom: 0;
-        line-height: 0.8;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(120deg, rgba(0,153,247,0.45) 0%, rgba(241,23,18,0.35) 100%);
+        z-index: 1;
+        border-radius: 24px;
     }
-
-    .hero-content h1 {
-        font-size: 4rem;
-        font-weight: 700;
-        margin-top: 0;
-        margin-bottom: 15px;
-        color: #fff;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        line-height: 1.2;
-    }
-
-    .hero-content p {
-        font-size: 1.4rem;
-        color: #f5f6fa;
-        margin: 0;
-        text-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
-    .search-container {
-        background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-        padding: 24px 20px 12px 20px;
-        max-width: 900px;
-        margin: 0 auto;
+    .banner-sale-content {
         position: relative;
         z-index: 2;
+        color: #fff;
+        text-align: center;
+        max-width: 520px;
+        padding: 32px 24px 28px 24px;
+        background: rgba(0,0,0,0.18);
+        border-radius: 20px;
+        box-shadow: 0 2px 16px 0 rgba(255,152,0,0.10);
     }
-    .search-tabs {
-        display: flex;
-        gap: 24px;
-        margin-bottom: 18px;
-        border-bottom: 2px solid #eee;
+    .banner-sale-icon {
+        margin-bottom: 12px;
     }
-    .search-tab {
-        background: none;
-        border: none;
-        font-weight: 600;
-        font-size: 1.1rem;
-        color: #222;
-        padding: 0 0 10px 0;
-        border-bottom: 3px solid transparent;
-        transition: all 0.2s;
-        cursor: pointer;
-    }
-    .search-tab.active {
-        color: #ff6600;
-        border-bottom: 3px solid #ff6600;
-    }
-    .search-form {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-        align-items: center;
-        margin-bottom: 0;
-    }
-    .search-input-group {
-        display: flex;
-        align-items: center;
-        background: #f7f7f7;
-        border-radius: 8px;
-        padding: 0 10px;
-        flex: 1 1 180px;
-        min-width: 180px;
-    }
-    .search-input-group i {
-        color: #888;
-        margin-right: 6px;
-    }
-    .search-input-group input,
-    .search-input-group select {
-        border: none;
-        background: transparent;
-        outline: none;
-        width: 100%;
-        padding: 10px 0;
-        font-size: 1rem;
-    }
-    .btn-search {
-        min-width: 120px;
-        font-weight: 600;
-        border-radius: 8px;
-        margin-top: 8px;
-    }
-    #show-filters {
-        background: #f1f1f1;
-        color: #1976d2;
-        border: none;
-    }
-    #show-filters i {
-        color: #1976d2;
-    }
-
-    .section-title {
-        font-size: 2.2rem;
+    .banner-sale-content h2 {
+        font-size: 2.1rem;
         font-weight: 800;
-        color: #003366;
-        margin: 48px 0 32px 0;
-        text-align: center;
-        letter-spacing: -1px;
+        margin-bottom: 10px;
+        color: #ffd700;
+        text-shadow: 0 2px 8px rgba(255,215,0,0.10);
     }
-
-    .popular-destinations, .special-offers, .hotel-categories, .why-choose-us {
-        background: #f5f6fa;
-        padding: 32px 0 24px 0;
+    .banner-sale-desc {
+        font-size: 1.15rem;
+        margin-bottom: 18px;
+        color: #fffbe7;
     }
-    .destination-card, .offer-card, .category-card, .feature-card {
-        border-radius: 18px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-        overflow: hidden;
-        background: #fff;
-        margin-bottom: 24px;
-        transition: box-shadow 0.2s;
-    }
-    .destination-card:hover, .offer-card:hover, .category-card:hover, .feature-card:hover {
-        box-shadow: 0 6px 24px rgba(0,0,0,0.13);
-    }
-    .destination-card img, .offer-card img, .category-card img {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-        border-top-left-radius: 18px;
-        border-top-right-radius: 18px;
-    }
-    .destination-info, .category-content, .offer-content-overlay {
-        padding: 18px 16px 12px 16px;
-        color: white;
+    .banner-sale-list {
         text-align: left;
+        margin: 0 auto 18px auto;
+        display: inline-block;
+        font-size: 1.05rem;
+        color: #fff;
     }
-    .destination-info h3, .category-content h3, .offer-content-overlay h3, .offer-content-overlay h4 {
-        font-size: 1.2rem;
-        font-weight: 700;
+    .banner-sale-list li {
         margin-bottom: 6px;
-        color: #003366;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    .destination-info p, .category-content p, .offer-content-overlay p {
-        font-size: 1rem;
-        color: white;
-        margin-bottom: 0;
-    }
-    .offer-card.large img {
-        height: 260px;
-    }
-    .offer-content-overlay .price {
-        color: #ffe066;
+    .banner-sale-list span {
+        color: rgba(0,153,247,0.45);
         font-size: 1.1rem;
+    }
+    .banner-sale-price {
+        display: block;
+        font-size: 1.25rem;
         font-weight: 700;
+        margin-bottom: 18px;
+        color: #fff;
+    }
+    .banner-sale-btn {
+        font-size: 1.1rem;
+        padding: 12px 36px;
+        border-radius: 8px;
+        background: #ffd700;
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 2px 8px 0 rgba(255,152,0,0.10);
+        border: none;
+        transition: background 0.2s;
+    }
+    .banner-sale-btn:hover {
+        background: #ffd700;
+    }
+    .banner-sale-note {
+        margin-top: 12px;
+        font-size: 0.98rem;
+        color: #fffbe7;
+        opacity: 0.85;
     }
 
-    .why-choose-us .feature-card {
+    /* Summer Mood Section */
+    .summer-mood {
+        padding: 48px 0 32px 0; 
+        background: linear-gradient(120deg, #fdf6e3 0%, #e0f7fa 100%);
+    }
+    .summer-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 28px;
+        margin-bottom: 18px;
+    }
+    @media (max-width: 1000px) {
+        .summer-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 600px) {
+        .summer-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    .summer-card {
         background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-        padding: 32px 18px;
-        text-align: center;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 16px 0 rgba(42,110,220,0.08);
+        transition: box-shadow 0.2s, transform 0.2s;
+        position: relative;
+        height: 320px;
+    }
+    .summer-card:hover {
+        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.18);
+        transform: translateY(-8px) scale(1.03);
+    }
+    .summer-card img {
+        width: 100%;
         height: 100%;
+        object-fit: cover;
     }
-    .why-choose-us .icon-wrapper {
-        margin-bottom: 12px;
-    }
-    .why-choose-us .icon-wrapper i {
-        color: #ff6600;
-        font-size: 2.2rem;
-    }
-    .why-choose-us h3 {
-        color: #003366;
-        font-size: 1.1rem;
-        font-weight: 700;
-    }
-    .why-choose-us p {
-        color: #555;
-        font-size: 1rem;
-    }
-
-    .footer {
-        background: #003366;
+    .summer-info {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        background: linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0.15) 60%, transparent 100%);
         color: #fff;
-        padding: 40px 0 0 0;
-        margin-top: 40px;
-    }
-    .footer h4 {
-        color: #fff;
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin-bottom: 12px;
-    }
-    .footer ul {
-        list-style: none;
-        padding: 0;
-    }
-    .footer ul li a {
-        color: #e0e0e0;
-        text-decoration: none;
-        font-size: 1rem;
-    }
-    .footer ul li a:hover {
-        color: #ffe066;
-    }
-    .footer-bottom {
-        border-top: 1px solid #1a237e;
-        margin-top: 24px;
-        padding: 16px 0 0 0;
         text-align: center;
-        color: #e0e0e0;
-        font-size: 0.95rem;
     }
-    .social-links a {
+    .summer-info h3 {
+        margin: 0 0 8px 0;
         color: #fff;
         font-size: 1.3rem;
-        margin-right: 12px;
-    }
-    .social-links a:hover {
-        color: #ffe066;
-    }
-
-    /* Bố cục section và card chuyên nghiệp, đồng nhất */
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-
-    /* Card grid layout */
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: -12px;
-        margin-right: -12px;
-    }
-    .col-md-3, .col-md-6 {
-        padding-left: 12px;
-        padding-right: 12px;
-        margin-bottom: 32px;
-    }
-    .col-md-3 {
-        width: 25%;
-    }
-    .col-md-6 {
-        width: 50%;
-    }
-
-    /* Card style */
-    .destination-card, .category-card, .feature-card, .offer-card {
-        border-radius: 18px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-        background: #fff;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        transition: box-shadow 0.2s;
-    }
-    .destination-card img, .category-card img, .offer-card img {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-        border-top-left-radius: 18px;
-        border-top-right-radius: 18px;
-    }
-    .destination-info, .category-content, .offer-content-overlay {
-        padding: 18px 16px 12px 16px;
-        color: #222;
-        text-align: left;
-        flex: 1 1 auto;
-    }
-    .destination-info h3, .category-content h3, .offer-content-overlay h3, .offer-content-overlay h4 {
-        font-size: 1.2rem;
         font-weight: 700;
-        margin-bottom: 6px;
-        color: white;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
-    .destination-info p, .category-content p, .offer-content-overlay p {
+    .summer-info p {
         font-size: 1rem;
-        color: white;
-        margin-bottom: 0;
+        color: #f0f0f0;
+        margin-bottom: 8px;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
 
-    /* --- SPECIAL OFFERS LAYOUT --- */
-    .special-offers .row {
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 24px;
-        align-items: stretch;
-        height: 400px;
-        min-height: 400px;
+    /* Favorite Destinations */
+    .favorite-destinations {
+        padding: 48px 0;
+        background: linear-gradient(120deg, #fdf6e3 0%, #fff8e1 100%);
     }
-    .special-offers .col-offer-big {
-        width: 52%;
-        display: flex;
-    }
-    .special-offers .col-offer-small {
-        width: 48%;
-        display: flex;
-        flex-direction: row;
-        gap: 8px;
-        align-items: center;
-        height: 100%;
-    }
-    .special-offers .offer-card.big {
-        width: 100%;
-        height: 100%;
+    .golden-spiral-grid {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        gap: 20px;
+        height: 800px;
         position: relative;
     }
-    .special-offers .offer-card.small {
-        width: 49.5%;
-        height: 80%;
+    .destination-card {
         position: relative;
-        display: flex;
+        overflow: hidden;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .special-offers .offer-card img {
+    .destination-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .destination-card img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: transform 0.3s ease;
     }
-    .special-offers .offer-content-overlay {
+    .destination-card:hover img {
+        transform: scale(1.1);
+    }
+    .destination-info {
         position: absolute;
-        left: 0; right: 0; bottom: 0;
-        width: 100%;
-        background: linear-gradient(to top, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.05) 100%);
-        color: #fff;
-        padding: 24px 24px 18px 24px;
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        color: white;
     }
-    .special-offers .offer-content-overlay h3,
-    .special-offers .offer-content-overlay h4 {
-        color: #fff;
-        font-weight: 800;
-        font-size: 1.6rem;
-        margin-bottom: 4px;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.35);
-    }
-    .special-offers .offer-content-overlay p {
-        color: #fff;
-        font-size: 1.1rem;
-        margin-bottom: 2px;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    }
-    .special-offers .offer-content-overlay .price {
-        color: #ffe066;
-        font-size: 1.2rem;
+    .destination-info h3 {
+        margin: 0 0 8px 0;
+        font-size: 1.5rem;
         font-weight: 700;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
-    @media (max-width: 991px) {
-        .special-offers .row {
-            flex-direction: column;
+    .destination-info p {
+        margin: 0;
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+    /* Golden Spiral Layout */
+    .destination-card.large {
+        grid-column: 1 / 6;
+        grid-row: 1 / 6;
+    }
+    .destination-card.medium {
+        grid-column: 6 / 9;
+        grid-row: 1 / 4;
+    }
+    .destination-card.small:nth-of-type(3) {
+        grid-column: 6 / 9;
+        grid-row: 4 / 6;
+    }
+    .destination-card.small:nth-of-type(4) {
+        grid-column: 1 / 4;
+        grid-row: 6 / 9;
+    }
+    .destination-card.small:nth-of-type(5) {
+        grid-column: 4 / 9;
+        grid-row: 6 / 9;
+    }
+    @media (max-width: 768px) {
+        .golden-spiral-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(5, 300px);
             height: auto;
-            min-height: 0;
-        }
-        .special-offers .col-offer-big,
-        .special-offers .col-offer-small {
-            width: 100%;
-            height: auto;
-        }
-        .special-offers .col-offer-small {
-            flex-direction: row;
-            gap: 8px;
-        }
-        .special-offers .offer-card.big,
-        .special-offers .offer-card.small {
-            height: 180px;
-            min-height: 0;
-        }
-    }
-
-    /* Why choose us: 4 cột đều nhau */
-    .why-choose-us .row {
-        gap: 0;
-    }
-    .why-choose-us .col-md-3 {
-        width: 25%;
-        display: flex;
-    }
-    .why-choose-us .feature-card {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 32px 18px;
-    }
-
-    /* Footer chia 4 cột đều nhau */
-    .footer .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: -12px;
-        margin-right: -12px;
-    }
-    .footer .col-md-3 {
-        width: 25%;
-        padding-left: 12px;
-        padding-right: 12px;
-        margin-bottom: 24px;
-    }
-
-    /* Responsive */
-    @media (max-width: 991px) {
-        .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
-            width: 50%;
-        }
-        .col-md-6 {
-            width: 100%;
-        }
-    }
-    @media (max-width: 767px) {
-        .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
-            width: 100%;
-        }
-        .container {
-            padding-left: 6px;
-            padding-right: 6px;
-        }
-        .section-title {
-            font-size: 1.3rem;
-            margin: 32px 0 18px 0;
-        }
-    }
-
-    /* --- TOUR CARD LAYOUT REDESIGN --- */
-    .tour-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 32px;
-  padding: 32px 16px;
-  max-width: 1320px;
-  margin: 0 auto;
-}
-
-
-    .tour-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    width: 280px;   /* <-- Thêm dòng này */
-    justify-content: space-between;
-  height: 100%;
-}
-@media (max-width: 1300px) {
-  .tour-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (max-width: 700px) {
-  .tour-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.tour-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    }
-
-.tour-image {
-    width: 100%;
-    height: 210px;
-    background: #f2f2f2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-}
-.tour-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    transition: transform 0.3s;
-}
-.tour-card:hover .tour-image img {
-    transform: scale(1.06);
-}
-
-.tour-content {
-    flex-grow : 1;
-    width: 100%;
-       padding: 28px 24px 20px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-}
-.tour-name {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #1a237e;
-    margin-bottom: 4px;
-    line-height: 1.3;
-}
-.tour-rating {
-    display: flex;
-    gap: 3px;
-    margin-bottom: 2px;
-}
-.tour-rating i {
-    color: #ffd700;
-    font-size: 1.1rem;
-}
-.tour-location {
-    font-size: 1rem;
-    color: #0066cc;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.tour-features {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    min-height: 72px; /* Tùy chỉnh độ cao đồng đều */
-}
-
-.tour-features > div {
-    margin-bottom: 2px;
-}
-.tour-btn {
-    width: 100%;
-    padding: 14px 0;
-    background: linear-gradient(90deg, #1a237e 60%, #0066cc 100%);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 1.08rem;
-    margin-top: auto;
-    box-shadow: 0 2px 8px rgba(42,110,220,0.10);
-    transition: background 0.2s, transform 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-}
-.tour-btn:hover {
-    background: linear-gradient(90deg, #0066cc 60%, #1a237e 100%);
-    transform: translateY(-2px) scale(1.02);
-}
-
-@media (max-width: 1200px) {
-    .tour-card {
-        width: 45vw;
-        min-width: 260px;
-        max-width: 360px;
-    }
-    .tour-grid {
-        gap: 24px;
-    }
-}
-@media (max-width: 768px) {
-    .tour-grid {
-        flex-direction: column;
-        align-items: center;
-        gap: 18px;
-    }
-    .tour-card {
-        width: 100%;
-        min-width: 0;
-        margin: o auto;
-        max-width: 370px;
-    }
-    .tour-image {
-        height: 180px;
-    }
-    .tour-content {
-        padding: 18px 10px 16px 10px;
-    }
-}
-    </style>
-    <style>
-        @font-face {
-          font-family: 'Nautica Script Bold';
-          src: url('fonts/nautica-bold.otf') format('opentype');
-          font-weight: bold;
-          font-style: normal;
-        }
-        .nautica-script {
-          font-family: 'Nautica Script Bold', cursive;
-          font-size: 6em;
-          font-weight: bold;
-          color: #cddae6;
-          text-align: center;
-        }
-        @media (max-width: 1200px) {
-            .tour-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 768px) {
-            .tour-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-                .tour-nav {
-            display: flex;
-            justify-content: center;
-            align-items: center;
             gap: 16px;
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-            padding: 0 20px;
         }
-        .modal-backdrop.show {
+        .destination-card.large,
+        .destination-card.medium,
+        .destination-card.small {
+            grid-column: 1;
+            grid-row: auto;
+        }
+    }
+
+    /* Banner Sale */
+    .banner-sale {
+        background: url('https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+        min-height: 320px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 48px 0;
+        border-radius: 24px;
+        position: relative;
+        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.10);
+        overflow: hidden;
+    }
+    .banner-sale-overlay {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(120deg, rgba(0,153,247,0.45) 0%, rgba(241,23,18,0.35) 100%);
+        z-index: 1;
+        border-radius: 24px;
+    }
+    .banner-sale-content {
+        position: relative;
+        z-index: 2;
+        color: #fff;
+        text-align: center;
+        max-width: 520px;
+        padding: 32px 24px 28px 24px;
+        background: rgba(0,0,0,0.18);
+        border-radius: 20px;
+        box-shadow: 0 2px 16px 0 rgba(255,152,0,0.10);
+    }
+    .banner-sale-icon {
+        margin-bottom: 12px;
+    }
+    .banner-sale-content h2 {
+        font-size: 2.1rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #ffd700;
+        text-shadow: 0 2px 8px rgba(255,215,0,0.10);
+    }
+    .banner-sale-desc {
+        font-size: 1.15rem;
+        margin-bottom: 18px;
+        color: #fffbe7;
+    }
+    .banner-sale-list {
+        text-align: left;
+        margin: 0 auto 18px auto;
+        display: inline-block;
+        font-size: 1.05rem;
+        color: #fff;
+    }
+    .banner-sale-list li {
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .banner-sale-list span {
+        color: #ffd700;
+        font-size: 1.1rem;
+    }
+    .banner-sale-price {
+        display: block;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+        color: #fff;
+    }
+    .banner-sale-btn {
+        font-size: 1.1rem;
+        padding: 12px 36px;
+        border-radius: 8px;
+        background: #ffd700;
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 2px 8px 0 rgba(255,152,0,0.10);
+        border: none;
+        transition: background 0.2s;
+    }
+    .banner-sale-btn:hover {
+        background: rgba(0,153,247,0.45);
+    }
+    .banner-sale-note {
+        margin-top: 12px;
+        font-size: 0.98rem;
+        color: #fffbe7;
+        opacity: 0.85;
+    }
+    @media (max-width: 700px) {
+        .banner-sale-content {padding: 18px 6px;}
+        .banner-sale {min-height: 220px;}
+    }
+
+    .combo-center-text {
+        text-align: center;
+        margin-bottom: 24px;
+        color: #666;
+    }
+    
+    /* Thêm CSS cho .job-card */
+    .job-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+    .job-card .btn-gradient {
+      margin-top: auto;
+      width: 100%;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+     .modal-backdrop.show {
     z-index: 1050 !important;
 }
 .modal.show {
     z-index: 1060 !important;
     display: block;
 }
-.content-wrapper {
-    display: flex;
-    max-width: 1400px;
-    margin: 48px auto;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 32px rgba(44,62,80,0.10);
-    overflow: hidden;
-    min-height: 350px;
-}
-.image-section {
-    flex: 2;
-    min-width: 0;
-}
-.image-section img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-.text-section {
-    flex: 1;
-    padding: 0px 32px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-@media (max-width: 900px) {
-    .content-wrapper {
-        flex-direction: column;
-    }
-    .image-section, .text-section {
-        flex: unset;
-        width: 100%;
-    }
-    .text-section {
-        padding: 0px 16px;
-    }
-}
-.section-photo-memories {
-  margin-top: 16px;
-  margin-bottom: 32px;
-}
-
-      </style>
+    </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
+   <nav class="navbar">
         <div class="container">
             <div class="nav-flex">
                 <!-- Logo -->
                 <a class="navbar-brand" href="#">
-                    <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
+                    <img src="../images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
                 </a>
 
                 <!-- Search Box -->
@@ -1756,10 +1508,10 @@
                 </div>
                 <div class="nav-right">
                     <ul class="nav-links">
-                        <li><a href="index.html" >Trang chủ</a></li>
+                        <li><a href="index.html" class="active">Trang chủ</a></li>
                         <li><a href="hotel.html" >Khách sạn</a></li>
                     
-                        <li class="dropdown"><a href="tours.html" class="active">Tours</a></li>
+                        <li class="dropdown"><a href="tours.html">Tours</a></li>
                         
                         <li class="dropdown"><a href="prioritize.html">Ưu đãi</a></li>
                         <li class="dropdown"><a href="travel_guide.html">Cẩm nang du lịch</a></li>
@@ -1798,143 +1550,181 @@
         </div><br><br><br><br><br><br><br><br>
     </section>
 
-   <main>
-    
-        <!-- Tours Section -->
-        <section class="tours-section py-5">
-            <div class="content-wrapper">
-        <div class="image-section">
-            <img src="images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg" alt="Luxury Haven Travel">
-        </div>
-        <div class="text-section">
-            <h2>Khám phá hành trình trong mơ cùng LuxuryHavenTravel</h2>
-            <p>Chúng tôi không chỉ cung cấp các tour du lịch, mà còn mang đến những hành trình được thiết kế đặc biệt, kết hợp giữa nghỉ dưỡng và khám phá văn hóa – giúp bạn tận hưởng từng phút giây trên từng cung đường.</p>
-            <p>Từ những tour nội địa hấp dẫn đến các điểm đến quốc tế độc đáo, hãy để LuxuryHavenTravel là người bạn đồng hành đáng tin cậy trên mọi hành trình của bạn.</p>
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="mb-4">
+                    <h2 class="mb-3 text-primary"><i class="fas fa-handshake me-2"></i>Đăng ký làm đối tác</h2>
+                    <p>Chào mừng bạn đến với chương trình đối tác của chúng tôi! Hợp tác cùng LuxuryHaven để phát triển kinh doanh khách sạn, homestay, villa, tour du lịch hoặc dịch vụ liên quan.</p>
+                </div>
+                <div class="mb-4">
+                    <h4 class="mb-2 text-secondary"><i class="fas fa-user-plus me-2"></i>Quyền lợi đối tác</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Tiếp cận hàng triệu khách hàng tiềm năng trên toàn quốc.</li>
+                        <li class="list-group-item">Công cụ quản lý phòng, giá, khuyến mãi tiện lợi.</li>
+                        <li class="list-group-item">Hỗ trợ truyền thông, marketing và chăm sóc khách hàng.</li>
+                        <li class="list-group-item">Thanh toán minh bạch, nhanh chóng.</li>
+                    </ul>
+                </div>
+                <div class="mb-4">
+                    <h4 class="mb-2 text-secondary"><i class="fas fa-edit me-2"></i>Quy trình đăng ký</h4>
+                    <ol class="ps-3">
+                        <li>Điền thông tin đăng ký đối tác qua form hoặc liên hệ trực tiếp.</li>
+                        <li>Chờ xác nhận và tư vấn từ đội ngũ hỗ trợ.</li>
+                        <li>Ký hợp đồng hợp tác và kích hoạt tài khoản quản lý.</li>
+                        <li>Bắt đầu đăng bán phòng/tour/dịch vụ trên hệ thống.</li>
+                    </ol>
+                </div>
+                <div class="mb-4">
+                    <h4 class="mb-2 text-secondary"><i class="fas fa-question-circle me-2"></i>Câu hỏi thường gặp</h4>
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                                    Làm sao để cập nhật giá/phòng?
+                                </button>
+                            </h2>
+                            <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Đối tác có thể đăng nhập vào hệ thống quản lý, vào mục "Quản lý phòng" để cập nhật giá, số lượng phòng và các thông tin liên quan bất cứ lúc nào.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                    Tôi có thể rút tiền hoa hồng như thế nào?
+                                </button>
+                            </h2>
+                            <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Hoa hồng sẽ được tổng kết hàng tháng và chuyển khoản trực tiếp vào tài khoản ngân hàng mà đối tác đã đăng ký.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                                    Có hỗ trợ marketing cho đối tác không?
+                                </button>
+                            </h2>
+                            <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Chúng tôi hỗ trợ truyền thông, quảng bá và các chương trình ưu đãi để tăng lượng khách hàng cho đối tác.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="bg-light rounded shadow-sm p-4 mb-4">
+                    <h5 class="mb-3 text-primary"><i class="fas fa-phone-volume me-2"></i>Liên hệ hợp tác</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li><strong>Email:</strong> partner@hotel.com</li>
+                        <li><strong>Hotline:</strong> (84) 123-456-789</li>
+                        <li><strong>Địa chỉ:</strong> 123 Đường ABC, Quận XYZ, TP.HCM</li>
+                    </ul>
+                </div>
+                <div class="alert alert-success mt-3" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>Hãy liên hệ với chúng tôi để nhận tư vấn chi tiết về hợp tác!
+                </div>
+            </div>
         </div>
     </div>
-            <div class="container">
-                <h2 class="section-title">✨ TOURS DU LỊCH</h2>
-                
-                <!-- Tour Type Navigation -->
-                <div class="tour-nav mb-4">
-                    <button class="btn btn-outline-primary me-3 active" data-type="all">
-                        Tất cả (19)
-                    </button>
-                    <button class="btn btn-outline-primary me-3" data-type="adventure">
-                        Mạo hiểm (7)
-                    </button>
-                    <button class="btn btn-outline-primary me-3" data-type="cultural">
-                        Văn hóa (7)
-                    </button>
-                    <button class="btn btn-outline-primary" data-type="eco">
-                        Sinh thái (5)
-                    </button>
-                </div>
-
-                <!-- Tour Grid -->
-                <div id="tours-grid" class="tour-grid">
-                    <!-- Tours will be dynamically inserted here -->
-                </div>
-
-                <!-- Tour Detail Modal -->
-                <div class="modal fade" id="tourDetailModal" tabindex="-1" aria-labelledby="tourDetailModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="tourDetailModalLabel">Chi tiết tour</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-                      </div>
-                      <div class="modal-body" id="tour-detail-content">
-                        <!-- Nội dung chi tiết sẽ được render vào đây -->
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-        </section>
-        <section class="container section-photo-memories">
-        <section class="container my-5">
-            <h2 class="section-title">📸 Những khoảnh khắc đáng nhớ</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <img src="images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg" class="card-img-top" alt="Khoảnh khắc 1">
-                        <div class="card-body">
-                            <h5 class="card-title">Chạm vào thiên nhiên</h5>
-                            <p class="card-text">Khám phá những vùng đất hoang sơ, nơi thiên nhiên vẫn giữ nguyên nét đẹp thuần khiết.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <img src="images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg" class="card-img-top" alt="Khoảnh khắc 2">
-                        <div class="card-body">
-                            <h5 class="card-title">Văn hóa & Con người</h5>
-                            <p class="card-text">Gặp gỡ người bản địa và trải nghiệm văn hóa độc đáo tại các điểm đến đầy màu sắc của các bản làng.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <img src="images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg" class="card-img-top" alt="Khoảnh khắc 3">
-                        <div class="card-body">
-                            <h5 class="card-title">Những phút giây hạnh phúc</h5>
-                            <p class="card-text">Tận hưởng những khoảnh khắc đáng nhớ cùng người thân và bạn bè trong từng hành trình.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-   </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <h4>Về LuxuryHavenTravel</h4>
-                    <ul>
-                        <li><a href="footer\about.html">Giới thiệu</a></li>
-                        <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
-                        <li><a href="footer\news.html">Tin tức</a></li>
-                        <li><a href="footer\contact.html">Liên hệ</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h4>Hỗ trợ</h4>
-                    <ul>
-                        <li><a href="footer\help-center.html">Trung tâm trợ giúp</a></li>
-                        <li><a href="footer\privacy-policy.html">Chính sách bảo mật</a></li>
-                        <li><a href="footer\terms.html">Điều khoản sử dụng</a></li>
-                        <li><a href="footer\cookie-policy.html">Chính sách cookie</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h4>Đối tác</h4>
-                    <ul>
-                        <li><a href="footer\partner.html">Đăng ký làm đối tác</a></li>
-                        <li><a href="footer\marketing.html">Chương trình tiếp thị</a></li>
-                        <li><a href="footer\affiliate.html">Affiliate</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h4>Theo dõi chúng tôi</h4>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
+    <!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <h4>Về LuxuryHaven</h4>
+                <ul>
+                    <li><a href="footer\about.html">Giới thiệu</a></li>
+                    <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
+                    <li><a href="footer\news.html">Tin tức</a></li>
+                    <li><a href="footer\contact.html">Liên hệ</a></li>
+                </ul>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 LuxuryHaven. Tất cả quyền được bảo lưu.</p>
+            <div class="col-md-3">
+                <h4>Hỗ trợ</h4>
+                <ul>
+                    <li><a href="footer\help.html">Trung tâm trợ giúp</a></li>
+                    <li><a href="footer\privacy.html">Chính sách bảo mật</a></li>
+                    <li><a href="footer\terms.html">Điều khoản sử dụng</a></li>
+                    <li><a href="footer\cookie.html">Chính sách cookie</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h4>Đối tác</h4>
+                <ul>
+                    <li><a href="footer\partner.html">Đăng ký làm đối tác</a></li>
+                    <li><a href="footer\marketing.html">Chương trình tiếp thị</a></li>
+                    <li><a href="footer\affiliate.html">Affiliate</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h4>Theo dõi chúng tôi</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
             </div>
         </div>
-    </footer>
+        <div class="footer-bottom">
+            <p>&copy; 2024 LuxuryHaven. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </div>
+</footer>
 
-    <!-- Auth Modal -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form Step Navigation
+        let currentStep = 1;
+        const totalSteps = 3;
+        const steps = document.querySelectorAll('.step-content');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const stepIndicators = document.querySelectorAll('.step');
+
+        function showStep(step) {
+            steps.forEach((s, index) => {
+                s.style.display = index + 1 === step ? 'block' : 'none';
+            });
+            
+            stepIndicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index + 1 <= step);
+            });
+
+            prevBtn.style.display = step === 1 ? 'none' : 'inline-block';
+            nextBtn.style.display = step === totalSteps ? 'none' : 'inline-block';
+            submitBtn.style.display = step === totalSteps ? 'inline-block' : 'none';
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
+
+        // Initialize first step
+        showStep(1);
+    </script>
+     <!-- Auth Modal -->
 <div id="auth-modal" class="modal">
     <div class="modal-content" style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
         <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
@@ -2272,56 +2062,54 @@
     })();
 
     // Xử lý form liên hệ
-    const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-            // Lấy thông tin từ form
-            const name = document.getElementById('contact-name').value;
-            const email = document.getElementById('contact-email').value;
-            const message = document.getElementById('contact-message').value;
+        // Lấy thông tin từ form
+        const name = document.getElementById('contact-name').value;
+        const email = document.getElementById('contact-email').value;
+        const message = document.getElementById('contact-message').value;
 
-            // Hiển thị loading
-            Swal.fire({
-                title: 'Đang gửi...',
-                text: 'Vui lòng đợi trong giây lát',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            // Gửi email
-            emailjs.send("service_6spwxxw", "template_vcjlg02", {
-                to_email: "quantrikhachsan001@gmail.com",
-                from_name: name,
-                from_email: email,
-                message: message
-            })
-            .then(function() {
-                // Thành công
-                Swal.fire({
-                    title: 'Gửi thành công!',
-                    text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
-                    icon: 'success',
-                    confirmButtonColor: '#e67e22'
-                });
-                // Reset form
-                contactForm.reset();
-            })
-            .catch(function(error) {
-                // Thất bại
-                Swal.fire({
-                    title: 'Lỗi!',
-                    text: 'Không thể gửi email. Vui lòng thử lại sau.',
-                    icon: 'error',
-                    confirmButtonColor: '#e67e22'
-                });
-                console.error("Error sending email:", error);
-            });
+        // Hiển thị loading
+        Swal.fire({
+            title: 'Đang gửi...',
+            text: 'Vui lòng đợi trong giây lát',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
         });
-    }
+
+        // Gửi email
+        emailjs.send("service_6spwxxw", "template_vcjlg02", {
+            to_email: "quantrikhachsan001@gmail.com",
+            from_name: name,
+            from_email: email,
+            message: message
+        })
+
+        .then(function() {
+            // Thành công
+            Swal.fire({
+                title: 'Gửi thành công!',
+                text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
+                icon: 'success',
+                confirmButtonColor: '#e67e22'
+            });
+            // Reset form
+            document.getElementById('contact-form').reset();
+        })
+        .catch(function(error) {
+            // Thất bại
+            Swal.fire({
+                title: 'Lỗi!',
+                text: 'Không thể gửi email. Vui lòng thử lại sau.',
+                icon: 'error',
+                confirmButtonColor: '#e67e22'
+            });
+            console.error("Error sending email:", error);
+        });
+    });
 
     let autoSlideInterval;
     let currentSlideIndex = 0;
@@ -2390,262 +2178,6 @@
             container.addEventListener('mouseleave', startAutoSlide);
         });
     });
-
-    // Hàm format giá tiền
-
-    // Hàm hiển thị tours
-    function displayTours(tours) {
-        const toursGrid = document.getElementById('tours-grid');
-        if (!toursGrid) return;
-
-        toursGrid.innerHTML = '';
-        
-        tours.forEach(tour => {
-            const tourCard = `
-                <div class="tour-card">
-                    <div class="tour-image">
-                        <img src="${tour.image}" alt="${tour.name}" loading="lazy">
-                    </div>
-                    <div class="tour-content">
-                        <h3 class="tour-title">${tour.name}</h3>
-                        <div class="tour-rating">
-                            ${Array(5).fill('').map((_, i) => 
-                                `<i class="fas fa-star" style="color: ${i < tour.rating ? '#ffd700' : '#ddd'}"></i>`
-                            ).join('')}
-                        </div>
-                        <div class="tour-location">
-                            <i class="fas fa-map-marker-alt"></i>
-                            ${tour.location}
-                        </div>
-                        <div class="tour-duration">
-                            <i class="far fa-clock"></i>
-                            ${tour.duration}
-                        </div>
-                        <div class="tour-type">
-                            <i class="fas fa-tag"></i>
-                            ${tour.type === 'adventure' ? 'Mạo hiểm' : tour.type === 'cultural' ? 'Văn hóa' : 'Sinh thái'}
-                        </div>
-                    </div>
-                </div>
-            `;
-            toursGrid.innerHTML += tourCard;
-        });
-    }
-
-    // Thêm event listeners cho các nút lọc tour
-    document.addEventListener('DOMContentLoaded', () => {
-        const tourNavButtons = document.querySelectorAll('.tour-nav button');
-        tourNavButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const type = button.getAttribute('data-type');
-                filterTours(type);
-            });
-        });
-
-        // Load tất cả tours khi trang được tải
-        filterTours('all');
-    });
-
-    // Biến toàn cục để lưu trữ danh sách tours
-    window.tours = [];
-    
-    // Hàm format giá tiền
-    function formatPrice(price) {
-        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " đ";
-    }
-
-    // Hàm tải danh sách tours từ Firebase
-    function loadTours(type = 'all') {
-        const toursRef = firebase.database().ref('specialTours');
-        const toursGrid = document.getElementById('tours-grid');
-        if (!toursGrid) return;
-
-        toursGrid.innerHTML = '<div class="text-center w-100 py-5">Đang tải...</div>';
-
-        toursRef.once('value').then((snapshot) => {
-            if (snapshot.exists()) {
-                const tours = [];
-                snapshot.forEach((tourSnapshot) => {
-                    tours.push({
-                        id: tourSnapshot.key,
-                        ...tourSnapshot.val()
-                    });
-                });
-                
-                window.tours = tours;
-                
-                // Lọc tours theo loại nếu cần
-                const filteredTours = type === 'all' ? 
-                    tours : 
-                    tours.filter(tour => tour.type === type);
-
-                if (filteredTours.length === 0) {
-                    toursGrid.innerHTML = `
-                        <div class="no-tours">
-                            <i class="fas fa-route" style="font-size:48px;color:#ccc"></i>
-                            <br><b>Không tìm thấy tour</b>
-                            <br>Hiện chưa có tour nào thuộc loại này. Vui lòng thử lại sau.
-                        </div>`;
-                    return;
-                }
-
-                toursGrid.innerHTML = filteredTours.map(tour => createTourCard(tour)).join('');
-            } else {
-                toursGrid.innerHTML = `
-                    <div class="no-tours">
-                        <i class="fas fa-route" style="font-size:48px;color:#ccc"></i>
-                        <br><b>Không tìm thấy tour</b>
-                        <br>Hiện chưa có tour nào. Vui lòng thử lại sau.
-                    </div>`;
-            }
-        }).catch((error) => {
-            toursGrid.innerHTML = `<div class="error">Lỗi tải dữ liệu: ${error.message}</div>`;
-        });
-    }
-
-    // Hàm tạo card cho tour
-    function createTourCard(tour) {
-        return `
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="tour-card h-100">
-                    <div class="tour-image">
-                        <img src="${tour.image}" alt="${tour.name}">
-                    </div>
-                    <div class="tour-content p-3">
-                        <h3 class="tour-name h5 mb-2">${tour.name}</h3>
-                        <div class="tour-rating mb-2">
-                            ${Array(5).fill('').map((_, index) => 
-                                `<i class="fas fa-star" style="color: ${index < tour.rating ? '#ffd700' : '#ccc'}"></i>`
-                            ).join('')}
-                        </div>
-                        <p class="tour-location mb-2">
-                            <i class="fas fa-map-marker-alt text-primary me-1"></i> ${tour.location}
-                        </p>
-                        <div class="tour-features mb-3">
-                            <div><i class="far fa-clock text-primary me-1"></i> ${tour.duration}</div>
-                            <div><i class="fas fa-tag text-primary me-1"></i> ${tour.type === 'adventure' ? 'Mạo hiểm' : tour.type === 'cultural' ? 'Văn hóa' : 'Sinh thái'}</div>
-                        </div>
-                        <button class="btn btn-primary w-100" onclick="showTourDetail('${tour.id}')">
-                            <i class="fas fa-info-circle me-1"></i> Xem chi tiết
-                        </button>                            
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    // Hàm lọc tours theo loại
-    function filterTours(type) {
-        // Cập nhật trạng thái active của các nút
-        document.querySelectorAll('.tour-nav button').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        document.querySelector(`[data-type="${type}"]`).classList.add('active');
-        
-        // Tải lại danh sách tours với bộ lọc
-        loadTours(type);
-    }
-
-    // Hàm đặt tour
-    function bookTour(tourId) {
-        // Lấy thông tin tour từ danh sách đã load
-        const tour = window.tours.find(t => t.id === tourId);
-        if (!tour) return;
-
-        // Kiểm tra đăng nhập
-        const user = firebase.auth().currentUser;
-        if (!user) {
-            Swal.fire({
-                title: 'Thông báo',
-                text: 'Vui lòng đăng nhập để đặt tour',
-                icon: 'warning',
-                confirmButtonText: 'Đăng nhập ngay'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('open-login-modal').click();
-                }
-            });
-            return;
-        }
-
-        // Tạo dữ liệu booking cho tour
-        const bookingData = {
-            email: user.email,
-            hotelId: tour.name, // hoặc tour.tourName nếu có
-            roomId: tour.location || tour.id || '',
-            checkIn: new Date().toISOString().split('T')[0],
-            checkOut: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-            guests: 1,
-            name: user.displayName || user.name || '',
-            phone: user.phoneNumber || '',
-            createdAt: Date.now(),
-            type: 'tour',
-            price: tour.price || 0,
-            duration: tour.duration || ''
-        };
-
-        firebase.database().ref('bookings').push(bookingData)
-            .then((ref) => {
-                const bookingId = ref.key;
-                window.location.href = `check-out.html?bookingId=${bookingId}`;
-            })
-            .catch((err) => {
-                Swal.fire('Lỗi khi đặt tour', err.message, 'error');
-            });
-    }
-
-    // Khởi tạo khi trang load xong
-    document.addEventListener('DOMContentLoaded', function() {
-        loadTours();
-    });
-               function showTourDetail(tourId) {
-            // Lấy thông tin tour từ danh sách đã load
-            const tour = window.tours.find(t => t.id === tourId);
-            if (!tour) return;
-        
-            // Render nội dung chi tiết vào modal
-            document.getElementById('tour-detail-content').innerHTML = `
-                <div>
-                    <img src="${tour.image}" alt="${tour.name}" style="width:100%;border-radius:12px;margin-bottom:16px;">
-                    <h3>${tour.name}</h3>
-                    <div><b>Địa điểm:</b> ${tour.location}</div>
-                    <div><b>Thời lượng:</b> ${tour.duration}</div>
-                    <div><b>Loại tour:</b> ${tour.type === 'adventure' ? 'Mạo hiểm' : tour.type === 'cultural' ? 'Văn hóa' : 'Sinh thái'}</div>
-                    <div><b>Mô tả:</b> ${tour.description || ''}</div>
-                    <div class="tour-price" style="color: #ffd700; font-weight: 700; font-size: 1.3rem; margin: 20px 0;">
-                        ${formatPrice(tour.price)}
-                    </div>
-                    <div style="margin-top:20px;">
-                        <button class="btn btn-primary" onclick="bookTour('${tour.id}')">Đặt tour</button>
-                    </div>
-                </div>
-            `;
-        
-        
-            // Gọi modal Bootstrap
-            var modalEl = document.getElementById('tourDetailModal');
-            var modal = new bootstrap.Modal(modalEl);
-            modal.show();
-            
-            // Gắn lại sự kiện cho nút "Đặt tour"
-            setTimeout(() => {
-                const btnBook = document.getElementById('btn-book-tour');
-                if (btnBook) {
-                    btnBook.onclick = function() {
-                        // Đóng modal trước
-                        modal.hide();
-                        // Đợi modal đóng xong mới mở Swal
-                        modalEl.addEventListener('hidden.bs.modal', function handler() {
-                            bookTour(tour.id);
-                            // Chỉ gọi 1 lần
-                            modalEl.removeEventListener('hidden.bs.modal', handler);
-                        });
-                    };
-                }
-            }, 100);
-
-        }
     </script>
 </body>
 </html>

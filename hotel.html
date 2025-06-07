@@ -1762,6 +1762,126 @@
     z-index: 1060 !important;
     display: block;
 }
+/* {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f7fa;
+        } */
+        .main-section {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 48px 0;
+            border-radius: 40px;
+    overflow: hidden;
+    /* background: #fff; */
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        .info {
+            flex: 1.2;
+            padding: 0 0  0 32px;
+            /* background: #fff; */
+            border-radius: 0 0 0 80px;
+            /* box-shadow: 0 2px 16px rgba(0,0,0,0.06); */
+            max-width: 450px;
+            height: 435px;
+        }
+        .info h2 {
+            color: #222;
+            font-size: 2.6rem;
+            margin: 0 0 32px 0;
+            font-weight: 800;
+        }
+        .info h3 {
+            font-size: 1.1rem;
+            margin: 0 0 8px 0;
+            font-weight: 700;
+        }
+        .info .label {
+            display: inline-block;
+            /* background: #eaf1ff; */
+            color: #3b5bdb;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 16px;
+            padding: 4px 16px;
+            margin-bottom: 8px;
+        }
+        .info .item {
+            margin-bottom: 36px;
+        }
+        .info .item:last-child {
+            margin-bottom: 0;
+        }
+        .info .desc {
+            color: #444;
+            font-size: 1rem;
+            margin-top: 4px;
+        }
+        .image-section {
+            flex: 1.1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-right: 64px;
+        }
+        .main-img {
+            width: 100%;
+            max-width: 520px;
+            height: 420px;
+            object-fit: cover;
+            border-radius: 0 120px 0 80px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+        }
+        @media (max-width: 900px) {
+            .main-section {
+                flex-direction: column;
+                padding: 24px 0;
+            }
+            .info, .image-section {
+                padding: 24px 16px;
+                max-width: 100%;
+            }
+            .image-section {
+                padding-right: 0;
+                margin-top: 32px;
+            }
+            .main-img {
+                height: 260px;
+                border-radius: 0 60px 0 40px;
+            }
+        }
+        .hotel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.hotel-image img {
+    max-width: 100;
+    border-radius: 12px;
+    height: 100%;
+}
+
+.hotel-info {
+    padding: 20px;
+}
+
+.hotel-info h1 {
+    color: #333;
+    font-size: 24px;
+}
+
+.hotel-info p {
+    color: #666;
+    font-size: 16px;
+}
     
     </style>
     <style>
@@ -1787,7 +1907,7 @@
             <div class="nav-flex">
                 <!-- Logo -->
                 <a class="navbar-brand" href="#">
-                    <img src="images/LuxuryHaven.png" alt="LuxuryHaven Logo">
+                    <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
                 </a>
 
                 <!-- Search Box -->
@@ -1809,7 +1929,7 @@
                         <li class="dropdown"><a href="prioritize.html">Ưu đãi</a></li>
                         <li class="dropdown"><a href="travel_guide.html">Cẩm nang du lịch</a></li>
                         <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
-                        <li class="dropdown"><a href="vuichoi.html">🌐</a></li>
+                        <!-- <li class="dropdown"><a href="vuichoi.html">🌐</a></li> -->
 
                         <li>
                             <div class="d-flex align-items-center">
@@ -1835,19 +1955,26 @@
 
     <!-- Hero Section with Search -->
     <section class="hero-section">
-        <p class="nautica-script">LuxuryHaven</p>
+        <p class="nautica-script">LuxuryHavenTravel</p>
         <div class="hero-content"><br><br><br><br><br><br><br><br>
             
-            <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
-            <p>Đặt phòng khách sạn, tour du lịch, vé máy bay với giá tốt nhất</p>
+            <h1>Nơi nghỉ dưỡng hoàn hảo cho bạn</h1>
+            <p>Khám phá khách sạn phù hợp mọi hành trình</p>
         </div><br><br><br><br><br><br><br><br>
     </section>
     <main>
+        <h2 class="section-title">Chào mừng đến với LuxuryHavenTravel</h2>
+        <div class="hotel-container">
+            <div class="hotel-image">
+                <img src="images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg" alt="LuxuryHavenTravel">
+            </div>
+            <div class="hotel-info">
+                <p>Tại Luxury Haven Travel, chúng tôi không chỉ cung cấp các tour, mà còn mang đến những hành trình đậm chất nghệ thuật, sự xa hoa và những khoảnh khắc đáng nhớ. Với dịch vụ cao cấp và hành trình được thiết kế riêng, mỗi điểm đến đều trở thành một câu chuyện tuyệt vời, nơi bạn được tận hưởng sự tiện nghi bậc nhất và khám phá vẻ đẹp tráng lệ của thế giới.</p>
+                <p>Từ những khu nghỉ dưỡng độc quyền đến những trải nghiệm du lịch cá nhân hóa, chúng tôi biến mỗi chuyến đi thành một kỷ niệm đáng giá. Hãy cùng Luxury Haven Travel chinh phục những điểm đến mơ ước và tận hưởng phong cách du lịch của riêng bạn.</p>
+            </div>
+        </div>
         <div class="container">
-            
-
             <h2 class="section-title">✨ KHÁCH SẠN</h2>
-            
             <!-- City Navigation -->
             <div class="city-nav-wrapper" style="position:relative; margin-bottom:32px;">
               <!-- <button class="city-nav-btn left" aria-label="Cuộn trái">&lt;</button> -->
@@ -1867,21 +1994,20 @@
               </div>
               <!-- <button class="city-nav-btn right" aria-label="Cuộn phải">&gt;</button> -->
             </div>
-
             <!-- Hotel Grid -->
             <div id="hotel-grid" class="hotel-grid">
                 <!-- Hotels will be dynamically inserted here -->
             </div>
-            
-            <h2 class="section-title"> Đặt Phòng Khách Sạn tại LuxuryHaven</h2>
+             
+            <h2 class="section-title"> Đặt Phòng Khách Sạn tại LuxuryHavenTravel</h2>
         <!-- Phần giới thiệu về LuxuryHaven -->
         <div class="about-section" style="padding: 40px 0; background: linear-gradient(120deg, #fdf6e3 0%, #fff8e1 100%);">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-6" style="padding: 0 30px;">
-                        <h2 style="color: #1a237e; font-size: 1.8rem; font-weight: 700; margin-bottom: 15px;">Về LuxuryHaven</h2>
+                        <h2 style="color: #1a237e; font-size: 1.8rem; font-weight: 700; margin-bottom: 15px;">Về LuxuryHavenTravel</h2>
                         <p style="color: #444; font-size: 1rem; line-height: 1.5; margin-bottom: 20px;">
-                            LuxuryHaven là điểm đến lý tưởng cho những trải nghiệm nghỉ dưỡng đẳng cấp. Chúng tôi cung cấp đa dạng các loại phòng và suite sang trọng, kèm theo các tiện nghi cao cấp như nhà hàng, spa, hồ bơi. Với quy trình đặt phòng trực tuyến đơn giản và hỗ trợ 24/7, chúng tôi cam kết mang đến cho bạn kỳ nghỉ hoàn hảo.
+                            LuxuryHavenTravel là điểm đến lý tưởng cho những trải nghiệm nghỉ dưỡng đẳng cấp. Chúng tôi cung cấp đa dạng các loại phòng và suite sang trọng, kèm theo các tiện nghi cao cấp như nhà hàng, spa, hồ bơi. Với quy trình đặt phòng trực tuyến đơn giản và hỗ trợ 24/7, chúng tôi cam kết mang đến cho bạn kỳ nghỉ hoàn hảo.
                         </p>
                         <div class="features" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div class="feature-item" style="display: flex; align-items: center;">
@@ -1929,6 +2055,9 @@
                 </div>
             </div>
         </div>
+
+
+        
     </main>   
     
                 
@@ -2063,6 +2192,12 @@
                             }
                         } else {
                             hotelGrid.innerHTML = `<div class="no-hotels"><i class="fas fa-hotel" style="font-size:48px;color:#ccc"></i><br><b>Không tìm thấy khách sạn</b><br>Hiện chưa có khách sạn nào ở ${cityDisplayName}. Vui lòng thử lại sau hoặc chọn thành phố khác.</div>`;
+                        }
+                        // Sau khi render xong, nếu có từ khóa tìm kiếm thì lọc lại
+                        const searchInput = document.querySelector('.nav-search input');
+                        if (searchInput && searchInput.value.trim() !== '') {
+                            console.log('Auto search after loadHotels:', searchInput.value);
+                            performSearch(searchInput.value);
                         }
                     })
                     .catch((error) => {
@@ -2250,7 +2385,6 @@ if (btnLeft && btnRight && cityNav) {
 }
     
    function bookRoom(hotel, room) {
-    // Kiểm tra đăng nhập nếu cần
     const user = firebase.auth().currentUser;
     if (!user) {
         Swal.fire({
@@ -2266,21 +2400,27 @@ if (btnLeft && btnRight && cityNav) {
         return;
     }
 
-    // Lưu thông tin đặt phòng vào localStorage
+    // Lấy thông tin người dùng từ user object hoặc form nếu có
     const bookingData = {
-        hotelName: hotel.tenKhachSan,
-        roomType: room.name,
-        price: room.price,
-        guests: room.maxGuests || 2,
-        checkIn: new Date().toISOString().split('T')[0], // Ngày hiện tại
-        checkOut: new Date(Date.now() + 86400000).toISOString().split('T')[0], // Ngày mai
-        nights: 1,
-        type: 'hotel'
+        email: user.email || '',
+        hotelId: hotel.tenKhachSan || '',
+        roomId: room.name || '',
+        checkIn: new Date().toISOString().split('T')[0],
+        checkOut: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+        guests: room.maxGuests ? room.maxGuests.toString() : '2',
+        name: user.displayName || user.name || '',
+        phone: user.phoneNumber || '',
+        createdAt: Date.now()
     };
-    localStorage.setItem('bookingData', JSON.stringify(bookingData));
 
-    // Chuyển hướng sang trang thanh toán
-    window.location.href = 'check-out.html';
+    firebase.database().ref('bookings').push(bookingData)
+        .then((ref) => {
+            const bookingId = ref.key;
+            window.location.href = `check-out.html?bookingId=${bookingId}`;
+        })
+        .catch((err) => {
+            Swal.fire('Lỗi khi đặt phòng', err.message, 'error');
+        });
 }
                                 
     </script>
@@ -2289,7 +2429,7 @@ if (btnLeft && btnRight && cityNav) {
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
-                    <h4>Về LuxuryHaven</h4>
+                    <h4>Về LuxuryHavenTravel</h4>
                     <ul>
                         <li><a href="footer\about.html">Giới thiệu</a></li>
                         <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
@@ -2833,6 +2973,7 @@ if (btnLeft && btnRight && cityNav) {
         });
         
       </script>
+
 </body>
 </html>
 

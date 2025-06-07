@@ -1417,6 +1417,87 @@
         font-weight: bold;
         color: #d32f2f;
     }
+
+    /* Thêm hoặc cập nhật CSS cho card ưu đãi nổi bật */
+    .offer-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 16px rgba(26,35,126,0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      height: 100%;
+      transition: box-shadow 0.2s, transform 0.2s;
+      margin-bottom: 24px;
+    }
+    .offer-card:hover {
+      box-shadow: 0 8px 32px 0 rgba(26,35,126,0.18);
+      transform: translateY(-6px) scale(1.03);
+    }
+    .offer-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+    }
+    .offer-content-overlay {
+      padding: 20px 18px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      justify-content: space-between;
+    }
+    .offer-label {
+    background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 16px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .offer-card h4 {
+      font-size: 1.18rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #1a237e;
+    }
+    .offer-card p {
+      font-size: 0.98rem;
+      color: #444;
+      margin-bottom: 12px;
+    }
+    .price {
+      margin-bottom: 10px;
+    }
+    .old-price {
+      text-decoration: line-through;
+      color: #888;
+      margin-right: 8px;
+      font-size: 0.98rem;
+    }
+    .new-price {
+      color: #e67e22;
+      font-weight: 700;
+      font-size: 1.08rem;
+    }
+    .btn-primary.w-100 {
+      border-radius: 20px;
+      font-weight: 600;
+      margin-top: auto;
+    }
+    @media (max-width: 900px) {
+      .offer-card img { height: 140px; }
+    }
+    @media (max-width: 600px) {
+      .offer-card img { height: 110px; }
+    }
+    #deals-list > [class*='col-'] {
+  margin-bottom: 32px;
+}
     </style>
     <style>
         @font-face {
@@ -1442,6 +1523,51 @@
 .offer-content-overlay * {
     color: #111 !important;
 }
+.content-wrapper {
+    display: flex;
+    max-width: 1400px;
+    margin: 48px auto;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 32px rgba(44,62,80,0.10);
+    overflow: hidden;
+    min-height: 350px;
+}
+.image-section {
+    flex: 2;
+    min-width: 0;
+}
+.image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.text-section {
+    flex: 1;
+    padding: 0px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+@media (max-width: 900px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+    .image-section, .text-section {
+        flex: unset;
+        width: 100%;
+    }
+    .text-section {
+        padding: 0px 16px;
+    }
+}
+.section-photo-memories {
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
+
+
 </style>
 </head>
 <body>
@@ -1451,7 +1577,7 @@
             <div class="nav-flex">
                 <!-- Logo -->
                 <a class="navbar-brand" href="#">
-                    <img src="images/LuxuryHaven.png" alt="LuxuryHaven Logo">
+                    <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
                 </a>
 
                 <!-- Search Box -->
@@ -1473,7 +1599,7 @@
                         <li class="dropdown"><a href="prioritize.html" class="active">Ưu đãi</a></li>
                         <li class="dropdown"><a href="travel_guide.html">Cẩm nang du lịch</a></li>
                         <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
-                        <li class="dropdown"><a href="vuichoi.html">🌐</a></li>
+                        <!-- <li class="dropdown"><a href="vuichoi.html">🌐</a></li> -->
 
                         <li>
                             <div class="d-flex align-items-center">
@@ -1499,15 +1625,27 @@
 
     <!-- Hero Section with Search -->
     <section class="hero-section">
-        <p class="nautica-script">LuxuryHaven</p>
+        <p class="nautica-script">LuxuryHavenTravel</p>
         <div class="hero-content"><br><br><br><br><br><br><br><br>
             
-            <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
-            <p>Đặt phòng khách sạn, tour du lịch, vé máy bay với giá tốt nhất</p>
+            <h1>Ưu đãi đặc biệt dành riêng cho bạn</h1>
+            <p>Trải nghiệm kỳ nghỉ đẳng cấp với giá ưu đãi đến bất ngờ chỉ có tại LuxuryHavenTravel.</p>
         </div><br><br><br><br><br><br><br><br>
     </section>
 
 <main>
+    <div class="content-wrapper">
+        <div class="image-section">
+            <img src="images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg" alt="Luxury Haven Travel">
+        </div>
+        <div class="text-section">
+             <h1>Ưu Đãi Đặc Biệt Mùa Hè</h1>
+            <p>Giảm giá lên đến <strong>30%</strong> cho tất cả các đặt phòng!</p>
+            <p>Đặt ngay để nhận thêm <strong>bữa sáng miễn phí</strong> và ưu đãi đặc biệt.</p>
+            </div>
+    </div>
+               
+            
   <div class="main-sections-wrapper" style="max-width:1200px;margin:40px auto 0 auto;padding:0 12px;">
     <div class="main-section-card" style="background:#fff;border-radius:18px;box-shadow:0 2px 16px rgba(0,0,0,0.07);padding:32px 20px 28px 20px;margin-bottom:32px;">
       <h2 class="section-title" style="margin-top:0;">Ưu đãi nổi bật</h2>
@@ -1525,7 +1663,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
-                    <h4>Về LuxuryHaven</h4>
+                    <h4>Về LuxuryHavenTravel</h4>
                     <ul>
                         <li><a href="footer\about.html">Giới thiệu</a></li>
                         <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
@@ -2028,14 +2166,14 @@ if (contactForm) {
     <script>
     function renderDealCard(deal) {
         return `
-        <div class="col-md-3">
-          <div class="offer-card">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
+          <div class="offer-card w-100 d-flex flex-column">
             <img src="${deal.image}" alt="${deal.title}">
-            <div class="offer-content-overlay">
+            <div class="offer-content-overlay d-flex flex-column flex-grow-1">
               <span class="offer-label">${deal.label || ""}</span>
               <h4>${deal.title}</h4>
               <p>${deal.desc}</p>
-              <div class="price">
+              <div class="price mb-2">
                 <span class="old-price">${deal.oldPrice || ""}</span>
                 <span class="new-price">${deal.newPrice || ""}</span>
               </div>
@@ -2127,117 +2265,26 @@ if (contactForm) {
             });
             return;
         }
-        setTimeout(function() {
-            Swal.fire({
-                title: 'Đặt phòng ưu đãi',
-                html: `
-                    <input id="swal-name" class="swal2-input" placeholder="Họ tên" value="${user.displayName || ''}" autocomplete="off">
-                    <input id="swal-phone" class="swal2-input" placeholder="Số điện thoại" autocomplete="off">
-                    <input id="swal-email" class="swal2-input" placeholder="Email" value="${user.email}" autocomplete="off">
-                    <input id="swal-checkin" type="date" class="swal2-input" placeholder="Ngày nhận phòng">
-                    <input id="swal-checkout" type="date" class="swal2-input" placeholder="Ngày trả phòng">
-                    <input id="swal-guests" type="number" min="1" class="swal2-input" placeholder="Số người" value="1">
-                    <input id="swal-voucher" class="swal2-input" placeholder="Mã giảm giá (nếu có)" autocomplete="off">
-                    <div id="voucher-msg" style="font-size:0.95em;color:#d32f2f;margin-top:4px;"></div>
-                    <div class="form-text text-muted" style="margin-top: 10px;">* Bạn có thể thay đổi email nếu đặt phòng giúp người khác</div>
-                `,
-                focusConfirm: false,
-                showCancelButton: true,
-                confirmButtonText: 'Xác nhận',
-                cancelButtonText: 'Hủy',
-                preConfirm: async () => {
-                    const formData = {
-                        name: document.getElementById('swal-name').value,
-                        phone: document.getElementById('swal-phone').value,
-                        email: document.getElementById('swal-email').value,
-                        checkIn: document.getElementById('swal-checkin').value,
-                        checkOut: document.getElementById('swal-checkout').value,
-                        guests: document.getElementById('swal-guests').value,
-                        voucher: document.getElementById('swal-voucher').value.trim()
-                    };
-                    // Validate dữ liệu
-                    if (!formData.name || !formData.phone || !formData.email || !formData.checkIn || !formData.checkOut || !formData.guests) {
-                        Swal.showValidationMessage('Vui lòng điền đầy đủ thông tin');
-                        return false;
-                    }
-                    // Validate email format
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(formData.email)) {
-                        Swal.showValidationMessage('Email không hợp lệ');
-                        return false;
-                    }
-                    // Validate phone number (Vietnam format)
-                    const phoneRegex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
-                    if (!phoneRegex.test(formData.phone)) {
-                        Swal.showValidationMessage('Số điện thoại không hợp lệ');
-                        return false;
-                    }
-                    // Validate dates
-                    const checkIn = new Date(formData.checkIn);
-                    const checkOut = new Date(formData.checkOut);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    if (checkIn < today) {
-                        Swal.showValidationMessage('Ngày nhận phòng không thể trong quá khứ');
-                        return false;
-                    }
-                    if (checkOut <= checkIn) {
-                        Swal.showValidationMessage('Ngày trả phòng phải sau ngày nhận phòng');
-                        return false;
-                    }
-                    // Validate số người
-                    if (parseInt(formData.guests) < 1) {
-                        Swal.showValidationMessage('Số người phải lớn hơn 0');
-                        return false;
-                    }
-                    // Kiểm tra mã giảm giá nếu có
-                    if (formData.voucher) {
-                        const voucherValid = await checkVoucherValid(formData.voucher);
-                        if (!voucherValid) {
-                            Swal.showValidationMessage('Mã giảm giá không hợp lệ hoặc đã hết hạn');
-                            return false;
-                        }
-                    }
-                    return formData;
-                }
-            }).then((result) => {
-                if (result.isConfirmed && result.value) {
-                    // Đảm bảo đủ các trường bắt buộc cho rule Firebase
-                    const bookingData = {
-                        email: result.value.email || user.email || '',
-                        hotelId: deal.title || '',
-                        roomId: deal.id || deal.title || '',
-                        checkIn: result.value.checkIn || '',
-                        checkOut: result.value.checkOut || '',
-                        guests: result.value.guests ? result.value.guests.toString() : '1',
-                        name: result.value.name || user.displayName || '',
-                        phone: result.value.phone || '',
-                        createdAt: Date.now(),
-                        // Các trường bổ sung
-                        userId: user.uid,
-                        voucher: result.value.voucher || '',
-                        dealId: deal.id || deal.title || '',
-                        dealTitle: deal.title || ''
-                    };
-                    firebase.database().ref('bookings').push(bookingData)
-                        .then(() => {
-                            Swal.fire({
-                                title: 'Thành công!',
-                                text: 'Đặt phòng thành công! Bạn có thể xem chi tiết trong lịch sử đặt phòng.',
-                                icon: 'success',
-                                confirmButtonText: 'Xem lịch sử',
-                                showCancelButton: true,
-                                cancelButtonText: 'Đóng'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = 'member.html';
-                                }
-                            });
-                        })
-                        .catch((err) => Swal.fire('Lỗi', err.message, 'error'));
-                }
-            });
-        }, 200);
+        // Tạo bookingData cơ bản từ deal
+        const bookingData = {
+            email: user.email,
+            hotelId: deal.title,
+            roomId: deal.label,
+            checkIn: new Date().toISOString().split('T')[0],
+            checkOut: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+            guests: 1,
+            name: user.displayName || user.name || '',
+            phone: user.phoneNumber || '',
+            createdAt: Date.now(),
+            type: 'deal',
+            price: deal.newPrice.replace(/[^0-9]/g, '') || 0
+        };
+        firebase.database().ref('bookings').push(bookingData)
+            .then((ref) => {
+                const bookingId = ref.key;
+                window.location.href = `check-out.html?bookingId=${bookingId}`;
+            })
+            .catch((err) => Swal.fire('Lỗi khi đặt ưu đãi', err.message, 'error'));
     }
     // Kiểm tra mã giảm giá hợp lệ
     async function checkVoucherValid(code) {
@@ -2280,6 +2327,7 @@ if (contactForm) {
     };
     // ... existing code ...
     </script>
+    
 </body>
 </html>
 
