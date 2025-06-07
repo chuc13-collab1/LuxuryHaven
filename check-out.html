@@ -6,9 +6,13 @@
     <title>Thanh Toán - Luxury Haven</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Thêm SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- Add CryptoJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <!-- Thêm SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             background-color: #f8f9fa;
@@ -178,6 +182,8 @@
                         <p class="mb-1" id="roomType">Đang tải...</p>
                         <p class="mb-1" id="stayInfo">Đang tải...</p>
                         <p class="mb-1" id="checkInOut">Đang tải...</p>
+                        <p class="mb-1" id="hotelAddress">Đang tải...</p>
+                        <p class="mb-1" id="hotelPhone">Đang tải...</p>
                     </div>
                     
                     <div class="price-details">
@@ -325,47 +331,140 @@
 
         // Lấy thông tin đặt phòng từ Firebase
         async function loadBookingInfo() {
-            console.log('bookingId:', bookingId);
+            console.log('Bắt đầu tải thông tin đặt phòng - bookingId:', bookingId);
             if (!bookingId) {
                 alert('Không tìm thấy thông tin đặt phòng!');
                 return;
             }
 
             try {
+                // Lấy thông tin booking
                 const bookingRef = ref(database, `bookings/${bookingId}`);
-                const snapshot = await get(bookingRef);
-                const bookingData = snapshot.val();
-                console.log('bookingData:', bookingData);
+                const bookingSnapshot = await get(bookingRef);
+                const bookingData = bookingSnapshot.val();
+                console.log('Dữ liệu booking:', bookingData);
 
                 if (!bookingData) {
                     alert('Không tìm thấy thông tin đặt phòng!');
                     return;
                 }
 
-                // Cập nhật thông tin khách sạn
-                document.getElementById('hotelName').textContent = bookingData.hotelId || 'Luxury Haven Hotel';
-                document.getElementById('roomType').textContent = `Phòng ${bookingData.roomId || 'Deluxe'}`;
+                // Lấy thông tin khách sạn từ location
+                const locationRef = ref(database, 'location');
+                const locationSnapshot = await get(locationRef);
+                const locationData = locationSnapshot.val();
+                console.log('Dữ liệu location:', locationData);
+
+                // Tìm khách sạn dựa trên hotelId
+                let hotelData = null;
+                let selectedRoom = null;
+
+                // Tìm khách sạn trong tất cả các thành phố
+                for (const city in locationData) {
+                    if (locationData[city].hotels) {
+                        const hotels = locationData[city].hotels;
+                        for (let i = 0; i < hotels.length; i++) {
+                            if (hotels[i].tenKhachSan === bookingData.hotelId) {
+                                hotelData = hotels[i];
+                                // Tìm thông tin phòng
+                                if (hotelData.chiTiet && hotelData.chiTiet.rooms) {
+                                    selectedRoom = hotelData.chiTiet.rooms.find(room => 
+                                        room.name === bookingData.roomId || 
+                                        `Phòng ${room.name}` === bookingData.roomId
+                                    );
+                                }
+                                break;
+                            }
+                        }
+                        if (hotelData) break;
+                    }
+                }
+
+                console.log('Dữ liệu khách sạn tìm thấy:', hotelData);
+                console.log('Thông tin phòng tìm thấy:', selectedRoom);
+
+                if (hotelData) {
+                    // Cập nhật thông tin khách sạn
+                    document.getElementById('hotelName').textContent = hotelData.tenKhachSan;
+                    document.getElementById('hotelAddress').textContent = `Địa chỉ: ${hotelData.diaChi}`;
+                    document.getElementById('hotelPhone').textContent = `Điện thoại: ${hotelData.phone}`;
+
+                    if (selectedRoom) {
+                        document.getElementById('roomType').textContent = `Phòng ${selectedRoom.name} - ${selectedRoom.size}`;
+                        
+                        // Cập nhật giá phòng và phí dịch vụ
+                        const roomPrice = selectedRoom.price;
+                        const serviceFee = hotelData.serviceFee || 200000;
+                        const totalPrice = roomPrice + serviceFee;
+
+                        document.getElementById('roomPrice').textContent = formatCurrency(roomPrice);
+                        document.getElementById('taxAndFees').textContent = formatCurrency(serviceFee);
+                        document.getElementById('totalPrice').textContent = formatCurrency(totalPrice);
+                    } else {
+                        // Sử dụng giá từ booking nếu không tìm thấy thông tin phòng
+                        const roomPrice = parseInt(bookingData.price) || 2000000;
+                        const serviceFee = parseInt(bookingData.taxAndFees) || 200000;
+                        const totalPrice = roomPrice + serviceFee;
+
+                        document.getElementById('roomType').textContent = bookingData.roomId || 'Phòng Deluxe';
+                        document.getElementById('roomPrice').textContent = formatCurrency(roomPrice);
+                        document.getElementById('taxAndFees').textContent = formatCurrency(serviceFee);
+                        document.getElementById('totalPrice').textContent = formatCurrency(totalPrice);
+                    }
+                } else {
+                    // Sử dụng dữ liệu từ booking nếu không tìm thấy khách sạn
+                    document.getElementById('hotelName').textContent = bookingData.hotelId || 'Luxury Haven Hotel';
+                    document.getElementById('hotelAddress').textContent = 'Địa chỉ: Đang cập nhật...';
+                    document.getElementById('hotelPhone').textContent = 'Điện thoại: Đang cập nhật...';
+                    document.getElementById('roomType').textContent = bookingData.roomId || 'Phòng Deluxe';
+                    
+                    const roomPrice = parseInt(bookingData.price) || 2000000;
+                    const serviceFee = parseInt(bookingData.taxAndFees) || 200000;
+                    const totalPrice = roomPrice + serviceFee;
+
+                    document.getElementById('roomPrice').textContent = formatCurrency(roomPrice);
+                    document.getElementById('taxAndFees').textContent = formatCurrency(serviceFee);
+                    document.getElementById('totalPrice').textContent = formatCurrency(totalPrice);
+                }
+
+                // Cập nhật thông tin đặt phòng
+                const checkInDate = bookingData.checkIn || bookingData.checkInDate;
+                const checkOutDate = bookingData.checkOut || bookingData.checkOutDate;
+                
                 document.getElementById('stayInfo').textContent = 
                     `${bookingData.guests || 2} người`;
                 document.getElementById('checkInOut').textContent = 
-                    `Check-in: ${bookingData.checkIn || '14:00'} - Check-out: ${bookingData.checkOut || '12:00'}`;
+                    `Check-in: ${checkInDate} - Check-out: ${checkOutDate}`;
 
-                // Cập nhật thông tin giá
-                const roomPrice = parseInt((bookingData.price || 2000000).toString().replace(/[^0-9]/g, ''));
-                const taxAndFees = parseInt((bookingData.taxAndFees || 200000).toString().replace(/[^0-9]/g, ''));
-                const totalPrice = roomPrice + taxAndFees;
-
-                document.getElementById('roomPrice').textContent = formatCurrency(roomPrice);
-                document.getElementById('taxAndFees').textContent = formatCurrency(taxAndFees);
-                document.getElementById('totalPrice').textContent = formatCurrency(totalPrice);
-
-                // Tự động điền thông tin người dùng nếu có
-                if (bookingData.name) document.getElementById('lastName').value = bookingData.name;
-                if (bookingData.email) document.getElementById('email').value = bookingData.email;
-                if (bookingData.phone) document.getElementById('phone').value = bookingData.phone;
-                if (bookingData.address) document.getElementById('address').value = bookingData.address;
+                // Tự động điền thông tin người dùng
+                if (bookingData.guestInfo) {
+                    // Cấu trúc mới
+                    const guestInfo = bookingData.guestInfo;
+                    if (guestInfo.name) {
+                        const nameParts = guestInfo.name.split(' ');
+                        const lastName = nameParts.pop() || '';
+                        const firstName = nameParts.join(' ');
+                        document.getElementById('firstName').value = firstName;
+                        document.getElementById('lastName').value = lastName;
+                    }
+                    if (guestInfo.email) document.getElementById('email').value = guestInfo.email;
+                    if (guestInfo.phone) document.getElementById('phone').value = guestInfo.phone;
+                    if (guestInfo.address) document.getElementById('address').value = guestInfo.address;
+                } else {
+                    // Cấu trúc cũ
+                    if (bookingData.name) {
+                        const nameParts = bookingData.name.split(' ');
+                        const lastName = nameParts.pop() || '';
+                        const firstName = nameParts.join(' ');
+                        document.getElementById('firstName').value = firstName;
+                        document.getElementById('lastName').value = lastName;
+                    }
+                    if (bookingData.email) document.getElementById('email').value = bookingData.email;
+                    if (bookingData.phone) document.getElementById('phone').value = bookingData.phone;
+                    if (bookingData.address) document.getElementById('address').value = bookingData.address;
+                }
             } catch (error) {
-                console.error('Error loading booking info:', error);
+                console.error('Lỗi khi tải thông tin:', error);
                 alert('Có lỗi xảy ra khi tải thông tin đặt phòng!');
             }
         }
@@ -422,11 +521,30 @@
             return hmac.toString(CryptoJS.enc.Hex);
         }
 
-        // Hàm xử lý thanh toán VNPay
+        // Cập nhật hàm processVNPayPayment
         async function processVNPayPayment(bookingId, amount) {
             try {
                 if (!bookingId) {
                     throw new Error('Mã đặt phòng không hợp lệ');
+                }
+
+                // Kiểm tra user đã đăng nhập
+                if (!auth.currentUser) {
+                    throw new Error('Vui lòng đăng nhập để thực hiện thanh toán');
+                }
+
+                // Kiểm tra quyền truy cập booking
+                const bookingRef = ref(database, `bookings/${bookingId}`);
+                const bookingSnapshot = await get(bookingRef);
+                const bookingData = bookingSnapshot.val();
+
+                if (!bookingData) {
+                    throw new Error('Không tìm thấy thông tin đặt phòng');
+                }
+
+                // Kiểm tra xem user có quyền thanh toán booking này không
+                if (bookingData.userId && bookingData.userId !== auth.currentUser.uid) {
+                    throw new Error('Bạn không có quyền thanh toán đơn đặt phòng này');
                 }
 
                 // Tạo mã giao dịch duy nhất
@@ -481,28 +599,46 @@
                     .map(([key, value]) => `${key}=${encodeURIComponent(value).replace(/%20/g, '+')}`)
                     .join('&');
 
-                // Cập nhật trạng thái thanh toán trong Firebase
-                const paymentRef = ref(database, `bookings/${bookingId}/payments`);
-                const newPaymentRef = await push(paymentRef);
-                await set(newPaymentRef, {
-                    status: 'pending',
-                    paymentMethod: 'vnpay',
-                    amount: amount,
-                    transactionRef: txnRef,
-                    timestamp: new Date().toISOString(),
-                    userId: auth.currentUser.uid,
-                    paymentUrl: paymentUrl
-                });
+                try {
+                    // Cập nhật trạng thái thanh toán trong Firebase
+                    const paymentRef = ref(database, `bookings/${bookingId}/payments/${auth.currentUser.uid}`);
+                    
+                    // Cập nhật thông tin payment
+                    await update(ref(database, `bookings/${bookingId}`), {
+                        userId: auth.currentUser.uid,
+                        status: 'pending_payment',
+                        updatedAt: serverTimestamp()
+                    });
 
-                // Chuyển hướng đến trang thanh toán VNPay
-                window.location.href = paymentUrl;
+                    // Lưu thông tin payment
+                    await set(paymentRef, {
+                        status: 'pending',
+                        paymentMethod: 'vnpay',
+                        amount: amount,
+                        transactionRef: txnRef,
+                        timestamp: serverTimestamp(),
+                        userId: auth.currentUser.uid,
+                        paymentUrl: paymentUrl
+                    });
+
+                    // Chuyển hướng đến trang thanh toán VNPay
+                    window.location.href = paymentUrl;
+
+                } catch (error) {
+                    console.error('Lỗi xử lý thanh toán VNPay:', error);
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi thanh toán',
+                        text: 'Có lỗi xảy ra khi xử lý thanh toán VNPay. Vui lòng thử lại sau.'
+                    });
+                }
 
             } catch (error) {
                 console.error('Lỗi xử lý thanh toán VNPay:', error);
-                Swal.fire({
+                await Swal.fire({
                     icon: 'error',
                     title: 'Lỗi thanh toán',
-                    text: 'Có lỗi xảy ra khi xử lý thanh toán VNPay. Vui lòng thử lại sau.'
+                    text: error.message || 'Có lỗi xảy ra khi xử lý thanh toán VNPay. Vui lòng thử lại sau.'
                 });
             }
         }

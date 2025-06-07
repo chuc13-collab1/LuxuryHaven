@@ -187,21 +187,6 @@
       "updatedAt": "2025-06-05T02:49:29.766Z",
       "updatedBy": "C0KP03RRSFahajSy8RnQhWyV1T82"
     },
-    "-ORk04ei9ZEMKFyeoAHp": {
-      "checkIn": "2025-06-03",
-      "checkOut": "2025-06-03",
-      "createdAt": 1748857280334,
-      "email": "baokhangml99@gmail.com",
-      "guests": "2",
-      "hotelId": "Leo núi Bà Đen",
-      "name": "Nguyến Tiến Chức",
-      "note": "thêm tiện ích",
-      "phone": "0362960545",
-      "price": "900000",
-      "roomId": "adventure2",
-      "type": "tour",
-      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
-    },
     "-ORk0f4P4yKw-t5zex3Q": {
       "checkIn": "2025-06-03",
       "checkOut": "2025-06-03",
@@ -370,23 +355,6 @@
       "phone": "",
       "roomId": "Standard Room"
     },
-    "-ORz4dYBfVF90XYbGZPn": {
-      "checkIn": "2025-06-05",
-      "checkOut": "2025-06-06",
-      "createdAt": 1749110134589,
-      "email": "baokhangml99@gmail.com",
-      "guests": "2",
-      "hotelId": "Sai Gon Ban Me Hotel",
-      "name": "Nguyến Tiến Chức",
-      "payment": {
-        "method": "vnpay",
-        "status": "pending",
-        "timestamp": "2025-06-05T07:55:39.521Z",
-        "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
-      },
-      "phone": "",
-      "roomId": "Standard Room"
-    },
     "-ORz5BmnDQs3esczY8-w": {
       "checkIn": "2025-06-05",
       "checkOut": "2025-06-06",
@@ -448,26 +416,6 @@
       "name": "Nguyến Tiến Chức",
       "phone": "",
       "roomId": "Deluxe Room"
-    },
-    "-ORzXogxSufkh2Tlsk53": {
-      "checkIn": "2025-06-05",
-      "checkOut": "2025-06-06",
-      "createdAt": 1749117781910,
-      "duration": "1 ngày",
-      "email": "baokhangml99@gmail.com",
-      "guests": 1,
-      "hotelId": "Leo núi Bà Đen",
-      "name": "Nguyến Tiến Chức",
-      "payment": {
-        "method": "vnpay",
-        "status": "pending",
-        "timestamp": "2025-06-05T10:03:06.719Z",
-        "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
-      },
-      "phone": "",
-      "price": 900000,
-      "roomId": "Tây Ninh",
-      "type": "tour"
     },
     "-ORzcYKOZIyuTCahqQT3": {
       "checkIn": "2025-06-05",
@@ -751,6 +699,496 @@
       },
       "phone": "",
       "roomId": "Deluxe Room"
+    },
+    "-OS8atJKPWAeAOHy2haX": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749286621887,
+      "email": "baokhangml99@gmail.com",
+      "guests": "2",
+      "hotelId": "Sai Gon Ban Me Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payment": {
+        "amount": 2200000,
+        "paymentMethod": "vnpay",
+        "status": "pending",
+        "timestamp": 1749287180275,
+        "transactionId": "",
+        "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
+      },
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OS8diTRscBJrQxpstVC": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749287363907,
+      "email": "baokhangml99@gmail.com",
+      "guests": "2",
+      "hotelId": "Sai Gon Ban Me Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payment": {
+        "amount": 2200000,
+        "paymentMethod": "vnpay",
+        "status": "completed",
+        "timestamp": 1749288430370,
+        "transactionId": "15005600",
+        "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2",
+        "vnpayDetails": {
+          "bankCode": "NCB",
+          "bankTranNo": "VNP15005600",
+          "cardType": "ATM",
+          "payDate": "20250607161028"
+        }
+      },
+      "paymentStatus": "completed",
+      "phone": "",
+      "roomId": "Deluxe Room",
+      "status": "confirmed",
+      "updatedAt": 1749288430600,
+      "updatedBy": "znKsJjausdR0vcdhpUoWUt9BYtM2"
+    },
+    "-OS8iZaVvSsHwbhqmn24": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749288634196,
+      "email": "baokhangml99@gmail.com",
+      "guests": "2",
+      "hotelAddress": "N/A",
+      "hotelId": "Mường Thanh Luxury Buôn Ma Thuột",
+      "hotelName": "Mường Thanh Luxury Buôn Ma Thuột",
+      "hotelPhone": "N/A",
+      "name": "Nguyến Tiến Chức",
+      "payment": {
+        "amount": 2200000,
+        "paymentMethod": "vnpay",
+        "status": "completed",
+        "timestamp": 1749289550056,
+        "transactionId": "15005652",
+        "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2",
+        "vnpayDetails": {
+          "bankCode": "NCB",
+          "bankTranNo": "VNP15005652",
+          "cardType": "ATM",
+          "payDate": "20250607163437"
+        }
+      },
+      "paymentStatus": "completed",
+      "phone": "",
+      "roomId": "Executive Suite",
+      "roomPrice": 0,
+      "roomType": "Executive Suite",
+      "serviceFee": 0,
+      "status": "confirmed",
+      "updatedAt": 1749289550287,
+      "updatedBy": "znKsJjausdR0vcdhpUoWUt9BYtM2"
+    },
+    "-OS8qTlSjorZWy2wUkFU": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749290707443,
+      "email": "baokhangml99@gmail.com",
+      "guests": "2",
+      "hotelAddress": "N/A",
+      "hotelId": "Mường Thanh Luxury Buôn Ma Thuột",
+      "hotelName": "Mường Thanh Luxury Buôn Ma Thuột",
+      "hotelPhone": "N/A",
+      "lockedAt": 1749290712782,
+      "lockedUntil": 1749291612553,
+      "name": "Nguyến Tiến Chức",
+      "payment": {
+        "amount": 2200000,
+        "paymentMethod": "vnpay",
+        "status": "completed",
+        "timestamp": 1749291255505,
+        "transactionId": "15005731",
+        "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2",
+        "vnpayDetails": {
+          "bankCode": "NCB",
+          "bankTranNo": "VNP15005731",
+          "cardType": "ATM",
+          "payDate": "20250607170618"
+        }
+      },
+      "paymentStatus": "completed",
+      "phone": "",
+      "roomId": "Executive Suite",
+      "roomNumber": "N/A",
+      "roomPrice": 0,
+      "roomType": "Executive Suite",
+      "serviceFee": 0,
+      "status": "confirmed",
+      "updatedAt": 1749291255733,
+      "updatedBy": "znKsJjausdR0vcdhpUoWUt9BYtM2"
+    },
+    "-OSA15u_TGwHPbzAFcdq": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749310531931,
+      "email": "baokhangml99@gmail.com",
+      "guests": "2",
+      "hotelId": "Sai Gon Ban Me Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSA17BQZ0XvWc28OX1S": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:35:37.257Z",
+          "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
+        }
+      },
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OSA1kE_ditOSTvHUiF3": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749310701204,
+      "email": "quantrikhachsan@gmail.com",
+      "guests": "2",
+      "hotelId": "Sai Gon Ban Me Hotel",
+      "name": "chuc",
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OSA1sJ9nY1B3AKDSHzR": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749310734304,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Sai Gon Ban Me Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSA1tI8yPCGaS3gsMLV": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:38:58.355Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        },
+        "-OSA2GKIoXksuJg6dHry": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:40:36.735Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OSA2JIULpu02BhO64lO": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749310848915,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Elephants Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSA2KHtuLT7LQ6t3lWm": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:40:53.044Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Superior Room"
+    },
+    "-OSA2d4L6sDzidyJZQ9P": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749310934024,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Elephants Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSA2drZO8-O26HjF7mj": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:42:17.305Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Superior Room"
+    },
+    "-OSA2x-CACBHN_2KhDKO": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749311015614,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Nguyên Nga Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSA2xmVsM-AGLX8lgtd": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:43:38.911Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        },
+        "-OSA3b10UGJmpKa2cWqL": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:46:27.759Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Family Room"
+    },
+    "-OSA3exbI7gtZWdZOY5J": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749311203870,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Dakruco Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSA3fzyhl_ga5oZfYd-": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:46:48.109Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OSA47qAks_XHHuR4912": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749311326270,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Sai Gon Ban Me Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSA48pFLp6DwcBTer5l": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:48:50.349Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OSA4ouDQy3nptS3BoAd": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749311506748,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Sai Gon Ban Me Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSA4pjjo16viJ_A_tWQ": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:51:50.171Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        },
+        "-OSA5VlsmY7I9seUF31L": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:54:46.437Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OSA5YFwBJkIwlwrjwdH": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749311696646,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Sai Gon Ban Me Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSA5ZBpseQqD26oWjtY": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T15:55:00.453Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OSA7wUC2sVRcyxp1BAF": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749312324215,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Mường Thanh Luxury Buôn Ma Thuột",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSA7y-gWUCA-1-eopw7": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "status": "pending",
+          "timestamp": "2025-06-07T16:05:30.539Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Executive Suite"
+    },
+    "-OSA93l3PvWqGhsG2FnJ": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749312620275,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Sai Gon Ban Me Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSA94iIDtgEG4KYlo14": {
+          "amount": 2200000,
+          "bankCode": "NCB",
+          "bankTranNo": "VNP15006262",
+          "payDate": "07/06/2025 23:11:28",
+          "paymentMethod": "vnpay",
+          "paymentUrl": "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=220000000&vnp_Command=pay&vnp_CreateDate=20250607231024&vnp_CurrCode=VND&vnp_ExpireDate=20250607232524&vnp_IpAddr=14.230.67.246&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+dat+phong+-OSA93l3PvWqGhsG2FnJ&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2F127.0.0.1%3A5500%2Fvnpay_return.html&vnp_TmnCode=9SMU243L&vnp_TxnRef=BOOK1749312623812257&vnp_Version=2.1.0&vnp_SecureHash=062636ac60f7368ac76a180b22af8f4998cadaa3a4daad22dd29712d07912b83c72364110512d51cd180cb51e0f46314a31d17ed81bc881eb6de8e30504b1166",
+          "responseCode": "00",
+          "status": "completed",
+          "timestamp": "2025-06-07T16:10:24.188Z",
+          "transactionNo": "15006262",
+          "transactionRef": "BOOK1749312623812257",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OSAA2tP_fBnTe_1xsys": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749312878927,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Sai Gon Ban Me Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSAA3saPwaSZlNBt78L": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "paymentUrl": "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=220000000&vnp_Command=pay&vnp_CreateDate=20250607231442&vnp_CurrCode=VND&vnp_ExpireDate=20250607232942&vnp_IpAddr=14.230.67.246&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+dat+phong+-OSAA2tP_fBnTe_1xsys&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2F127.0.0.1%3A5500%2Fvnpay_return.html&vnp_TmnCode=9SMU243L&vnp_TxnRef=BOOK1749312882446586&vnp_Version=2.1.0&vnp_SecureHash=001c47b6f34ccac477def38b72fad076f6a7e21584b7e4c5b5ea5b095971a0c1463d4b0fac0e37ba1b08ab181cd9fdd44f1d286d0521d1d6089dc6f291a92200",
+          "status": "pending",
+          "timestamp": "2025-06-07T16:14:42.893Z",
+          "transactionRef": "BOOK1749312882446586",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        },
+        "BOOK1749312882446586": {
+          "amount": 2200000,
+          "bankCode": "NCB",
+          "bankTranNo": "VNP15006270",
+          "cardType": "ATM",
+          "payDate": "07/06/2025 23:16:35",
+          "status": "success",
+          "transactionNo": "15006270",
+          "updatedAt": "2025-06-07T16:48:31.190Z",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OSAHxUIjt4ndEN-lZR5": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749314951238,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Mường Thanh Luxury Buôn Ma Thuột",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSAHyR2aegwxIzM3mOp": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "paymentUrl": "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=220000000&vnp_Command=pay&vnp_CreateDate=20250607234915&vnp_CurrCode=VND&vnp_ExpireDate=20250608000415&vnp_IpAddr=14.230.67.246&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+dat+phong+-OSAHxUIjt4ndEN-lZR5&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2F127.0.0.1%3A5500%2Fvnpay_return.html&vnp_TmnCode=9SMU243L&vnp_TxnRef=BOOK1749314954763173&vnp_Version=2.1.0&vnp_SecureHash=35d546bc1ab5d049d7512f5bc17942e3b044bd61aba6b44b5e9d1cda3ea7893c5ce3e46090e0766845572e6fdc51b350ac52e51bb477efddd675c20e7ea66f5b",
+          "status": "pending",
+          "timestamp": "2025-06-07T16:49:15.129Z",
+          "transactionRef": "BOOK1749314954763173",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Executive Suite"
+    },
+    "-OSAKTYFtExRjxoQld1U": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749315611615,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Sai Gon Ban Me Hotel",
+      "name": "Nguyến Tiến Chức",
+      "payments": {
+        "-OSAKV2Tsc4PwJ-epNNK": {
+          "amount": 2200000,
+          "paymentMethod": "vnpay",
+          "paymentUrl": "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=220000000&vnp_Command=pay&vnp_CreateDate=20250608000017&vnp_CurrCode=VND&vnp_ExpireDate=20250608001517&vnp_IpAddr=14.230.67.246&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+dat+phong+-OSAKTYFtExRjxoQld1U&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2F127.0.0.1%3A5500%2Fvnpay_return.html&vnp_TmnCode=9SMU243L&vnp_TxnRef=BOOK1749315616753885&vnp_Version=2.1.0&vnp_SecureHash=bfcce3b29d16d937eee59463bedf5c5d1ce6a84217e094591584e84feb7c83c261886270fc46895097b0def64001810ea7239c77bde2b98585d344996f5d30cb",
+          "status": "pending",
+          "timestamp": "2025-06-07T17:00:17.106Z",
+          "transactionRef": "BOOK1749315616753885",
+          "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+        }
+      },
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OSANtLIF_y2UyrnZq6c": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749316507137,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Dakruco Hotel",
+      "name": "Nguyến Tiến Chức",
+      "phone": "",
+      "roomId": "Deluxe Room"
+    },
+    "-OSAO0_rAw48YxkjBboh": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749316540895,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Mường Thanh Luxury Buôn Ma Thuột",
+      "name": "Nguyến Tiến Chức",
+      "phone": "",
+      "roomId": "Executive Suite"
+    },
+    "-OSAPn4ImFIqjrcb2Q93": {
+      "checkIn": "2025-06-07",
+      "checkOut": "2025-06-08",
+      "createdAt": 1749317005767,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Mường Thanh Luxury Buôn Ma Thuột",
+      "name": "Nguyến Tiến Chức",
+      "phone": "",
+      "roomId": "Executive Suite"
     }
   },
   "location": {
@@ -783,8 +1221,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -800,13 +1237,14 @@
                   "Wifi miễn phí."
                 ],
                 "size": "60m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
           "diaChi": "81 Nguyễn Tất Thành, Tân An, Thành phố Buôn Ma Thuột, Đắk Lắk",
           "moTa": "Tọa lạc tại trung tâm thành phố Buôn Ma Thuột, **Mường Thanh Luxury Buôn Ma Thuột** là khách sạn 5 sao hiện đại, mang đến không gian sang trọng và tiện nghi cao cấp. Khách sạn là lựa chọn lý tưởng cho khách du lịch và công tác khi đến Đắk Lắk.",
+          "phone": "0262 386 7890",
+          "serviceFee": 200000,
           "tenKhachSan": "Mường Thanh Luxury Buôn Ma Thuột",
           "xepHangSao": 5
         },
@@ -836,8 +1274,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -853,13 +1290,14 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
           "diaChi": "10 Phan Chu Trinh, Thắng Lợi, Thành phố Buôn Ma Thuột, Đắk Lắk",
           "moTa": "Nằm ngay trung tâm thành phố Buôn Ma Thuột, **Sai Gon Ban Me Hotel** là khách sạn 4 sao với kiến trúc hiện đại và dịch vụ chuyên nghiệp. Khách sạn là lựa chọn tốt cho cả khách công tác và du lịch khám phá Tây Nguyên.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Sai Gon Ban Me Hotel",
           "xepHangSao": 4
         },
@@ -885,8 +1323,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "20m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -900,13 +1337,14 @@
                   "Phòng tắm với vòi sen."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
           "diaChi": "143 Phan Chu Trinh, Thắng Lợi, Thành phố Buôn Ma Thuột, Đắk Lắk",
           "moTa": "Nằm ở vị trí trung tâm, **Elephants Hotel** là khách sạn 3 sao với không gian thoải mái và dịch vụ thân thiện. Khách sạn là lựa chọn tốt cho du khách muốn khám phá Buôn Ma Thuột với chi phí hợp lý.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Elephants Hotel",
           "xepHangSao": 3
         },
@@ -929,8 +1367,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "18m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi và 1 Giường đơn",
@@ -943,13 +1380,14 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "22m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
           "diaChi": "13 Lý Thường Kiệt, Thống Nhất, Thành phố Buôn Ma Thuột, Đắk Lắk",
           "moTa": "Nằm ở vị trí trung tâm, **Nguyên Nga Hotel** là khách sạn 3 sao với không gian đơn giản và tiện nghi. Khách sạn là lựa chọn phù hợp cho du khách có ngân sách hạn chế hoặc cần một nơi nghỉ chân cơ bản.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Nguyên Nga Hotel",
           "xepHangSao": 3
         },
@@ -975,8 +1413,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "20m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -990,13 +1427,14 @@
                   "Phòng tắm với vòi sen."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
           "diaChi": "212 Nguyễn Công Trứ, Tự An, Thành phố Buôn Ma Thuột, Đắk Lắk",
           "moTa": "Nằm ở vị trí thuận tiện, **Dam San Hotel** là khách sạn 3 sao với không gian thoải mái và tiện nghi cơ bản. Khách sạn là lựa chọn tốt cho du khách muốn khám phá Buôn Ma Thuột với ngân sách hợp lý.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Dam San Hotel",
           "xepHangSao": 3
         },
@@ -1026,8 +1464,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -1043,13 +1480,14 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
           "diaChi": "30 Nguyễn Chí Thanh, Tân An, Thành phố Buôn Ma Thuột, Đắk Lắk",
           "moTa": "Nằm ở vị trí thuận tiện, **Dakruco Hotel** là khách sạn 4 sao với không gian rộng rãi và đầy đủ tiện nghi. Khách sạn là lựa chọn tốt cho cả khách công tác và du lịch khi đến Buôn Ma Thuột.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Dakruco Hotel",
           "xepHangSao": 4
         }
@@ -1087,13 +1525,14 @@
                   "Wifi miễn phí"
                 ],
                 "size": "40m²",
-                "view": "Hướng sông Hậu lãng mạn",
-                "roomNumber": "110"
+                "view": "Hướng sông Hậu lãng mạn"
               }
             ]
           },
           "diaChi": "Cái Khế, Ninh Kiều, Cần Thơ",
           "moTa": "Nằm duyên dáng bên bờ sông Hậu hiền hòa, Victoria Can Tho Resort là một ốc đảo xanh mát và lãng mạn, mang đậm phong cách kiến trúc Pháp cổ điển giao thoa tinh tế với nét truyền thống Việt Nam.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Victoria Can Tho Resort",
           "xepHangSao": 5
         },
@@ -1122,13 +1561,14 @@
                   "Minibar"
                 ],
                 "size": "50m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               }
             ]
           },
           "diaChi": "Khu E1, Cái Khế, Ninh Kiều, Cần Thơ",
           "moTa": "Khách sạn Mường Thanh Luxury Cần Thơ là lựa chọn hoàn hảo cho kỳ nghỉ dưỡng với không gian sang trọng, hiện đại và vị trí trung tâm.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Muong Thanh Luxury Can Tho Hotel",
           "xepHangSao": 5
         },
@@ -1157,13 +1597,14 @@
                   "TV 55 inch"
                 ],
                 "size": "80m²",
-                "view": "Hướng sông Hậu",
-                "roomNumber": "110"
+                "view": "Hướng sông Hậu"
               }
             ]
           },
           "diaChi": "209, 30/4, Xuân Khánh, Ninh Kiều, Cần Thơ",
           "moTa": "Là khách sạn 5 sao cao cấp nằm tại trung tâm Cần Thơ, Vinpearl Hotel mang đến sự tiện nghi và dịch vụ đẳng cấp.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Vinpearl Hotel Can Tho",
           "xepHangSao": "5"
         },
@@ -1192,13 +1633,14 @@
                   "Bộ đồ dùng vệ sinh cao cấp"
                 ],
                 "size": "45m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               }
             ]
           },
           "diaChi": "2 Hai Bà Trưng, Ninh Kiều, Cần Thơ",
           "moTa": "Ninh Kiều Riverside là khách sạn ven sông với không gian thoáng đãng, thích hợp cho du khách muốn tận hưởng vẻ đẹp của Cần Thơ.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Ninh Kieu Riverside Hotel",
           "xepHangSao": "4"
         },
@@ -1227,13 +1669,14 @@
                   "Máy pha cà phê"
                 ],
                 "size": "85m²",
-                "view": "Hướng sông",
-                "roomNumber": "110"
+                "view": "Hướng sông"
               }
             ]
           },
           "diaChi": "209, 30/4, Xuân Khánh, Ninh Kiều, Cần Thơ",
           "moTa": "Sheraton Can Tho là khách sạn sang trọng bậc nhất tại trung tâm thành phố, mang đến dịch vụ cao cấp và không gian nghỉ dưỡng đẳng cấp.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Sheraton Can Tho",
           "xepHangSao": "5"
         },
@@ -1262,13 +1705,14 @@
                   "Minibar cao cấp"
                 ],
                 "size": "95m²",
-                "view": "Hồ nước yên bình",
-                "roomNumber": "110"
+                "view": "Hồ nước yên bình"
               }
             ]
           },
           "diaChi": "Cồn Ấu, Cái Răng, Cần Thơ",
           "moTa": "Ẩn mình trên Cồn Ấu yên tĩnh, Azerai Can Tho mang đến trải nghiệm nghỉ dưỡng sang trọng giữa thiên nhiên xanh mát và không gian tĩnh lặng.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Azerai Can Tho",
           "xepHangSao": "5"
         },
@@ -1297,13 +1741,14 @@
                   "Wifi miễn phí"
                 ],
                 "size": "48m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               }
             ]
           },
           "diaChi": "88-90 Hai Bà Trưng, Ninh Kiều, Cần Thơ",
           "moTa": "West Hotel là khách sạn hiện đại tọa lạc ngay trung tâm Cần Thơ, với thiết kế tối giản nhưng sang trọng và dịch vụ chất lượng.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "West Hotel Can Tho",
           "xepHangSao": "4"
         },
@@ -1316,7 +1761,10 @@
             ],
             "image": "https://img.freepik.com/premium-photo/urban-palace-luxury-haven_1031523-20441.jpg"
           },
+          "diaChi": "Cái Khế, Ninh Kiều, Cần Thơ",
           "moTa": "Tọa lạc tại Bến Ninh Kiều, với kiến trúc độc đáo riêng biệt, khiến các khách hàng khi vào tạo được sự thỏa mái, vui vẻ, và được cảm giác của vua chúa .\n",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "LuxuryHaven",
           "xepHangSao": "4"
         }
@@ -1354,8 +1802,7 @@
                   "Wifi miễn phí tốc độ cao."
                 ],
                 "size": "40m²",
-                "view": "Hướng vườn hoặc thành phố",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -1372,13 +1819,14 @@
                   "Dịch vụ quản gia cá nhân."
                 ],
                 "size": "70m²",
-                "view": "Hướng Hồ Xuân Hương",
-                "roomNumber": "120"
+                "view": "Hướng Hồ Xuân Hương"
               }
             ]
           },
           "diaChi": "02 Trần Phú, Phường 3, Đà Lạt, Lâm Đồng",
           "moTa": "Tọa lạc tại trung tâm thành phố Đà Lạt, **Dalat Palace Heritage Hotel** là biểu tượng của sự sang trọng và lịch sử, mang đậm kiến trúc Pháp cổ kính. Khách sạn được xây dựng từ năm 1922, mang đến không gian nghỉ dưỡng hoàng gia với tầm nhìn tuyệt đẹp ra Hồ Xuân Hương và những khu vườn xanh mướt.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Dalat Palace Heritage Hotel",
           "xepHangSao": "5"
         },
@@ -1410,8 +1858,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "50m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường King và 2 Giường đơn",
@@ -1429,13 +1876,14 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "80m² (gồm 2 phòng ngủ)",
-                "view": "Toàn cảnh thung lũng",
-                "roomNumber": "120"
+                "view": "Toàn cảnh thung lũng"
               }
             ]
           },
           "diaChi": "Lê Lai, Phường 5, Đà Lạt, Lâm Đồng",
           "moTa": "Nằm ẩn mình trên những ngọn đồi xanh mướt của Đà Lạt, Ana Mandara Villas Dalat Resort & Spa là một khu nghỉ dưỡng độc đáo với những biệt thự Pháp cổ kính được phục hồi tinh tế. Nơi đây mang đến sự kết hợp hoàn hảo giữa nét kiến trúc truyền thống và tiện nghi hiện đại, tạo nên không gian yên bình và lãng mạn.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Ana Mandara Villas Dalat Resort & Spa",
           "xepHangSao": "5"
         },
@@ -1464,8 +1912,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -1481,13 +1928,14 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng vườn hoặc thành phố",
-                "roomNumber": "120"
+                "view": "Hướng vườn hoặc thành phố"
               }
             ]
           },
           "diaChi": "15 Trần Phú, Phường 3, Đà Lạt, Lâm Đồng",
           "moTa": "Tọa lạc ngay cạnh Dalat Palace, **Dalat Hotel Du Parc** là một khách sạn lịch sử khác mang phong cách kiến trúc Pháp thuộc địa. Với không gian cổ kính và vị trí thuận tiện, khách sạn mang đến trải nghiệm nghỉ dưỡng hoài niệm và thư thái.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Dalat Hotel Du Parc",
           "xepHangSao": "4"
         },
@@ -1519,8 +1967,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường King",
@@ -1536,13 +1983,14 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng thung lũng hoặc thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thung lũng hoặc thành phố"
               }
             ]
           },
           "diaChi": "03 Nguyễn Du, Phường 9, Đà Lạt, Lâm Đồng",
           "moTa": "Tọa lạc trên một ngọn đồi yên tĩnh, **Mercure Dalat Resort** là một khu nghỉ dưỡng độc đáo được cải tạo từ những biệt thự Pháp cổ. Khách sạn mang đến không gian sang trọng, cổ điển và tầm nhìn đẹp ra thành phố hoặc rừng thông.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Mercure Dalat Resort",
           "xepHangSao": "4"
         },
@@ -1574,8 +2022,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "38m²",
-                "view": "Hướng đồi hoặc sân golf",
-                "roomNumber": "110"
+                "view": "Hướng đồi hoặc sân golf"
               },
               {
                 "bed": "1 Giường King",
@@ -1591,13 +2038,14 @@
                   "Wifi miễn phí."
                 ],
                 "size": "45m²",
-                "view": "Hướng hồ hoặc sân golf",
-                "roomNumber": "120"
+                "view": "Hướng hồ hoặc sân golf"
               }
             ]
           },
           "diaChi": "Khu du lịch Hồ Tuyền Lâm, Phường 3, Đà Lạt, Lâm Đồng",
           "moTa": "Nằm ẩn mình giữa khung cảnh thiên nhiên hùng vĩ của Hồ Tuyền Lâm, Swiss-Belresort Tuyen Lam Dalat mang đến một không gian nghỉ dưỡng yên bình, sang trọng và hòa mình vào thiên nhiên. Kiến trúc của resort lấy cảm hứng từ những biệt thự kiểu Pháp, kết hợp hài hòa với vẻ đẹp của núi rừng.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Swiss-Belresort Tuyen Lam Dalat",
           "xepHangSao": "4"
         },
@@ -1630,8 +2078,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -1647,13 +2094,14 @@
                   "Wifi miễn phí."
                 ],
                 "size": "45m²",
-                "view": "Hướng hồ hoặc đồi thông",
-                "roomNumber": "120"
+                "view": "Hướng hồ hoặc đồi thông"
               }
             ]
           },
           "diaChi": "Phân khu chức năng 7.9 KDL Hồ Tuyền Lâm, Phường 3, Đà Lạt, Lâm Đồng",
           "moTa": "Nằm bên bờ Hồ Tuyền Lâm thơ mộng, **Terracotta Hotel & Resort Dalat** là một khu nghỉ dưỡng hiện đại, sang trọng, mang đến không gian yên bình và gần gũi với thiên nhiên. Với thiết kế độc đáo và tiện nghi đa dạng, resort là lựa chọn lý tưởng cho các gia đình và cặp đôi.",
+          "phone": "0292xxxxxxx",
+          "serviceFee": 200000,
           "tenKhachSan": "Terracotta Hotel & Resort Dalat",
           "xepHangSao": "4"
         },
@@ -1682,8 +2130,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -1699,8 +2146,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố hoặc thung lũng",
-                "roomNumber": "120"
+                "view": "Hướng thành phố hoặc thung lũng"
               }
             ]
           },
@@ -1733,8 +2179,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "20m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi và 1 Giường đơn",
@@ -1749,8 +2194,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -1794,8 +2238,7 @@
                   "Két an toàn."
                 ],
                 "size": "70m²",
-                "view": "Hướng biển hoặc vườn",
-                "roomNumber": "110"
+                "view": "Hướng biển hoặc vườn"
               },
               {
                 "bed": "1 Giường King",
@@ -1812,8 +2255,7 @@
                   "Dịch vụ quản gia cá nhân 24/7."
                 ],
                 "size": "170m²",
-                "view": "Toàn cảnh biển Đông",
-                "roomNumber": "120"
+                "view": "Toàn cảnh biển Đông"
               }
             ]
           },
@@ -1853,8 +2295,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "90m²",
-                "view": "Hướng vườn riêng",
-                "roomNumber": "110"
+                "view": "Hướng vườn riêng"
               },
               {
                 "bed": "1 Giường King",
@@ -1870,8 +2311,7 @@
                   "Dịch vụ quản gia."
                 ],
                 "size": "120m²",
-                "view": "Trực diện biển",
-                "roomNumber": "120"
+                "view": "Trực diện biển"
               }
             ]
           },
@@ -1909,8 +2349,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "42m²",
-                "view": "Hướng vườn hoặc thành phố",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -1926,8 +2365,7 @@
                   "Quyền lợi Executive Lounge."
                 ],
                 "size": "50m²",
-                "view": "Trực diện biển",
-                "roomNumber": "120"
+                "view": "Trực diện biển"
               }
             ]
           },
@@ -1965,8 +2403,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "37m²",
-                "view": "Hướng vườn hoặc hồ bơi",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc hồ bơi"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -1982,8 +2419,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "37m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -2021,8 +2457,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng vườn hoặc hồ bơi",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc hồ bơi"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -2039,8 +2474,7 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "36m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -2077,8 +2511,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -2094,8 +2527,7 @@
                   "Phòng tắm sang trọng."
                 ],
                 "size": "40m²",
-                "view": "Hướng sông Hàn",
-                "roomNumber": "120"
+                "view": "Hướng sông Hàn"
               }
             ]
           },
@@ -2132,8 +2564,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -2150,8 +2581,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng sông Hàn",
-                "roomNumber": "120"
+                "view": "Hướng sông Hàn"
               }
             ]
           },
@@ -2189,8 +2619,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố hoặc vườn",
-                "roomNumber": "110"
+                "view": "Hướng thành phố hoặc vườn"
               },
               {
                 "bed": "1 Giường King",
@@ -2206,8 +2635,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng sông Hàn",
-                "roomNumber": "120"
+                "view": "Hướng sông Hàn"
               }
             ]
           },
@@ -2242,8 +2670,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -2259,8 +2686,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -2296,8 +2722,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -2313,8 +2738,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -2351,8 +2775,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -2369,8 +2792,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng sông Hàn",
-                "roomNumber": "120"
+                "view": "Hướng sông Hàn"
               }
             ]
           },
@@ -2407,8 +2829,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -2424,8 +2845,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -2460,8 +2880,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -2477,8 +2896,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng sông Hàn",
-                "roomNumber": "120"
+                "view": "Hướng sông Hàn"
               }
             ]
           },
@@ -2520,8 +2938,7 @@
                   "Wifi miễn phí tốc độ cao."
                 ],
                 "size": "32m²",
-                "view": "Hướng vườn hoặc thành phố",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -2537,8 +2954,7 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "60m²",
-                "view": "Hướng vườn hoặc thành phố",
-                "roomNumber": "120"
+                "view": "Hướng vườn hoặc thành phố"
               }
             ]
           },
@@ -2574,8 +2990,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "48m²",
-                "view": "Hướng hồ hoặc thành phố",
-                "roomNumber": "110"
+                "view": "Hướng hồ hoặc thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -2591,8 +3006,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "48m²",
-                "view": "Hướng hồ hoặc thành phố",
-                "roomNumber": "120"
+                "view": "Hướng hồ hoặc thành phố"
               }
             ]
           },
@@ -2628,8 +3042,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -2645,8 +3058,7 @@
                   "Dịch vụ quản gia cá nhân."
                 ],
                 "size": "70m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -2681,8 +3093,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "43m²",
-                "view": "Hướng hồ hoặc vườn",
-                "roomNumber": "110"
+                "view": "Hướng hồ hoặc vườn"
               },
               {
                 "bed": "1 Giường King",
@@ -2699,8 +3110,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "43m²",
-                "view": "Trực diện hồ trên mặt nước",
-                "roomNumber": "120"
+                "view": "Trực diện hồ trên mặt nước"
               }
             ]
           },
@@ -2736,8 +3146,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "43m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -2753,8 +3162,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "43m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -2788,8 +3196,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -2805,8 +3212,7 @@
                   "Quyền lợi Executive Lounge."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -2841,8 +3247,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -2858,8 +3263,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "50m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -2894,8 +3298,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -2911,8 +3314,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -2943,8 +3345,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "20m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -2959,8 +3360,7 @@
                   "Phòng tắm với vòi sen."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -2991,8 +3391,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "18m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -3006,8 +3405,7 @@
                   "Phòng tắm với vòi sen."
                 ],
                 "size": "22m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -3050,8 +3448,7 @@
                   "Wifi miễn phí tốc độ cao."
                 ],
                 "size": "40m²",
-                "view": "Hướng vườn hoặc thành phố Hạ Long",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc thành phố Hạ Long"
               },
               {
                 "bed": "1 Giường King",
@@ -3068,8 +3465,7 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "80m²",
-                "view": "Toàn cảnh Vịnh Hạ Long",
-                "roomNumber": "120"
+                "view": "Toàn cảnh Vịnh Hạ Long"
               }
             ]
           },
@@ -3106,8 +3502,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố hoặc núi",
-                "roomNumber": "110"
+                "view": "Hướng thành phố hoặc núi"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -3123,8 +3518,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng Vịnh Hạ Long",
-                "roomNumber": "120"
+                "view": "Hướng Vịnh Hạ Long"
               }
             ]
           },
@@ -3160,8 +3554,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố Hạ Long",
-                "roomNumber": "110"
+                "view": "Hướng thành phố Hạ Long"
               },
               {
                 "bed": "1 Giường đôi",
@@ -3177,8 +3570,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng Vịnh Hạ Long",
-                "roomNumber": "120"
+                "view": "Hướng Vịnh Hạ Long"
               }
             ]
           },
@@ -3213,8 +3605,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố hoặc vườn",
-                "roomNumber": "110"
+                "view": "Hướng thành phố hoặc vườn"
               },
               {
                 "bed": "1 Giường đôi",
@@ -3230,8 +3621,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng Vịnh Hạ Long",
-                "roomNumber": "120"
+                "view": "Hướng Vịnh Hạ Long"
               }
             ]
           },
@@ -3268,8 +3658,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -3285,8 +3674,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "70m²",
-                "view": "Hướng Vịnh Hạ Long",
-                "roomNumber": "120"
+                "view": "Hướng Vịnh Hạ Long"
               }
             ]
           },
@@ -3323,8 +3711,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "45m²",
-                "view": "Hướng thành phố hoặc núi",
-                "roomNumber": "110"
+                "view": "Hướng thành phố hoặc núi"
               },
               {
                 "bed": "1 Giường King",
@@ -3341,8 +3728,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "70m²",
-                "view": "Hướng Vịnh Hạ Long",
-                "roomNumber": "120"
+                "view": "Hướng Vịnh Hạ Long"
               }
             ]
           },
@@ -3380,8 +3766,7 @@
                   "Wifi miễn phí (khu vực chung)."
                 ],
                 "size": "30m²",
-                "view": "Hướng biển (qua cửa sổ lớn hoặc ban công)",
-                "roomNumber": "110"
+                "view": "Hướng biển (qua cửa sổ lớn hoặc ban công)"
               },
               {
                 "bed": "1 Giường King",
@@ -3397,8 +3782,7 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "60m²",
-                "view": "Toàn cảnh biển",
-                "roomNumber": "120"
+                "view": "Toàn cảnh biển"
               }
             ]
           },
@@ -3435,8 +3819,7 @@
                   "Điều hòa nhiệt độ."
                 ],
                 "size": "20m²",
-                "view": "Hướng biển (qua cửa sổ lớn)",
-                "roomNumber": "110"
+                "view": "Hướng biển (qua cửa sổ lớn)"
               },
               {
                 "bed": "1 Giường đôi",
@@ -3452,8 +3835,7 @@
                   "Dịch vụ bữa ăn tại phòng."
                 ],
                 "size": "25m²",
-                "view": "Hướng biển với ban công riêng",
-                "roomNumber": "120"
+                "view": "Hướng biển với ban công riêng"
               }
             ]
           },
@@ -3489,8 +3871,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -3506,8 +3887,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng Vịnh Hạ Long",
-                "roomNumber": "120"
+                "view": "Hướng Vịnh Hạ Long"
               }
             ]
           },
@@ -3545,8 +3925,7 @@
                   "Wifi miễn phí (khu vực chung)."
                 ],
                 "size": "22m²",
-                "view": "Hướng biển với ban công riêng",
-                "roomNumber": "110"
+                "view": "Hướng biển với ban công riêng"
               },
               {
                 "bed": "1 Giường đôi",
@@ -3562,8 +3941,7 @@
                   "Dịch vụ bữa ăn tại phòng."
                 ],
                 "size": "30m²",
-                "view": "Hướng biển với ban công riêng rộng",
-                "roomNumber": "120"
+                "view": "Hướng biển với ban công riêng rộng"
               }
             ]
           },
@@ -3606,8 +3984,7 @@
                   "Dịch vụ dọn phòng 2 lần/ngày"
                 ],
                 "size": "32m²",
-                "view": "Nội thành hoặc sân trong",
-                "roomNumber": "110"
+                "view": "Nội thành hoặc sân trong"
               },
               {
                 "bed": "1 Giường King size",
@@ -3627,8 +4004,7 @@
                   "Club Lounge access"
                 ],
                 "size": "55m²",
-                "view": "Quang cảnh thành phố",
-                "roomNumber": "120"
+                "view": "Quang cảnh thành phố"
               }
             ]
           },
@@ -3673,8 +4049,7 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "80m²",
-                "view": "Hướng vườn hoặc biển",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc biển"
               },
               {
                 "bed": "2 Giường King",
@@ -3690,8 +4065,7 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "200m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -3728,8 +4102,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "36m²",
-                "view": "Hướng sông Thu Bồn",
-                "roomNumber": "110"
+                "view": "Hướng sông Thu Bồn"
               },
               {
                 "bed": "1 Giường King",
@@ -3745,8 +4118,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "70m²",
-                "view": "Hướng sông hoặc vườn",
-                "roomNumber": "120"
+                "view": "Hướng sông hoặc vườn"
               }
             ]
           },
@@ -3782,8 +4154,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -3799,8 +4170,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng sông Thu Bồn",
-                "roomNumber": "120"
+                "view": "Hướng sông Thu Bồn"
               }
             ]
           },
@@ -3837,8 +4207,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "34m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường đôi",
@@ -3854,8 +4223,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Trực diện biển",
-                "roomNumber": "120"
+                "view": "Trực diện biển"
               }
             ]
           },
@@ -3890,8 +4258,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -3907,8 +4274,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng phố hoặc hồ bơi",
-                "roomNumber": "120"
+                "view": "Hướng phố hoặc hồ bơi"
               }
             ]
           },
@@ -3944,8 +4310,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -3961,8 +4326,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng sông",
-                "roomNumber": "120"
+                "view": "Hướng sông"
               }
             ]
           },
@@ -3999,8 +4363,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường đôi",
@@ -4016,8 +4379,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng hồ bơi hoặc vườn",
-                "roomNumber": "120"
+                "view": "Hướng hồ bơi hoặc vườn"
               }
             ]
           },
@@ -4056,8 +4418,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "45m²",
-                "view": "Hướng vườn hoặc hồ bơi",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc hồ bơi"
               },
               {
                 "bed": "1 Giường King",
@@ -4074,8 +4435,7 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "90m²",
-                "view": "Hướng biển hoặc hồ bơi",
-                "roomNumber": "120"
+                "view": "Hướng biển hoặc hồ bơi"
               }
             ]
           },
@@ -4117,8 +4477,7 @@
                   "Wifi miễn phí tốc độ cao."
                 ],
                 "size": "38m²",
-                "view": "Hướng vườn hoặc thành phố",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -4134,8 +4493,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng sông Hương và Kinh thành",
-                "roomNumber": "120"
+                "view": "Hướng sông Hương và Kinh thành"
               }
             ]
           },
@@ -4173,8 +4531,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "45m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường King",
@@ -4191,8 +4548,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "70m²",
-                "view": "Hướng vườn riêng",
-                "roomNumber": "120"
+                "view": "Hướng vườn riêng"
               }
             ]
           },
@@ -4229,8 +4585,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -4246,8 +4601,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "70m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -4281,8 +4635,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -4298,8 +4651,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng sông Hương",
-                "roomNumber": "120"
+                "view": "Hướng sông Hương"
               }
             ]
           },
@@ -4334,8 +4686,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -4351,8 +4702,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng sông Hương",
-                "roomNumber": "120"
+                "view": "Hướng sông Hương"
               }
             ]
           },
@@ -4387,8 +4737,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -4404,8 +4753,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng sông Hương",
-                "roomNumber": "120"
+                "view": "Hướng sông Hương"
               }
             ]
           },
@@ -4440,8 +4788,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng vườn hoặc thành phố",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -4457,8 +4804,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng sông Hương",
-                "roomNumber": "120"
+                "view": "Hướng sông Hương"
               }
             ]
           },
@@ -4503,8 +4849,7 @@
                   "Điều hòa không khí tự động điều chỉnh."
                 ],
                 "size": "45m²",
-                "view": "Hướng biển tuyệt đẹp",
-                "roomNumber": "110"
+                "view": "Hướng biển tuyệt đẹp"
               },
               {
                 "bed": "1 Giường King lớn hoặc 2 Giường đôi",
@@ -4526,8 +4871,7 @@
                   "Dịch vụ quản gia riêng hỗ trợ 24/7."
                 ],
                 "size": "80m²",
-                "view": "Trực diện biển và bãi cát riêng",
-                "roomNumber": "120"
+                "view": "Trực diện biển và bãi cát riêng"
               },
               {
                 "bed": "1 Giường King và 2 Giường đơn",
@@ -4545,8 +4889,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "60m²",
-                "view": "Hướng vườn hoặc hồ bơi",
-                "roomNumber": "130"
+                "view": "Hướng vườn hoặc hồ bơi"
               }
             ]
           },
@@ -4590,8 +4933,7 @@
                   "Dịch vụ dọn phòng hàng ngày."
                 ],
                 "size": "60m²",
-                "view": "Hướng vịnh Emerald Bay",
-                "roomNumber": "110"
+                "view": "Hướng vịnh Emerald Bay"
               }
             ]
           },
@@ -4626,8 +4968,7 @@
                   "Bồn tắm riêng"
                 ],
                 "size": "70m²",
-                "view": "Hướng biển",
-                "roomNumber": "110"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -4659,8 +5000,7 @@
                   "Wifi tốc độ cao"
                 ],
                 "size": "90m²",
-                "view": "Vườn nhiệt đới",
-                "roomNumber": "110"
+                "view": "Vườn nhiệt đới"
               }
             ]
           },
@@ -4692,8 +5032,7 @@
                   "Ban công hướng biển"
                 ],
                 "size": "100m²",
-                "view": "Hướng biển",
-                "roomNumber": "110"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -4727,8 +5066,7 @@
                   "Wifi miễn phí"
                 ],
                 "size": "75m²",
-                "view": "Hướng biển",
-                "roomNumber": "110"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -4762,8 +5100,7 @@
                   "Bộ đồ dùng vệ sinh cao cấp"
                 ],
                 "size": "50m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               }
             ]
           },
@@ -4797,8 +5134,7 @@
                   "Dịch vụ phòng 24/7"
                 ],
                 "size": "55m²",
-                "view": "Hướng biển",
-                "roomNumber": "110"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -4841,8 +5177,7 @@
                   "Wifi miễn phí tốc độ cao."
                 ],
                 "size": "42m²",
-                "view": "Hướng vườn hoặc hồ bơi",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc hồ bơi"
               },
               {
                 "bed": "1 Giường King",
@@ -4859,8 +5194,7 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "80m²",
-                "view": "Toàn cảnh biển",
-                "roomNumber": "120"
+                "view": "Toàn cảnh biển"
               }
             ]
           },
@@ -4897,8 +5231,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "38m²",
-                "view": "Hướng thành phố hoặc núi",
-                "roomNumber": "110"
+                "view": "Hướng thành phố hoặc núi"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -4915,8 +5248,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "38m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -4953,8 +5285,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "60m²",
-                "view": "Hướng vườn hoặc hồ bơi",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc hồ bơi"
               },
               {
                 "bed": "1 Giường King",
@@ -4972,8 +5303,7 @@
                   "Dịch vụ quản gia."
                 ],
                 "size": "100m²",
-                "view": "Trực diện biển",
-                "roomNumber": "120"
+                "view": "Trực diện biển"
               }
             ]
           },
@@ -5011,8 +5341,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "60m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường King",
@@ -5029,8 +5358,7 @@
                   "Phòng tắm sang trọng với bồn tắm độc lập và vòi sen ngoài trời."
                 ],
                 "size": "100m²",
-                "view": "Trực diện biển",
-                "roomNumber": "120"
+                "view": "Trực diện biển"
               }
             ]
           },
@@ -5068,8 +5396,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "50m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường King",
@@ -5086,8 +5413,7 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "150m²",
-                "view": "Trực diện biển với hồ bơi riêng",
-                "roomNumber": "120"
+                "view": "Trực diện biển với hồ bơi riêng"
               }
             ]
           },
@@ -5124,8 +5450,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "33m²",
-                "view": "Hướng biển",
-                "roomNumber": "110"
+                "view": "Hướng biển"
               },
               {
                 "bed": "1 Giường King",
@@ -5143,8 +5468,7 @@
                   "Hệ thống âm thanh."
                 ],
                 "size": "60m²",
-                "view": "Toàn cảnh biển",
-                "roomNumber": "120"
+                "view": "Toàn cảnh biển"
               }
             ]
           },
@@ -5180,8 +5504,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng thành phố hoặc núi",
-                "roomNumber": "110"
+                "view": "Hướng thành phố hoặc núi"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -5197,8 +5520,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "38m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -5234,8 +5556,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -5251,8 +5572,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -5290,8 +5610,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng thành phố hoặc núi",
-                "roomNumber": "110"
+                "view": "Hướng thành phố hoặc núi"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -5307,8 +5626,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -5344,8 +5662,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -5361,8 +5678,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -5397,8 +5713,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -5414,8 +5729,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -5450,8 +5764,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -5467,8 +5780,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -5509,8 +5821,7 @@
                   "Wifi miễn phí tốc độ cao."
                 ],
                 "size": "50m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường King",
@@ -5526,8 +5837,7 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "100m²",
-                "view": "Trực diện biển",
-                "roomNumber": "120"
+                "view": "Trực diện biển"
               }
             ]
           },
@@ -5565,8 +5875,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "38m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường King",
@@ -5583,8 +5892,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "55m²",
-                "view": "Trực diện biển",
-                "roomNumber": "120"
+                "view": "Trực diện biển"
               }
             ]
           },
@@ -5620,8 +5928,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "45m²",
-                "view": "Hướng biển",
-                "roomNumber": "110"
+                "view": "Hướng biển"
               },
               {
                 "bed": "2 Giường King",
@@ -5638,8 +5945,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "100m²",
-                "view": "Trực diện biển",
-                "roomNumber": "120"
+                "view": "Trực diện biển"
               }
             ]
           },
@@ -5674,8 +5980,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -5691,8 +5996,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -5729,8 +6033,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường đôi",
@@ -5746,8 +6049,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng vườn",
-                "roomNumber": "120"
+                "view": "Hướng vườn"
               }
             ]
           },
@@ -5783,8 +6085,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường đôi",
@@ -5800,8 +6101,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -5838,8 +6138,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng vườn hoặc thành phố",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc thành phố"
               },
               {
                 "bed": "1 Giường King và 1 Giường tầng",
@@ -5856,8 +6155,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "50m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -5896,8 +6194,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -5913,8 +6210,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -5950,8 +6246,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -5967,8 +6262,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "60m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -5999,8 +6293,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "20m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -6014,8 +6307,7 @@
                   "Phòng tắm với vòi sen."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -6045,8 +6337,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "18m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -6060,8 +6351,7 @@
                   "Phòng tắm với vòi sen."
                 ],
                 "size": "22m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -6091,8 +6381,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "18m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -6106,8 +6395,7 @@
                   "Phòng tắm với vòi sen."
                 ],
                 "size": "22m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -6135,8 +6423,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "15m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi và 1 Giường đơn",
@@ -6149,8 +6436,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "20m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -6191,8 +6477,7 @@
                   "Wifi miễn phí tốc độ cao."
                 ],
                 "size": "50m²",
-                "view": "Hướng vườn hoặc sân golf",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc sân golf"
               },
               {
                 "bed": "1 Giường King và 2 Giường đơn",
@@ -6207,8 +6492,7 @@
                   "Phòng tắm lát đá cẩm thạch với bồn tắm độc lập và vòi sen riêng."
                 ],
                 "size": "70m²",
-                "view": "Toàn cảnh biển",
-                "roomNumber": "120"
+                "view": "Toàn cảnh biển"
               }
             ]
           },
@@ -6245,8 +6529,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "45m²",
-                "view": "Hướng vườn hoặc hồ bơi",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc hồ bơi"
               },
               {
                 "bed": "1 Giường King",
@@ -6263,8 +6546,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "60m²",
-                "view": "Trực diện biển",
-                "roomNumber": "120"
+                "view": "Trực diện biển"
               }
             ]
           },
@@ -6299,8 +6581,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng thành phố hoặc núi",
-                "roomNumber": "110"
+                "view": "Hướng thành phố hoặc núi"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -6316,8 +6597,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "38m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -6357,8 +6637,7 @@
                   "Dịch vụ quản gia cá nhân."
                 ],
                 "size": "150m²",
-                "view": "Trực diện biển",
-                "roomNumber": "110"
+                "view": "Trực diện biển"
               }
             ]
           },
@@ -6394,8 +6673,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -6411,8 +6689,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -6446,8 +6723,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -6463,8 +6739,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -6499,8 +6774,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -6516,8 +6790,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -6549,8 +6822,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "20m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -6565,8 +6837,7 @@
                   "Phòng tắm với vòi sen."
                 ],
                 "size": "25m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -6602,8 +6873,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -6619,8 +6889,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -6655,8 +6924,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -6672,8 +6940,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -6714,8 +6981,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "33m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -6731,8 +6997,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "33m²",
-                "view": "Hướng núi hoặc thung lũng",
-                "roomNumber": "120"
+                "view": "Hướng núi hoặc thung lũng"
               }
             ]
           },
@@ -6768,8 +7033,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng núi hoặc thành phố",
-                "roomNumber": "110"
+                "view": "Hướng núi hoặc thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -6785,8 +7049,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "38m²",
-                "view": "Toàn cảnh thung lũng",
-                "roomNumber": "120"
+                "view": "Toàn cảnh thung lũng"
               }
             ]
           },
@@ -6824,8 +7087,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "45m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường King",
@@ -6841,8 +7103,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "80m²",
-                "view": "Hướng thung lũng",
-                "roomNumber": "120"
+                "view": "Hướng thung lũng"
               }
             ]
           },
@@ -6875,8 +7136,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -6892,8 +7152,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng núi",
-                "roomNumber": "120"
+                "view": "Hướng núi"
               }
             ]
           },
@@ -6927,8 +7186,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -6944,8 +7202,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng núi",
-                "roomNumber": "120"
+                "view": "Hướng núi"
               }
             ]
           },
@@ -6978,8 +7235,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -6995,8 +7251,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng núi",
-                "roomNumber": "120"
+                "view": "Hướng núi"
               }
             ]
           },
@@ -7031,8 +7286,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -7048,8 +7302,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng núi",
-                "roomNumber": "120"
+                "view": "Hướng núi"
               }
             ]
           },
@@ -7090,8 +7343,7 @@
                   "Wifi miễn phí tốc độ cao."
                 ],
                 "size": "34m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -7107,8 +7359,7 @@
                   "Dịch vụ quản gia riêng."
                 ],
                 "size": "70m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -7145,8 +7396,7 @@
                   "Wifi miễn phí tốc độ cao."
                 ],
                 "size": "43m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -7162,8 +7412,7 @@
                   "Dịch vụ quản gia cá nhân 24/7."
                 ],
                 "size": "80m²",
-                "view": "Toàn cảnh sông Sài Gòn",
-                "roomNumber": "120"
+                "view": "Toàn cảnh sông Sài Gòn"
               }
             ]
           },
@@ -7200,8 +7449,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -7217,8 +7465,7 @@
                   "Quyền lợi Executive Lounge."
                 ],
                 "size": "40m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -7255,8 +7502,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "34m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -7272,8 +7518,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "34m²",
-                "view": "Hướng Nhà hát Lớn",
-                "roomNumber": "120"
+                "view": "Hướng Nhà hát Lớn"
               }
             ]
           },
@@ -7309,8 +7554,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -7326,8 +7570,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -7363,8 +7606,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -7380,8 +7622,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "34m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -7416,8 +7657,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -7433,8 +7673,7 @@
                   "Quyền lợi Executive Lounge."
                 ],
                 "size": "32m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -7469,8 +7708,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "26m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -7486,8 +7724,7 @@
                   "Phòng tắm với bồn tắm và vòi sen."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -7523,8 +7760,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -7540,8 +7776,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -7574,8 +7809,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -7591,8 +7825,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "120"
+                "view": "Hướng thành phố"
               }
             ]
           },
@@ -7633,8 +7866,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -7650,8 +7882,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -7688,8 +7919,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "40m²",
-                "view": "Hướng thành phố hoặc vườn",
-                "roomNumber": "110"
+                "view": "Hướng thành phố hoặc vườn"
               },
               {
                 "bed": "1 Giường King và 1 Giường đơn",
@@ -7706,8 +7936,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "50m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -7743,8 +7972,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng vườn",
-                "roomNumber": "110"
+                "view": "Hướng vườn"
               },
               {
                 "bed": "1 Giường đôi",
@@ -7760,8 +7988,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -7795,8 +8022,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King",
@@ -7812,8 +8038,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "45m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -7849,8 +8074,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -7866,8 +8090,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -7904,8 +8127,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "28m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -7921,8 +8143,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "32m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -7953,8 +8174,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "20m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi hoặc 2 Giường đơn",
@@ -7969,8 +8189,7 @@
                   "Phòng tắm với vòi sen."
                 ],
                 "size": "25m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -8004,8 +8223,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "25m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -8020,8 +8238,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố hoặc hồ bơi",
-                "roomNumber": "120"
+                "view": "Hướng thành phố hoặc hồ bơi"
               }
             ]
           },
@@ -8052,8 +8269,7 @@
                   "Phòng tắm riêng với vòi sen."
                 ],
                 "size": "22m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -8068,8 +8284,7 @@
                   "Phòng tắm với vòi sen."
                 ],
                 "size": "25m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -8107,8 +8322,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng vườn hoặc thành phố",
-                "roomNumber": "110"
+                "view": "Hướng vườn hoặc thành phố"
               },
               {
                 "bed": "1 Giường đôi",
@@ -8124,8 +8338,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "45m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },
@@ -8158,8 +8371,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "30m²",
-                "view": "Hướng thành phố",
-                "roomNumber": "110"
+                "view": "Hướng thành phố"
               },
               {
                 "bed": "1 Giường King hoặc 2 Giường đơn",
@@ -8175,8 +8387,7 @@
                   "Wifi miễn phí."
                 ],
                 "size": "35m²",
-                "view": "Hướng biển",
-                "roomNumber": "120"
+                "view": "Hướng biển"
               }
             ]
           },

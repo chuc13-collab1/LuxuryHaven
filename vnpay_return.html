@@ -166,9 +166,49 @@
                         const bookingSnapshot = await get(ref(database, `bookings/${bookingId}`));
                         if (bookingSnapshot.exists()) {
                             bookingData = bookingSnapshot.val();
+                            console.log('Booking ID:', bookingId);
+                            console.log('Raw booking data:', bookingSnapshot.val());
+                            console.log('Parsed booking data:', bookingData);
+                            console.log('Phone number from booking:', bookingData.phone);
+                            
+                            // Lấy thông tin từ location
+                            const locationRef = ref(database, 'location');
+                            const locationSnapshot = await get(locationRef);
+                            const locationData = locationSnapshot.val();
+                            
+                            // Tìm khách sạn và phòng trong cấu trúc location
+                            for (const city in locationData) {
+                                const hotels = locationData[city].hotels;
+                                if (hotels) {
+                                    for (const hotel of hotels) {
+                                        if (hotel.tenKhachSan === bookingData.hotelId) {
+                                            bookingData.serviceFee = hotel.serviceFee || 0;
+                                            // Tìm thông tin phòng
+                                            const rooms = hotel.chiTiet.rooms;
+                                            for (const room of rooms) {
+                                                if (room.name === bookingData.roomId) {
+                                                    bookingData.price = room.price || 0;
+                                                    break;
+                                                }
+                                            }
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Kiểm tra và format số điện thoại
+                            let phoneNumber = 'N/A';
+                            if (bookingData.phone !== undefined && bookingData.phone !== null && bookingData.phone !== '') {
+                                phoneNumber = bookingData.phone;
+                                console.log('Formatted phone number:', phoneNumber);
+                            } else {
+                                console.log('Phone number is missing or invalid');
+                            }
+                            bookingData.formattedPhone = phoneNumber;
                         }
                     } catch (error) {
-                        console.log('Không thể đọc thông tin đặt phòng:', error);
+                        console.error('Error loading booking data:', error);
                     }
                 }
 
@@ -214,11 +254,11 @@
                                 <h4 class="mb-3">Chi Tiết Đặt Phòng</h4>
                                 <div class="detail-row">
                                     <span>Khách sạn:</span>
-                                    <strong>${bookingData.hotelId || 'Luxury Haven Hotel'}</strong>
+                                    <strong>${bookingData.hotelId || 'N/A'}</strong>
                                 </div>
                                 <div class="detail-row">
                                     <span>Loại phòng:</span>
-                                    <strong>${bookingData.roomId || 'Deluxe Room'}</strong>
+                                    <strong>${bookingData.roomId || 'N/A'}</strong>
                                 </div>
                                 <div class="detail-row">
                                     <span>Check-in:</span>
@@ -232,8 +272,38 @@
                                     <span>Số khách:</span>
                                     <strong>${bookingData.guests || '2'} người</strong>
                                 </div>
+                                <div class="detail-row">
+                                    <span>Giá phòng:</span>
+                                    <strong>${formatCurrency(parseInt(bookingData.price) || 0)}</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Phí dịch vụ:</span>
+                                    <strong>${formatCurrency(parseInt(bookingData.serviceFee) || 0)}</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Tổng tiền:</span>
+                                    <strong>${formatCurrency((parseInt(bookingData.price) || 0) + (parseInt(bookingData.serviceFee) || 0))}</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Thông tin liên hệ:</span>
+                                    <strong>${bookingData.name || 'N/A'}</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Email:</span>
+                                    <strong>${bookingData.email || 'N/A'}</strong>
+                                </div>
+                               
                             </div>`;
                     }
+
+                    // Thêm nút hành động
+                    resultHTML += `
+                        <div class="text-center mt-4">
+                            
+                            <a href="index.html" class="btn-action">
+                                <i class="fas fa-home"></i> Về Trang Chủ
+                            </a>
+                        </div>`;
                 } else {
                     // Thanh toán thất bại
                     resultHTML = `
@@ -259,12 +329,6 @@
                             </div>
                         </div>`;
                 }
-
-                // Thêm nút hành động
-                resultHTML += `
-                    <div class="text-center mt-4">
-                        <a href="index.html" class="btn-action">Về Trang Chủ</a>
-                    </div>`;
 
                 resultSection.innerHTML = resultHTML;
                 document.getElementById('loadingSection').style.display = 'none';
