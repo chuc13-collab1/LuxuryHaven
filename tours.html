@@ -1613,10 +1613,13 @@
     justify-content: center;
     gap: 8px;
     cursor: pointer;
+    text-decoration: none;
 }
 .tour-btn:hover {
     background: linear-gradient(90deg, #0066cc 60%, #1a237e 100%);
     transform: translateY(-2px) scale(1.02);
+    color: #fff;
+    text-decoration: none;
 }
 
 @media (max-width: 1200px) {
@@ -2456,6 +2459,7 @@
 
     // Hàm tải danh sách tours từ Firebase
     function loadTours(type = 'all') {
+        console.log("Loading tours with type:", type);
         const toursRef = firebase.database().ref('specialTours');
         const toursGrid = document.getElementById('tours-grid');
         if (!toursGrid) return;
@@ -2463,6 +2467,7 @@
         toursGrid.innerHTML = '<div class="text-center w-100 py-5">Đang tải...</div>';
 
         toursRef.once('value').then((snapshot) => {
+            console.log("Raw tours data:", snapshot.val());
             if (snapshot.exists()) {
                 const tours = [];
                 snapshot.forEach((tourSnapshot) => {
@@ -2472,6 +2477,7 @@
                     });
                 });
                 
+                console.log("Processed tours:", tours);
                 window.tours = tours;
                 
                 // Lọc tours theo loại nếu cần
@@ -2481,7 +2487,7 @@
 
                 if (filteredTours.length === 0) {
                     toursGrid.innerHTML = `
-                        <div class="no-tours">
+                        <div class="no-tours text-center w-100 py-5">
                             <i class="fas fa-route" style="font-size:48px;color:#ccc"></i>
                             <br><b>Không tìm thấy tour</b>
                             <br>Hiện chưa có tour nào thuộc loại này. Vui lòng thử lại sau.
@@ -2489,17 +2495,52 @@
                     return;
                 }
 
-                toursGrid.innerHTML = filteredTours.map(tour => createTourCard(tour)).join('');
+                toursGrid.innerHTML = filteredTours.map(tour => `
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="tour-card h-100">
+                            <div class="tour-image">
+                                <img src="${tour.image}" alt="${tour.name}" class="img-fluid">
+                            </div>
+                            <div class="tour-content p-3">
+                                <h3 class="tour-name h5 mb-2">${tour.name}</h3>
+                                <div class="tour-rating mb-2">
+                                    ${Array(5).fill('').map((_, index) => 
+                                        `<i class="fas fa-star" style="color: ${index < tour.rating ? '#ffd700' : '#ccc'}"></i>`
+                                    ).join('')}
+                                </div>
+                                <p class="tour-location mb-2">
+                                    <i class="fas fa-map-marker-alt text-primary me-1"></i> ${tour.location}
+                                </p>
+                                <div class="tour-features mb-3">
+                                    <div><i class="far fa-clock text-primary me-1"></i> ${tour.duration}</div>
+                                    <div><i class="fas fa-tag text-primary me-1"></i> ${tour.type === 'adventure' ? 'Mạo hiểm' : tour.type === 'cultural' ? 'Văn hóa' : 'Sinh thái'}</div>
+                                </div>
+                                <div class="tour-price mb-3">
+                                    <strong>${formatPrice(tour.price)}</strong>
+                                </div>
+                                <button class="btn btn-primary w-100" onclick="showTourDetail('${tour.id}')">
+                                    <i class="fas fa-info-circle me-1"></i> Xem chi tiết
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
             } else {
                 toursGrid.innerHTML = `
-                    <div class="no-tours">
+                    <div class="no-tours text-center w-100 py-5">
                         <i class="fas fa-route" style="font-size:48px;color:#ccc"></i>
                         <br><b>Không tìm thấy tour</b>
                         <br>Hiện chưa có tour nào. Vui lòng thử lại sau.
                     </div>`;
             }
         }).catch((error) => {
-            toursGrid.innerHTML = `<div class="error">Lỗi tải dữ liệu: ${error.message}</div>`;
+            toursGrid.innerHTML = `
+                <div class="error text-center w-100 py-5 text-danger">
+                    <i class="fas fa-exclamation-triangle" style="font-size:48px;"></i>
+                    <br><b>Đã xảy ra lỗi</b>
+                    <br>Không thể tải danh sách tour. Vui lòng thử lại sau.
+                </div>`;
+            console.error('Error loading tours:', error);
         });
     }
 
@@ -2549,10 +2590,8 @@
 
     // Hàm đặt tour
     function bookTour(tourId) {
-        // Lấy thông tin tour từ danh sách đã load
-        const tour = window.tours.find(t => t.id === tourId);
-        if (!tour) return;
-
+        console.log("Starting bookTour with tourId:", tourId);
+        
         // Kiểm tra đăng nhập
         const user = firebase.auth().currentUser;
         if (!user) {
@@ -2569,29 +2608,94 @@
             return;
         }
 
-        // Tạo dữ liệu booking cho tour
+        // Lấy thông tin tour từ danh sách đã load
+        const tour = window.tours.find(t => t.id === tourId);
+        console.log("Found tour:", tour);
+        
+        if (!tour) {
+            console.error("Tour not found with ID:", tourId);
+            Swal.fire({
+                title: 'Lỗi!',
+                text: 'Không tìm thấy thông tin tour',
+                icon: 'error'
+            });
+            return;
+        }
+
+        // Tạo booking ID cho tour
+        const bookingId = `TOUR_${tourId}_${Date.now()}`;
+        console.log("Generated bookingId:", bookingId);
+
+        // Tạo dữ liệu booking theo đúng cấu trúc rules mới
         const bookingData = {
+            // Các trường bắt buộc theo rules
             email: user.email,
-            hotelId: tour.name, // hoặc tour.tourName nếu có
-            roomId: tour.location || tour.id || '',
+            hotelId: tourId,
+            roomId: "TOUR",
             checkIn: new Date().toISOString().split('T')[0],
-            checkOut: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-            guests: 1,
-            name: user.displayName || user.name || '',
-            phone: user.phoneNumber || '',
-            createdAt: Date.now(),
-            type: 'tour',
-            price: tour.price || 0,
-            duration: tour.duration || ''
+            checkOut: new Date().toISOString().split('T')[0], // Tạm thời set giống checkIn
+            guests: "1",
+            name: user.displayName || "Guest User",
+            phone: "", // Sẽ cập nhật ở trang checkout
+            
+            // Các trường bổ sung
+            userId: user.uid,
+            createdAt: firebase.database.ServerValue.TIMESTAMP,
+            status: "pending",
+            price: tour.price,
+            serviceFee: 200000, // Thêm phí dịch vụ mặc định
+            taxAndFees: 200000, // Thêm phí dịch vụ vào taxAndFees để tương thích với check-out.html
+            type: "tour",
+
+            // Thông tin tour
+            tourDetails: {
+                tourId: tourId,
+                tourName: tour.name,
+                location: tour.location,
+                duration: tour.duration,
+                image: tour.image,
+                description: tour.description,
+                rating: tour.rating,
+                available: tour.available,
+                tourType: tour.type
+            }
         };
 
-        firebase.database().ref('bookings').push(bookingData)
-            .then((ref) => {
-                const bookingId = ref.key;
-                window.location.href = `check-out.html?bookingId=${bookingId}`;
+        console.log("Booking data:", bookingData);
+
+        // Hiển thị loading
+        Swal.fire({
+            title: 'Đang xử lý...',
+            text: 'Vui lòng chờ trong giây lát',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Lưu booking vào Firebase
+        firebase.database().ref(`bookings/${bookingId}`).set(bookingData)
+            .then(() => {
+                console.log("Successfully saved booking to Firebase");
+                // Chuyển hướng đến trang check-out
+                window.location.href = `check-out.html?bookingId=${bookingId}&type=tour`;
             })
-            .catch((err) => {
-                Swal.fire('Lỗi khi đặt tour', err.message, 'error');
+            .catch((error) => {
+                console.error("Error saving booking:", error);
+                
+                // Xử lý lỗi cụ thể
+                let errorMessage = 'Không thể đặt tour. Vui lòng thử lại sau.';
+                
+                if (error.message.includes('permission_denied')) {
+                    errorMessage = 'Bạn không có quyền thực hiện thao tác này. Vui lòng đăng nhập lại.';
+                }
+                
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: errorMessage,
+                    icon: 'error',
+                    confirmButtonText: 'Đóng'
+                });
             });
     }
 
@@ -2606,46 +2710,49 @@
         
             // Render nội dung chi tiết vào modal
             document.getElementById('tour-detail-content').innerHTML = `
-                <div>
-                    <img src="${tour.image}" alt="${tour.name}" style="width:100%;border-radius:12px;margin-bottom:16px;">
-                    <h3>${tour.name}</h3>
-                    <div><b>Địa điểm:</b> ${tour.location}</div>
-                    <div><b>Thời lượng:</b> ${tour.duration}</div>
-                    <div><b>Loại tour:</b> ${tour.type === 'adventure' ? 'Mạo hiểm' : tour.type === 'cultural' ? 'Văn hóa' : 'Sinh thái'}</div>
-                    <div><b>Mô tả:</b> ${tour.description || ''}</div>
-                    <div class="tour-price" style="color: #ffd700; font-weight: 700; font-size: 1.3rem; margin: 20px 0;">
-                        ${formatPrice(tour.price)}
+                <div class="tour-detail">
+                    <img src="${tour.image}" alt="${tour.name}" class="img-fluid rounded mb-4" style="width:100%; max-height:400px; object-fit:cover;">
+                    <h3 class="mb-4">${tour.name}</h3>
+                    
+                    <div class="tour-info mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><i class="fas fa-map-marker-alt text-primary me-2"></i> <strong>Địa điểm:</strong> ${tour.location}</p>
+                                <p><i class="far fa-clock text-primary me-2"></i> <strong>Thời gian:</strong> ${tour.duration}</p>
+                                <p><i class="fas fa-tag text-primary me-2"></i> <strong>Loại tour:</strong> ${tour.type === 'adventure' ? 'Mạo hiểm' : tour.type === 'cultural' ? 'Văn hóa' : 'Sinh thái'}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><i class="fas fa-star text-warning me-2"></i> <strong>Đánh giá:</strong> ${tour.rating}/5</p>
+                                <p><i class="fas fa-check-circle text-success me-2"></i> <strong>Trạng thái:</strong> ${tour.available ? 'Còn chỗ' : 'Hết chỗ'}</p>
+                                <p><i class="fas fa-money-bill-wave text-primary me-2"></i> <strong>Giá:</strong> ${formatPrice(tour.price)}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div style="margin-top:20px;">
-                        <button class="btn btn-primary" onclick="bookTour('${tour.id}')">Đặt tour</button>
+
+                    <div class="tour-description mb-4">
+                        <h5 class="mb-3">Mô tả tour</h5>
+                        <p>${tour.description}</p>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-primary btn-lg" onclick="bookTour('${tour.id}')" ${!tour.available ? 'disabled' : ''}>
+                            <i class="fas fa-shopping-cart me-2"></i>
+                            ${tour.available ? 'Đặt tour ngay' : 'Hết chỗ'}
+                        </button>
                     </div>
                 </div>
             `;
-        
-        
-            // Gọi modal Bootstrap
-            var modalEl = document.getElementById('tourDetailModal');
-            var modal = new bootstrap.Modal(modalEl);
-            modal.show();
-            
-            // Gắn lại sự kiện cho nút "Đặt tour"
-            setTimeout(() => {
-                const btnBook = document.getElementById('btn-book-tour');
-                if (btnBook) {
-                    btnBook.onclick = function() {
-                        // Đóng modal trước
-                        modal.hide();
-                        // Đợi modal đóng xong mới mở Swal
-                        modalEl.addEventListener('hidden.bs.modal', function handler() {
-                            bookTour(tour.id);
-                            // Chỉ gọi 1 lần
-                            modalEl.removeEventListener('hidden.bs.modal', handler);
-                        });
-                    };
-                }
-            }, 100);
 
+            const modalEl = document.getElementById('tourDetailModal');
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
         }
+
+        // Hàm format giá tiền
+        function formatPrice(price) {
+            return price.toLocaleString('vi-VN') + ' đ';
+        }
+
     </script>
 </body>
 </html>

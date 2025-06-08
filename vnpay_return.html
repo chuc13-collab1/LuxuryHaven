@@ -249,51 +249,104 @@
                         </div>`;
 
                     if (bookingData) {
-                        resultHTML += `
-                            <div class="booking-details">
-                                <h4 class="mb-3">Chi Tiết Đặt Phòng</h4>
-                                <div class="detail-row">
-                                    <span>Khách sạn:</span>
-                                    <strong>${bookingData.hotelId || 'N/A'}</strong>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Loại phòng:</span>
-                                    <strong>${bookingData.roomId || 'N/A'}</strong>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Check-in:</span>
-                                    <strong>${bookingData.checkIn || 'N/A'}</strong>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Check-out:</span>
-                                    <strong>${bookingData.checkOut || 'N/A'}</strong>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Số khách:</span>
-                                    <strong>${bookingData.guests || '2'} người</strong>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Giá phòng:</span>
-                                    <strong>${formatCurrency(parseInt(bookingData.price) || 0)}</strong>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Phí dịch vụ:</span>
-                                    <strong>${formatCurrency(parseInt(bookingData.serviceFee) || 0)}</strong>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Tổng tiền:</span>
-                                    <strong>${formatCurrency((parseInt(bookingData.price) || 0) + (parseInt(bookingData.serviceFee) || 0))}</strong>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Thông tin liên hệ:</span>
-                                    <strong>${bookingData.name || 'N/A'}</strong>
-                                </div>
-                                <div class="detail-row">
-                                    <span>Email:</span>
-                                    <strong>${bookingData.email || 'N/A'}</strong>
-                                </div>
-                               
-                            </div>`;
+                        if (bookingData.type === 'tour') {
+                            // Hiển thị thông tin tour
+                            resultHTML += `
+                                <div class="booking-details">
+                                    <h4 class="mb-3">Chi Tiết Đặt Tour</h4>
+                                    <div class="detail-row">
+                                        <span>Tên tour:</span>
+                                        <strong>${bookingData.tourDetails.tourName || 'N/A'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Địa điểm:</span>
+                                        <strong>${bookingData.tourDetails.location || 'N/A'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Thời gian:</span>
+                                        <strong>${bookingData.tourDetails.duration || 'N/A'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Loại tour:</span>
+                                        <strong>${bookingData.tourDetails.tourType === 'adventure' ? 'Mạo hiểm' : 
+                                                 bookingData.tourDetails.tourType === 'cultural' ? 'Văn hóa' : 'Sinh thái'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Giá tour:</span>
+                                        <strong>${formatCurrency(parseInt(bookingData.price) || 0)}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Phí dịch vụ:</span>
+                                        <strong>${formatCurrency(parseInt(bookingData.serviceFee) || 0)}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Tổng tiền:</span>
+                                        <strong>${formatCurrency((parseInt(bookingData.price) || 0) + (parseInt(bookingData.serviceFee) || 0))}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Thông tin liên hệ:</span>
+                                        <strong>${bookingData.name || 'N/A'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Email:</span>
+                                        <strong>${bookingData.email || 'N/A'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Số điện thoại:</span>
+                                        <strong>${bookingData.formattedPhone}</strong>
+                                    </div>
+                                </div>`;
+                        } else {
+                            // Hiển thị thông tin khách sạn
+                            resultHTML += `
+                                <div class="booking-details">
+                                    <h4 class="mb-3">Chi Tiết Đặt Phòng</h4>
+                                    <div class="detail-row">
+                                        <span>Khách sạn:</span>
+                                        <strong>${bookingData.hotelId || 'N/A'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Loại phòng:</span>
+                                        <strong>${bookingData.roomId || 'N/A'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Check-in:</span>
+                                        <strong>${bookingData.checkIn || 'N/A'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Check-out:</span>
+                                        <strong>${bookingData.checkOut || 'N/A'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Số khách:</span>
+                                        <strong>${bookingData.guests || '2'} người</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Giá phòng:</span>
+                                        <strong>${formatCurrency(parseInt(bookingData.price) || 0)}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Phí dịch vụ:</span>
+                                        <strong>${formatCurrency(parseInt(bookingData.serviceFee) || 0)}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Tổng tiền:</span>
+                                        <strong>${formatCurrency((parseInt(bookingData.price) || 0) + (parseInt(bookingData.serviceFee) || 0))}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Thông tin liên hệ:</span>
+                                        <strong>${bookingData.name || 'N/A'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Email:</span>
+                                        <strong>${bookingData.email || 'N/A'}</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Số điện thoại:</span>
+                                        <strong>${bookingData.formattedPhone}</strong>
+                                    </div>
+                                </div>`;
+                        }
                     }
 
                     // Thêm nút hành động
