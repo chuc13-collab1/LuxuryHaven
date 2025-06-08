@@ -2519,8 +2519,203 @@
         });
     });
     </script>
+
+    <!-- Nút mở modal đánh giá -->
+    <button id="open-review-modal" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px; z-index: 999; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-star" style="font-size: 24px;"></i>
+    </button>
+
+    <!-- Modal đánh giá -->
+    <div id="review-modal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+        <div class="modal-content" style="background-color: #fff; margin: 15% auto; padding: 20px; border-radius: 12px; max-width: 500px; position: relative;">
+            <span class="close-review-modal" style="position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer;">&times;</span>
+            <h2 style="color: #003366; margin-bottom: 20px;">Đánh giá của bạn</h2>
+            <form id="review-form">
+                <div class="rating" style="margin-bottom: 20px; text-align: center;">
+                    <i class="far fa-star star" data-rating="1" style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="2" style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="3" style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="4" style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="5" style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="review-title" style="display: block; margin-bottom: 5px;">Tiêu đề</label>
+                    <input type="text" id="review-title" class="form-control" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="review-content" style="display: block; margin-bottom: 5px;">Nội dung đánh giá</label>
+                    <textarea id="review-content" class="form-control" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 10px; background: linear-gradient(45deg, #1a237e, #0d47a1); border: none;">Gửi đánh giá</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const reviewModal = document.getElementById('review-modal');
+        const openReviewBtn = document.getElementById('open-review-modal');
+        const closeReviewBtn = document.querySelector('.close-review-modal');
+        const reviewForm = document.getElementById('review-form');
+        const stars = document.querySelectorAll('.star');
+        let currentRating = 0;
+
+        // Mở modal
+        openReviewBtn.addEventListener('click', () => {
+            reviewModal.style.display = 'block';
+        });
+
+        // Đóng modal
+        closeReviewBtn.addEventListener('click', () => {
+            reviewModal.style.display = 'none';
+        });
+
+        // Đóng modal khi click ngoài modal
+        window.addEventListener('click', (event) => {
+            if (event.target == reviewModal) {
+                reviewModal.style.display = 'none';
+            }
+        });
+
+        // Xử lý hover và click cho sao
+        stars.forEach(star => {
+            // Hover effect
+            star.addEventListener('mouseover', function() {
+                const rating = this.getAttribute('data-rating');
+                highlightStars(rating);
+            });
+
+            // Click event
+            star.addEventListener('click', function() {
+                currentRating = this.getAttribute('data-rating');
+                highlightStars(currentRating);
+            });
+        });
+
+        // Reset stars khi mouse out khỏi container
+        document.querySelector('.rating').addEventListener('mouseleave', () => {
+            highlightStars(currentRating);
+        });
+
+        // Hàm highlight sao
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const starRating = star.getAttribute('data-rating');
+                if (starRating <= rating) {
+                    star.classList.remove('far');
+                    star.classList.add('fas');
+                } else {
+                    star.classList.remove('fas');
+                    star.classList.add('far');
+                }
+            });
+        }
+
+        // Xử lý submit form
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (currentRating === 0) {
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Vui lòng chọn số sao đánh giá',
+                    icon: 'error',
+                    confirmButtonColor: '#e67e22'
+                });
+                return;
+            }
+
+            // Kiểm tra đăng nhập
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                Swal.fire({
+                    title: 'Yêu cầu đăng nhập',
+                    text: 'Vui lòng đăng nhập để gửi đánh giá',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Đăng nhập',
+                    cancelButtonText: 'Hủy',
+                    confirmButtonColor: '#1a237e',
+                    cancelButtonColor: '#d33'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Mở modal đăng nhập
+                        document.getElementById('login-modal').style.display = 'block';
+                    }
+                });
+                return;
+            }
+
+            const reviewData = {
+                rating: currentRating,
+                title: document.getElementById('review-title').value,
+                content: document.getElementById('review-content').value,
+                timestamp: new Date().toISOString(),
+                userId: user.uid,
+                userEmail: user.email,
+                userName: user.displayName || user.email
+            };
+
+
+
+            // Hiển thị loading
+            Swal.fire({
+                title: 'Đang gửi...',
+                text: 'Vui lòng đợi trong giây lát',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Lưu đánh giá vào Firebase và gửi qua EmailJS
+            Promise.all([
+                // Lưu vào Firebase
+                firebase.database().ref('reviews').push({
+                    userId: reviewData.userId,
+                    hotelId: "general", // Đánh giá chung
+                    rating: parseInt(reviewData.rating),
+                    comment: reviewData.content,
+                    date: Date.now(),
+                    userName: reviewData.userName,
+                    title: reviewData.title
+                }),
+                
+                // Gửi qua EmailJS
+                emailjs.send("service_6spwxxw", "template_vcjlg02", {
+                    to_email: "quantrikhachsan001@gmail.com",
+                    from_name: reviewData.userId || "Khách vãng lai",
+                    rating: reviewData.rating + " sao",
+                    title: reviewData.title,
+                    message: reviewData.content,
+                    timestamp: new Date().toLocaleString('vi-VN')
+                })
+            ])
+            .then(() => {
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: 'Cảm ơn bạn đã gửi đánh giá',
+                    icon: 'success',
+                    confirmButtonColor: '#e67e22'
+                });
+                reviewModal.style.display = 'none';
+                reviewForm.reset();
+                currentRating = 0;
+                highlightStars(0);
+            })
+            .catch((error) => {
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể gửi đánh giá. Vui lòng thử lại sau.',
+                    icon: 'error',
+                    confirmButtonColor: '#e67e22'
+                });
+                console.error("Error sending review: ", error);
+            });
+        });
+    });
+    </script>
         
 </body>
 </html>
-
 

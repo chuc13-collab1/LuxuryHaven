@@ -2696,6 +2696,65 @@
             if(dest) renderDestinationDetail(dest);
           });
         });
+
+        // Thêm dữ liệu điểm đến miền Nam
+        const southDestinations = [
+          {
+            name: "Phú Quốc",
+            slug: "phu-quoc",
+            region: "Nam",
+            image: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
+            overview: "Thiên đường biển đảo với bãi cát trắng mịn, nước biển trong xanh",
+            best_time_to_visit: "Tháng 10 đến tháng 4",
+            highlights: [
+              {
+                title: "Bãi Sao",
+                description: "Một trong những bãi biển đẹp nhất Việt Nam với cát trắng mịn"
+              },
+              {
+                title: "Vinpearl Safari",
+                description: "Vườn thú bán hoang dã đầu tiên của Việt Nam"
+              }
+            ]
+          },
+        //   {
+        //     name: "Cần Thơ",
+        //     slug: "can-tho",
+        //     region: "Nam",
+        //     image: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=600&q=80",
+        //     overview: "Thành phố của những kênh rạch và chợ nổi",
+        //     best_time_to_visit: "Tháng 12 đến tháng 4",
+        //     highlights: [
+        //       {
+        //         title: "Chợ nổi Cái Răng",
+        //         description: "Chợ nổi truyền thống lớn nhất vùng đồng bằng sông Cửu Long"
+        //       }
+        //     ]
+        //   },
+        //   {
+        //     name: "Vũng Tàu",
+        //     slug: "vung-tau", 
+        //     region: "Nam",
+        //     image: "https://images.unsplash.com/photo-1465156799763-2c087c332922?auto=format&fit=crop&w=400&q=80",
+        //     overview: "Thành phố biển gần Sài Gòn với nhiều bãi tắm đẹp",
+        //     best_time_to_visit: "Tháng 12 đến tháng 4",
+        //     highlights: [
+        //       {
+        //         title: "Bãi Trước",
+        //         description: "Bãi biển trung tâm thành phố, thuận tiện tắm biển và ngắm hoàng hôn"
+        //       },
+        //       {
+        //         title: "Tượng Chúa Kitô",
+        //         description: "Biểu tượng của thành phố, nơi ngắm toàn cảnh Vũng Tàu từ trên cao"
+        //       }
+        //     ]
+        //   }
+        ];
+
+        // Thêm vào Firebase
+        southDestinations.forEach(dest => {
+          db.ref('travelGuide/destinations/' + dest.slug).set(dest);
+        });
     });
     </script>
 </body>

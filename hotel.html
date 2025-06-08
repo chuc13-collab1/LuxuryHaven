@@ -5,6 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LuxuryHaven - Đặt Phòng Khách Sạn Trực Tuyến</title>
 
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+
+    <!-- Firebase Config -->
+    <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+      authDomain: "websitedatphongkhachsan.firebaseapp.com",
+      databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+      projectId: "websitedatphongkhachsan",
+      storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+      messagingSenderId: "732884739524",
+      appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+      measurementId: "G-RC61EXTZH7"
+    };
+    firebase.initializeApp(firebaseConfig);
+    if (firebase.analytics) firebase.analytics();
+    </script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Thêm SweetAlert2 CSS -->
@@ -2110,46 +2134,57 @@
             }
 
             // Function to create hotel card
-                function createHotelCard(hotel) {
-            const image = hotel.chiTiet?.image || defaultHotelImage;
-            const name = hotel.tenKhachSan || 'Không có tên';
-            const address = hotel.diaChi || '';
-            const star = hotel.xepHangSao || '';
-            const facilities = hotel.chiTiet?.facilities || [];
+            function createHotelCard(hotel) {
+                const image = hotel.chiTiet?.image || defaultHotelImage;
+                const name = hotel.tenKhachSan || 'Không có tên';
+                const address = hotel.diaChi || '';
+                const star = hotel.xepHangSao || '';
+                const facilities = hotel.chiTiet?.facilities || [];
+                const hotelId = hotel.id || `${name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}`;
 
-            let starHtml = '';
-            if (star) {
-                for (let i = 0; i < star; i++) {
-                    starHtml += '<i class="fas fa-star" style="color:#ffd700;font-size:1.1rem"></i>';
+                let starHtml = '';
+                if (star) {
+                    for (let i = 0; i < star; i++) {
+                        starHtml += '<i class="fas fa-star" style="color:#ffd700;font-size:1.1rem"></i>';
+                    }
                 }
+
+                const facilitiesHtml = facilities.slice(0, 3).map(f => 
+                    `<span class="badge bg-light text-dark">${f}</span>`
+                ).join('');
+
+                return `
+                <div class="hotel-card" data-hotel-id="${hotelId}">
+                    <div class="hotel-image">
+                        <img src="${image}" alt="${name}" onerror="this.src='${defaultHotelImage}'">
+                        <button class="favorite-btn" data-hotel-id="${hotelId}" data-hotel-name="${name}" data-hotel-image="${image}" data-hotel-location="${address}" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">
+                            <i class="far fa-heart favorite-icon" style="color: #e74c3c; font-size: 20px;"></i>
+                        </button>
+                    </div>
+                    <div class="hotel-info">
+                        <h3 class="hotel-name">${name}</h3>
+                        <div class="hotel-rating">${starHtml}</div>
+                        <p class="hotel-address">
+                            <i class="fas fa-map-marker-alt" style="color:#e67e22;margin-right:6px;"></i>
+                            ${address}
+                        </p>
+                        <div class="hotel-facilities">
+                            ${facilitiesHtml}
+                        </div>
+                        <button class="btn-view-detail" onclick='showHotelDetail(${JSON.stringify(hotel)})'>
+                            <i class="fas fa-info-circle"></i> Xem chi tiết
+                        </button>
+                    </div>
+                </div>
+                `;
             }
 
-            const facilitiesHtml = facilities.slice(0, 3).map(f => 
-                `<span class="badge bg-light text-dark">${f}</span>`
-            ).join('');
-
-            return `
-            <div class="hotel-card">
-                <div class="hotel-image">
-                    <img src="${image}" alt="${name}" onerror="this.src='${defaultHotelImage}'">
-                </div>
-                <div class="hotel-info">
-                    <h3 class="hotel-name">${name}</h3>
-                    <div class="hotel-rating">${starHtml}</div>
-                    <p class="hotel-address">
-                        <i class="fas fa-map-marker-alt" style="color:#e67e22;margin-right:6px;"></i>
-                        ${address}
-                    </p>
-                    <div class="hotel-facilities">
-                        ${facilitiesHtml}
-                    </div>
-                    <button class="btn-view-detail" onclick='showHotelDetail(${JSON.stringify(hotel)})'>
-                        <i class="fas fa-info-circle"></i> Xem chi tiết
-                    </button>
-                </div>
-            </div>
-            `;
-        }
+            // Gọi hàm cập nhật trạng thái yêu thích sau khi render khách sạn
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    updateFavoriteStatus();
+                }
+            });
             
             const cityKeyMap = {
                 "Buôn Ma Thuột": "Buôn Ma Thuột",
@@ -2172,6 +2207,11 @@
             };
             
                         function loadHotels(cityDisplayName) {
+                const hotelGrid = document.getElementById('hotel-grid');
+                if (!hotelGrid) {
+                    console.error('Không tìm thấy element hotel-grid');
+                    return;
+                }
                 const cityKey = cityKeyMap[cityDisplayName] || cityDisplayName;
                 hotelGrid.innerHTML = `<div class="text-center w-100 py-5">Đang tải...</div>`;
                 firebase.database().ref('location/' + cityKey + '/hotels').once('value')
@@ -2179,9 +2219,18 @@
                         if (snapshot.exists()) {
                             // Lấy toàn bộ mảng khách sạn
                             let hotels = snapshot.val();
-                            // Nếu là object, chuyển thành mảng
+                            // Nếu là object, chuyển thành mảng và thêm id
                             if (!Array.isArray(hotels)) {
-                                hotels = Object.values(hotels);
+                                hotels = Object.entries(hotels).map(([key, value]) => ({
+                                    ...value,
+                                    id: key // Thêm id từ key của object
+                                }));
+                            } else {
+                                // Nếu là mảng, thêm id là index
+                                hotels = hotels.map((hotel, index) => ({
+                                    ...hotel,
+                                    id: `${cityKey}_${index}` // Thêm id là cityKey_index
+                                }));
                             }
                             // Lọc bỏ phần tử null (nếu có)
                             hotels = hotels.filter(h => h);
@@ -2189,6 +2238,11 @@
                                 hotelGrid.innerHTML = `<div class="no-hotels"><i class="fas fa-hotel" style="font-size:48px;color:#ccc"></i><br><b>Không tìm thấy khách sạn</b><br>Hiện chưa có khách sạn nào ở ${cityDisplayName}. Vui lòng thử lại sau hoặc chọn thành phố khác.</div>`;
                             } else {
                                 hotelGrid.innerHTML = hotels.map(createHotelCard).join('');
+                                // Sau khi render xong, cập nhật trạng thái yêu thích
+                                const user = firebase.auth().currentUser;
+                                if (user) {
+                                    updateFavoriteStatus();
+                                }
                             }
                         } else {
                             hotelGrid.innerHTML = `<div class="no-hotels"><i class="fas fa-hotel" style="font-size:48px;color:#ccc"></i><br><b>Không tìm thấy khách sạn</b><br>Hiện chưa có khách sạn nào ở ${cityDisplayName}. Vui lòng thử lại sau hoặc chọn thành phố khác.</div>`;
@@ -2208,7 +2262,7 @@
                       const offers = snapshot.val();
                       const offerContainer = document.getElementById('special-offers');
                       offerContainer.innerHTML = '';
-                      Object.values(offers).forEach(offer => {
+                      Object.values(offers).forEach((offer, index) => {
                         offerContainer.innerHTML += `
                           <div class="offer-card">
                             <img src="${offer.image}" alt="${offer.title}">
@@ -2216,7 +2270,8 @@
                               <div class="offer-badge">Ưu đãi HOT</div>
                               <div class="offer-title">${offer.title}</div>
                               <div class="offer-desc">${offer.desc}</div>
-                            <a href="#" class="btn btn-primary tour-btn" onclick='showOfferDetail(offerIndex)'>Xem chi tiết</a>                            </div>
+                              <a href="#" class="btn btn-primary tour-btn" onclick="showOfferDetail(${index})">Xem chi tiết</a>
+                            </div>
                           </div>
                         `;
                       });
@@ -2551,26 +2606,7 @@ if (btnLeft && btnRight && cityNav) {
 </div> 
 
    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    // Firebase config và xử lý xác thực
-        var firebaseConfig = {
-      apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
-      authDomain: "websitedatphongkhachsan.firebaseapp.com",
-      databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
-      projectId: "websitedatphongkhachsan",
-      storageBucket: "websitedatphongkhachsan.firebasestorage.app",
-      messagingSenderId: "732884739524",
-      appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
-      measurementId: "G-RC61EXTZH7"
-    };
-    firebase.initializeApp(firebaseConfig);
-    if (firebase.analytics) firebase.analytics();
 
     // Đợi DOM load xong
     document.addEventListener('DOMContentLoaded', function() {
@@ -2974,6 +3010,141 @@ if (btnLeft && btnRight && cityNav) {
         
       </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Thêm event listener cho các nút yêu thích
+            document.addEventListener('click', function(event) {
+                const favoriteBtn = event.target.closest('.favorite-btn');
+                if (favoriteBtn) {
+                    const hotelId = favoriteBtn.getAttribute('data-hotel-id');
+                    const hotelName = favoriteBtn.getAttribute('data-hotel-name');
+                    const hotelImage = favoriteBtn.getAttribute('data-hotel-image');
+                    const hotelLocation = favoriteBtn.getAttribute('data-hotel-location');
+                    toggleFavorite(event, hotelId, hotelName, hotelImage, hotelLocation);
+                }
+            });
+
+            // Cập nhật trạng thái yêu thích khi load trang
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    updateFavoriteStatus();
+                }
+            });
+        });
+
+        // Hàm cập nhật trạng thái yêu thích
+        function updateFavoriteStatus() {
+            const user = firebase.auth().currentUser;
+            if (!user) return;
+
+            // Lấy danh sách yêu thích từ Firebase
+            firebase.database().ref('favorites/' + user.uid).once('value')
+                .then(snapshot => {
+                    const favorites = snapshot.val() || {};
+                    
+                    // Cập nhật UI cho tất cả các nút yêu thích
+                    document.querySelectorAll('.favorite-btn').forEach(btn => {
+                        const hotelId = btn.getAttribute('data-hotel-id');
+                        const icon = btn.querySelector('.favorite-icon');
+                        if (favorites[hotelId]) {
+                            icon.classList.remove('far');
+                            icon.classList.add('fas');
+                        } else {
+                            icon.classList.remove('fas');
+                            icon.classList.add('far');
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Lỗi khi cập nhật trạng thái yêu thích:', error);
+                });
+        }
+
+        // Hàm xử lý yêu thích
+        function toggleFavorite(event, hotelId, hotelName, hotelImage, hotelLocation) {
+            event.preventDefault();
+            event.stopPropagation(); // Ngăn sự kiện lan truyền
+            const user = firebase.auth().currentUser;
+            
+            if (!user) {
+                Swal.fire({
+                    title: 'Yêu cầu đăng nhập',
+                    text: 'Vui lòng đăng nhập để sử dụng tính năng yêu thích',
+                    icon: 'info',
+                    confirmButtonColor: '#e67e22'
+                });
+                return;
+            }
+
+            const clickedBtn = event.target.closest('.favorite-btn');
+            if (!clickedBtn) return;
+
+            const favoriteRef = firebase.database().ref('favorites/' + user.uid + '/' + hotelId);
+            const icon = clickedBtn.querySelector('.favorite-icon');
+
+            favoriteRef.once('value')
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        // Nếu đã yêu thích, xóa khỏi danh sách
+                        return favoriteRef.remove().then(() => {
+                            icon.classList.remove('fas');
+                            icon.classList.add('far');
+                            Swal.fire({
+                                title: 'Đã xóa khỏi yêu thích',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        });
+                    } else {
+                        // Nếu chưa yêu thích, thêm vào danh sách
+                        const hotelData = {
+                            id: hotelId,
+                            name: hotelName,
+                            image: hotelImage,
+                            location: hotelLocation,
+                            timestamp: firebase.database.ServerValue.TIMESTAMP
+                        };
+                        
+                        return favoriteRef.set(hotelData).then(() => {
+                            icon.classList.remove('far');
+                            icon.classList.add('fas');
+                            Swal.fire({
+                                title: 'Đã thêm vào yêu thích',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi khi thao tác với yêu thích:', error);
+                    Swal.fire({
+                        title: 'Có lỗi xảy ra',
+                        text: 'Không thể cập nhật trạng thái yêu thích',
+                        icon: 'error',
+                        confirmButtonColor: '#e67e22'
+                    });
+                });
+        }
+
+        // Thêm sự kiện lắng nghe thay đổi trạng thái đăng nhập
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // Khi đăng nhập thành công, cập nhật trạng thái yêu thích
+                updateFavoriteStatus();
+            } else {
+                // Khi đăng xuất, reset tất cả nút yêu thích về trạng thái chưa thích
+                document.querySelectorAll('.favorite-btn .favorite-icon').forEach(icon => {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
 
