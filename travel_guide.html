@@ -1,1034 +1,1112 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuxuryHaven - Đặt Phòng Khách Sạn Trực Tuyến</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LuxuryHaven - Đặt Phòng Khách Sạn Trực Tuyến</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Thêm SweetAlert2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="css/travel_guide.css">
-    <style>
-        @font-face {
-          font-family: 'Nautica Script Bold';
-          src: url('fonts/nautica-bold.otf') format('opentype');
-          font-weight: bold;
-          font-style: normal;
-        }
-        .nautica-script {
-          font-family: 'Nautica Script Bold', cursive;
-          font-size: 6em;
-          font-weight: bold;
-          color: #cddae6;
-          text-align: center;
-        }
-        .section-spacing {
-          margin-top: 48px;
-          margin-bottom: 48px;
-          padding-top: 24px;
-          padding-bottom: 24px;
-          background: #fff;
-          border-radius: 18px;
-          box-shadow: 0 2px 16px rgba(26,35,126,0.07);
-        }
-        .section-title {
-          text-align: center;
-          font-size: 2.2rem;
-          font-weight: 800;
-          color: #003366;
-          margin: 32px 0 32px 0;
-          letter-spacing: -1px;
-        }
-        @media (max-width: 900px) {
-          .section-spacing { margin-top: 28px; margin-bottom: 28px; padding: 12px 0; }
-          .row { flex-direction: column; }
-          .col-md-4 { width: 100%; }
-        }
-    </style>
-    <style>
-        @font-face {
-          font-family: 'Nautica Script Bold';
-          src: url('fonts/nautica-bold.otf') format('opentype');
-          font-weight: bold;
-          font-style: normal;
-        }
-        .nautica-script {
-          font-family: 'Nautica Script Bold', cursive;
-          font-size: 6em;
-          font-weight: bold;
-          color: #cddae6;
-          text-align: center;
-        }
-        /* Featured Guides Card Styles */
-        .featured-guides-list {
-          display: flex;
-          gap: 32px;
-          justify-content: flex-start;
-          flex-wrap: wrap;
-        }
-        .featured-guide-card {
-          flex: 1 1 0;
-          min-width: 280px;
-          max-width: 350px;
-          background: linear-gradient(to bottom, #fff 60%, #888 100%);
-          border-radius: 20px;
-          box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-          padding: 28px 22px 22px 22px;
-          color: #000000 !important;
-          font-size: 1.1rem;
-          font-weight: 400;
-          margin-bottom: 0;
-          position: relative;
-          overflow: hidden;
-          transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .featured-guide-card:hover {
-          box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-          transform: translateY(-6px) scale(1.03);
-        }
-        .featured-guide-title {
-          font-size: 1.15rem;
-          font-weight: 700;
-          margin-bottom: 8px;
-          color: #000000 !important;
-        }
-        .featured-guide-desc {
-          font-size: 1rem;
-          color: #000000 !important;
-        }
-        @media (max-width: 900px) {
-          .featured-guides-list { flex-direction: column; gap: 18px; }
-          .featured-guide-card { max-width: 100%; }
-        }
-        /* Bố cục 3 cột đều nhau cho section điểm đến theo vùng */
-.row.destination-region-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 32px;
-}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Thêm SweetAlert2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+  <link rel="stylesheet" href="css/travel_guide.css">
+  <style>
+    @font-face {
+      font-family: 'Nautica Script Bold';
+      src: url('fonts/nautica-bold.otf') format('opentype');
+      font-weight: bold;
+      font-style: normal;
+    }
 
-.col-md-4.destination-region-col {
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+    .nautica-script {
+      font-family: 'Nautica Script Bold', cursive;
+      font-size: 6em;
+      font-weight: bold;
+      color: #cddae6;
+      text-align: center;
+    }
 
-.destination-region-title {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 800;
-  color: #003366;
-  margin-bottom: 24px;
-  margin-top: 0;
-}
+    .section-spacing {
+      margin-top: 48px;
+      margin-bottom: 48px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 16px rgba(26, 35, 126, 0.07);
+    }
 
-.destination-grid {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-}
+    .section-title {
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #003366;
+      margin: 32px 0 32px 0;
+      letter-spacing: -1px;
+    }
 
-.destination-card {
-  width: 220px;
-  min-height: 260px;
-  margin-bottom: 18px;
-}
-    </style>
-    <style>
-        @font-face {
-          font-family: 'Nautica Script Bold';
-          src: url('fonts/nautica-bold.otf') format('opentype');
-          font-weight: bold;
-          font-style: normal;
-        }
-        .nautica-script {
-          font-family: 'Nautica Script Bold', cursive;
-          font-size: 6em;
-          font-weight: bold;
-          color: #cddae6;
-          text-align: center;
-        }
-        /* Featured Guides Card Styles */
-        .featured-guides-list {
-          display: flex;
-          gap: 32px;
-          justify-content: flex-start;
-          flex-wrap: wrap;
-        }
-        .featured-guide-card {
-          flex: 1 1 0;
-          min-width: 280px;
-          max-width: 350px;
-          background: linear-gradient(to bottom, #fff 60%, #888 100%);
-          border-radius: 20px;
-          box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-          padding: 28px 22px 22px 22px;
-          color: #fff;
-          font-size: 1.1rem;
-          font-weight: 400;
-          margin-bottom: 0;
-          position: relative;
-          overflow: hidden;
-          transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .featured-guide-card:hover {
-          box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-          transform: translateY(-6px) scale(1.03);
-        }
-        .featured-guide-title {
-          font-size: 1.15rem;
-          font-weight: 700;
-          margin-bottom: 8px;
-          color: #fff;
-        }
-        .featured-guide-desc {
-          font-size: 1rem;
-          color: #f0f0f0;
-        }
-        /* Latest Guides Grid Styles */
-        .guide-grid {
-          display: flex;
-          gap: 24px;
-          flex-wrap: wrap;
-          margin-top: 18px;
-        }
-        .guide-card {
-          background: #fff;
-          border-radius: 16px;
-          box-shadow: 0 2px 12px rgba(26,35,126,0.07);
-          padding: 18px 16px 14px 16px;
-          min-width: 220px;
-          max-width: 300px;
-          flex: 1 1 0;
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-        }
-        .guide-card img {
-          width: 100%;
-          height: 120px;
-          object-fit: cover;
-          border-radius: 12px;
-          margin-bottom: 10px;
-        }
-        .guide-title {
-          font-size: 1.08rem;
-          font-weight: 700;
-          color: #003366;
-          margin-bottom: 6px;
-        }
-        .guide-desc {
-          font-size: 0.98rem;
-          color: #444;
-        }
-        @media (max-width: 900px) {
-          .featured-guides-list, .guide-grid { flex-direction: column; gap: 18px; }
-          .featured-guide-card, .guide-card { max-width: 100%; }
-        }
-                .destination-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 28px;
-          margin: 32px auto;
-          max-width: 1200px;
-        }
-        .destination-card {
-          background: #fff;
-          border-radius: 16px;
-          box-shadow: 0 2px 12px rgba(26,35,126,0.08);
-          overflow: hidden;
-          text-align: center;
-          transition: box-shadow 0.2s, transform 0.2s;
-          padding: 32px 0 18px 0;
-          cursor: pointer;
-          min-height: 180px;
-          display: flex;
-          align-items: flex-end;
-          justify-content: center;
-          background-size: cover;
-          background-position: center;
-          position: relative;
-        }
-        .destination-card .destination-label {
-          background: rgba(255,255,255,0.85);
-          border-radius: 12px;
-          padding: 10px 18px;
-          font-weight: 700;
-          color: #1a237e;
-          font-size: 1.1rem;
-          margin-bottom: 12px;
-          width: 90%;
-          text-align: center;
-          box-shadow: 0 2px 8px rgba(26,35,126,0.08);
-        }
-        .destination-card:hover {
-          box-shadow: 0 8px 32px rgba(26,35,126,0.18);
-          transform: translateY(-8px) scale(1.03);
-        }
-        @media (max-width: 991px) {
-          .destination-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-        @media (max-width: 600px) {
-          .destination-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-        .nav-links .highlight-black {
-            color: #1a237e;
-        font-weight: 600;
-        font-size: 0.95rem;
-        text-decoration: none;
-        padding: 8px 0;
-        transition: all 0.3s ease;
-        position: relative;
-        white-space: nowrap;
-}
-/* .nav-links .highlight-black:hover {
+    @media (max-width: 900px) {
+      .section-spacing {
+        margin-top: 28px;
+        margin-bottom: 28px;
+        padding: 12px 0;
+      }
+
+      .row {
+        flex-direction: column;
+      }
+
+      .col-md-4 {
+        width: 100%;
+      }
+    }
+  </style>
+  <style>
+    @font-face {
+      font-family: 'Nautica Script Bold';
+      src: url('fonts/nautica-bold.otf') format('opentype');
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    .nautica-script {
+      font-family: 'Nautica Script Bold', cursive;
+      font-size: 6em;
+      font-weight: bold;
+      color: #cddae6;
+      text-align: center;
+    }
+
+    /* Featured Guides Card Styles */
+    .featured-guides-list {
+      display: flex;
+      gap: 32px;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .featured-guide-card {
+      flex: 1 1 0;
+      min-width: 280px;
+      max-width: 350px;
+      background: linear-gradient(to bottom, #fff 60%, #888 100%);
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+      padding: 28px 22px 22px 22px;
+      color: #000000 !important;
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 0;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .featured-guide-card:hover {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+      transform: translateY(-6px) scale(1.03);
+    }
+
+    .featured-guide-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #000000 !important;
+    }
+
+    .featured-guide-desc {
+      font-size: 1rem;
+      color: #000000 !important;
+    }
+
+    @media (max-width: 900px) {
+      .featured-guides-list {
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .featured-guide-card {
+        max-width: 100%;
+      }
+    }
+
+    /* Bố cục 3 cột đều nhau cho section điểm đến theo vùng */
+    .row.destination-region-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    .col-md-4.destination-region-col {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .destination-region-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #003366;
+      margin-bottom: 24px;
+      margin-top: 0;
+    }
+
+    .destination-grid {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .destination-card {
+      width: 220px;
+      min-height: 260px;
+      margin-bottom: 18px;
+    }
+  </style>
+  <style>
+    @font-face {
+      font-family: 'Nautica Script Bold';
+      src: url('fonts/nautica-bold.otf') format('opentype');
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    .nautica-script {
+      font-family: 'Nautica Script Bold', cursive;
+      font-size: 6em;
+      font-weight: bold;
+      color: #cddae6;
+      text-align: center;
+    }
+
+    /* Featured Guides Card Styles */
+    .featured-guides-list {
+      display: flex;
+      gap: 32px;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .featured-guide-card {
+      flex: 1 1 0;
+      min-width: 280px;
+      max-width: 350px;
+      background: linear-gradient(to bottom, #fff 60%, #888 100%);
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+      padding: 28px 22px 22px 22px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 0;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .featured-guide-card:hover {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+      transform: translateY(-6px) scale(1.03);
+    }
+
+    .featured-guide-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .featured-guide-desc {
+      font-size: 1rem;
+      color: #f0f0f0;
+    }
+
+    /* Latest Guides Grid Styles */
+    .guide-grid {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .guide-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(26, 35, 126, 0.07);
+      padding: 18px 16px 14px 16px;
+      min-width: 220px;
+      max-width: 300px;
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .guide-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .guide-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #003366;
+      margin-bottom: 6px;
+    }
+
+    .guide-desc {
+      font-size: 0.98rem;
+      color: #444;
+    }
+
+    @media (max-width: 900px) {
+
+      .featured-guides-list,
+      .guide-grid {
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .featured-guide-card,
+      .guide-card {
+        max-width: 100%;
+      }
+    }
+
+    .destination-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      margin: 32px auto;
+      max-width: 1200px;
+    }
+
+    .destination-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(26, 35, 126, 0.08);
+      overflow: hidden;
+      text-align: center;
+      transition: box-shadow 0.2s, transform 0.2s;
+      padding: 32px 0 18px 0;
+      cursor: pointer;
+      min-height: 180px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .destination-card .destination-label {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-weight: 700;
+      color: #1a237e;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(26, 35, 126, 0.08);
+    }
+
+    .destination-card:hover {
+      box-shadow: 0 8px 32px rgba(26, 35, 126, 0.18);
+      transform: translateY(-8px) scale(1.03);
+    }
+
+    @media (max-width: 991px) {
+      .destination-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .destination-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .nav-links .highlight-black {
+      color: #1a237e;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      padding: 8px 0;
+      transition: all 0.3s ease;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    /* .nav-links .highlight-black:hover {
     color: #fff !important;
     background: #222;
 } */
-.destination-card {
-  position: relative;
-}
+    .destination-card {
+      position: relative;
+    }
 
-.destination-card .destination-label {
-  position: absolute;
-  left: 50%;
-  bottom: 0; /* hoặc điều chỉnh số px cho phù hợp */
-  transform: translateX(-50%);
-  width: 80%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 60px;
-  background: rgba(255,255,255,0.85);
-  border-radius: 12px;
-  font-weight: 700;
-  color: #1a237e;
-  font-size: 1.1rem;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(26,35,126,0.08);
-  margin: 0;
-}
-.modal-backdrop.show {
-    z-index: 1050 !important;
-}
-.modal.show {
-    z-index: 1060 !important;
-    display: block;
-}
-    </style>
+    .destination-card .destination-label {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      /* hoặc điều chỉnh số px cho phù hợp */
+      transform: translateX(-50%);
+      width: 80%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 12px;
+      font-weight: 700;
+      color: #1a237e;
+      font-size: 1.1rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(26, 35, 126, 0.08);
+      margin: 0;
+    }
+
+    .modal-backdrop.show {
+      z-index: 1050 !important;
+    }
+
+    .modal.show {
+      z-index: 1060 !important;
+      display: block;
+    }
+  </style>
 </head>
+
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-flex">
-                <!-- Logo -->
-                <a class="navbar-brand" href="#">
-                    <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-flex">
+        <!-- Logo -->
+        <a class="navbar-brand" href="#">
+          <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
+        </a>
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <!-- Search Box -->
+        <div class="nav-search">
+          <div class="search-input-group">
+            <input type="text" placeholder="Tìm kiếm...">
+            <button type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <div class="nav-right">
+          <ul class="nav-links">
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="hotel.html">Khách sạn</a></li>
+
+            <li class="dropdown"><a href="tours.html">Tours</a></li>
+
+            <li class="dropdown"><a href="prioritize.html">Ưu đãi</a></li>
+            <li class="dropdown"><a href="travel_guide.html" class="active">Cẩm nang du lịch</a></li>
+            <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
+            <!-- <li class="dropdown"><a href="vuichoi.html">🌐</a></li> -->
+
+            <li>
+              <div class="d-flex align-items-center">
+                <div class="dropdown" id="user-dropdown" style="display:none;">
+                  <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user"></i> <span id="user-name"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="member.html"><i class="fas fa-user-circle"></i> Tài khoản</a>
+                    </li>
+                    <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng
+                        xuất</a></li>
+                  </ul>
+                </div>
+                <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
+                  <i class="fas fa-user"></i> Đăng nhập
                 </a>
-
-                <!-- Search Box -->
-                <div class="nav-search">
-                    <div class="search-input-group">
-                        <input type="text" placeholder="Tìm kiếm...">
-                        <button type="button">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="nav-right">
-                    <ul class="nav-links">
-                        <li><a href="index.html" >Trang chủ</a></li>
-                        <li><a href="hotel.html" >Khách sạn</a></li>
-                    
-                        <li class="dropdown"><a href="tours.html">Tours</a></li>
-                        
-                        <li class="dropdown"><a href="prioritize.html">Ưu đãi</a></li>
-                        <li class="dropdown"><a href="travel_guide.html" class="active">Cẩm nang du lịch</a></li>
-                        <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
-                        <!-- <li class="dropdown"><a href="vuichoi.html">🌐</a></li> -->
-
-                        <li>
-                            <div class="d-flex align-items-center">
-                                <div class="dropdown" id="user-dropdown" style="display:none;">
-                                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-user"></i> <span id="user-name"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                        <li><a class="dropdown-item" href="member.html"><i class="fas fa-user-circle"></i> Tài khoản</a></li>
-                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
-                                    </ul>
-                                </div>
-                                <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
-                                    <i class="fas fa-user"></i> Đăng nhập
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+              </div>
+            </li>
+          </ul>
         </div>
-    </nav>
-
-    <!-- Hero Section with Search -->
-    <section class="hero-section">
-        <p class="nautica-script">LuxuryHavenTravel</p>
-        <div class="hero-content"><br><br><br><br><br><br><br><br>
-            
-            <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
-            <p>Đặt phòng khách sạn, tour du lịch, vé máy bay với giá tốt nhất</p>
-        </div><br><br><br><br><br><br><br><br>
-    </section>
-<main>
-  <!-- Cẩm nang du lịch nổi bật -->
-  <section class="container section-spacing">
-    <div id="destination-content"></div>
-  </section>
-
- <!-- Điểm đến nổi bật -->
-<section class="container section-spacing">
-  <div class="featured-destinations-grid" id="dest-featured"></div>
-</section>
-
-  <!-- Điểm đến theo vùng -->
-  <section class="container section-spacing">
-    <div class="row">
-      <div class="col-md-4"><div id="dest-north"></div></div>
-      <div class="col-md-4"><div id="dest-central"></div></div>
-      <div class="col-md-4"><div id="dest-south"></div></div>
+      </div>
     </div>
+  </nav>
+
+  <!-- Hero Section with Search -->
+  <section class="hero-section">
+    <p class="nautica-script">LuxuryHavenTravel</p>
+    <div class="hero-content"><br><br><br><br><br><br><br><br>
+
+      <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
+      <p>Đặt phòng khách sạn, tour du lịch, vé máy bay với giá tốt nhất</p>
+    </div><br><br><br><br><br><br><br><br>
   </section>
+  <main>
+    <!-- Cẩm nang du lịch nổi bật -->
+    <section class="container section-spacing">
+      <div id="destination-content"></div>
+    </section>
 
-  <!-- Những cẩm nang mới nhất -->
-  <section class="container section-spacing">
-    <div id="latest-guides"></div>
-  </section>
+    <!-- Điểm đến nổi bật -->
+    <section class="container section-spacing">
+      <div class="featured-destinations-grid" id="dest-featured"></div>
+    </section>
 
-  <!-- Popup chi tiết -->
-  <section class="container" id="destination-detail" style="display:none;"></section>
-
-  <!-- Modal Điểm đến nổi bật -->
-  <div id="destination-modal" class="destination-modal">
-    <div class="modal-content">
-      <span class="close-modal">&times;</span>
-      <div class="modal-body">
-        <div class="destination-gallery">
-          <div class="main-image">
-            <img id="modal-main-image" src="" alt="Destination Image">
-          </div>
-          <div class="thumbnail-list" id="modal-thumbnails">
-            <!-- Thumbnails sẽ được thêm bằng JavaScript -->
-          </div>
+    <!-- Điểm đến theo vùng -->
+    <section class="container section-spacing">
+      <div class="row">
+        <div class="col-md-4">
+          <div id="dest-north"></div>
         </div>
-        <div class="destination-info">
-          <h2 id="modal-title"></h2>
-          <div class="destination-meta">
-            <span class="location"><i class="fas fa-map-marker-alt"></i> <span id="modal-location"></span></span>
-            <span class="rating"><i class="fas fa-star"></i> <span id="modal-rating"></span></span>
+        <div class="col-md-4">
+          <div id="dest-central"></div>
+        </div>
+        <div class="col-md-4">
+          <div id="dest-south"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Những cẩm nang mới nhất -->
+    <section class="container section-spacing">
+      <div id="latest-guides"></div>
+    </section>
+
+    <!-- Popup chi tiết -->
+    <section class="container" id="destination-detail" style="display:none;"></section>
+
+    <!-- Modal Điểm đến nổi bật -->
+    <div id="destination-modal" class="destination-modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-body">
+          <div class="destination-gallery">
+            <div class="main-image">
+              <img id="modal-main-image" src="" alt="Destination Image">
+            </div>
+            <div class="thumbnail-list" id="modal-thumbnails">
+              <!-- Thumbnails sẽ được thêm bằng JavaScript -->
+            </div>
           </div>
-          <div class="destination-description" id="modal-description"></div>
-          <div class="destination-features">
-            <h3>Đặc điểm nổi bật</h3>
-            <ul id="modal-features"></ul>
-          </div>
-          <div class="destination-map" id="modal-map"></div>
-          <div class="destination-actions">
-            <button class="btn-book-tour">Đặt Tour</button>
-            <button class="btn-book-hotel">Đặt Khách Sạn</button>
+          <div class="destination-info">
+            <h2 id="modal-title"></h2>
+            <div class="destination-meta">
+              <span class="location"><i class="fas fa-map-marker-alt"></i> <span id="modal-location"></span></span>
+              <span class="rating"><i class="fas fa-star"></i> <span id="modal-rating"></span></span>
+            </div>
+            <div class="destination-description" id="modal-description"></div>
+            <div class="destination-features">
+              <h3>Đặc điểm nổi bật</h3>
+              <ul id="modal-features"></ul>
+            </div>
+            <div class="destination-map" id="modal-map"></div>
+            <div class="destination-actions">
+              <button class="btn-book-tour">Đặt Tour</button>
+              <button class="btn-book-hotel">Đặt Khách Sạn</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</main>
+  </main>
 
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <h4>Về LuxuryHavenTravel</h4>
-                    <ul>
-                        <li><a href="footer\about.html">Giới thiệu</a></li>
-                        <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
-                        <li><a href="footer\news.html">Tin tức</a></li>
-                        <li><a href="footer\contact.html">Liên hệ</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h4>Hỗ trợ</h4>
-                    <ul>
-                        <li><a href="footer\help-center.html">Trung tâm trợ giúp</a></li>
-                        <li><a href="footer\privacy-policy.html">Chính sách bảo mật</a></li>
-                        <li><a href="footer\terms.html">Điều khoản sử dụng</a></li>
-                        <li><a href="footer\cookie-policy.html">Chính sách cookie</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h4>Đối tác</h4>
-                    <ul>
-                        <li><a href="footer\partner.html">Đăng ký làm đối tác</a></li>
-                        <li><a href="footer\marketing.html">Chương trình tiếp thị</a></li>
-                        <li><a href="footer\affiliate.html">Affiliate</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h4>Theo dõi chúng tôi</h4>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 LuxuryHaven. Tất cả quyền được bảo lưu.</p>
-            </div>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <h4>Về LuxuryHavenTravel</h4>
+          <ul>
+            <li><a href="footer\about.html">Giới thiệu</a></li>
+            <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
+            <li><a href="footer\news.html">Tin tức</a></li>
+            <li><a href="footer\contact.html">Liên hệ</a></li>
+          </ul>
         </div>
-    </footer>
-
-    <!-- Auth Modal -->
-<div id="auth-modal" class="modal">
-    <div class="modal-content" style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
-        <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
-        
-        <div id="auth-forms">
-            <form id="login-form" class="auth-form" style="text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="login-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
-                    </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
-                    </div>
-                </div>
-                <button type="submit" class="btn-gradient">Đăng nhập</button>
-                <div class="login-links">
-                    <a href="#" id="to-register">Không có tài khoản?</a>
-                    <a href="#" id="to-forgot">Quên mật khẩu?</a>
-                </div>
-            </form>
-
-            <form id="register-form" class="auth-form" style="display: none; text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
-                    <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
-                    </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
-                    </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
-                    </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu" required />
-                    </div>
-                </div>
-                <button type="submit" class="btn-gradient">Đăng ký</button>
-                <div class="login-links">
-                    <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
-                </div>
-            </form>
-
-            <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="forgot-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
-                    </div>
-                </div>
-                <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
-                <div class="login-links">
-                    <a href="#" id="back-to-login">Quay lại đăng nhập</a>
-                </div>
-            </form>
+        <div class="col-md-3">
+          <h4>Hỗ trợ</h4>
+          <ul>
+            <li><a href="footer\help-center.html">Trung tâm trợ giúp</a></li>
+            <li><a href="footer\privacy-policy.html">Chính sách bảo mật</a></li>
+            <li><a href="footer\terms.html">Điều khoản sử dụng</a></li>
+            <li><a href="footer\cookie-policy.html">Chính sách cookie</a></li>
+          </ul>
         </div>
+        <div class="col-md-3">
+          <h4>Đối tác</h4>
+          <ul>
+            <li><a href="footer\partner.html">Đăng ký làm đối tác</a></li>
+            <li><a href="footer\marketing.html">Chương trình tiếp thị</a></li>
+            <li><a href="footer\affiliate.html">Affiliate</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h4>Theo dõi chúng tôi</h4>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 LuxuryHaven. Tất cả quyền được bảo lưu.</p>
+      </div>
     </div>
-</div> 
+  </footer>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script>
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="modal">
+    <div class="modal-content"
+      style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
+      <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
+
+      <div id="auth-forms">
+        <form id="login-form" class="auth-form" style="text-align:center;">
+          <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+            <label for="login-email" style="font-weight: 500;">Email</label>
+            <div class="input-icon">
+              <i class="fas fa-user"></i>
+              <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+            <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
+            <div class="input-icon">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
+            </div>
+          </div>
+          <button type="submit" class="btn-gradient">Đăng nhập</button>
+          <div class="login-links">
+            <a href="#" id="to-register">Không có tài khoản?</a>
+            <a href="#" id="to-forgot">Quên mật khẩu?</a>
+          </div>
+        </form>
+
+        <form id="register-form" class="auth-form" style="display: none; text-align:center;">
+          <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+            <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
+            <div class="input-icon">
+              <i class="fas fa-user"></i>
+              <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+            <label for="register-email" style="font-weight: 500;">Email</label>
+            <div class="input-icon">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+            <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
+            <div class="input-icon">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+            <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
+            <div class="input-icon">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu" required />
+            </div>
+          </div>
+          <button type="submit" class="btn-gradient">Đăng ký</button>
+          <div class="login-links">
+            <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
+          </div>
+        </form>
+
+        <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
+          <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+            <label for="forgot-email" style="font-weight: 500;">Email</label>
+            <div class="input-icon">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+            </div>
+          </div>
+          <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
+          <div class="login-links">
+            <a href="#" id="back-to-login">Quay lại đăng nhập</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
     // Firebase config và xử lý xác thực
     const firebaseConfig = {
-        apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
-        authDomain: "websitedatphongkhachsan.firebaseapp.com",
-        databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
-        projectId: "websitedatphongkhachsan",
-        storageBucket: "websitedatphongkhachsan.firebasestorage.app",
-        messagingSenderId: "732884739524",
-        appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
-        measurementId: "G-RC61EXTZH7"
+      apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+      authDomain: "websitedatphongkhachsan.firebaseapp.com",
+      databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+      projectId: "websitedatphongkhachsan",
+      storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+      messagingSenderId: "732884739524",
+      appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+      measurementId: "G-RC61EXTZH7"
     };
 
     // Khởi tạo Firebase
     firebase.initializeApp(firebaseConfig);
 
     // Đợi DOM load xong
-    document.addEventListener('DOMContentLoaded', function() {
-        // Biến toàn cục để lưu danh sách điểm đến
-        let destArr = [];
+    document.addEventListener('DOMContentLoaded', function () {
+      // Biến toàn cục để lưu danh sách điểm đến
+      let destArr = [];
 
-        // Hàm render card điểm đến
-        function renderDestinationCards(destinations, containerId, title) {
-          let html = '';
-          if (title) html += `<h2 class="section-title">${title}</h2>`;
-          html += '<div class="destination-grid">';
-          destinations.forEach(dest => {
-            html += `
+      // Hàm render card điểm đến
+      function renderDestinationCards(destinations, containerId, title) {
+        let html = '';
+        if (title) html += `<h2 class="section-title">${title}</h2>`;
+        html += '<div class="destination-grid">';
+        destinations.forEach(dest => {
+          html += `
               <a href="destination_detail.html?slug=${dest.slug}" class="destination-card" style="background-image:url('${dest.image}')">
                 <div class="destination-label">${dest.name}</div>
               </a>
             `;
-          });
-          html += '</div>';
-          document.getElementById(containerId).innerHTML = html;
-        }
+        });
+        html += '</div>';
+        document.getElementById(containerId).innerHTML = html;
+      }
 
-        // --- LẤY DỮ LIỆU CẨM NANG NỔI BẬT VÀ CÁC SECTION KHÁC TỪ FIREBASE ---
-        firebase.database().ref('travelGuide').once('value')
-            .then((snapshot) => {
-                const data = snapshot.val();
-                if (data && data.latestGuides) {
-                    renderFeaturedGuidesFromLatest(data.latestGuides, 'destination-content');
-                }
-                if (data && data.featuredGuides) {
-                    renderLatestGuidesFromLatest(data.featuredGuides, 'latest-guides');
-                }
-                // Thêm lại section Điểm đến nổi bật
-                if (data && data.destinations) {
-                    destArr = Object.entries(data.destinations).map(([id, dest]) => ({
-                        id,
-                        ...dest
-                    }));
-                    renderDestinationCards(destArr.slice(0,16), 'dest-featured', 'Điểm đến nổi bật');
-                    renderDestinationCards(destArr.filter(d=>d.region==='Bắc'), 'dest-north', 'Điểm đến miền Bắc');
-                    renderDestinationCards(destArr.filter(d=>d.region==='Trung'), 'dest-central', 'Điểm đến miền Trung');
-                    renderDestinationCards(destArr.filter(d=>d.region==='Nam'), 'dest-south', 'Điểm đến miền Nam');
-                }
+      // --- LẤY DỮ LIỆU CẨM NANG NỔI BẬT VÀ CÁC SECTION KHÁC TỪ FIREBASE ---
+      firebase.database().ref('travelGuide').once('value')
+        .then((snapshot) => {
+          const data = snapshot.val();
+          if (data && data.latestGuides) {
+            renderFeaturedGuidesFromLatest(data.latestGuides, 'destination-content');
+          }
+          if (data && data.featuredGuides) {
+            renderLatestGuidesFromLatest(data.featuredGuides, 'latest-guides');
+          }
+          // Thêm lại section Điểm đến nổi bật
+          if (data && data.destinations) {
+            destArr = Object.entries(data.destinations).map(([id, dest]) => ({
+              id,
+              ...dest
+            }));
+            renderDestinationCards(destArr.slice(0, 16), 'dest-featured', 'Điểm đến nổi bật');
+            renderDestinationCards(destArr.filter(d => d.region === 'Bắc'), 'dest-north', 'Điểm đến miền Bắc');
+            renderDestinationCards(destArr.filter(d => d.region === 'Trung'), 'dest-central', 'Điểm đến miền Trung');
+            renderDestinationCards(destArr.filter(d => d.region === 'Nam'), 'dest-south', 'Điểm đến miền Nam');
+          }
+        })
+        .catch((error) => {
+          document.getElementById('destination-content').innerHTML = '<p style="color:red;">Không thể tải dữ liệu từ Firebase.</p>';
+          console.error(error);
+        });
+
+      // Modal Destination
+      const destinationModal = document.getElementById('destination-modal');
+      const closeModal = document.querySelector('.close-modal');
+      const modalMainImage = document.getElementById('modal-main-image');
+      const modalThumbnails = document.getElementById('modal-thumbnails');
+      const modalTitle = document.getElementById('modal-title');
+      const modalLocation = document.getElementById('modal-location');
+      const modalRating = document.getElementById('modal-rating');
+      const modalDescription = document.getElementById('modal-description');
+      const modalFeatures = document.getElementById('modal-features');
+      const modalMap = document.getElementById('modal-map');
+
+      // Hàm mở modal
+      function openDestinationModal(destination) {
+        // Cập nhật nội dung modal
+        modalTitle.textContent = destination.name;
+        modalLocation.textContent = destination.location;
+        modalRating.textContent = destination.rating;
+        modalDescription.textContent = destination.description;
+
+        // Cập nhật hình ảnh
+        modalMainImage.src = destination.images[0];
+        modalThumbnails.innerHTML = '';
+        destination.images.forEach((img, index) => {
+          const thumb = document.createElement('img');
+          thumb.src = img;
+          thumb.alt = `${destination.name} - Image ${index + 1}`;
+          thumb.onclick = () => modalMainImage.src = img;
+          modalThumbnails.appendChild(thumb);
+        });
+
+        // Cập nhật features
+        modalFeatures.innerHTML = '';
+        destination.features.forEach(feature => {
+          const li = document.createElement('li');
+          li.textContent = feature;
+          modalFeatures.appendChild(li);
+        });
+
+        // Hiển thị modal
+        destinationModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      }
+
+      // Đóng modal
+      function closeDestinationModal() {
+        destinationModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+
+      // Event listeners
+      closeModal.addEventListener('click', closeDestinationModal);
+      window.addEventListener('click', (e) => {
+        if (e.target === destinationModal) {
+          closeDestinationModal();
+        }
+      });
+
+      // Xử lý nút đặt tour và đặt khách sạn
+      document.querySelector('.btn-book-tour').addEventListener('click', () => {
+        // Chuyển hướng đến trang tour
+        window.location.href = 'tours.html';
+      });
+
+      document.querySelector('.btn-book-hotel').addEventListener('click', () => {
+        // Chuyển hướng đến trang đặt phòng
+        window.location.href = 'hotel.html';
+      });
+
+      // Lấy các elements
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      const forgotForm = document.getElementById('forgot-form');
+      const closeAuthModal = document.getElementById('close-auth-modal');
+      const openLoginModal = document.getElementById('open-login-modal');
+      const userDropdown = document.getElementById('user-dropdown');
+      const userName = document.getElementById('user-name');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      // Xử lý đăng nhập
+      if (loginForm) {
+        loginForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const email = document.getElementById('login-email').value;
+          const password = document.getElementById('login-password').value;
+
+          firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              document.getElementById('auth-modal').style.display = 'none';
+
+              // Kiểm tra nếu là admin
+              if (email === 'quantrikhachsan@gmail.com') {
+                Swal.fire({
+                  title: 'Đăng nhập thành công!',
+                  text: 'Chào mừng Admin!',
+                  icon: 'success',
+                  confirmButtonColor: '#e67e22'
+                }).then(() => {
+                  window.location.href = 'admin-dashboard.html';
+                });
+              } else if (email === 'nhanvien2@luxuryhaven.com') {
+                Swal.fire({
+                  title: 'Đăng nhập thành công!',
+                  text: 'Chào mừng Nhân viên!',
+                  icon: 'success',
+                  confirmButtonColor: '#e67e22'
+                }).then(() => {
+                  window.location.href = 'admin-dashboard.html';
+                });
+              } else {
+                Swal.fire({
+                  title: 'Đăng nhập thành công!',
+                  icon: 'success',
+                  confirmButtonColor: '#e67e22'
+                });
+              }
             })
             .catch((error) => {
-                document.getElementById('destination-content').innerHTML = '<p style="color:red;">Không thể tải dữ liệu từ Firebase.</p>';
-                console.error(error);
+              Swal.fire({
+                title: 'Lỗi đăng nhập!',
+                text: error.message,
+                icon: 'error',
+                confirmButtonColor: '#e67e22'
+              });
             });
+        });
+      }
 
-        // Modal Destination
-        const destinationModal = document.getElementById('destination-modal');
-        const closeModal = document.querySelector('.close-modal');
-        const modalMainImage = document.getElementById('modal-main-image');
-        const modalThumbnails = document.getElementById('modal-thumbnails');
-        const modalTitle = document.getElementById('modal-title');
-        const modalLocation = document.getElementById('modal-location');
-        const modalRating = document.getElementById('modal-rating');
-        const modalDescription = document.getElementById('modal-description');
-        const modalFeatures = document.getElementById('modal-features');
-        const modalMap = document.getElementById('modal-map');
+      // Xử lý đăng ký
+      if (registerForm) {
+        registerForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const email = document.getElementById('register-email').value;
+          const password = document.getElementById('register-password').value;
+          const confirmPassword = document.getElementById('register-confirm-password').value;
+          const username = document.getElementById('register-username').value;
 
-        // Hàm mở modal
-        function openDestinationModal(destination) {
-            // Cập nhật nội dung modal
-            modalTitle.textContent = destination.name;
-            modalLocation.textContent = destination.location;
-            modalRating.textContent = destination.rating;
-            modalDescription.textContent = destination.description;
-            
-            // Cập nhật hình ảnh
-            modalMainImage.src = destination.images[0];
-            modalThumbnails.innerHTML = '';
-            destination.images.forEach((img, index) => {
-                const thumb = document.createElement('img');
-                thumb.src = img;
-                thumb.alt = `${destination.name} - Image ${index + 1}`;
-                thumb.onclick = () => modalMainImage.src = img;
-                modalThumbnails.appendChild(thumb);
+          if (password.length < 6) {
+            Swal.fire({
+              title: 'Lỗi đăng ký!',
+              text: 'Mật khẩu phải có ít nhất 6 ký tự.',
+              icon: 'error',
+              confirmButtonColor: '#e67e22'
             });
+            return;
+          }
 
-            // Cập nhật features
-            modalFeatures.innerHTML = '';
-            destination.features.forEach(feature => {
-                const li = document.createElement('li');
-                li.textContent = feature;
-                modalFeatures.appendChild(li);
+          if (password !== confirmPassword) {
+            Swal.fire({
+              title: 'Lỗi đăng ký!',
+              text: 'Mật khẩu nhập lại không khớp.',
+              icon: 'error',
+              confirmButtonColor: '#e67e22'
             });
+            return;
+          }
 
-            // Hiển thị modal
-            destinationModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        // Đóng modal
-        function closeDestinationModal() {
-            destinationModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        // Event listeners
-        closeModal.addEventListener('click', closeDestinationModal);
-        window.addEventListener('click', (e) => {
-            if (e.target === destinationModal) {
-                closeDestinationModal();
-            }
-        });
-
-        // Xử lý nút đặt tour và đặt khách sạn
-        document.querySelector('.btn-book-tour').addEventListener('click', () => {
-            // Chuyển hướng đến trang tour
-            window.location.href = 'tours.html';
-        });
-
-        document.querySelector('.btn-book-hotel').addEventListener('click', () => {
-            // Chuyển hướng đến trang đặt phòng
-            window.location.href = 'hotel.html';
-        });
-
-        // Lấy các elements
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const forgotForm = document.getElementById('forgot-form');
-        const closeAuthModal = document.getElementById('close-auth-modal');
-        const openLoginModal = document.getElementById('open-login-modal');
-        const userDropdown = document.getElementById('user-dropdown');
-        const userName = document.getElementById('user-name');
-        const logoutBtn = document.getElementById('logout-btn');
-
-        // Xử lý đăng nhập
-        if (loginForm) {
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-
-                firebase.auth().signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        const user = userCredential.user;
-                        document.getElementById('auth-modal').style.display = 'none';
-                        
-                        // Kiểm tra nếu là admin
-                        if (email === 'quantrikhachsan@gmail.com') {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                text: 'Chào mừng Admin!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            }).then(() => {
-                                window.location.href = 'admin-dashboard.html';
-                            });
-                        } else if (email === 'nhanvien2@luxuryhaven.com') {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                text: 'Chào mừng Nhân viên!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            }).then(() => {
-                                window.location.href = 'admin-dashboard.html';
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            });
-                        }
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi đăng nhập!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
+          firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+              return userCredential.user.updateProfile({
+                displayName: username
+              });
+            })
+            .then(() => {
+              document.getElementById('auth-modal').style.display = 'none';
+              Swal.fire({
+                title: 'Đăng ký thành công!',
+                icon: 'success',
+                confirmButtonColor: '#e67e22'
+              });
+            })
+            .catch((error) => {
+              Swal.fire({
+                title: 'Lỗi đăng ký!',
+                text: error.message,
+                icon: 'error',
+                confirmButtonColor: '#e67e22'
+              });
             });
-        }
+        });
+      }
 
-        // Xử lý đăng ký
-        if (registerForm) {
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('register-email').value;
-                const password = document.getElementById('register-password').value;
-                const confirmPassword = document.getElementById('register-confirm-password').value;
-                const username = document.getElementById('register-username').value;
+      // Xử lý quên mật khẩu
+      if (forgotForm) {
+        forgotForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const email = document.getElementById('forgot-email').value;
 
-                if (password.length < 6) {
-                    Swal.fire({
-                        title: 'Lỗi đăng ký!',
-                        text: 'Mật khẩu phải có ít nhất 6 ký tự.',
-                        icon: 'error',
-                        confirmButtonColor: '#e67e22'
-                    });
-                    return;
-                }
-
-                if (password !== confirmPassword) {
-                    Swal.fire({
-                        title: 'Lỗi đăng ký!',
-                        text: 'Mật khẩu nhập lại không khớp.',
-                        icon: 'error',
-                        confirmButtonColor: '#e67e22'
-                    });
-                    return;
-                }
-
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        return userCredential.user.updateProfile({
-                            displayName: username
-                        });
-                    })
-                    .then(() => {
-                        document.getElementById('auth-modal').style.display = 'none';
-                        Swal.fire({
-                            title: 'Đăng ký thành công!',
-                            icon: 'success',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi đăng ký!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
+          firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+              Swal.fire({
+                title: 'Email đã được gửi!',
+                text: 'Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.',
+                icon: 'success',
+                confirmButtonColor: '#e67e22'
+              });
+            })
+            .catch((error) => {
+              Swal.fire({
+                title: 'Lỗi!',
+                text: error.message,
+                icon: 'error',
+                confirmButtonColor: '#e67e22'
+              });
             });
+        });
+      }
+
+      // Xử lý chuyển đổi giữa các form
+      const toRegister = document.getElementById('to-register');
+      if (toRegister) {
+        toRegister.addEventListener('click', function (e) {
+          e.preventDefault();
+          loginForm.style.display = 'none';
+          registerForm.style.display = 'block';
+          forgotForm.style.display = 'none';
+        });
+      }
+
+      const toLogin = document.getElementById('to-login');
+      if (toLogin) {
+        toLogin.addEventListener('click', function (e) {
+          e.preventDefault();
+          loginForm.style.display = 'block';
+          registerForm.style.display = 'none';
+          forgotForm.style.display = 'none';
+        });
+      }
+
+      const toForgot = document.getElementById('to-forgot');
+      if (toForgot) {
+        toForgot.addEventListener('click', function (e) {
+          e.preventDefault();
+          loginForm.style.display = 'none';
+          registerForm.style.display = 'none';
+          forgotForm.style.display = 'block';
+        });
+      }
+
+      const backToLogin = document.getElementById('back-to-login');
+      if (backToLogin) {
+        backToLogin.addEventListener('click', function (e) {
+          e.preventDefault();
+          loginForm.style.display = 'block';
+          registerForm.style.display = 'none';
+          forgotForm.style.display = 'none';
+        });
+      }
+
+      // Xử lý đóng modal
+      if (closeAuthModal) {
+        closeAuthModal.addEventListener('click', () => {
+          document.getElementById('auth-modal').style.display = 'none';
+        });
+      }
+
+      // Xử lý mở modal đăng nhập
+      if (openLoginModal) {
+        openLoginModal.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById('auth-modal').style.display = 'block';
+        });
+      }
+
+      // Đóng modal khi click ra ngoài
+      window.onclick = function (event) {
+        const modal = document.getElementById('auth-modal');
+        if (event.target == modal) {
+          modal.style.display = "none";
         }
+      };
 
-        // Xử lý quên mật khẩu
-        if (forgotForm) {
-            forgotForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('forgot-email').value;
+      // Theo dõi trạng thái đăng nhập
+      firebase.auth().onAuthStateChanged(function (user) {
+        const loginBtn = document.getElementById('open-login-modal');
+        if (user) {
+          if (loginBtn) loginBtn.style.display = 'none';
+          if (userDropdown) userDropdown.style.display = 'block';
+          if (userName) userName.textContent = user.displayName || user.email;
+        } else {
+          if (loginBtn) loginBtn.style.display = 'block';
+          if (userDropdown) userDropdown.style.display = 'none';
+        }
+      });
 
-                firebase.auth().sendPasswordResetEmail(email)
-                    .then(() => {
-                        Swal.fire({
-                            title: 'Email đã được gửi!',
-                            text: 'Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.',
-                            icon: 'success',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
+      // Xử lý đăng xuất
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          firebase.auth().signOut().then(() => {
+            Swal.fire({
+              title: 'Đăng xuất thành công!',
+              icon: 'success',
+              confirmButtonColor: '#e67e22'
             });
-        }
-
-        // Xử lý chuyển đổi giữa các form
-        const toRegister = document.getElementById('to-register');
-        if (toRegister) {
-            toRegister.addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-            forgotForm.style.display = 'none';
-        });
-        }
-
-        const toLogin = document.getElementById('to-login');
-        if (toLogin) {
-            toLogin.addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'none';
-        });
-        }
-
-        const toForgot = document.getElementById('to-forgot');
-        if (toForgot) {
-            toForgot.addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'block';
-        });
-        }
-
-        const backToLogin = document.getElementById('back-to-login');
-        if (backToLogin) {
-            backToLogin.addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'none';
-        });
-        }
-
-        // Xử lý đóng modal
-        if (closeAuthModal) {
-            closeAuthModal.addEventListener('click', () => {
-                document.getElementById('auth-modal').style.display = 'none';
+          }).catch((error) => {
+            Swal.fire({
+              title: 'Lỗi đăng xuất!',
+              text: error.message,
+              icon: 'error',
+              confirmButtonColor: '#e67e22'
             });
+          });
+        });
+      }
+
+      // --- LẤY DỮ LIỆU TRAVELGUIDE TỪ FIREBASE REALTIME DATABASE ---
+      const db = firebase.database();
+      const travelGuideRef = db.ref('travelGuide');
+
+      // Lấy dữ liệu điểm đến
+      travelGuideRef.child('destinations').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const destinations = Object.entries(data).map(([id, dest]) => ({
+            id,
+            ...dest
+          }));
+
+          // Render các section điểm đến
+          renderDestinationCards(destinations.slice(0, 16), 'dest-featured', 'Điểm đến nổi bật');
+          renderDestinationCards(destinations.filter(d => d.region === 'Bắc'), 'dest-north', 'Điểm đến miền Bắc');
+          renderDestinationCards(destinations.filter(d => d.region === 'Trung'), 'dest-central', 'Điểm đến miền Trung');
+          renderDestinationCards(destinations.filter(d => d.region === 'Nam'), 'dest-south', 'Điểm đến miền Nam');
         }
+      }, (error) => {
+        console.error("Error loading destinations:", error);
+        document.getElementById('dest-featured').innerHTML = '<p style="color:red;">Không thể tải dữ liệu điểm đến.</p>';
+      });
 
-        // Xử lý mở modal đăng nhập
-        if (openLoginModal) {
-            openLoginModal.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('auth-modal').style.display = 'block';
-            });
+      // Lấy dữ liệu cẩm nang du lịch
+      travelGuideRef.child('latestGuides').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          renderFeaturedGuidesFromLatest(data, 'destination-content');
         }
+      }, (error) => {
+        console.error("Error loading latest guides:", error);
+        document.getElementById('destination-content').innerHTML = '<p style="color:red;">Không thể tải dữ liệu cẩm nang.</p>';
+      });
 
-        // Đóng modal khi click ra ngoài
-        window.onclick = function(event) {
-            const modal = document.getElementById('auth-modal');
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        };
-
-        // Theo dõi trạng thái đăng nhập
-        firebase.auth().onAuthStateChanged(function(user) {
-            const loginBtn = document.getElementById('open-login-modal');
-            if (user) {
-                if (loginBtn) loginBtn.style.display = 'none';
-                if (userDropdown) userDropdown.style.display = 'block';
-                if (userName) userName.textContent = user.displayName || user.email;
-            } else {
-                if (loginBtn) loginBtn.style.display = 'block';
-                if (userDropdown) userDropdown.style.display = 'none';
-            }
-        });
-
-        // Xử lý đăng xuất
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                firebase.auth().signOut().then(() => {
-                    Swal.fire({
-                        title: 'Đăng xuất thành công!',
-                        icon: 'success',
-                        confirmButtonColor: '#e67e22'
-                    });
-                }).catch((error) => {
-                    Swal.fire({
-                        title: 'Lỗi đăng xuất!',
-                        text: error.message,
-                        icon: 'error',
-                        confirmButtonColor: '#e67e22'
-                    });
-                });
-            });
+      // Lấy dữ liệu cẩm nang mới nhất
+      travelGuideRef.child('featuredGuides').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          renderLatestGuidesFromLatest(data, 'latest-guides');
         }
+      }, (error) => {
+        console.error("Error loading featured guides:", error);
+        document.getElementById('latest-guides').innerHTML = '<p style="color:red;">Không thể tải dữ liệu cẩm nang mới nhất.</p>';
+      });
 
-        // --- LẤY DỮ LIỆU TRAVELGUIDE TỪ FIREBASE REALTIME DATABASE ---
-        const db = firebase.database();
-        const travelGuideRef = db.ref('travelGuide');
-
-        // Lấy dữ liệu điểm đến
-        travelGuideRef.child('destinations').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                const destinations = Object.entries(data).map(([id, dest]) => ({
-                    id,
-                    ...dest
-                }));
-                
-                // Render các section điểm đến
-                renderDestinationCards(destinations.slice(0,16), 'dest-featured', 'Điểm đến nổi bật');
-                renderDestinationCards(destinations.filter(d => d.region === 'Bắc'), 'dest-north', 'Điểm đến miền Bắc');
-                renderDestinationCards(destinations.filter(d => d.region === 'Trung'), 'dest-central', 'Điểm đến miền Trung');
-                renderDestinationCards(destinations.filter(d => d.region === 'Nam'), 'dest-south', 'Điểm đến miền Nam');
-            }
-        }, (error) => {
-            console.error("Error loading destinations:", error);
-            document.getElementById('dest-featured').innerHTML = '<p style="color:red;">Không thể tải dữ liệu điểm đến.</p>';
-        });
-
-        // Lấy dữ liệu cẩm nang du lịch
-        travelGuideRef.child('latestGuides').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                renderFeaturedGuidesFromLatest(data, 'destination-content');
-            }
-        }, (error) => {
-            console.error("Error loading latest guides:", error);
-            document.getElementById('destination-content').innerHTML = '<p style="color:red;">Không thể tải dữ liệu cẩm nang.</p>';
-        });
-
-        // Lấy dữ liệu cẩm nang mới nhất
-        travelGuideRef.child('featuredGuides').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                renderLatestGuidesFromLatest(data, 'latest-guides');
-            }
-        }, (error) => {
-            console.error("Error loading featured guides:", error);
-            document.getElementById('latest-guides').innerHTML = '<p style="color:red;">Không thể tải dữ liệu cẩm nang mới nhất.</p>';
-        });
-
-        // Hàm render cẩm nang du lịch nổi bật (3 guide mới nhất từ latestGuides)
-        function renderFeaturedGuidesFromLatest(latestGuidesObj, containerId) {
-          const guides = Object.values(latestGuidesObj)
-            .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
-            .slice(0, 3);
-          let html = `
+      // Hàm render cẩm nang du lịch nổi bật (3 guide mới nhất từ latestGuides)
+      function renderFeaturedGuidesFromLatest(latestGuidesObj, containerId) {
+        const guides = Object.values(latestGuidesObj)
+          .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
+          .slice(0, 3);
+        let html = `
             <h2 class="section-title">Cẩm nang du lịch nổi bật</h2>
             <div class="featured-guides-list">
           `;
-          guides.forEach((g, idx) => {
-            html += `
+        guides.forEach((g, idx) => {
+          html += `
               <div class="featured-guide-card" data-guide-idx="${idx}">
                 <div class="featured-guide-title">${g.title}</div>
                 <div class="featured-guide-desc">${g.overview}</div>
               </div>
             `;
-          });
-          html += '</div>';
-          document.getElementById(containerId).innerHTML = html;
+        });
+        html += '</div>';
+        document.getElementById(containerId).innerHTML = html;
 
-          // Gắn sự kiện click cho từng card
-          document.querySelectorAll('.featured-guide-card').forEach(card => {
-            card.addEventListener('click', function() {
-              const idx = this.getAttribute('data-guide-idx');
-              const guide = guides[idx];
-              let modalHtml = `<div class='modal fade' id='guideDetailModal' tabindex='-1' aria-labelledby='guideDetailModalLabel' aria-hidden='true'>
+        // Gắn sự kiện click cho từng card
+        document.querySelectorAll('.featured-guide-card').forEach(card => {
+          card.addEventListener('click', function () {
+            const idx = this.getAttribute('data-guide-idx');
+            const guide = guides[idx];
+            let modalHtml = `<div class='modal fade' id='guideDetailModal' tabindex='-1' aria-labelledby='guideDetailModalLabel' aria-hidden='true'>
                 <div class='modal-dialog modal-lg'>
                   <div class='modal-content'>
                     <div class='modal-header'>
@@ -1042,49 +1120,49 @@
                   </div>
                 </div>
               </div>`;
-              // Xóa modal cũ nếu có
-              const oldModal = document.getElementById('guideDetailModal');
-              if (oldModal) oldModal.remove();
-              document.body.insertAdjacentHTML('beforeend', modalHtml);
-              var modal = new bootstrap.Modal(document.getElementById('guideDetailModal'));
-              modal.show();
-            });
+            // Xóa modal cũ nếu có
+            const oldModal = document.getElementById('guideDetailModal');
+            if (oldModal) oldModal.remove();
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            var modal = new bootstrap.Modal(document.getElementById('guideDetailModal'));
+            modal.show();
           });
-        }
+        });
+      }
 
-        // Hàm render những cẩm nang mới nhất (5 guide mới nhất từ latestGuides)
-        function renderLatestGuidesFromLatest(latestGuidesObj, containerId) {
-          const guides = Object.values(latestGuidesObj)
-            .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
-            .slice(0, 5);
-          let html = '<h2 class="section-title">Những cẩm nang mới nhất</h2>';
-          html += '<div class="guide-grid">';
-          guides.forEach(g => {
-            html += `
+      // Hàm render những cẩm nang mới nhất (5 guide mới nhất từ latestGuides)
+      function renderLatestGuidesFromLatest(latestGuidesObj, containerId) {
+        const guides = Object.values(latestGuidesObj)
+          .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
+          .slice(0, 5);
+        let html = '<h2 class="section-title">Những cẩm nang mới nhất</h2>';
+        html += '<div class="guide-grid">';
+        guides.forEach(g => {
+          html += `
               <div class="guide-card">
                 ${g.image ? `<img src="${g.image}" />` : ''}
                 <div class="guide-title">${g.title}</div>
                 <div class="guide-desc">${g.overview}</div>
               </div>
             `;
-          });
-          html += '</div>';
-          document.getElementById(containerId).innerHTML = html;
-        }
+        });
+        html += '</div>';
+        document.getElementById(containerId).innerHTML = html;
+      }
 
-        // Hàm render popup chi tiết điểm đến
-        function renderDestinationDetail(dest) {
-          let html = `
+      // Hàm render popup chi tiết điểm đến
+      function renderDestinationDetail(dest) {
+        let html = `
           <div class="travel-modern-container">
             <div class="travel-header">
               <h2><i class="fas fa-map-marker-alt"></i> ${dest.name}</h2>
               <p class="travel-overview">${dest.overview}</p>
-              <div class="travel-besttime"><i class="fas fa-calendar-alt"></i> <b>Thời gian lý tưởng:</b> ${dest.best_time_to_visit||''}</div>
+              <div class="travel-besttime"><i class="fas fa-calendar-alt"></i> <b>Thời gian lý tưởng:</b> ${dest.best_time_to_visit || ''}</div>
             </div>
             <div class="travel-section travel-highlights">
               <h4><i class="fas fa-star"></i> Điểm nổi bật</h4>
               <div class="highlight-list">
-                ${(dest.highlights||[]).map(h => `
+                ${(dest.highlights || []).map(h => `
                   <div class="highlight-card">
                     <div class="highlight-title">${h.title}</div>
                     <div class="highlight-desc">${h.description}</div>
@@ -1095,11 +1173,11 @@
             <div class="travel-section travel-foods">
               <h4><i class="fas fa-utensils"></i> Ẩm thực đặc sắc</h4>
               <div class="food-list">
-                ${(dest.foods||[]).map(f => `
+                ${(dest.foods || []).map(f => `
                   <div class="food-card">
                     <div class="food-name">${f.name}</div>
                     <div class="food-desc">${f.description}</div>
-                    <div class="food-place"><i class="fas fa-store"></i> <b>Gợi ý:</b> ${(f.recommended_places||[]).join(', ')}</div>
+                    <div class="food-place"><i class="fas fa-store"></i> <b>Gợi ý:</b> ${(f.recommended_places || []).join(', ')}</div>
                   </div>
                 `).join('')}
               </div>
@@ -1107,12 +1185,12 @@
             <div class="travel-section travel-hotels">
               <h4><i class="fas fa-hotel"></i> Khách sạn gợi ý</h4>
               <div class="hotel-list">
-                ${(dest.accommodations||[]).map(h => `
+                ${(dest.accommodations || []).map(h => `
                   <div class="hotel-card">
-                    <div class="hotel-name">${h.name} <span class="hotel-star">${'★'.repeat(h.star||0)}</span></div>
+                    <div class="hotel-name">${h.name} <span class="hotel-star">${'★'.repeat(h.star || 0)}</span></div>
                     <div class="hotel-address"><i class="fas fa-map-pin"></i> ${h.address}</div>
                     <div class="hotel-price"><i class="fas fa-money-bill"></i> ${h.price_range}</div>
-                    <div class="hotel-amenities"><i class="fas fa-check-circle"></i> ${(h.amenities||[]).join(', ')}</div>
+                    <div class="hotel-amenities"><i class="fas fa-check-circle"></i> ${(h.amenities || []).join(', ')}</div>
                   </div>
                 `).join('')}
               </div>
@@ -1120,43 +1198,70 @@
             <div class="travel-section travel-images">
               <h4><i class="fas fa-images"></i> Hình ảnh</h4>
               <div class="image-gallery">
-                ${(dest.images||[]).map(img => `<img src="${img}" alt="Hình ảnh ${dest.name}" class="gallery-img">`).join('')}
+                ${(dest.images || []).map(img => `<img src="${img}" alt="Hình ảnh ${dest.name}" class="gallery-img">`).join('')}
               </div>
             </div>
           </div>
           `;
-          document.getElementById('destination-detail').innerHTML = html;
-          document.getElementById('destination-detail').style.display = 'block';
-          window.scrollTo({top: document.getElementById('destination-detail').offsetTop-60, behavior:'smooth'});
+        document.getElementById('destination-detail').innerHTML = html;
+        document.getElementById('destination-detail').style.display = 'block';
+        window.scrollTo({ top: document.getElementById('destination-detail').offsetTop - 60, behavior: 'smooth' });
+      }
+
+      // Thêm dữ liệu điểm đến miền Nam
+      const southDestinations = [
+        {
+          name: "Phú Quốc",
+          slug: "phu-quoc",
+          region: "Nam",
+          image: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
+          overview: "Thiên đường biển đảo với bãi cát trắng mịn, nước biển trong xanh",
+          best_time_to_visit: "Tháng 10 đến tháng 4",
+          highlights: [
+            {
+              title: "Bãi Sao",
+              description: "Một trong những bãi biển đẹp nhất Việt Nam với cát trắng mịn"
+            },
+            {
+              title: "Vinpearl Safari",
+              description: "Vườn thú bán hoang dã đầu tiên của Việt Nam"
+            }
+          ]
         }
+      ];
 
-        // Thêm dữ liệu điểm đến miền Nam
-        const southDestinations = [
-          {
-            name: "Phú Quốc",
-            slug: "phu-quoc",
-            region: "Nam",
-            image: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
-            overview: "Thiên đường biển đảo với bãi cát trắng mịn, nước biển trong xanh",
-            best_time_to_visit: "Tháng 10 đến tháng 4",
-            highlights: [
-              {
-                title: "Bãi Sao",
-                description: "Một trong những bãi biển đẹp nhất Việt Nam với cát trắng mịn"
-              },
-              {
-                title: "Vinpearl Safari",
-                description: "Vườn thú bán hoang dã đầu tiên của Việt Nam"
-              }
-            ]
-          }
-        ];
+      // Thêm vào Firebase
+      southDestinations.forEach(dest => {
+        db.ref('travelGuide/destinations/' + dest.slug).set(dest);
+      });
 
-        // Thêm vào Firebase
-        southDestinations.forEach(dest => {
-          db.ref('travelGuide/destinations/' + dest.slug).set(dest);
+      // Mobile Menu Toggle
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const navLinks = document.getElementById('nav-links');
+
+      if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', function () {
+          this.classList.toggle('active');
+          navLinks.classList.toggle('active');
         });
-    });
-    </script>
+
+        // Close mobile menu when clicking on links
+        navLinks.addEventListener('click', function (e) {
+          if (e.target.tagName === 'A') {
+            mobileMenuBtn.classList.remove('active');
+            navLinks.classList.remove('active');
+          }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function (e) {
+          if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+            mobileMenuBtn.classList.remove('active');
+            navLinks.classList.remove('active');
+          }
+        });
+      }
+  </script>
 </body>
+
 </html>

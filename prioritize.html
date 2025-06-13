@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,77 +13,85 @@
     <link rel="stylesheet" href="css/prioritize.css">
     <style>
         @font-face {
-          font-family: 'Nautica Script Bold';
-          src: url('fonts/nautica-bold.otf') format('opentype');
-          font-weight: bold;
-          font-style: normal;
+            font-family: 'Nautica Script Bold';
+            src: url('fonts/nautica-bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
         }
+
         .nautica-script {
-          font-family: 'Nautica Script Bold', cursive;
-          font-size: 6em;
-          font-weight: bold;
-          color: #cddae6;
-          text-align: center;
+            font-family: 'Nautica Script Bold', cursive;
+            font-size: 6em;
+            font-weight: bold;
+            color: #cddae6;
+            text-align: center;
         }
-      </style>
+    </style>
     <style>
-.offer-content-overlay,
-.offer-content-overlay h4,
-.offer-content-overlay p,
-.offer-content-overlay .price,
-.offer-content-overlay .offer-label,
-.offer-content-overlay * {
-    color: #111 !important;
-}
-.content-wrapper {
-    display: flex;
-    max-width: 1400px;
-    margin: 48px auto;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 32px rgba(44,62,80,0.10);
-    overflow: hidden;
-    min-height: 350px;
-}
-.image-section {
-    flex: 2;
-    min-width: 0;
-}
-.image-section img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-.text-section {
-    flex: 1;
-    padding: 0px 32px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-@media (max-width: 900px) {
-    .content-wrapper {
-        flex-direction: column;
-    }
-    .image-section, .text-section {
-        flex: unset;
-        width: 100%;
-    }
-    .text-section {
-        padding: 0px 16px;
-    }
-}
-.section-photo-memories {
-  margin-top: 16px;
-  margin-bottom: 32px;
-}
+        .offer-content-overlay,
+        .offer-content-overlay h4,
+        .offer-content-overlay p,
+        .offer-content-overlay .price,
+        .offer-content-overlay .offer-label,
+        .offer-content-overlay * {
+            color: #111 !important;
+        }
 
+        .content-wrapper {
+            display: flex;
+            max-width: 1400px;
+            margin: 48px auto;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 32px rgba(44, 62, 80, 0.10);
+            overflow: hidden;
+            min-height: 350px;
+        }
 
-</style>
+        .image-section {
+            flex: 2;
+            min-width: 0;
+        }
+
+        .image-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .text-section {
+            flex: 1;
+            padding: 0px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @media (max-width: 900px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+
+            .image-section,
+            .text-section {
+                flex: unset;
+                width: 100%;
+            }
+
+            .text-section {
+                padding: 0px 16px;
+            }
+        }
+
+        .section-photo-memories {
+            margin-top: 16px;
+            margin-bottom: 32px;
+        }
+    </style>
 </head>
-<body>
-    <!-- Navbar -->
+
+<body> <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-flex">
@@ -90,6 +99,12 @@
                 <a class="navbar-brand" href="#">
                     <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
                 </a>
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
 
                 <!-- Search Box -->
                 <div class="nav-search">
@@ -101,12 +116,12 @@
                     </div>
                 </div>
                 <div class="nav-right">
-                    <ul class="nav-links">
-                        <li><a href="index.html" >Trang chủ</a></li>
-                        <li><a href="hotel.html" >Khách sạn</a></li>
-                    
+                    <ul class="nav-links" id="nav-links">
+                        <li><a href="index.html">Trang chủ</a></li>
+                        <li><a href="hotel.html">Khách sạn</a></li>
+
                         <li class="dropdown"><a href="tours.html">Tours</a></li>
-                        
+
                         <li class="dropdown"><a href="prioritize.html" class="active">Ưu đãi</a></li>
                         <li class="dropdown"><a href="travel_guide.html">Cẩm nang du lịch</a></li>
                         <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
@@ -115,12 +130,15 @@
                         <li>
                             <div class="d-flex align-items-center">
                                 <div class="dropdown" id="user-dropdown" style="display:none;">
-                                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                                        id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-user"></i> <span id="user-name"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                        <li><a class="dropdown-item" href="member.html"><i class="fas fa-user-circle"></i> Tài khoản</a></li>
-                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                                        <li><a class="dropdown-item" href="member.html"><i
+                                                    class="fas fa-user-circle"></i> Tài khoản</a></li>
+                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i
+                                                    class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
                                     </ul>
                                 </div>
                                 <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
@@ -138,36 +156,39 @@
     <section class="hero-section">
         <p class="nautica-script">LuxuryHavenTravel</p>
         <div class="hero-content"><br><br><br><br><br><br><br><br>
-            
+
             <h1>Ưu đãi đặc biệt dành riêng cho bạn</h1>
             <p>Trải nghiệm kỳ nghỉ đẳng cấp với giá ưu đãi đến bất ngờ chỉ có tại LuxuryHavenTravel.</p>
         </div><br><br><br><br><br><br><br><br>
     </section>
 
-<main>
-    <div class="content-wrapper">
-        <div class="image-section">
-            <img src="images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg" alt="Luxury Haven Travel">
-        </div>
-        <div class="text-section">
-             <h1>Ưu Đãi Đặc Biệt Mùa Hè</h1>
-            <p>Giảm giá lên đến <strong>30%</strong> cho tất cả các đặt phòng!</p>
-            <p>Đặt ngay để nhận thêm <strong>bữa sáng miễn phí</strong> và ưu đãi đặc biệt.</p>
+    <main>
+        <div class="content-wrapper">
+            <div class="image-section">
+                <img src="images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg"
+                    alt="Luxury Haven Travel">
             </div>
-    </div>
-               
-            
-  <div class="main-sections-wrapper" style="max-width:1200px;margin:40px auto 0 auto;padding:0 12px;">
-    <div class="main-section-card" style="background:#fff;border-radius:18px;box-shadow:0 2px 16px rgba(0,0,0,0.07);padding:32px 20px 28px 20px;margin-bottom:32px;">
-      <h2 class="section-title" style="margin-top:0;">Ưu đãi nổi bật</h2>
-      <div id="deals-list" class="row"></div>
-    </div>
-    <div class="main-section-card" style="background:#fff;border-radius:18px;box-shadow:0 2px 16px rgba(0,0,0,0.07);padding:32px 20px 28px 20px;margin-bottom:32px;">
-      <h2 class="section-title" style="margin-top:0;">Voucher hấp dẫn</h2>
-      <div id="vouchers-list" class="row"></div>
-    </div>
-  </div>
-</main>
+            <div class="text-section">
+                <h1>Ưu Đãi Đặc Biệt Mùa Hè</h1>
+                <p>Giảm giá lên đến <strong>30%</strong> cho tất cả các đặt phòng!</p>
+                <p>Đặt ngay để nhận thêm <strong>bữa sáng miễn phí</strong> và ưu đãi đặc biệt.</p>
+            </div>
+        </div>
+
+
+        <div class="main-sections-wrapper" style="max-width:1200px;margin:40px auto 0 auto;padding:0 12px;">
+            <div class="main-section-card"
+                style="background:#fff;border-radius:18px;box-shadow:0 2px 16px rgba(0,0,0,0.07);padding:32px 20px 28px 20px;margin-bottom:32px;">
+                <h2 class="section-title" style="margin-top:0;">Ưu đãi nổi bật</h2>
+                <div id="deals-list" class="row"></div>
+            </div>
+            <div class="main-section-card"
+                style="background:#fff;border-radius:18px;box-shadow:0 2px 16px rgba(0,0,0,0.07);padding:32px 20px 28px 20px;margin-bottom:32px;">
+                <h2 class="section-title" style="margin-top:0;">Voucher hấp dẫn</h2>
+                <div id="vouchers-list" class="row"></div>
+            </div>
+        </div>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
@@ -216,84 +237,86 @@
     </footer>
 
     <!-- Auth Modal -->
-<div id="auth-modal" class="modal">
-    <div class="modal-content" style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
-        <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
-        
-        <div id="auth-forms">
-            <form id="login-form" class="auth-form" style="text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="login-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
-                    </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
-                    </div>
-                </div>
-                <button type="submit" class="btn-gradient">Đăng nhập</button>
-                <div class="login-links">
-                    <a href="#" id="to-register">Không có tài khoản?</a>
-                    <a href="#" id="to-forgot">Quên mật khẩu?</a>
-                </div>
-            </form>
+    <div id="auth-modal" class="modal">
+        <div class="modal-content"
+            style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
+            <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
 
-            <form id="register-form" class="auth-form" style="display: none; text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
-                    <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+            <div id="auth-forms">
+                <form id="login-form" class="auth-form" style="text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+                    <button type="submit" class="btn-gradient">Đăng nhập</button>
+                    <div class="login-links">
+                        <a href="#" id="to-register">Không có tài khoản?</a>
+                        <a href="#" id="to-forgot">Quên mật khẩu?</a>
                     </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu" required />
-                    </div>
-                </div>
-                <button type="submit" class="btn-gradient">Đăng ký</button>
-                <div class="login-links">
-                    <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
-                </div>
-            </form>
+                </form>
 
-            <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="forgot-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+                <form id="register-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+                        </div>
                     </div>
-                </div>
-                <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
-                <div class="login-links">
-                    <a href="#" id="back-to-login">Quay lại đăng nhập</a>
-                </div>
-            </form>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu"
+                                required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Đăng ký</button>
+                    <div class="login-links">
+                        <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
+                    </div>
+                </form>
+
+                <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="forgot-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
+                    <div class="login-links">
+                        <a href="#" id="back-to-login">Quay lại đăng nhập</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div> 
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -303,380 +326,380 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
-    // Firebase config và xử lý xác thực
-    const firebaseConfig = {
-        apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
-        authDomain: "websitedatphongkhachsan.firebaseapp.com",
-        databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
-        projectId: "websitedatphongkhachsan",
-        storageBucket: "websitedatphongkhachsan.firebasestorage.app",
-        messagingSenderId: "732884739524",
-        appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
-        measurementId: "G-RC61EXTZH7"
-    };
-
-    // Khởi tạo Firebase
-    firebase.initializeApp(firebaseConfig);
-
-    // Đợi DOM load xong
-    document.addEventListener('DOMContentLoaded', function() {
-        // Lấy các elements
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const forgotForm = document.getElementById('forgot-form');
-        const closeAuthModal = document.getElementById('close-auth-modal');
-        const openLoginModal = document.getElementById('open-login-modal');
-        const userDropdown = document.getElementById('user-dropdown');
-        const userName = document.getElementById('user-name');
-        const logoutBtn = document.getElementById('logout-btn');
-
-        // Xử lý đăng nhập
-        if (loginForm) {
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-
-                firebase.auth().signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        const user = userCredential.user;
-                        document.getElementById('auth-modal').style.display = 'none';
-                        
-                        // Kiểm tra nếu là admin
-                        if (email === 'quantrikhachsan@gmail.com') {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                text: 'Chào mừng Admin!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            }).then(() => {
-                                window.location.href = 'admin-dashboard.html';
-                            });
-                        } else if (email === 'nhanvien2@luxuryhaven.com') {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                text: 'Chào mừng Nhân viên!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            }).then(() => {
-                                window.location.href = 'admin-dashboard.html';
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            });
-                        }
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi đăng nhập!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
-            });
-        }
-
-        // Xử lý đăng ký
-        if (registerForm) {
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('register-email').value;
-                const password = document.getElementById('register-password').value;
-                const confirmPassword = document.getElementById('register-confirm-password').value;
-                const username = document.getElementById('register-username').value;
-
-                if (password.length < 6) {
-                    Swal.fire({
-                        title: 'Lỗi đăng ký!',
-                        text: 'Mật khẩu phải có ít nhất 6 ký tự.',
-                        icon: 'error',
-                        confirmButtonColor: '#e67e22'
-                    });
-                    return;
-                }
-
-                if (password !== confirmPassword) {
-                    Swal.fire({
-                        title: 'Lỗi đăng ký!',
-                        text: 'Mật khẩu nhập lại không khớp.',
-                        icon: 'error',
-                        confirmButtonColor: '#e67e22'
-                    });
-                    return;
-                }
-
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        return userCredential.user.updateProfile({
-                            displayName: username
-                        });
-                    })
-                    .then(() => {
-                        document.getElementById('auth-modal').style.display = 'none';
-                        Swal.fire({
-                            title: 'Đăng ký thành công!',
-                            icon: 'success',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi đăng ký!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
-            });
-        }
-
-        // Xử lý quên mật khẩu
-        if (forgotForm) {
-            forgotForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('forgot-email').value;
-
-                firebase.auth().sendPasswordResetEmail(email)
-                    .then(() => {
-                        Swal.fire({
-                            title: 'Email đã được gửi!',
-                            text: 'Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.',
-                            icon: 'success',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
-            });
-        }
-
-        // Xử lý chuyển đổi giữa các form
-        document.getElementById('to-register').addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-            forgotForm.style.display = 'none';
-        });
-
-        document.getElementById('to-login').addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'none';
-        });
-
-        document.getElementById('to-forgot').addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'block';
-        });
-
-        document.getElementById('back-to-login').addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'none';
-        });
-
-        // Xử lý đóng modal
-        if (closeAuthModal) {
-            closeAuthModal.addEventListener('click', () => {
-                document.getElementById('auth-modal').style.display = 'none';
-            });
-        }
-
-        // Xử lý mở modal đăng nhập
-        if (openLoginModal) {
-            openLoginModal.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('auth-modal').style.display = 'block';
-            });
-        }
-
-        // Đóng modal khi click ra ngoài
-        window.onclick = function(event) {
-            const modal = document.getElementById('auth-modal');
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
+        // Firebase config và xử lý xác thực
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
         };
 
-        // Theo dõi trạng thái đăng nhập
-        firebase.auth().onAuthStateChanged(function(user) {
-            const loginBtn = document.getElementById('open-login-modal');
-            if (user) {
-                if (loginBtn) loginBtn.style.display = 'none';
-                if (userDropdown) userDropdown.style.display = 'block';
-                if (userName) userName.textContent = user.displayName || user.email;
-            } else {
-                if (loginBtn) loginBtn.style.display = 'block';
-                if (userDropdown) userDropdown.style.display = 'none';
-            }
-        });
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
 
-        // Xử lý đăng xuất
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', function(e) {
+        // Đợi DOM load xong
+        document.addEventListener('DOMContentLoaded', function () {
+            // Lấy các elements
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const forgotForm = document.getElementById('forgot-form');
+            const closeAuthModal = document.getElementById('close-auth-modal');
+            const openLoginModal = document.getElementById('open-login-modal');
+            const userDropdown = document.getElementById('user-dropdown');
+            const userName = document.getElementById('user-name');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // Xử lý đăng nhập
+            if (loginForm) {
+                loginForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+
+                    firebase.auth().signInWithEmailAndPassword(email, password)
+                        .then((userCredential) => {
+                            const user = userCredential.user;
+                            document.getElementById('auth-modal').style.display = 'none';
+
+                            // Kiểm tra nếu là admin
+                            if (email === 'quantrikhachsan@gmail.com') {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    text: 'Chào mừng Admin!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                }).then(() => {
+                                    window.location.href = 'admin-dashboard.html';
+                                });
+                            } else if (email === 'nhanvien2@luxuryhaven.com') {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    text: 'Chào mừng Nhân viên!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                }).then(() => {
+                                    window.location.href = 'admin-dashboard.html';
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi đăng nhập!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
+                });
+            }
+
+            // Xử lý đăng ký
+            if (registerForm) {
+                registerForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('register-email').value;
+                    const password = document.getElementById('register-password').value;
+                    const confirmPassword = document.getElementById('register-confirm-password').value;
+                    const username = document.getElementById('register-username').value;
+
+                    if (password.length < 6) {
+                        Swal.fire({
+                            title: 'Lỗi đăng ký!',
+                            text: 'Mật khẩu phải có ít nhất 6 ký tự.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        return;
+                    }
+
+                    if (password !== confirmPassword) {
+                        Swal.fire({
+                            title: 'Lỗi đăng ký!',
+                            text: 'Mật khẩu nhập lại không khớp.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        return;
+                    }
+
+                    firebase.auth().createUserWithEmailAndPassword(email, password)
+                        .then((userCredential) => {
+                            return userCredential.user.updateProfile({
+                                displayName: username
+                            });
+                        })
+                        .then(() => {
+                            document.getElementById('auth-modal').style.display = 'none';
+                            Swal.fire({
+                                title: 'Đăng ký thành công!',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi đăng ký!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
+                });
+            }
+
+            // Xử lý quên mật khẩu
+            if (forgotForm) {
+                forgotForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('forgot-email').value;
+
+                    firebase.auth().sendPasswordResetEmail(email)
+                        .then(() => {
+                            Swal.fire({
+                                title: 'Email đã được gửi!',
+                                text: 'Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
+                });
+            }
+
+            // Xử lý chuyển đổi giữa các form
+            document.getElementById('to-register').addEventListener('click', function (e) {
                 e.preventDefault();
-                firebase.auth().signOut().then(() => {
-                    Swal.fire({
-                        title: 'Đăng xuất thành công!',
-                        icon: 'success',
-                        confirmButtonColor: '#e67e22'
-                    });
-                }).catch((error) => {
-                    Swal.fire({
-                        title: 'Lỗi đăng xuất!',
-                        text: error.message,
-                        icon: 'error',
-                        confirmButtonColor: '#e67e22'
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                forgotForm.style.display = 'none';
+            });
+
+            document.getElementById('to-login').addEventListener('click', function (e) {
+                e.preventDefault();
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                forgotForm.style.display = 'none';
+            });
+
+            document.getElementById('to-forgot').addEventListener('click', function (e) {
+                e.preventDefault();
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                forgotForm.style.display = 'block';
+            });
+
+            document.getElementById('back-to-login').addEventListener('click', function (e) {
+                e.preventDefault();
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                forgotForm.style.display = 'none';
+            });
+
+            // Xử lý đóng modal
+            if (closeAuthModal) {
+                closeAuthModal.addEventListener('click', () => {
+                    document.getElementById('auth-modal').style.display = 'none';
+                });
+            }
+
+            // Xử lý mở modal đăng nhập
+            if (openLoginModal) {
+                openLoginModal.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById('auth-modal').style.display = 'block';
+                });
+            }
+
+            // Đóng modal khi click ra ngoài
+            window.onclick = function (event) {
+                const modal = document.getElementById('auth-modal');
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            // Theo dõi trạng thái đăng nhập
+            firebase.auth().onAuthStateChanged(function (user) {
+                const loginBtn = document.getElementById('open-login-modal');
+                if (user) {
+                    if (loginBtn) loginBtn.style.display = 'none';
+                    if (userDropdown) userDropdown.style.display = 'block';
+                    if (userName) userName.textContent = user.displayName || user.email;
+                } else {
+                    if (loginBtn) loginBtn.style.display = 'block';
+                    if (userDropdown) userDropdown.style.display = 'none';
+                }
+            });
+
+            // Xử lý đăng xuất
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    firebase.auth().signOut().then(() => {
+                        Swal.fire({
+                            title: 'Đăng xuất thành công!',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    }).catch((error) => {
+                        Swal.fire({
+                            title: 'Lỗi đăng xuất!',
+                            text: error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
                     });
                 });
-            });
-        }
-    });
-
-    // Khởi tạo EmailJS với public key
-    (function() {
-        emailjs.init("yI6xhpzYSnD3AGzbX");
-    })();
-
-    // Xử lý form liên hệ
-    const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // Lấy thông tin từ form
-        const name = document.getElementById('contact-name').value;
-        const email = document.getElementById('contact-email').value;
-        const message = document.getElementById('contact-message').value;
-
-        // Hiển thị loading
-        Swal.fire({
-            title: 'Đang gửi...',
-            text: 'Vui lòng đợi trong giây lát',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
             }
         });
 
-        // Gửi email
-        emailjs.send("service_6spwxxw", "template_vcjlg02", {
-            to_email: "quantrikhachsan001@gmail.com",
-            from_name: name,
-            from_email: email,
-            message: message
-        })
-        .then(function() {
-            // Thành công
-            Swal.fire({
-                title: 'Gửi thành công!',
-                text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
-                icon: 'success',
-                confirmButtonColor: '#e67e22'
-            });
-            // Reset form
-            document.getElementById('contact-form').reset();
-        })
-        .catch(function(error) {
-            // Thất bại
-            Swal.fire({
-                title: 'Lỗi!',
-                text: 'Không thể gửi email. Vui lòng thử lại sau.',
-                icon: 'error',
-                confirmButtonColor: '#e67e22'
-            });
-            console.error("Error sending email:", error);
-        });
-    });
-}
+        // Khởi tạo EmailJS với public key
+        (function () {
+            emailjs.init("yI6xhpzYSnD3AGzbX");
+        })();
 
-    let autoSlideInterval;
-    let currentSlideIndex = 0;
+        // Xử lý form liên hệ
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
 
-    function startAutoSlide() {
-        stopAutoSlide(); // Clear any existing interval
-        autoSlideInterval = setInterval(() => {
-            document.querySelectorAll('.slider-container').forEach(container => {
-                const nextBtn = container.querySelector('.next');
-                if (nextBtn) nextSlide(nextBtn);
+                // Lấy thông tin từ form
+                const name = document.getElementById('contact-name').value;
+                const email = document.getElementById('contact-email').value;
+                const message = document.getElementById('contact-message').value;
+
+                // Hiển thị loading
+                Swal.fire({
+                    title: 'Đang gửi...',
+                    text: 'Vui lòng đợi trong giây lát',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Gửi email
+                emailjs.send("service_6spwxxw", "template_vcjlg02", {
+                    to_email: "quantrikhachsan001@gmail.com",
+                    from_name: name,
+                    from_email: email,
+                    message: message
+                })
+                    .then(function () {
+                        // Thành công
+                        Swal.fire({
+                            title: 'Gửi thành công!',
+                            text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        // Reset form
+                        document.getElementById('contact-form').reset();
+                    })
+                    .catch(function (error) {
+                        // Thất bại
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Không thể gửi email. Vui lòng thử lại sau.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        console.error("Error sending email:", error);
+                    });
             });
-        }, 4000); // Chuyển slide mỗi 4 giây
-    }
-
-    function stopAutoSlide() {
-        if (autoSlideInterval) {
-            clearInterval(autoSlideInterval);
         }
-    }
 
-    function nextSlide(btn) {
-        const container = btn.closest('.slider-container');
-        const slider = container.querySelector('.slider');
-        const dots = container.querySelectorAll('.dot');
-        const slides = container.querySelectorAll('.slide');
-        
-        currentSlideIndex = (currentSlideIndex + 1) % slides.length;
-        updateSlider(slider, dots, currentSlideIndex);
-    }
+        let autoSlideInterval;
+        let currentSlideIndex = 0;
 
-    function prevSlide(btn) {
-        const container = btn.closest('.slider-container');
-        const slider = container.querySelector('.slider');
-        const dots = container.querySelectorAll('.dot');
-        const slides = container.querySelectorAll('.slide');
-        
-        currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
-        updateSlider(slider, dots, currentSlideIndex);
-    }
+        function startAutoSlide() {
+            stopAutoSlide(); // Clear any existing interval
+            autoSlideInterval = setInterval(() => {
+                document.querySelectorAll('.slider-container').forEach(container => {
+                    const nextBtn = container.querySelector('.next');
+                    if (nextBtn) nextSlide(nextBtn);
+                });
+            }, 4000); // Chuyển slide mỗi 4 giây
+        }
 
-    function currentSlide(dot, index) {
-        const container = dot.closest('.slider-container');
-        const slider = container.querySelector('.slider');
-        const dots = container.querySelectorAll('.dot');
-        
-        currentSlideIndex = index;
-        updateSlider(slider, dots, index);
-    }
+        function stopAutoSlide() {
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+            }
+        }
 
-    function updateSlider(slider, dots, index) {
-        const sliderWidth = slider.offsetWidth;
-        slider.style.transform = `translateX(${-index * sliderWidth}px)`;
-        
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
+        function nextSlide(btn) {
+            const container = btn.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+            const slides = container.querySelectorAll('.slide');
+
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            updateSlider(slider, dots, currentSlideIndex);
+        }
+
+        function prevSlide(btn) {
+            const container = btn.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+            const slides = container.querySelectorAll('.slide');
+
+            currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+            updateSlider(slider, dots, currentSlideIndex);
+        }
+
+        function currentSlide(dot, index) {
+            const container = dot.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+
+            currentSlideIndex = index;
+            updateSlider(slider, dots, index);
+        }
+
+        function updateSlider(slider, dots, index) {
+            const sliderWidth = slider.offsetWidth;
+            slider.style.transform = `translateX(${-index * sliderWidth}px)`;
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        // Khởi động auto slide và xử lý các sự kiện khi trang load xong
+        document.addEventListener('DOMContentLoaded', () => {
+            startAutoSlide();
+
+            // Thêm sự kiện hover để dừng/tiếp tục auto slide
+            document.querySelectorAll('.slider-container').forEach(container => {
+                container.addEventListener('mouseenter', stopAutoSlide);
+                container.addEventListener('mouseleave', startAutoSlide);
+            });
         });
-    }
 
-    // Khởi động auto slide và xử lý các sự kiện khi trang load xong
-    document.addEventListener('DOMContentLoaded', () => {
-        startAutoSlide();
-        
-        // Thêm sự kiện hover để dừng/tiếp tục auto slide
-        document.querySelectorAll('.slider-container').forEach(container => {
-            container.addEventListener('mouseenter', stopAutoSlide);
-            container.addEventListener('mouseleave', startAutoSlide);
-        });
-    });
-        
     </script>
     <!-- Thêm lại script gọi realtime specialOffers và specialVouchers -->
     <script>
-    function renderDealCard(deal) {
-        return `
+        function renderDealCard(deal) {
+            return `
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
           <div class="offer-card w-100 d-flex flex-column">
             <img src="${deal.image}" alt="${deal.title}">
@@ -693,10 +716,10 @@ if (contactForm) {
           </div>
         </div>
         `;
-    }
+        }
 
-    function renderVoucherCard(voucher) {
-    return `
+        function renderVoucherCard(voucher) {
+            return `
     <div class="col-md-3">
       <div class="offer-card voucher-card">
             <img src="${voucher.image}" alt="${voucher.title}">
@@ -713,133 +736,158 @@ if (contactForm) {
           </div>
         </div>
         `;
-    }
+        }
 
-    function renderSpecialOffers(data) {
-        const dealsList = document.getElementById('deals-list');
-        let dealsArr = Array.isArray(data) ? data : [];
-        const validDeals = dealsArr.filter(
-            d => d && d.image && d.title && d.desc && d.image.trim() && d.title.trim() && d.desc.trim()
-        );
-        if (dealsList) {
-            if (validDeals.length > 0) {
-                dealsList.innerHTML = validDeals.map(renderDealCard).join('');
-            } else {
-                dealsList.innerHTML = '<div class="col-12 text-center">Hiện chưa có ưu đãi nào.</div>';
+        function renderSpecialOffers(data) {
+            const dealsList = document.getElementById('deals-list');
+            let dealsArr = Array.isArray(data) ? data : [];
+            const validDeals = dealsArr.filter(
+                d => d && d.image && d.title && d.desc && d.image.trim() && d.title.trim() && d.desc.trim()
+            );
+            if (dealsList) {
+                if (validDeals.length > 0) {
+                    dealsList.innerHTML = validDeals.map(renderDealCard).join('');
+                } else {
+                    dealsList.innerHTML = '<div class="col-12 text-center">Hiện chưa có ưu đãi nào.</div>';
+                }
             }
         }
-    }
 
-    function renderVouchers(data) {
-        const vouchersList = document.getElementById('vouchers-list');
-        let vouchersArr = Array.isArray(data) ? data : [];
-        const validVouchers = vouchersArr.filter(
-            v => v && v.image && v.title && v.desc && v.image.trim() && v.title.trim() && v.desc.trim()
-        );
-        if (vouchersList) {
-            if (validVouchers.length > 0) {
-                vouchersList.innerHTML = validVouchers.map(renderVoucherCard).join('');
-            } else {
-                vouchersList.innerHTML = '<div class="col-12 text-center">Hiện chưa có voucher nào.</div>';
+        function renderVouchers(data) {
+            const vouchersList = document.getElementById('vouchers-list');
+            let vouchersArr = Array.isArray(data) ? data : [];
+            const validVouchers = vouchersArr.filter(
+                v => v && v.image && v.title && v.desc && v.image.trim() && v.title.trim() && v.desc.trim()
+            );
+            if (vouchersList) {
+                if (validVouchers.length > 0) {
+                    vouchersList.innerHTML = validVouchers.map(renderVoucherCard).join('');
+                } else {
+                    vouchersList.innerHTML = '<div class="col-12 text-center">Hiện chưa có voucher nào.</div>';
+                }
             }
         }
-    }
 
-    firebase.database().ref('specialOffers').on('value', function(snapshot) {
-        const data = snapshot.val();
-        if (data) {
-            renderSpecialOffers(data);
-        }
-    });
+        firebase.database().ref('specialOffers').on('value', function (snapshot) {
+            const data = snapshot.val();
+            if (data) {
+                renderSpecialOffers(data);
+            }
+        });
 
-    firebase.database().ref('vouchers').on('value', function(snapshot) {
-        const data = snapshot.val();
-        if (data) {
-            renderVouchers(data);
-        }
-    });
+        firebase.database().ref('vouchers').on('value', function (snapshot) {
+            const data = snapshot.val();
+            if (data) {
+                renderVouchers(data);
+            }
+        });
     </script>
     <script>
-    // ... existing code ...
-    function handleDealBooking(deal) {
-        const user = firebase.auth().currentUser;
-        if (!user) {
-            Swal.fire({
-                title: 'Thông báo',
-                text: 'Vui lòng đăng nhập để đặt phòng',
-                icon: 'warning',
-                confirmButtonText: 'Đăng nhập ngay'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('open-login-modal').click();
-                }
-            });
-            return;
+        // ... existing code ...
+        function handleDealBooking(deal) {
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                Swal.fire({
+                    title: 'Thông báo',
+                    text: 'Vui lòng đăng nhập để đặt phòng',
+                    icon: 'warning',
+                    confirmButtonText: 'Đăng nhập ngay'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('open-login-modal').click();
+                    }
+                });
+                return;
+            }
+            // Tạo bookingData cơ bản từ deal
+            const bookingData = {
+                email: user.email,
+                hotelId: deal.title,
+                roomId: deal.label,
+                checkIn: new Date().toISOString().split('T')[0],
+                checkOut: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+                guests: 1,
+                name: user.displayName || user.name || '',
+                phone: user.phoneNumber || '',
+                createdAt: Date.now(),
+                type: 'deal',
+                price: deal.newPrice.replace(/[^0-9]/g, '') || 0
+            };
+            firebase.database().ref('bookings').push(bookingData)
+                .then((ref) => {
+                    const bookingId = ref.key;
+                    window.location.href = `check-out.html?bookingId=${bookingId}`;
+                })
+                .catch((err) => Swal.fire('Lỗi khi đặt ưu đãi', err.message, 'error'));
         }
-        // Tạo bookingData cơ bản từ deal
-        const bookingData = {
-            email: user.email,
-            hotelId: deal.title,
-            roomId: deal.label,
-            checkIn: new Date().toISOString().split('T')[0],
-            checkOut: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-            guests: 1,
-            name: user.displayName || user.name || '',
-            phone: user.phoneNumber || '',
-            createdAt: Date.now(),
-            type: 'deal',
-            price: deal.newPrice.replace(/[^0-9]/g, '') || 0
-        };
-        firebase.database().ref('bookings').push(bookingData)
-            .then((ref) => {
-                const bookingId = ref.key;
-                window.location.href = `check-out.html?bookingId=${bookingId}`;
-            })
-            .catch((err) => Swal.fire('Lỗi khi đặt ưu đãi', err.message, 'error'));
-    }
-    // Kiểm tra mã giảm giá hợp lệ
-    async function checkVoucherValid(code) {
-        return new Promise((resolve) => {
-            firebase.database().ref('vouchers').once('value', function(snapshot) {
-                const vouchers = snapshot.val();
-                if (!vouchers) return resolve(false);
-                let arr = Array.isArray(vouchers) ? vouchers : Object.values(vouchers);
-                const found = arr.find(v => v.code && v.code.toLowerCase() === code.toLowerCase());
-                resolve(!!found);
+        // Kiểm tra mã giảm giá hợp lệ
+        async function checkVoucherValid(code) {
+            return new Promise((resolve) => {
+                firebase.database().ref('vouchers').once('value', function (snapshot) {
+                    const vouchers = snapshot.val();
+                    if (!vouchers) return resolve(false);
+                    let arr = Array.isArray(vouchers) ? vouchers : Object.values(vouchers);
+                    const found = arr.find(v => v.code && v.code.toLowerCase() === code.toLowerCase());
+                    resolve(!!found);
+                });
             });
-        });
-    }
-    // Gắn sự kiện cho nút Đặt ngay
-    function attachDealBookingEvents() {
-        setTimeout(() => {
-            document.querySelectorAll('.btn.btn-primary').forEach(btn => {
-                if (btn.textContent.trim() === 'Đặt ngay' && !btn.dataset.bookingAttached) {
-                    btn.dataset.bookingAttached = '1';
-                    btn.onclick = function(e) {
-                        const card = btn.closest('.offer-card');
-                        if (!card) return;
-                        // Lấy thông tin deal từ DOM
-                        const title = card.querySelector('h4')?.textContent || '';
-                        const oldPrice = card.querySelector('.old-price')?.textContent || '';
-                        const newPrice = card.querySelector('.new-price')?.textContent || '';
-                        const label = card.querySelector('.offer-label')?.textContent || '';
-                        const img = card.querySelector('img')?.src || '';
-                        handleDealBooking({title, oldPrice, newPrice, label, image: img});
-                    };
+        }
+        // Gắn sự kiện cho nút Đặt ngay
+        function attachDealBookingEvents() {
+            setTimeout(() => {
+                document.querySelectorAll('.btn.btn-primary').forEach(btn => {
+                    if (btn.textContent.trim() === 'Đặt ngay' && !btn.dataset.bookingAttached) {
+                        btn.dataset.bookingAttached = '1';
+                        btn.onclick = function (e) {
+                            const card = btn.closest('.offer-card');
+                            if (!card) return;
+                            // Lấy thông tin deal từ DOM
+                            const title = card.querySelector('h4')?.textContent || '';
+                            const oldPrice = card.querySelector('.old-price')?.textContent || '';
+                            const newPrice = card.querySelector('.new-price')?.textContent || '';
+                            const label = card.querySelector('.offer-label')?.textContent || '';
+                            const img = card.querySelector('img')?.src || '';
+                            handleDealBooking({ title, oldPrice, newPrice, label, image: img });
+                        };
+                    }
+                });
+            }, 500);
+        }
+        // Gọi lại sau khi render ưu đãi
+        const origRenderSpecialOffers = renderSpecialOffers;
+        renderSpecialOffers = function (data) {
+            origRenderSpecialOffers(data);
+            attachDealBookingEvents();
+        };
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function () {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Close mobile menu when clicking on links
+            navLinks.addEventListener('click', function (e) {
+                if (e.target.tagName === 'A') {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
                 }
             });
-        }, 500);
-    }
-    // Gọi lại sau khi render ưu đãi
-    const origRenderSpecialOffers = renderSpecialOffers;
-    renderSpecialOffers = function(data) {
-        origRenderSpecialOffers(data);
-        attachDealBookingEvents();
-    };
-    // ... existing code ...
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
     </script>
-    
+
 </body>
+
 </html>
-
-

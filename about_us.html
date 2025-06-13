@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,24 +13,24 @@
     <link rel="stylesheet" href="css/about_us.css">
     <style>
         @font-face {
-          font-family: 'Nautica Script Bold';
-          src: url('fonts/nautica-bold.otf') format('opentype');
-          font-weight: bold;
-          font-style: normal;
+            font-family: 'Nautica Script Bold';
+            src: url('fonts/nautica-bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
         }
+
         .nautica-script {
-          font-family: 'Nautica Script Bold', cursive;
-          font-size: 6em;
-          font-weight: bold;
-          color: #cddae6;
-          text-align: center;
+            font-family: 'Nautica Script Bold', cursive;
+            font-size: 6em;
+            font-weight: bold;
+            color: #cddae6;
+            text-align: center;
         }
-        
-      </style>
-      
+    </style>
+
 </head>
-<body>
-    <!-- Navbar -->
+
+<body> <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-flex">
@@ -37,6 +38,12 @@
                 <a class="navbar-brand" href="#">
                     <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
                 </a>
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
 
                 <!-- Search Box -->
                 <div class="nav-search">
@@ -48,12 +55,12 @@
                     </div>
                 </div>
                 <div class="nav-right">
-                    <ul class="nav-links">
-                        <li><a href="index.html" >Trang chủ</a></li>
-                        <li><a href="hotel.html" >Khách sạn</a></li>
-                    
+                    <ul class="nav-links" id="nav-links">
+                        <li><a href="index.html">Trang chủ</a></li>
+                        <li><a href="hotel.html">Khách sạn</a></li>
+
                         <li class="dropdown"><a href="tours.html">Tours</a></li>
-                        
+
                         <li class="dropdown"><a href="prioritize.html">Ưu đãi</a></li>
                         <li class="dropdown"><a href="travel_guide.html">Cẩm nang du lịch</a></li>
                         <li class="dropdown"><a href="about_us.html" class="active">Về chúng tôi</a></li>
@@ -62,12 +69,15 @@
                         <li>
                             <div class="d-flex align-items-center">
                                 <div class="dropdown" id="user-dropdown" style="display:none;">
-                                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                                        id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-user"></i> <span id="user-name"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                        <li><a class="dropdown-item" href="member.html"><i class="fas fa-user-circle"></i> Tài khoản</a></li>
-                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                                        <li><a class="dropdown-item" href="member.html"><i
+                                                    class="fas fa-user-circle"></i> Tài khoản</a></li>
+                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i
+                                                    class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
                                     </ul>
                                 </div>
                                 <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
@@ -85,102 +95,126 @@
     <section class="hero-section">
         <p class="nautica-script">LuxuryHavenTravel</p>
         <div class="hero-content"><br><br><br><br><br><br><br><br>
-            
+
             <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
             <p>Đặt phòng khách sạn, tour du lịch, vé máy bay với giá tốt nhất</p>
         </div><br><br><br><br><br><br><br><br>
     </section>
 
-   <main>
-<div class="container">
-        <h1>Giới thiệu về chúng tôi</h1>
-        <p>Chào mừng bạn đến với <b>Luxury Haven</b> – hệ thống đặt phòng khách sạn hàng đầu Việt Nam. Chúng tôi cam kết mang đến trải nghiệm đặt phòng nhanh chóng, tiện lợi và an toàn cho mọi khách hàng.</p>
-        <h2>Sứ mệnh</h2>
-        <p>Sứ mệnh của chúng tôi là kết nối khách hàng với những khách sạn chất lượng, giá tốt nhất, góp phần nâng cao trải nghiệm du lịch và nghỉ dưỡng tại Việt Nam.</p>
-        <h2>Tầm nhìn</h2>
-        <p>Trở thành nền tảng đặt phòng khách sạn được tin dùng nhất tại Việt Nam, không ngừng đổi mới để đáp ứng nhu cầu ngày càng cao của khách hàng.</p>
-        <h2>Giá trị cốt lõi</h2>
-        <ul>
-            <li><b>Khách hàng là trung tâm:</b> Luôn lắng nghe và phục vụ tận tâm.</li>
-            <li><b>Chất lượng dịch vụ:</b> Đảm bảo mọi khách sạn đều đạt tiêu chuẩn kiểm định nghiêm ngặt.</li>
-            <li><b>Đổi mới sáng tạo:</b> Ứng dụng công nghệ hiện đại để tối ưu hóa trải nghiệm người dùng.</li>
-            <li><b>Minh bạch & Uy tín:</b> Cam kết thông tin rõ ràng, giá cả minh bạch.</li>
-        </ul>
-        <h2>Lịch sử phát triển</h2>
-        <p>Luxury Haven được thành lập năm 2020 bởi đội ngũ chuyên gia trong lĩnh vực du lịch và công nghệ. Sau 5 năm hoạt động, chúng tôi đã phục vụ hơn 100.000 khách hàng, hợp tác với hơn 2.000 khách sạn trên toàn quốc và nhận được nhiều giải thưởng uy tín trong ngành.</p>
-        <h2>Đội ngũ lãnh đạo</h2>
-        <div class="team">
-            <div class="member">
-                <img src="images/z6678536134938_a6253735ab0cfcd9da34a2e2230f0468.jpg" alt="CEO">
-                <div>Nguyễn Văn A<br><small>CEO & Founder</small></div>
+    <main>
+        <div class="container">
+            <h1>Giới thiệu về chúng tôi</h1>
+            <p>Chào mừng bạn đến với <b>Luxury Haven</b> – hệ thống đặt phòng khách sạn hàng đầu Việt Nam. Chúng tôi cam
+                kết mang đến trải nghiệm đặt phòng nhanh chóng, tiện lợi và an toàn cho mọi khách hàng.</p>
+            <h2>Sứ mệnh</h2>
+            <p>Sứ mệnh của chúng tôi là kết nối khách hàng với những khách sạn chất lượng, giá tốt nhất, góp phần nâng
+                cao trải nghiệm du lịch và nghỉ dưỡng tại Việt Nam.</p>
+            <h2>Tầm nhìn</h2>
+            <p>Trở thành nền tảng đặt phòng khách sạn được tin dùng nhất tại Việt Nam, không ngừng đổi mới để đáp ứng
+                nhu cầu ngày càng cao của khách hàng.</p>
+            <h2>Giá trị cốt lõi</h2>
+            <ul>
+                <li><b>Khách hàng là trung tâm:</b> Luôn lắng nghe và phục vụ tận tâm.</li>
+                <li><b>Chất lượng dịch vụ:</b> Đảm bảo mọi khách sạn đều đạt tiêu chuẩn kiểm định nghiêm ngặt.</li>
+                <li><b>Đổi mới sáng tạo:</b> Ứng dụng công nghệ hiện đại để tối ưu hóa trải nghiệm người dùng.</li>
+                <li><b>Minh bạch & Uy tín:</b> Cam kết thông tin rõ ràng, giá cả minh bạch.</li>
+            </ul>
+            <h2>Lịch sử phát triển</h2>
+            <p>Luxury Haven được thành lập năm 2020 bởi đội ngũ chuyên gia trong lĩnh vực du lịch và công nghệ. Sau 5
+                năm hoạt động, chúng tôi đã phục vụ hơn 100.000 khách hàng, hợp tác với hơn 2.000 khách sạn trên toàn
+                quốc và nhận được nhiều giải thưởng uy tín trong ngành.</p>
+            <h2>Đội ngũ lãnh đạo</h2>
+            <div class="team">
+                <div class="member">
+                    <img src="images/z6678536134938_a6253735ab0cfcd9da34a2e2230f0468.jpg" alt="CEO">
+                    <div>Nguyễn Văn A<br><small>CEO & Founder</small></div>
+                </div>
+                <div class="member">
+                    <img src="images/LuxuryHaven.png" alt="CTO">
+                    <div>Trần Thị B<br><small>CTO</small></div>
+                </div>
             </div>
-            <div class="member">
-                <img src="images/LuxuryHaven.png" alt="CTO">
-                <div>Trần Thị B<br><small>CTO</small></div>
-            </div>
-        </div>
-        <h2>Thành tựu nổi bật</h2>
-        <ul>
-            <li>Top 3 nền tảng đặt phòng khách sạn trực tuyến tại Việt Nam (2024).</li>
-            <li>Đối tác chiến lược của nhiều tập đoàn khách sạn lớn.</li>
-            <li>Giải thưởng "Dịch vụ khách hàng xuất sắc" năm 2023.</li>
-        </ul>
-        <h2>Chứng nhận</h2>
-        <ul>
-            <li>Chứng nhận ISO 9001:2015 về quản lý chất lượng dịch vụ.</li>
-            <li>Đạt chuẩn bảo mật thông tin PCI DSS.</li>
-        </ul>
-        <h2>Văn hóa doanh nghiệp</h2>
-        <p>Luxury Haven xây dựng môi trường làm việc chuyên nghiệp, sáng tạo và thân thiện. Chúng tôi đề cao sự hợp tác, tôn trọng lẫn nhau và khuyến khích phát triển cá nhân. Các hoạt động nội bộ như team building, đào tạo kỹ năng, và các chương trình thiện nguyện luôn được tổ chức thường xuyên.</p>
-        <h2>Đối tác & Khách hàng tiêu biểu</h2>
-        <ul>
-            <li>Khách sạn Grand Palace, Hà Nội</li>
-            <li>Khách sạn Sunlight, Đà Nẵng</li>
-            <li>Khách sạn Ocean Pearl, Nha Trang</li>
-            <li>Khách sạn The Luxe, TP.HCM</li>
-            <li>Hơn 2.000 khách sạn và resort trên toàn quốc</li>
-        </ul>
-        <h2>Cam kết với khách hàng</h2>
-        <ul>
-            <li>Đặt phòng nhanh chóng, xác nhận tức thì</li>
-            <li>Giá tốt nhất, nhiều ưu đãi hấp dẫn</li>
-            <li>Hỗ trợ khách hàng 24/7</li>
-            <li>Chính sách hoàn hủy linh hoạt</li>
-            <li>Bảo mật thông tin tuyệt đối</li>
-        </ul>
-        <h2>Chính sách bảo mật</h2>
-        <p>Luxury Haven cam kết bảo vệ thông tin cá nhân của khách hàng theo quy định pháp luật. Mọi dữ liệu đều được mã hóa và chỉ sử dụng cho mục đích phục vụ khách hàng tốt hơn.</p>
-        <h2>Chính sách hoàn tiền</h2>
-        <p>Khách hàng có thể yêu cầu hoàn tiền theo các điều kiện được quy định rõ ràng trên website. Chúng tôi luôn minh bạch và hỗ trợ tối đa cho khách hàng trong mọi trường hợp phát sinh.</p>
-        <h2>Câu hỏi thường gặp (FAQ)</h2>
-        <ul>
-            <li><b>Làm thế nào để đặt phòng?</b> – Chỉ cần chọn khách sạn, ngày nhận/trả phòng và điền thông tin, hệ thống sẽ xác nhận ngay lập tức.</li>
-            <li><b>Tôi có thể thanh toán bằng những hình thức nào?</b> – Chúng tôi hỗ trợ thanh toán qua thẻ tín dụng, chuyển khoản, ví điện tử và tiền mặt tại khách sạn.</li>
-            <li><b>Làm sao để nhận hóa đơn VAT?</b> – Vui lòng liên hệ bộ phận CSKH để được hỗ trợ xuất hóa đơn VAT sau khi hoàn tất đặt phòng.</li>
-            <li><b>Chính sách hủy phòng như thế nào?</b> – Mỗi khách sạn sẽ có chính sách riêng, bạn có thể xem chi tiết khi đặt phòng hoặc liên hệ CSKH để được tư vấn.</li>
-        </ul>
-        <h2>Thông tin pháp lý</h2>
-        <p>Công ty TNHH Luxury Haven<br>Mã số doanh nghiệp: 0123456789<br>Đăng ký lần đầu: 01/01/2020 tại Sở KH&ĐT TP.HCM</p>
-        <h2>Hành trình phát triển bền vững</h2>
-        <p>Luxury Haven không chỉ tập trung vào phát triển kinh doanh mà còn chú trọng đến trách nhiệm xã hội và bảo vệ môi trường. Chúng tôi triển khai nhiều chương trình hợp tác với các tổ chức phi lợi nhuận, hỗ trợ cộng đồng địa phương, và thúc đẩy du lịch xanh. Các khách sạn đối tác đều được khuyến khích áp dụng các tiêu chuẩn tiết kiệm năng lượng, giảm thiểu rác thải nhựa và bảo tồn tài nguyên thiên nhiên.</p>
-        <h2>Hoạt động cộng đồng</h2>
-        <ul>
-            <li>Chương trình "Chung tay vì miền Trung" hỗ trợ đồng bào vùng lũ lụt.</li>
-            <li>Quỹ học bổng "Ươm mầm tài năng trẻ" cho học sinh nghèo vượt khó.</li>
-            <li>Tham gia các chiến dịch trồng cây xanh, làm sạch bãi biển tại các địa phương du lịch.</li>
-            <li>Hợp tác cùng các tổ chức bảo vệ động vật hoang dã.</li>
-        </ul>
-        <h2>Định hướng phát triển tương lai</h2>
-        <p>Luxury Haven đặt mục tiêu mở rộng mạng lưới đối tác lên 5.000 khách sạn vào năm 2030, phát triển ứng dụng di động thông minh, tích hợp AI để cá nhân hóa trải nghiệm người dùng, và mở rộng ra thị trường quốc tế. Chúng tôi cũng sẽ tiếp tục đầu tư vào công nghệ bảo mật, nâng cao chất lượng dịch vụ và đa dạng hóa các sản phẩm du lịch.</p>
-        <h2>Đội ngũ nhân sự</h2>
-        <p>Hiện tại, Luxury Haven có hơn 200 nhân viên làm việc tại các văn phòng ở TP.HCM, Hà Nội, Đà Nẵng và các chi nhánh địa phương. Đội ngũ của chúng tôi gồm các chuyên gia giàu kinh nghiệm trong lĩnh vực du lịch, công nghệ thông tin, chăm sóc khách hàng và marketing. Chúng tôi luôn tạo điều kiện để nhân viên phát triển nghề nghiệp, tham gia các khóa đào tạo chuyên sâu và khuyến khích sáng tạo đổi mới.</p>
-        <h2>Truyền thông & Báo chí</h2>
-        <ul>
-            <li>Được vinh danh trên các báo lớn như VnExpress, Tuổi Trẻ, Thanh Niên, Vietnamnet...</li>
-            <li>Thường xuyên xuất hiện trong các chương trình truyền hình về du lịch và công nghệ.</li>
-            <li>Được cộng đồng đánh giá cao trên các nền tảng mạng xã hội, nhận nhiều phản hồi tích cực từ khách hàng.</li>
-        </ul>
-        <!-- <h2>Khách hàng nói về chúng tôi</h2>
+            <h2>Thành tựu nổi bật</h2>
+            <ul>
+                <li>Top 3 nền tảng đặt phòng khách sạn trực tuyến tại Việt Nam (2024).</li>
+                <li>Đối tác chiến lược của nhiều tập đoàn khách sạn lớn.</li>
+                <li>Giải thưởng "Dịch vụ khách hàng xuất sắc" năm 2023.</li>
+            </ul>
+            <h2>Chứng nhận</h2>
+            <ul>
+                <li>Chứng nhận ISO 9001:2015 về quản lý chất lượng dịch vụ.</li>
+                <li>Đạt chuẩn bảo mật thông tin PCI DSS.</li>
+            </ul>
+            <h2>Văn hóa doanh nghiệp</h2>
+            <p>Luxury Haven xây dựng môi trường làm việc chuyên nghiệp, sáng tạo và thân thiện. Chúng tôi đề cao sự hợp
+                tác, tôn trọng lẫn nhau và khuyến khích phát triển cá nhân. Các hoạt động nội bộ như team building, đào
+                tạo kỹ năng, và các chương trình thiện nguyện luôn được tổ chức thường xuyên.</p>
+            <h2>Đối tác & Khách hàng tiêu biểu</h2>
+            <ul>
+                <li>Khách sạn Grand Palace, Hà Nội</li>
+                <li>Khách sạn Sunlight, Đà Nẵng</li>
+                <li>Khách sạn Ocean Pearl, Nha Trang</li>
+                <li>Khách sạn The Luxe, TP.HCM</li>
+                <li>Hơn 2.000 khách sạn và resort trên toàn quốc</li>
+            </ul>
+            <h2>Cam kết với khách hàng</h2>
+            <ul>
+                <li>Đặt phòng nhanh chóng, xác nhận tức thì</li>
+                <li>Giá tốt nhất, nhiều ưu đãi hấp dẫn</li>
+                <li>Hỗ trợ khách hàng 24/7</li>
+                <li>Chính sách hoàn hủy linh hoạt</li>
+                <li>Bảo mật thông tin tuyệt đối</li>
+            </ul>
+            <h2>Chính sách bảo mật</h2>
+            <p>Luxury Haven cam kết bảo vệ thông tin cá nhân của khách hàng theo quy định pháp luật. Mọi dữ liệu đều
+                được mã hóa và chỉ sử dụng cho mục đích phục vụ khách hàng tốt hơn.</p>
+            <h2>Chính sách hoàn tiền</h2>
+            <p>Khách hàng có thể yêu cầu hoàn tiền theo các điều kiện được quy định rõ ràng trên website. Chúng tôi luôn
+                minh bạch và hỗ trợ tối đa cho khách hàng trong mọi trường hợp phát sinh.</p>
+            <h2>Câu hỏi thường gặp (FAQ)</h2>
+            <ul>
+                <li><b>Làm thế nào để đặt phòng?</b> – Chỉ cần chọn khách sạn, ngày nhận/trả phòng và điền thông tin, hệ
+                    thống sẽ xác nhận ngay lập tức.</li>
+                <li><b>Tôi có thể thanh toán bằng những hình thức nào?</b> – Chúng tôi hỗ trợ thanh toán qua thẻ tín
+                    dụng, chuyển khoản, ví điện tử và tiền mặt tại khách sạn.</li>
+                <li><b>Làm sao để nhận hóa đơn VAT?</b> – Vui lòng liên hệ bộ phận CSKH để được hỗ trợ xuất hóa đơn VAT
+                    sau khi hoàn tất đặt phòng.</li>
+                <li><b>Chính sách hủy phòng như thế nào?</b> – Mỗi khách sạn sẽ có chính sách riêng, bạn có thể xem chi
+                    tiết khi đặt phòng hoặc liên hệ CSKH để được tư vấn.</li>
+            </ul>
+            <h2>Thông tin pháp lý</h2>
+            <p>Công ty TNHH Luxury Haven<br>Mã số doanh nghiệp: 0123456789<br>Đăng ký lần đầu: 01/01/2020 tại Sở KH&ĐT
+                TP.HCM</p>
+            <h2>Hành trình phát triển bền vững</h2>
+            <p>Luxury Haven không chỉ tập trung vào phát triển kinh doanh mà còn chú trọng đến trách nhiệm xã hội và bảo
+                vệ môi trường. Chúng tôi triển khai nhiều chương trình hợp tác với các tổ chức phi lợi nhuận, hỗ trợ
+                cộng đồng địa phương, và thúc đẩy du lịch xanh. Các khách sạn đối tác đều được khuyến khích áp dụng các
+                tiêu chuẩn tiết kiệm năng lượng, giảm thiểu rác thải nhựa và bảo tồn tài nguyên thiên nhiên.</p>
+            <h2>Hoạt động cộng đồng</h2>
+            <ul>
+                <li>Chương trình "Chung tay vì miền Trung" hỗ trợ đồng bào vùng lũ lụt.</li>
+                <li>Quỹ học bổng "Ươm mầm tài năng trẻ" cho học sinh nghèo vượt khó.</li>
+                <li>Tham gia các chiến dịch trồng cây xanh, làm sạch bãi biển tại các địa phương du lịch.</li>
+                <li>Hợp tác cùng các tổ chức bảo vệ động vật hoang dã.</li>
+            </ul>
+            <h2>Định hướng phát triển tương lai</h2>
+            <p>Luxury Haven đặt mục tiêu mở rộng mạng lưới đối tác lên 5.000 khách sạn vào năm 2030, phát triển ứng dụng
+                di động thông minh, tích hợp AI để cá nhân hóa trải nghiệm người dùng, và mở rộng ra thị trường quốc tế.
+                Chúng tôi cũng sẽ tiếp tục đầu tư vào công nghệ bảo mật, nâng cao chất lượng dịch vụ và đa dạng hóa các
+                sản phẩm du lịch.</p>
+            <h2>Đội ngũ nhân sự</h2>
+            <p>Hiện tại, Luxury Haven có hơn 200 nhân viên làm việc tại các văn phòng ở TP.HCM, Hà Nội, Đà Nẵng và các
+                chi nhánh địa phương. Đội ngũ của chúng tôi gồm các chuyên gia giàu kinh nghiệm trong lĩnh vực du lịch,
+                công nghệ thông tin, chăm sóc khách hàng và marketing. Chúng tôi luôn tạo điều kiện để nhân viên phát
+                triển nghề nghiệp, tham gia các khóa đào tạo chuyên sâu và khuyến khích sáng tạo đổi mới.</p>
+            <h2>Truyền thông & Báo chí</h2>
+            <ul>
+                <li>Được vinh danh trên các báo lớn như VnExpress, Tuổi Trẻ, Thanh Niên, Vietnamnet...</li>
+                <li>Thường xuyên xuất hiện trong các chương trình truyền hình về du lịch và công nghệ.</li>
+                <li>Được cộng đồng đánh giá cao trên các nền tảng mạng xã hội, nhận nhiều phản hồi tích cực từ khách
+                    hàng.</li>
+            </ul>
+            <!-- <h2>Khách hàng nói về chúng tôi</h2>
         <blockquote style="background:#f1f1f1;padding:16px;border-left:4px solid #2980b9;margin:16px 0;">
             <b>Nguyễn Thị Lan (Hà Nội):</b> "Tôi rất hài lòng với dịch vụ của Luxury Haven, đặt phòng nhanh, giá tốt và hỗ trợ tận tình."
         </blockquote>
@@ -190,28 +224,29 @@
         <blockquote style="background:#f1f1f1;padding:16px;border-left:4px solid #2980b9;margin:16px 0;">
             <b>Lê Hoàng (Đà Nẵng):</b> "Tôi đánh giá cao sự minh bạch và uy tín của Luxury Haven. Sẽ tiếp tục ủng hộ trong các chuyến đi tới."
         </blockquote> -->
-        <h2>Hệ sinh thái dịch vụ</h2>
-        <ul>
-            <li>Đặt phòng khách sạn, resort, homestay trên toàn quốc</li>
-            <li>Đặt tour du lịch trọn gói, tour trải nghiệm địa phương</li>
-            <li>Dịch vụ đưa đón sân bay, thuê xe du lịch</li>
-            <li>Gợi ý nhà hàng, điểm tham quan, trải nghiệm ẩm thực</li>
-            <li>Hỗ trợ tổ chức sự kiện, hội nghị, team building cho doanh nghiệp</li>
-        </ul>
-        <!-- <h2>Đăng ký nhận bản tin</h2>
+            <h2>Hệ sinh thái dịch vụ</h2>
+            <ul>
+                <li>Đặt phòng khách sạn, resort, homestay trên toàn quốc</li>
+                <li>Đặt tour du lịch trọn gói, tour trải nghiệm địa phương</li>
+                <li>Dịch vụ đưa đón sân bay, thuê xe du lịch</li>
+                <li>Gợi ý nhà hàng, điểm tham quan, trải nghiệm ẩm thực</li>
+                <li>Hỗ trợ tổ chức sự kiện, hội nghị, team building cho doanh nghiệp</li>
+            </ul>
+            <!-- <h2>Đăng ký nhận bản tin</h2>
         <form style="margin:24px 0;display:flex;gap:8px;max-width:400px;">
             <input type="email" placeholder="Nhập email của bạn" style="flex:1;padding:8px;border:1px solid #ccc;border-radius:4px;">
             <button type="submit" style="padding:8px 16px;background:#2980b9;color:#fff;border:none;border-radius:4px;cursor:pointer;">Đăng ký</button>
         </form> -->
-        <div class="info">
-            <h2>Liên hệ</h2>
-            <p>Địa chỉ: 123 Đường ABC, Quận 1, TP.HCM<br>Email: contact@luxuryhaven.vn<br>Hotline: 0123 456 789<br>Website: www.luxuryhaven.vn</p>
+            <div class="info">
+                <h2>Liên hệ</h2>
+                <p>Địa chỉ: 123 Đường ABC, Quận 1, TP.HCM<br>Email: contact@luxuryhaven.vn<br>Hotline: 0123 456
+                    789<br>Website: www.luxuryhaven.vn</p>
+            </div>
         </div>
-    </div>
 
-   </main>
+    </main>
 
-  
+
 
     <!-- Footer -->
     <footer class="footer">
@@ -260,84 +295,86 @@
     </footer>
 
     <!-- Auth Modal -->
-<div id="auth-modal" class="modal">
-    <div class="modal-content" style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
-        <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
-        
-        <div id="auth-forms">
-            <form id="login-form" class="auth-form" style="text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="login-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
-                    </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
-                    </div>
-                </div>
-                <button type="submit" class="btn-gradient">Đăng nhập</button>
-                <div class="login-links">
-                    <a href="#" id="to-register">Không có tài khoản?</a>
-                    <a href="#" id="to-forgot">Quên mật khẩu?</a>
-                </div>
-            </form>
+    <div id="auth-modal" class="modal">
+        <div class="modal-content"
+            style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
+            <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
 
-            <form id="register-form" class="auth-form" style="display: none; text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
-                    <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+            <div id="auth-forms">
+                <form id="login-form" class="auth-form" style="text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+                    <button type="submit" class="btn-gradient">Đăng nhập</button>
+                    <div class="login-links">
+                        <a href="#" id="to-register">Không có tài khoản?</a>
+                        <a href="#" id="to-forgot">Quên mật khẩu?</a>
                     </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu" required />
-                    </div>
-                </div>
-                <button type="submit" class="btn-gradient">Đăng ký</button>
-                <div class="login-links">
-                    <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
-                </div>
-            </form>
+                </form>
 
-            <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="forgot-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+                <form id="register-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+                        </div>
                     </div>
-                </div>
-                <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
-                <div class="login-links">
-                    <a href="#" id="back-to-login">Quay lại đăng nhập</a>
-                </div>
-            </form>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu"
+                                required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Đăng ký</button>
+                    <div class="login-links">
+                        <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
+                    </div>
+                </form>
+
+                <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="forgot-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
+                    <div class="login-links">
+                        <a href="#" id="back-to-login">Quay lại đăng nhập</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div> 
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -347,406 +384,445 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
-    // Firebase config và xử lý xác thực
-    const firebaseConfig = {
-        apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
-        authDomain: "websitedatphongkhachsan.firebaseapp.com",
-        databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
-        projectId: "websitedatphongkhachsan",
-        storageBucket: "websitedatphongkhachsan.firebasestorage.app",
-        messagingSenderId: "732884739524",
-        appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
-        measurementId: "G-RC61EXTZH7"
-    };
-
-    // Khởi tạo Firebase
-    firebase.initializeApp(firebaseConfig);
-
-    // Đợi DOM load xong
-    document.addEventListener('DOMContentLoaded', function() {
-        // Lấy các elements
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const forgotForm = document.getElementById('forgot-form');
-        const closeAuthModal = document.getElementById('close-auth-modal');
-        const openLoginModal = document.getElementById('open-login-modal');
-        const userDropdown = document.getElementById('user-dropdown');
-        const userName = document.getElementById('user-name');
-        const logoutBtn = document.getElementById('logout-btn');
-
-        // Xử lý đăng nhập
-        if (loginForm) {
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-
-                firebase.auth().signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        const user = userCredential.user;
-                        document.getElementById('auth-modal').style.display = 'none';
-                        
-                        // Kiểm tra nếu là admin
-                        if (email === 'quantrikhachsan@gmail.com') {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                text: 'Chào mừng Admin!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            }).then(() => {
-                                window.location.href = 'admin-dashboard.html';
-                            });
-                        } else if (email === 'nhanvien2@luxuryhaven.com') {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                text: 'Chào mừng Nhân viên!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            }).then(() => {
-                                window.location.href = 'admin-dashboard.html';
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            });
-                        }
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi đăng nhập!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
-            });
-        }
-
-        // Xử lý đăng ký
-        if (registerForm) {
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('register-email').value;
-                const password = document.getElementById('register-password').value;
-                const confirmPassword = document.getElementById('register-confirm-password').value;
-                const username = document.getElementById('register-username').value;
-
-                if (password.length < 6) {
-                    Swal.fire({
-                        title: 'Lỗi đăng ký!',
-                        text: 'Mật khẩu phải có ít nhất 6 ký tự.',
-                        icon: 'error',
-                        confirmButtonColor: '#e67e22'
-                    });
-                    return;
-                }
-
-                if (password !== confirmPassword) {
-                    Swal.fire({
-                        title: 'Lỗi đăng ký!',
-                        text: 'Mật khẩu nhập lại không khớp.',
-                        icon: 'error',
-                        confirmButtonColor: '#e67e22'
-                    });
-                    return;
-                }
-
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        return userCredential.user.updateProfile({
-                            displayName: username
-                        });
-                    })
-                    .then(() => {
-                        document.getElementById('auth-modal').style.display = 'none';
-                        Swal.fire({
-                            title: 'Đăng ký thành công!',
-                            icon: 'success',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi đăng ký!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
-            });
-        }
-
-        // Xử lý quên mật khẩu
-        if (forgotForm) {
-            forgotForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('forgot-email').value;
-
-                firebase.auth().sendPasswordResetEmail(email)
-                    .then(() => {
-                        Swal.fire({
-                            title: 'Email đã được gửi!',
-                            text: 'Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.',
-                            icon: 'success',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
-            });
-        }
-
-        // Xử lý chuyển đổi giữa các form
-        document.getElementById('to-register').addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-            forgotForm.style.display = 'none';
-        });
-
-        document.getElementById('to-login').addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'none';
-        });
-
-        document.getElementById('to-forgot').addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'block';
-        });
-
-        document.getElementById('back-to-login').addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'none';
-        });
-
-        // Xử lý đóng modal
-        if (closeAuthModal) {
-            closeAuthModal.addEventListener('click', () => {
-                document.getElementById('auth-modal').style.display = 'none';
-            });
-        }
-
-        // Xử lý mở modal đăng nhập
-        if (openLoginModal) {
-            openLoginModal.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('auth-modal').style.display = 'block';
-            });
-        }
-
-        // Đóng modal khi click ra ngoài
-        window.onclick = function(event) {
-            const modal = document.getElementById('auth-modal');
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
+        // Firebase config và xử lý xác thực
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
         };
 
-        // Theo dõi trạng thái đăng nhập
-        firebase.auth().onAuthStateChanged(function(user) {
-            const loginBtn = document.getElementById('open-login-modal');
-            if (user) {
-                if (loginBtn) loginBtn.style.display = 'none';
-                if (userDropdown) userDropdown.style.display = 'block';
-                if (userName) userName.textContent = user.displayName || user.email;
-            } else {
-                if (loginBtn) loginBtn.style.display = 'block';
-                if (userDropdown) userDropdown.style.display = 'none';
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Đợi DOM load xong
+        document.addEventListener('DOMContentLoaded', function () {
+            // Lấy các elements
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const forgotForm = document.getElementById('forgot-form');
+            const closeAuthModal = document.getElementById('close-auth-modal');
+            const openLoginModal = document.getElementById('open-login-modal');
+            const userDropdown = document.getElementById('user-dropdown');
+            const userName = document.getElementById('user-name');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // Xử lý đăng nhập
+            if (loginForm) {
+                loginForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+
+                    firebase.auth().signInWithEmailAndPassword(email, password)
+                        .then((userCredential) => {
+                            const user = userCredential.user;
+                            document.getElementById('auth-modal').style.display = 'none';
+
+                            // Kiểm tra nếu là admin
+                            if (email === 'quantrikhachsan@gmail.com') {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    text: 'Chào mừng Admin!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                }).then(() => {
+                                    window.location.href = 'admin-dashboard.html';
+                                });
+                            } else if (email === 'nhanvien2@luxuryhaven.com') {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    text: 'Chào mừng Nhân viên!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                }).then(() => {
+                                    window.location.href = 'admin-dashboard.html';
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi đăng nhập!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
+                });
+            }
+
+            // Xử lý đăng ký
+            if (registerForm) {
+                registerForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('register-email').value;
+                    const password = document.getElementById('register-password').value;
+                    const confirmPassword = document.getElementById('register-confirm-password').value;
+                    const username = document.getElementById('register-username').value;
+
+                    if (password.length < 6) {
+                        Swal.fire({
+                            title: 'Lỗi đăng ký!',
+                            text: 'Mật khẩu phải có ít nhất 6 ký tự.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        return;
+                    }
+
+                    if (password !== confirmPassword) {
+                        Swal.fire({
+                            title: 'Lỗi đăng ký!',
+                            text: 'Mật khẩu nhập lại không khớp.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        return;
+                    }
+
+                    firebase.auth().createUserWithEmailAndPassword(email, password)
+                        .then((userCredential) => {
+                            return userCredential.user.updateProfile({
+                                displayName: username
+                            });
+                        })
+                        .then(() => {
+                            document.getElementById('auth-modal').style.display = 'none';
+                            Swal.fire({
+                                title: 'Đăng ký thành công!',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi đăng ký!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
+                });
+            }
+
+            // Xử lý quên mật khẩu
+            if (forgotForm) {
+                forgotForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('forgot-email').value;
+
+                    firebase.auth().sendPasswordResetEmail(email)
+                        .then(() => {
+                            Swal.fire({
+                                title: 'Email đã được gửi!',
+                                text: 'Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
+                });
+            }
+
+            // Xử lý chuyển đổi giữa các form
+            document.getElementById('to-register').addEventListener('click', function (e) {
+                e.preventDefault();
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                forgotForm.style.display = 'none';
+            });
+
+            document.getElementById('to-login').addEventListener('click', function (e) {
+                e.preventDefault();
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                forgotForm.style.display = 'none';
+            });
+
+            document.getElementById('to-forgot').addEventListener('click', function (e) {
+                e.preventDefault();
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                forgotForm.style.display = 'block';
+            });
+
+            document.getElementById('back-to-login').addEventListener('click', function (e) {
+                e.preventDefault();
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                forgotForm.style.display = 'none';
+            });
+
+            // Xử lý đóng modal
+            if (closeAuthModal) {
+                closeAuthModal.addEventListener('click', () => {
+                    document.getElementById('auth-modal').style.display = 'none';
+                });
+            }
+
+            // Xử lý mở modal đăng nhập
+            if (openLoginModal) {
+                openLoginModal.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById('auth-modal').style.display = 'block';
+                });
+            }
+
+            // Đóng modal khi click ra ngoài
+            window.onclick = function (event) {
+                const modal = document.getElementById('auth-modal');
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            // Theo dõi trạng thái đăng nhập
+            firebase.auth().onAuthStateChanged(function (user) {
+                const loginBtn = document.getElementById('open-login-modal');
+                if (user) {
+                    if (loginBtn) loginBtn.style.display = 'none';
+                    if (userDropdown) userDropdown.style.display = 'block';
+                    if (userName) userName.textContent = user.displayName || user.email;
+                } else {
+                    if (loginBtn) loginBtn.style.display = 'block';
+                    if (userDropdown) userDropdown.style.display = 'none';
+                }
+            });
+
+            // Xử lý đăng xuất
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    firebase.auth().signOut().then(() => {
+                        Swal.fire({
+                            title: 'Đăng xuất thành công!',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    }).catch((error) => {
+                        Swal.fire({
+                            title: 'Lỗi đăng xuất!',
+                            text: error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    });
+                });
             }
         });
 
-        // Xử lý đăng xuất
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                firebase.auth().signOut().then(() => {
+        // Khởi tạo EmailJS với public key
+        (function () {
+            emailjs.init("yI6xhpzYSnD3AGzbX");
+        })();
+
+        // Xử lý form liên hệ
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Lấy thông tin từ form
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            // Hiển thị loading
+            Swal.fire({
+                title: 'Đang gửi...',
+                text: 'Vui lòng đợi trong giây lát',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Gửi email
+            emailjs.send("service_6spwxxw", "template_vcjlg02", {
+                to_email: "quantrikhachsan001@gmail.com",
+                from_name: name,
+                from_email: email,
+                message: message
+            })
+                .then(function () {
+                    // Thành công
                     Swal.fire({
-                        title: 'Đăng xuất thành công!',
+                        title: 'Gửi thành công!',
+                        text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
                         icon: 'success',
                         confirmButtonColor: '#e67e22'
                     });
-                }).catch((error) => {
+                    // Reset form
+                    document.getElementById('contact-form').reset();
+                })
+                .catch(function (error) {
+                    // Thất bại
                     Swal.fire({
-                        title: 'Lỗi đăng xuất!',
-                        text: error.message,
+                        title: 'Lỗi!',
+                        text: 'Không thể gửi email. Vui lòng thử lại sau.',
                         icon: 'error',
                         confirmButtonColor: '#e67e22'
                     });
+                    console.error("Error sending email:", error);
                 });
-            });
+        });
+
+        let autoSlideInterval;
+        let currentSlideIndex = 0;
+
+        function startAutoSlide() {
+            stopAutoSlide(); // Clear any existing interval
+            autoSlideInterval = setInterval(() => {
+                document.querySelectorAll('.slider-container').forEach(container => {
+                    const nextBtn = container.querySelector('.next');
+                    if (nextBtn) nextSlide(nextBtn);
+                });
+            }, 4000); // Chuyển slide mỗi 4 giây
         }
-    });
 
-    // Khởi tạo EmailJS với public key
-    (function() {
-        emailjs.init("yI6xhpzYSnD3AGzbX");
-    })();
-
-    // Xử lý form liên hệ
-    document.getElementById('contact-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // Lấy thông tin từ form
-        const name = document.getElementById('contact-name').value;
-        const email = document.getElementById('contact-email').value;
-        const message = document.getElementById('contact-message').value;
-
-        // Hiển thị loading
-        Swal.fire({
-            title: 'Đang gửi...',
-            text: 'Vui lòng đợi trong giây lát',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
+        function stopAutoSlide() {
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
             }
-        });
-
-        // Gửi email
-        emailjs.send("service_6spwxxw", "template_vcjlg02", {
-            to_email: "quantrikhachsan001@gmail.com",
-            from_name: name,
-            from_email: email,
-            message: message
-        })
-        .then(function() {
-            // Thành công
-            Swal.fire({
-                title: 'Gửi thành công!',
-                text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
-                icon: 'success',
-                confirmButtonColor: '#e67e22'
-            });
-            // Reset form
-            document.getElementById('contact-form').reset();
-        })
-        .catch(function(error) {
-            // Thất bại
-            Swal.fire({
-                title: 'Lỗi!',
-                text: 'Không thể gửi email. Vui lòng thử lại sau.',
-                icon: 'error',
-                confirmButtonColor: '#e67e22'
-            });
-            console.error("Error sending email:", error);
-        });
-    });
-
-    let autoSlideInterval;
-    let currentSlideIndex = 0;
-
-    function startAutoSlide() {
-        stopAutoSlide(); // Clear any existing interval
-        autoSlideInterval = setInterval(() => {
-            document.querySelectorAll('.slider-container').forEach(container => {
-                const nextBtn = container.querySelector('.next');
-                if (nextBtn) nextSlide(nextBtn);
-            });
-        }, 4000); // Chuyển slide mỗi 4 giây
-    }
-
-    function stopAutoSlide() {
-        if (autoSlideInterval) {
-            clearInterval(autoSlideInterval);
         }
-    }
 
-    function nextSlide(btn) {
-        const container = btn.closest('.slider-container');
-        const slider = container.querySelector('.slider');
-        const dots = container.querySelectorAll('.dot');
-        const slides = container.querySelectorAll('.slide');
-        
-        currentSlideIndex = (currentSlideIndex + 1) % slides.length;
-        updateSlider(slider, dots, currentSlideIndex);
-    }
+        function nextSlide(btn) {
+            const container = btn.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+            const slides = container.querySelectorAll('.slide');
 
-    function prevSlide(btn) {
-        const container = btn.closest('.slider-container');
-        const slider = container.querySelector('.slider');
-        const dots = container.querySelectorAll('.dot');
-        const slides = container.querySelectorAll('.slide');
-        
-        currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
-        updateSlider(slider, dots, currentSlideIndex);
-    }
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            updateSlider(slider, dots, currentSlideIndex);
+        }
 
-    function currentSlide(dot, index) {
-        const container = dot.closest('.slider-container');
-        const slider = container.querySelector('.slider');
-        const dots = container.querySelectorAll('.dot');
-        
-        currentSlideIndex = index;
-        updateSlider(slider, dots, index);
-    }
+        function prevSlide(btn) {
+            const container = btn.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+            const slides = container.querySelectorAll('.slide');
 
-    function updateSlider(slider, dots, index) {
-        const sliderWidth = slider.offsetWidth;
-        slider.style.transform = `translateX(${-index * sliderWidth}px)`;
-        
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
+            currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+            updateSlider(slider, dots, currentSlideIndex);
+        }
+
+        function currentSlide(dot, index) {
+            const container = dot.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+
+            currentSlideIndex = index;
+            updateSlider(slider, dots, index);
+        }
+
+        function updateSlider(slider, dots, index) {
+            const sliderWidth = slider.offsetWidth;
+            slider.style.transform = `translateX(${-index * sliderWidth}px)`;
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        // Khởi động auto slide và xử lý các sự kiện khi trang load xong
+        document.addEventListener('DOMContentLoaded', () => {
+            startAutoSlide();
+
+            // Thêm sự kiện hover để dừng/tiếp tục auto slide
+            document.querySelectorAll('.slider-container').forEach(container => {
+                container.addEventListener('mouseenter', stopAutoSlide);
+                container.addEventListener('mouseleave', startAutoSlide);
+            });
         });
-    }
-
-    // Khởi động auto slide và xử lý các sự kiện khi trang load xong
-    document.addEventListener('DOMContentLoaded', () => {
-        startAutoSlide();
-        
-        // Thêm sự kiện hover để dừng/tiếp tục auto slide
-        document.querySelectorAll('.slider-container').forEach(container => {
-            container.addEventListener('mouseenter', stopAutoSlide);
-            container.addEventListener('mouseleave', startAutoSlide);
-        });
-    });
     </script>
-        <script>
-    fetch('websitedatphongkhachsan-default-rtdb-export (3).json')
-      .then(response => response.json())
-      .then(data => {
-        const about = data.about_us;
-        document.getElementById('about-intro').innerHTML = `
+    <script>
+        fetch('websitedatphongkhachsan-default-rtdb-export (3).json')
+            .then(response => response.json())
+            .then(data => {
+                const about = data.about_us;
+                document.getElementById('about-intro').innerHTML = `
           <h2>${about.introduction.title}</h2>
           <p>${about.introduction.description}</p>
         `;
-        document.getElementById('about-hotels').innerHTML = `
+                document.getElementById('about-hotels').innerHTML = `
           <h3>${about.hotels.title}</h3>
           <img src="${about.hotels.image}" alt="Khách sạn" style="max-width:300px;">
           <p>${about.hotels.description}</p>
         `;
-        document.getElementById('about-tours').innerHTML = `
+                document.getElementById('about-tours').innerHTML = `
           <h3>${about.tours.title}</h3>
           <img src="${about.tours.image}" alt="Tours" style="max-width:300px;">
           <p>${about.tours.description}</p>
         `;
-        document.getElementById('about-prioritize').innerHTML = `
+                document.getElementById('about-prioritize').innerHTML = `
           <h3>${about.prioritize.title}</h3>
           <p>${about.prioritize.description}</p>
         `;
-        document.getElementById('about-travel-guide').innerHTML = `
+                document.getElementById('about-travel-guide').innerHTML = `
           <h3>${about.travel_guide.title}</h3>
           <p>${about.travel_guide.description}</p>
         `;
-        document.getElementById('about-team').innerHTML = `
+                document.getElementById('about-team').innerHTML = `
           <h3>${about.team.title}</h3>
-          <p>${about.team.description}</p>
-        `;
-      });
+          <p>${about.team.description}</p>        `;
+            });
+
+        // Mobile menu toggle function
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const navLinks = document.getElementById('nav-links');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Close mobile menu when clicking outside        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function () {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Close mobile menu when clicking on links
+            navLinks.addEventListener('click', function (e) {
+                if (e.target.tagName === 'A') {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
     </script>
 </body>
+
 </html>
-
-

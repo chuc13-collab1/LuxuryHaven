@@ -1,7 +1,22 @@
-
 body {
     background: #f5f6fa;
     font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #1a237e;
+    cursor: pointer;
+    padding: 8px;
+    margin-right: 15px;
+}
+
+.mobile-menu-toggle:hover {
+    color: #0d47a1;
 }
 
     .destination-header {
@@ -26,8 +41,8 @@ body {
     position: absolute;
         top: 0;
     left: 0;
-        right: 0;
-        bottom: 0;
+    right: 0;
+    bottom: 0;
         background: linear-gradient(to top, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.15) 100%);
     z-index: 1;
 }
@@ -231,3 +246,163 @@ body {
             grid-template-columns: 1fr;
         }
     }
+
+/* Enhanced Mobile First Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    .destination-header {
+        margin-bottom: 25px;
+        border-radius: 12px;
+    }
+
+    .destination-title {
+        font-size: 1.8rem !important;
+        margin-bottom: 12px;
+    }
+
+    .destination-overview {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+
+    .info-card {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+    }
+
+    .highlight-card {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .highlight-title {
+        font-size: 0.95rem;
+        margin-bottom: 6px;
+    }
+
+    .food-card,
+    .hotel-card {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .food-name,
+    .hotel-name {
+        font-size: 0.95rem;
+        margin-bottom: 6px;
+    }
+
+    .food-description,
+    .hotel-description {
+        font-size: 0.85rem;
+    }
+
+    .image-gallery {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+
+    .gallery-img {
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .destination-header {
+        aspect-ratio: 16/10;
+        min-height: 160px;
+        max-height: 200px;
+        margin-bottom: 20px;
+    }
+
+    .destination-title {
+        font-size: 1.5rem !important;
+        margin-bottom: 10px;
+    }
+
+    .destination-overview {
+        font-size: 0.9rem;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+
+    .info-card {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .highlight-card {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .highlight-title {
+        font-size: 0.9rem;
+    }
+
+    .food-card,
+    .hotel-card {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .food-name,
+    .hotel-name {
+        font-size: 0.9rem;
+    }
+
+    .food-description,
+    .hotel-description {
+        font-size: 0.8rem;
+    }
+
+    .gallery-img {
+        height: 180px;
+    }
+}
+
+@media (max-width: 375px) {
+    .destination-header {
+        min-height: 140px;
+        max-height: 180px;
+    }
+
+    .destination-title {
+        font-size: 1.3rem !important;
+    }
+
+    .destination-overview {
+        font-size: 0.85rem;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+    }
+
+    .gallery-img {
+        height: 160px;
+    }
+
+    .info-card,
+    .highlight-card,
+    .food-card,
+    .hotel-card {
+        padding: 8px;
+    }
+}

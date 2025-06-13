@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,23 +19,27 @@
             background-color: #f8f9fa;
             font-family: 'Arial', sans-serif;
         }
+
         .checkout-container {
             max-width: 1200px;
             margin: 30px auto;
             padding: 20px;
         }
+
         .checkout-form {
             background: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
+
         .order-summary {
             background: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
+
         .payment-method {
             border: 1px solid #dee2e6;
             padding: 15px;
@@ -42,13 +47,16 @@
             margin-bottom: 10px;
             cursor: pointer;
         }
+
         .payment-method:hover {
             border-color: #0d6efd;
         }
+
         .payment-method.selected {
             border-color: #0d6efd;
             background-color: #f8f9fa;
         }
+
         .btn-checkout {
             background-color: #0d6efd;
             color: white;
@@ -58,15 +66,178 @@
             font-size: 18px;
             width: 100%;
         }
+
         .btn-checkout:hover {
             background-color: #0b5ed7;
         }
+
+        /* Mobile First Responsive Design */
+        @media (max-width: 768px) {
+            .checkout-container {
+                margin: 15px auto;
+                padding: 10px;
+            }
+
+            .checkout-form,
+            .order-summary {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 25px;
+            }
+
+            h3 {
+                font-size: 1.3rem;
+                margin-bottom: 20px;
+            }
+
+            h4 {
+                font-size: 1.1rem;
+                margin-bottom: 15px;
+            }
+
+            .payment-method {
+                padding: 12px;
+                margin-bottom: 8px;
+            }
+
+            .payment-method label {
+                font-size: 0.9rem;
+            }
+
+            .payment-details {
+                margin-top: 15px;
+            }
+
+            .form-control {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+
+            .form-label {
+                font-size: 0.85rem;
+                margin-bottom: 5px;
+            }
+
+            .btn-checkout {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+
+            .momo-qr-placeholder {
+                width: 150px !important;
+                height: 150px !important;
+            }
+
+            .bank-info {
+                font-size: 0.85rem;
+            }
+
+            .order-item {
+                padding: 10px 0;
+                border-bottom: 1px solid #eee;
+            }
+
+            .order-item h5 {
+                font-size: 1rem;
+            }
+
+            .order-item p {
+                font-size: 0.8rem;
+                margin-bottom: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .checkout-container {
+                margin: 10px auto;
+                padding: 5px;
+            }
+
+            .checkout-form,
+            .order-summary {
+                padding: 15px 10px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            h3 {
+                font-size: 1.2rem;
+            }
+
+            h4 {
+                font-size: 1rem;
+            }
+
+            .payment-method {
+                padding: 10px;
+            }
+
+            .form-control {
+                font-size: 0.85rem;
+                padding: 6px 10px;
+            }
+
+            .form-label {
+                font-size: 0.8rem;
+            }
+
+            .btn-checkout {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .momo-qr-placeholder {
+                width: 120px !important;
+                height: 120px !important;
+            }
+
+            .col-md-6 {
+                margin-bottom: 15px;
+            }
+        }
+
+        @media (max-width: 375px) {
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .checkout-form,
+            .order-summary {
+                padding: 12px 8px;
+            }
+
+            .payment-method {
+                padding: 8px;
+            }
+
+            .form-control {
+                font-size: 0.8rem;
+                padding: 5px 8px;
+            }
+
+            .btn-checkout {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+
+            .momo-qr-placeholder {
+                width: 100px !important;
+                height: 100px !important;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="checkout-container">
         <h1 class="text-center mb-4">Thanh Toán</h1>
-        
+
         <div class="row">
             <!-- Form Thanh Toán -->
             <div class="col-md-8">
@@ -99,7 +270,7 @@
                             <input type="text" class="form-control" id="address" required>
                         </div>
 
-                    
+
                         <h4 class="mt-4 mb-3">Phương Thức Thanh Toán</h4>
                         <div class="payment-methods">
                             <div class="payment-method" onclick="selectPayment('credit')">
@@ -109,7 +280,8 @@
                                 <div id="creditDetails" class="payment-details mt-3" style="display: none;">
                                     <div class="mb-3">
                                         <label for="cardNumber" class="form-label">Số thẻ</label>
-                                        <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456">
+                                        <input type="text" class="form-control" id="cardNumber"
+                                            placeholder="1234 5678 9012 3456">
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
@@ -123,7 +295,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="cardName" class="form-label">Tên chủ thẻ</label>
-                                        <input type="text" class="form-control" id="cardName" placeholder="NGUYEN VAN A">
+                                        <input type="text" class="form-control" id="cardName"
+                                            placeholder="NGUYEN VAN A">
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +307,8 @@
                                 <i class="fas fa-wallet float-end"></i>
                                 <div id="momoDetails" class="payment-details mt-3" style="display: none;">
                                     <div class="text-center">
-                                        <div class="momo-qr-placeholder mb-3" style="width: 200px; height: 200px; margin: 0 auto; background: #f8f9fa; display: flex; align-items: center; justify-content: center; border: 1px solid #dee2e6;">
+                                        <div class="momo-qr-placeholder mb-3"
+                                            style="width: 200px; height: 200px; margin: 0 auto; background: #f8f9fa; display: flex; align-items: center; justify-content: center; border: 1px solid #dee2e6;">
                                             <i class="fas fa-qrcode fa-3x text-muted"></i>
                                         </div>
                                         <p>Quét mã QR bằng ứng dụng MoMo để thanh toán</p>
@@ -152,7 +326,8 @@
                                         <p><strong>Số tài khoản:</strong> 1234567890</p>
                                         <p><strong>Chủ tài khoản:</strong> CONG TY TNHH LUXURY HAVEN</p>
                                         <p><strong>Số tiền:</strong> <span id="bankAmount"></span></p>
-                                        <p><strong>Nội dung chuyển khoản:</strong> <span id="transferContent"></span></p>
+                                        <p><strong>Nội dung chuyển khoản:</strong> <span id="transferContent"></span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -163,7 +338,8 @@
                                 <i class="fas fa-credit-card float-end"></i>
                                 <div id="vnpayDetails" class="payment-details mt-3" style="display: none;">
                                     <div class="text-center">
-                                        <img src="https://sandbox.vnpayment.vn/apis/vnpay-demo/images/vnpay-logo.png" alt="VNPay Logo" style="max-width: 200px;">
+                                        <img src="https://sandbox.vnpayment.vn/apis/vnpay-demo/images/vnpay-logo.png"
+                                            alt="VNPay Logo" style="max-width: 200px;">
                                         <p class="mt-3">Thanh toán qua cổng thanh toán VNPay</p>
                                     </div>
                                 </div>
@@ -185,7 +361,7 @@
                         <p class="mb-1" id="hotelAddress">Đang tải...</p>
                         <p class="mb-1" id="hotelPhone">Đang tải...</p>
                     </div>
-                    
+
                     <div class="price-details">
                         <div class="d-flex justify-content-between mb-2">
                             <span>Giá phòng</span>
@@ -368,8 +544,8 @@
                                 hotelData = hotels[i];
                                 // Tìm thông tin phòng
                                 if (hotelData.chiTiet && hotelData.chiTiet.rooms) {
-                                    selectedRoom = hotelData.chiTiet.rooms.find(room => 
-                                        room.name === bookingData.roomId || 
+                                    selectedRoom = hotelData.chiTiet.rooms.find(room =>
+                                        room.name === bookingData.roomId ||
                                         `Phòng ${room.name}` === bookingData.roomId
                                     );
                                 }
@@ -391,7 +567,7 @@
 
                     if (selectedRoom) {
                         document.getElementById('roomType').textContent = `Phòng ${selectedRoom.name} - ${selectedRoom.size}`;
-                        
+
                         // Cập nhật giá phòng và phí dịch vụ
                         const roomPrice = selectedRoom.price;
                         const serviceFee = hotelData.serviceFee || 200000;
@@ -417,7 +593,7 @@
                     document.getElementById('hotelAddress').textContent = 'Địa chỉ: Đang cập nhật...';
                     document.getElementById('hotelPhone').textContent = 'Điện thoại: Đang cập nhật...';
                     document.getElementById('roomType').textContent = bookingData.roomId || 'Phòng Deluxe';
-                    
+
                     const roomPrice = parseInt(bookingData.price) || 2000000;
                     const serviceFee = parseInt(bookingData.taxAndFees) || 200000;
                     const totalPrice = roomPrice + serviceFee;
@@ -430,10 +606,10 @@
                 // Cập nhật thông tin đặt phòng
                 const checkInDate = bookingData.checkIn || bookingData.checkInDate;
                 const checkOutDate = bookingData.checkOut || bookingData.checkOutDate;
-                
-                document.getElementById('stayInfo').textContent = 
+
+                document.getElementById('stayInfo').textContent =
                     `${bookingData.guests || 2} người`;
-                document.getElementById('checkInOut').textContent = 
+                document.getElementById('checkInOut').textContent =
                     `Check-in: ${checkInDate} - Check-out: ${checkOutDate}`;
 
                 // Tự động điền thông tin người dùng
@@ -470,17 +646,17 @@
         }
 
         // Hàm chọn phương thức thanh toán
-        window.selectPayment = function(method) {
+        window.selectPayment = function (method) {
             // Ẩn tất cả các chi tiết thanh toán
             document.querySelectorAll('.payment-details').forEach(el => {
                 el.style.display = 'none';
             });
-            
+
             // Xóa trạng thái selected của tất cả các phương thức
             document.querySelectorAll('.payment-method').forEach(el => {
                 el.classList.remove('selected');
             });
-            
+
             // Hiển thị chi tiết của phương thức được chọn
             document.querySelector(`#${method}Details`).style.display = 'block';
             document.querySelector(`#${method}`).parentElement.classList.add('selected');
@@ -549,10 +725,10 @@
 
                 // Tạo mã giao dịch duy nhất
                 const txnRef = generateTxnRef();
-                
+
                 // Lấy địa chỉ IP của người dùng
                 const ipAddr = await getClientIp();
-                
+
                 // Tạo thời gian hiện tại và thời gian hết hạn
                 const createDate = moment().format('YYYYMMDDHHmmss');
                 const expireDate = moment().add(15, 'minutes').format('YYYYMMDDHHmmss');
@@ -602,7 +778,7 @@
                 try {
                     // Cập nhật trạng thái thanh toán trong Firebase
                     const paymentRef = ref(database, `bookings/${bookingId}/payments/${auth.currentUser.uid}`);
-                    
+
                     // Cập nhật thông tin payment
                     await update(ref(database, `bookings/${bookingId}`), {
                         userId: auth.currentUser.uid,
@@ -656,7 +832,7 @@
         }
 
         // Cập nhật hàm processCheckout để xử lý thanh toán VNPay
-        window.processCheckout = async function() {
+        window.processCheckout = async function () {
             const form = document.getElementById('checkoutForm');
             if (!form.checkValidity()) {
                 form.reportValidity();
@@ -711,7 +887,7 @@
                 };
 
                 // Thêm thông tin thanh toán cụ thể cho từng phương thức
-                switch(paymentMethod.value) {
+                switch (paymentMethod.value) {
                     case 'credit':
                         paymentInfo.cardInfo = {
                             last4Digits: document.getElementById('cardNumber').value.slice(-4),
@@ -795,4 +971,5 @@
         });
     </script>
 </body>
+
 </html>

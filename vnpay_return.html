@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,28 +13,34 @@
             font-family: 'Arial', sans-serif;
             padding: 20px;
         }
+
         .payment-container {
             max-width: 800px;
             margin: 30px auto;
             background: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
+
         .success-icon {
             color: #28a745;
             font-size: 64px;
         }
+
         .error-icon {
             color: #dc3545;
             font-size: 64px;
         }
-        .transaction-details, .booking-details {
+
+        .transaction-details,
+        .booking-details {
             margin: 20px 0;
             padding: 20px;
             background: #f8f9fa;
             border-radius: 5px;
         }
+
         .detail-row {
             display: flex;
             justify-content: space-between;
@@ -41,9 +48,11 @@
             padding: 8px 0;
             border-bottom: 1px solid #dee2e6;
         }
+
         .detail-row:last-child {
             border-bottom: none;
         }
+
         .btn-action {
             background-color: #0d6efd;
             color: white;
@@ -55,45 +64,210 @@
             display: inline-block;
             margin: 10px 5px;
         }
+
         .btn-action:hover {
             background-color: #0b5ed7;
             color: white;
         }
+
         .btn-print {
             background-color: #6c757d;
         }
+
         .btn-print:hover {
             background-color: #5a6268;
         }
+
         .status-badge {
             padding: 8px 16px;
             border-radius: 20px;
             font-weight: bold;
         }
+
         .status-success {
             background-color: #d4edda;
             color: #155724;
         }
+
         .status-error {
             background-color: #f8d7da;
             color: #721c24;
         }
+
         @media print {
             body {
                 background: white;
                 padding: 0;
             }
+
             .payment-container {
                 box-shadow: none;
                 margin: 0;
                 padding: 15px;
             }
+
             .btn-action {
                 display: none;
             }
         }
+
+        /* Mobile First Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .payment-container {
+                margin: 15px auto;
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+                margin-bottom: 12px;
+            }
+
+            .success-icon,
+            .error-icon {
+                font-size: 48px;
+            }
+
+            .transaction-details,
+            .booking-details {
+                margin: 15px 0;
+                padding: 15px;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 8px;
+                padding: 6px 0;
+            }
+
+            .detail-row strong {
+                margin-bottom: 4px;
+                display: block;
+                font-size: 0.9rem;
+            }
+
+            .detail-row span {
+                font-size: 0.85rem;
+            }
+
+            .btn-action {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .text-center p {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+
+            .payment-container {
+                margin: 10px auto;
+                padding: 15px 10px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            h3 {
+                font-size: 1rem;
+            }
+
+            .success-icon,
+            .error-icon {
+                font-size: 40px;
+            }
+
+            .transaction-details,
+            .booking-details {
+                margin: 12px 0;
+                padding: 12px;
+            }
+
+            .detail-row strong {
+                font-size: 0.85rem;
+            }
+
+            .detail-row span {
+                font-size: 0.8rem;
+            }
+
+            .btn-action {
+                padding: 8px 15px;
+                font-size: 0.85rem;
+            }
+
+            .text-center p {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .payment-container {
+                margin: 5px auto;
+                padding: 12px 8px;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            h2 {
+                font-size: 1.1rem;
+            }
+
+            .success-icon,
+            .error-icon {
+                font-size: 36px;
+            }
+
+            .transaction-details,
+            .booking-details {
+                padding: 10px;
+            }
+
+            .detail-row strong {
+                font-size: 0.8rem;
+            }
+
+            .detail-row span {
+                font-size: 0.75rem;
+            }
+
+            .btn-action {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="payment-container">
         <div id="loadingSection" class="text-center">
@@ -170,12 +344,12 @@
                             console.log('Raw booking data:', bookingSnapshot.val());
                             console.log('Parsed booking data:', bookingData);
                             console.log('Phone number from booking:', bookingData.phone);
-                            
+
                             // Lấy thông tin từ location
                             const locationRef = ref(database, 'location');
                             const locationSnapshot = await get(locationRef);
                             const locationData = locationSnapshot.val();
-                            
+
                             // Tìm khách sạn và phòng trong cấu trúc location
                             for (const city in locationData) {
                                 const hotels = locationData[city].hotels;
@@ -268,8 +442,8 @@
                                     </div>
                                     <div class="detail-row">
                                         <span>Loại tour:</span>
-                                        <strong>${bookingData.tourDetails.tourType === 'adventure' ? 'Mạo hiểm' : 
-                                                 bookingData.tourDetails.tourType === 'cultural' ? 'Văn hóa' : 'Sinh thái'}</strong>
+                                        <strong>${bookingData.tourDetails.tourType === 'adventure' ? 'Mạo hiểm' :
+                                    bookingData.tourDetails.tourType === 'cultural' ? 'Văn hóa' : 'Sinh thái'}</strong>
                                     </div>
                                     <div class="detail-row">
                                         <span>Giá tour:</span>
@@ -408,4 +582,5 @@
         window.onload = processPaymentResult;
     </script>
 </body>
-</html> 
+
+</html>

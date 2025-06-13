@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LuxuryHaven Admin Dashboard</title>
-    
+
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/admin-dashboard.css">
 </head>
-<body>
+
+<body> <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="#" class="sidebar-brand">LuxuryHaven Admin</a>
         </div>
@@ -837,7 +843,7 @@
 
             db.ref('bookings/' + bookingId).once('value').then((snapshot) => {
                 const booking = snapshot.val();
-                
+
                 Swal.fire({
                     title: 'Chỉnh sửa đặt phòng',
                     html: `
@@ -890,7 +896,7 @@
                             form.reportValidity();
                             return false;
                         }
-                        
+
                         return {
                             name: document.getElementById('editName').value,
                             email: document.getElementById('editEmail').value,
@@ -907,7 +913,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         const updatedData = result.value;
-                        
+
                         // Giữ lại các trường dữ liệu cũ không được chỉnh sửa
                         db.ref('bookings/' + bookingId).once('value').then((snapshot) => {
                             const oldData = snapshot.val();
@@ -915,7 +921,7 @@
                                 ...oldData,
                                 ...updatedData
                             };
-                            
+
                             // Cập nhật dữ liệu với token xác thực
                             user.getIdToken().then((token) => {
                                 db.ref('bookings/' + bookingId).update(finalData).then(() => {
@@ -1177,7 +1183,7 @@
                         form.reportValidity();
                         return false;
                     }
-                    
+
                     return {
                         name: document.getElementById('newName').value,
                         email: document.getElementById('newEmail').value,
@@ -1196,7 +1202,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     const newBooking = result.value;
-                    
+
                     db.ref('bookings').push(newBooking)
                         .then(() => {
                             Swal.fire({
@@ -1288,7 +1294,7 @@
 
         // Hàm helper để lấy class cho badge trạng thái
         function getStatusBadgeClass(status) {
-            switch(status) {
+            switch (status) {
                 case 'pending': return 'bg-warning';
                 case 'confirmed': return 'bg-success';
                 case 'cancelled': return 'bg-danger';
@@ -1299,7 +1305,7 @@
 
         // Hàm helper để lấy text trạng thái
         function getStatusText(status) {
-            switch(status) {
+            switch (status) {
                 case 'pending': return 'Chờ xác nhận';
                 case 'confirmed': return 'Đã xác nhận';
                 case 'cancelled': return 'Đã hủy';
@@ -1314,22 +1320,22 @@
             document.querySelectorAll('.content-section').forEach(section => {
                 section.style.display = 'none';
             });
-            
+
             // Show selected content
             document.getElementById(contentId).style.display = 'block';
-            
+
             // Update active menu item
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             document.querySelector(`[href="#${contentId}"]`).classList.add('active');
-            
+
             // Update page title
-            document.querySelector('.page-title').textContent = 
+            document.querySelector('.page-title').textContent =
                 document.querySelector(`[href="#${contentId}"]`).textContent.trim();
 
             // Load data for the selected section
-            switch(contentId) {
+            switch (contentId) {
                 case 'dashboard':
                     loadStatistics();
                     break;
@@ -1866,9 +1872,30 @@
         window.editTour = editTour;
         window.deleteTour = deleteTour;
         window.addTour = addTour;
-        window.editVoucher = editVoucher;
-        window.deleteVoucher = deleteVoucher;
+        window.editVoucher = editVoucher; window.deleteVoucher = deleteVoucher;
         window.addVoucher = addVoucher;
+
+        // Mobile sidebar toggle function
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.mobile-toggle');
+
+            if (window.innerWidth <= 768 &&
+                !sidebar.contains(event.target) &&
+                !toggleBtn.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        window.toggleSidebar = toggleSidebar;
     </script>
 </body>
-</html> 
+
+</html>
