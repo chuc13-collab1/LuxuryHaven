@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký làm đối tác - Khách sạn của chúng tôi</title>
+    <title>Tuyển dụng - Khách sạn của chúng tôi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-     <style>
+    <link rel="stylesheet" href="../css/recruitment.css">
+    <style>
         @font-face {
           font-family: 'Nautica Script Bold';
           src: url('../fonts/nautica-bold.otf') format('opentype');
@@ -15,1487 +16,28 @@
         }
         .nautica-script {
           font-family: 'Nautica Script Bold', cursive;
-          font-size: 6em;
+          font-size: 3em;
           font-weight: bold;
           color: #cddae6;
           text-align: center;
         }
       </style>
-   <style>
-    body {
-        background: #f5f6fa;
-        font-family: 'Segoe UI', Arial, sans-serif;
-    }
-
-    /* Navbar Styles */
-    .navbar {
-        background: rgba(255, 255, 255, 0.98);
-        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
-        padding: 0;
-        position: fixed;
-        width: 100%;
-        top: 0;
-        z-index: 1000;
-        transition: all 0.3s ease;
-    }
-
-    /* Updated Navbar Styles */
-    .nav-flex {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 80px;
-        padding: 0 20px;
-        gap: 20px;
-    }
-
-    .navbar-brand img {
-        height: 60px;
-        width: auto;
-        padding: 5px 0;
-    }
-
-    .nav-search {
-        flex: 0 1 300px;
-        margin: 0 20px;
-    }
-
-    .search-input-group {
-        display: flex;
-        align-items: center;
-        background: #f7f7f7;
-        border-radius: 24px;
-        padding: 6px 16px;
-        width: 100%;
-        transition: all 0.3s ease;
-    }
-
-    .search-input-group:focus-within {
-        background: #fff;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    }
-
-    .search-input-group input {
-        border: none;
-        background: transparent;
-        padding: 8px 12px;
-        font-size: 0.95rem;
-        width: 100%;
-        outline: none;
-    }
-
-    .search-input-group button {
-        background: none;
-        border: none;
-        color: #1a237e;
-        padding: 0;
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-
-    .search-input-group button:hover {
-        color: #0d47a1;
-    }
-
-    .nav-right {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-    }
-
-
-    .logo {
-        font-size: 40px;
-        font-weight: 800;
-        background: linear-gradient(45deg, #1a237e, #0d47a1);
-        -webkit-text-fill-color: transparent;
-        letter-spacing: -1px;
-        font-family: 'Playfair Display', serif;
-    }
-
-    .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 25px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    .nav-links li a {
-        color: #1a237e;
-        font-weight: 600;
-        font-size: 0.95rem;
-        text-decoration: none;
-        padding: 8px 0;
-        transition: all 0.3s ease;
-        position: relative;
-        white-space: nowrap;
-    }
-
-    .nav-links li a:after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background: linear-gradient(45deg, #1a237e, #0d47a1);
-        transition: width 0.3s ease;
-    }
-
-    .nav-links li a:hover:after,
-    .nav-links li a.active:after {
-        width: 100%;
-    }
-
-    .language-switch {
-        font-size: 1.2rem;
-        padding: 0 5px;
-    }
-
-    .btn-outline-primary {
-        padding: 8px 15px;
-        font-size: 0.95rem;
-        white-space: nowrap;
-    }
-
-    @media (max-width: 1200px) {
-        .nav-links {
-            gap: 15px;
-        }
-        
-        .nav-search {
-            flex: 0 1 250px;
-        }
-    }
-
-    @media (max-width: 992px) {
-        .nav-search {
-            display: none;
-        }
-        
-        .nav-links li a {
-            font-size: 0.9rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .nav-links {
-            display: none;
-        }
-        
-        .navbar-brand img {
-            height: 50px;
-        }
-    }
-
-    /* Dropdown Styles */
-    .dropdown {
-        position: relative;
-    }
-
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(255, 255, 255, 0.98);
-        min-width: 220px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-        border-radius: 12px;
-        padding: 12px 0;
-        opacity: 0;
-        transition: all 0.3s ease;
-        z-index: 1000;
-    }
-
-    .dropdown:hover .dropdown-content {
-        display: block;
-        opacity: 1;
-        transform: translateX(-50%) translateY(8px);
-    }
-
-    .dropdown-content a {
-        color: #1a237e;
-        padding: 12px 24px;
-        display: block;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        position: relative;
-        z-index: 1;
-    }
-
-    .dropdown-content a:hover {
-        background: rgba(26, 35, 126, 0.05);
-        color: #0d47a1;
-        transform: translateX(5px);
-    }
-
-    /* User Dropdown Styles */
-    #user-dropdown .dropdown-menu {
-        background: rgba(255, 255, 255, 0.98);
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-        padding: 8px 0;
-    }
-
-    #user-dropdown .dropdown-item {
-        color: #1a237e;
-        padding: 12px 24px;
-        font-weight: 500;
-        transition: all 0.2s ease;
-    }
-
-    #user-dropdown .dropdown-item:hover {
-        background: rgba(26, 35, 126, 0.05);
-        color: #0d47a1;
-        transform: translateX(5px);
-    }
-
-    #user-dropdown .dropdown-item i {
-        margin-right: 8px;
-        color: #1a237e;
-    }
-
-    .btn-outline-primary {
-        background: transparent;
-        border: 2px solid #1a237e;
-        color: #1a237e;
-        padding: 8px 24px;
-        border-radius: 30px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-    .btn-outline-primary:hover {
-        background: linear-gradient(45deg, #1a237e, #0d47a1);
-        border-color: transparent;
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
-    }
-
-    /* Hero Section */
-    .hero-section {
-        background: linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)), url('../images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg') center/cover no-repeat;
-        height: 100vh;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .hero-content {
-        text-align: center;
-        width: 100%;
-        max-width: 1200px;
-        padding: 0 20px;
-        margin-top: 20px;
-    }
-
-    .nautica-script {
-        font-family: 'Nautica Script Bold', cursive;
-        font-size: 6em;
-        font-weight: bold;
-        color: #cddae6;
-        text-align: center;
-        position: absolute;
-        width: 100%;
-        top: 45%;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 2;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        margin-bottom: 0;
-        line-height: 0.8;
-    }
-
-    .hero-content h1 {
-        font-size: 4rem;
-        font-weight: 700;
-        margin-top: 0;
-        margin-bottom: 15px;
-        color: #fff;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        line-height: 1.2;
-    }
-
-    .hero-content p {
-        font-size: 1.4rem;
-        color: #f5f6fa;
-        margin: 0;
-        text-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
-    .search-container {
-        background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-        padding: 24px 20px 12px 20px;
-        max-width: 900px;
-        margin: 0 auto;
-        position: relative;
-        z-index: 2;
-    }
-    .search-tabs {
-        display: flex;
-        gap: 24px;
-        margin-bottom: 18px;
-        border-bottom: 2px solid #eee;
-    }
-    .search-tab {
-        background: none;
-        border: none;
-        font-weight: 600;
-        font-size: 1.1rem;
-        color: #222;
-        padding: 0 0 10px 0;
-        border-bottom: 3px solid transparent;
-        transition: all 0.2s;
-        cursor: pointer;
-    }
-    .search-tab.active {
-        color: #ff6600;
-        border-bottom: 3px solid #ff6600;
-    }
-    .search-form {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-        align-items: center;
-        margin-bottom: 0;
-    }
-    .search-input-group {
-        display: flex;
-        align-items: center;
-        background: #f7f7f7;
-        border-radius: 8px;
-        padding: 0 10px;
-        flex: 1 1 180px;
-        min-width: 180px;
-    }
-    .search-input-group i {
-        color: #888;
-        margin-right: 6px;
-    }
-    .search-input-group input,
-    .search-input-group select {
-        border: none;
-        background: transparent;
-        outline: none;
-        width: 100%;
-        padding: 10px 0;
-        font-size: 1rem;
-    }
-    .btn-search {
-        min-width: 120px;
-        font-weight: 600;
-        border-radius: 8px;
-        margin-top: 8px;
-    }
-    #show-filters {
-        background: #f1f1f1;
-        color: #1976d2;
-        border: none;
-    }
-    #show-filters i {
-        color: #1976d2;
-    }
-
-    .section-title {
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: #003366;
-        margin: 48px 0 32px 0;
-        text-align: center;
-        letter-spacing: -1px;
-    }
-
-    .popular-destinations, .special-offers, .hotel-categories, .why-choose-us {
-        background: #f5f6fa;
-        padding: 32px 0 24px 0;
-    }
-    .destination-card, .offer-card, .category-card, .feature-card {
-        border-radius: 18px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-        overflow: hidden;
-        background: #fff;
-        margin-bottom: 24px;
-        transition: box-shadow 0.2s;
-    }
-    .destination-card:hover, .offer-card:hover, .category-card:hover, .feature-card:hover {
-        box-shadow: 0 6px 24px rgba(0,0,0,0.13);
-    }
-    .destination-card img, .offer-card img, .category-card img {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-        border-top-left-radius: 18px;
-        border-top-right-radius: 18px;
-    }
-    .destination-info, .category-content, .offer-content-overlay {
-        padding: 18px 16px 12px 16px;
-        color: white;
-        text-align: left;
-    }
-    .destination-info h3, .category-content h3, .offer-content-overlay h3, .offer-content-overlay h4 {
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin-bottom: 6px;
-        color: #003366;
-    }
-    .destination-info p, .category-content p, .offer-content-overlay p {
-        font-size: 1rem;
-        color: white;
-        margin-bottom: 0;
-    }
-    .offer-card.large img {
-        height: 260px;
-    }
-    .offer-content-overlay .price {
-        color: #ffe066;
-        font-size: 1.1rem;
-        font-weight: 700;
-    }
-
-    .why-choose-us .feature-card {
-        background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-        padding: 32px 18px;
-        text-align: center;
-        height: 100%;
-    }
-    .why-choose-us .icon-wrapper {
-        margin-bottom: 12px;
-    }
-    .why-choose-us .icon-wrapper i {
-        color: #ff6600;
-        font-size: 2.2rem;
-    }
-    .why-choose-us h3 {
-        color: #003366;
-        font-size: 1.1rem;
-        font-weight: 700;
-    }
-    .why-choose-us p {
-        color: #555;
-        font-size: 1rem;
-    }
-
-    .footer {
-        background: #003366;
-        color: #fff;
-        padding: 40px 0 0 0;
-        margin-top: 40px;
-    }
-    .footer h4 {
-        color: #fff;
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin-bottom: 12px;
-    }
-    .footer ul {
-        list-style: none;
-        padding: 0;
-    }
-    .footer ul li a {
-        color: #e0e0e0;
-        text-decoration: none;
-        font-size: 1rem;
-    }
-    .footer ul li a:hover {
-        color: #ffe066;
-    }
-    .footer-bottom {
-        border-top: 1px solid #1a237e;
-        margin-top: 24px;
-        padding: 16px 0 0 0;
-        text-align: center;
-        color: #e0e0e0;
-        font-size: 0.95rem;
-    }
-    .social-links a {
-        color: #fff;
-        font-size: 1.3rem;
-        margin-right: 12px;
-    }
-    .social-links a:hover {
-        color: #ffe066;
-    }
-
-    /* Bố cục section và card chuyên nghiệp, đồng nhất */
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-
-    /* Card grid layout */
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: -12px;
-        margin-right: -12px;
-    }
-    .col-md-3, .col-md-6 {
-        padding-left: 12px;
-        padding-right: 12px;
-        margin-bottom: 32px;
-    }
-    .col-md-3 {
-        width: 25%;
-    }
-    .col-md-6 {
-        width: 50%;
-    }
-
-    /* Card style */
-    .destination-card, .category-card, .feature-card, .offer-card {
-        border-radius: 18px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-        background: #fff;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        transition: box-shadow 0.2s;
-    }
-    .destination-card img, .category-card img, .offer-card img {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-        border-top-left-radius: 18px;
-        border-top-right-radius: 18px;
-    }
-    .destination-info, .category-content, .offer-content-overlay {
-        padding: 18px 16px 12px 16px;
-        color: #222;
-        text-align: left;
-        flex: 1 1 auto;
-    }
-    .destination-info h3, .category-content h3, .offer-content-overlay h3, .offer-content-overlay h4 {
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin-bottom: 6px;
-        color: white;
-    }
-    .destination-info p, .category-content p, .offer-content-overlay p {
-        font-size: 1rem;
-        color: white;
-        margin-bottom: 0;
-    }
-
-    /* --- SPECIAL OFFERS LAYOUT --- */
-    .special-offers .row {
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 24px;
-        align-items: stretch;
-        height: 400px;
-        min-height: 400px;
-    }
-    .special-offers .col-offer-big {
-        width: 52%;
-        display: flex;
-    }
-    .special-offers .col-offer-small {
-        width: 48%;
-        display: flex;
-        flex-direction: row;
-        gap: 8px;
-        align-items: center;
-        height: 100%;
-    }
-    .special-offers .offer-card.big {
-        width: 100%;
-        height: 100%;
-        position: relative;
-    }
-    .special-offers .offer-card.small {
-        width: 49.5%;
-        height: 80%;
-        position: relative;
-        display: flex;
-    }
-    .special-offers .offer-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    .special-offers .offer-content-overlay {
-        position: absolute;
-        left: 0; right: 0; bottom: 0;
-        width: 100%;
-        background: linear-gradient(to top, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.05) 100%);
-        color: #fff;
-        padding: 24px 24px 18px 24px;
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-    }
-    .special-offers .offer-content-overlay h3,
-    .special-offers .offer-content-overlay h4 {
-        color: #fff;
-        font-weight: 800;
-        font-size: 1.6rem;
-        margin-bottom: 4px;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.35);
-    }
-    .special-offers .offer-content-overlay p {
-        color: #fff;
-        font-size: 1.1rem;
-        margin-bottom: 2px;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    }
-    .special-offers .offer-content-overlay .price {
-        color: #ffe066;
-        font-size: 1.2rem;
-        font-weight: 700;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    }
-    @media (max-width: 991px) {
-        .special-offers .row {
-            flex-direction: column;
-            height: auto;
-            min-height: 0;
-        }
-        .special-offers .col-offer-big,
-        .special-offers .col-offer-small {
-            width: 100%;
-            height: auto;
-        }
-        .special-offers .col-offer-small {
-            flex-direction: row;
-            gap: 8px;
-        }
-        .special-offers .offer-card.big,
-        .special-offers .offer-card.small {
-            height: 180px;
-            min-height: 0;
-        }
-    }
-
-    /* Why choose us: 4 cột đều nhau */
-    .why-choose-us .row {
-        gap: 0;
-    }
-    .why-choose-us .col-md-3 {
-        width: 25%;
-        display: flex;
-    }
-    .why-choose-us .feature-card {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 32px 18px;
-    }
-
-    /* Footer chia 4 cột đều nhau */
-    .footer .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: -12px;
-        margin-right: -12px;
-    }
-    .footer .col-md-3 {
-        width: 25%;
-        padding-left: 12px;
-        padding-right: 12px;
-        margin-bottom: 24px;
-    }
-
-    /* Responsive */
-    @media (max-width: 991px) {
-        .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
-            width: 50%;
-        }
-        .col-md-6 {
-            width: 100%;
-        }
-    }
-    @media (max-width: 767px) {
-        .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
-            width: 100%;
-        }
-        .container {
-            padding-left: 6px;
-            padding-right: 6px;
-        }
-        .section-title {
-            font-size: 1.3rem;
-            margin: 32px 0 18px 0;
-        }
-    }
-
-    /* --- HOTEL CATEGORIES LAYOUT --- */
-    .hotel-categories {
-        background: #f5f6fa;
-        padding: 48px 0;
-    }
-
-    .hotel-categories .category-card {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .hotel-categories .category-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    }
-
-    .hotel-categories .category-card img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
-        transition: transform 0.3s ease;
-    }
-
-    .hotel-categories .category-card:hover img {
-        transform: scale(1.1);
-    }
-
-    .hotel-categories .category-content {
-        padding: 20px;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        background: #fff;
-    }
-
-    .hotel-categories .category-content h3 {
-        color: #003366;
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 8px;
-    }
-
-    .hotel-categories .category-content p {
-        color: #666;
-        font-size: 0.95rem;
-        margin-bottom: 0;
-        line-height: 1.5;
-    }
-
-    @media (max-width: 991px) {
-        .hotel-categories .category-card img {
-            height: 180px;
-        }
-    }
-
-    @media (max-width: 767px) {
-        .hotel-categories .category-card img {
-            height: 160px;
-        }
-    }
-
-    /* Nền mờ với hình ảnh lớn */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.5);
-    }
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 500px;
-        border-radius: 8px;
-        position: relative;
-    }
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-        position: absolute;
-        right: 20px;
-        top: 10px;
-    }
-    .close:hover {
-        color: black;
-    }
-    .auth-tab {
-        padding: 10px 20px;
-        border: none;
-        background: none;
-        cursor: pointer;
-        font-size: 16px;
-        color: #666;
-    }
-    .auth-tab.active {
-        color: #ffd700;
-        border-bottom: 2px solid #ffd700;
-    }
-    .auth-form {
-        margin-top: 20px;
-    }
-    .auth-form input {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-    .auth-form button {
-        width: 100%;
-        padding: 12px;
-        background: #ffd700;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-top: 10px;
-    }
-    .auth-form button:hover {
-        background: #ffd700;
-    }
-    .form-group {
-        margin-bottom: 15px;
-    }
-    .form-group select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-    .input-icon {
-        position: relative;
-    }
-    .input-icon i {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #888;
-        font-size: 1rem;
-    }
-    .input-icon input {
-        padding-left: 38px;
-        width: 100%;
-        height: 42px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
-        margin-bottom: 0;
-    }
-    .btn-gradient {
-        width: 100%;
-        background: linear-gradient(90deg, #00c853, #00bfae);
-        color: #fff;
-        border: none;
-        border-radius: 24px;
-        padding: 12px 0;
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        transition: background 0.2s;
-    }
-    .btn-gradient:hover {
-        background: linear-gradient(90deg, #00bfae, #00c853);
-    }
-    .login-links {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.98rem;
-        margin-top: 8px;
-    }
-    .login-links a {
-        color: #1a237e;
-        text-decoration: underline;
-    }
-    .login-links a:hover {
-        color: #00bfae;
-    }
-
-    /* Combo tốt nhất styles */
-    .summer-mood {
-        padding: 48px 0 32px 0; 
-        background: linear-gradient(120deg, #fdf6e3 0%, #e0f7fa 100%);
-    }
-
-    .summer-grid {
-        display: grid; 
-        grid-template-columns: repeat(4, 1fr); 
-        gap: 28px; 
-        margin-bottom: 18px;
-    }
-
-    .summer-card {
-        background: #fff;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 2px 16px 0 rgba(42,110,220,0.08);
-        transition: all 0.3s ease;
-        position: relative;
-        height: 320px;
-    }
-
-    .summer-card:hover {
-        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.18);
-        transform: translateY(-8px);
-    }
-
-    .summer-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .combo-info {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(120deg,rgba(255,255,255,0.92) 60%,rgba(255,255,255,0.85) 100%);
-        color: #222;
-        border-radius: 16px;
-        box-shadow: 0 4px 24px 0 rgba(42,110,220,0.10);
-        padding: 24px;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-    }
-
-    .combo-info h3 {
-        font-size: 1.5rem;
-        font-weight: 800;
-        margin-bottom: 10px;
-        color: #1a237e;
-        text-shadow: none;
-    }
-
-    .combo-info p {
-        font-size: 1.08rem;
-        margin-bottom: 16px;
-        color: #444;
-    }
-
-    .combo-features {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
-
-    .combo-features span {
-        background: rgba(26, 35, 126, 0.05);
-        color: #1a237e;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .combo-features i {
-        color: #0d47a1;
-    }
-
-    .tour-price {
-        color: #ffd700;
-        font-weight: 700;
-        font-size: 1.3rem;
-        margin: 10px 0;
-    }
-
-    .btn-primary {
-        background: linear-gradient(45deg, #1a237e, #0d47a1);
-        border: none;
-        padding: 8px 24px;
-        color: white;
-        border-radius: 25px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
-    }
-
-    /* Tin tức du lịch */
-    .news-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    .news-container h1 {
-      text-align: center;
-      margin-bottom: 32px;
-      font-size: 2.2rem;
-      color: #2a6edc;
-      font-weight: 800;
-    }
-    .news-list {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 32px;
-      justify-content: center;
-      width: 100%;
-    }
-    .news-item {
-      background: #fff;
-      color: #003366;
-      border-radius: 18px;
-      box-shadow: 0 4px 24px rgba(42,110,220,0.13);
-      padding: 32px 28px 24px 28px;
-      min-height: 180px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      font-size: 1.08rem;
-      position: relative;
-      transition: box-shadow 0.2s, transform 0.2s;
-      width: 100%;
-      max-width: 340px;
-      margin: 0 auto;
-    }
-    .news-item h2 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: #2a6edc;
-    }
-    .news-date {
-      font-size: 0.98rem;
-      color: #888;
-      margin-bottom: 8px;
-      display: block;
-    }
-    @media (max-width: 1200px) {
-      .news-list {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-    @media (max-width: 900px) {
-      .news-list {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    @media (max-width: 600px) {
-      .news-list {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Banner giảm giá */
-    .banner-sale {
-        background: url('https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-        min-height: 320px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 48px 0;
-        border-radius: 24px;
-        position: relative;
-        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.10);
-        overflow: hidden;
-    }
-    .banner-sale-overlay {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: linear-gradient(120deg, rgba(0,153,247,0.45) 0%, rgba(241,23,18,0.35) 100%);
-        z-index: 1;
-        border-radius: 24px;
-    }
-    .banner-sale-content {
-        position: relative;
-        z-index: 2;
-        color: #fff;
-        text-align: center;
-        max-width: 520px;
-        padding: 32px 24px 28px 24px;
-        background: rgba(0,0,0,0.18);
-        border-radius: 20px;
-        box-shadow: 0 2px 16px 0 rgba(255,152,0,0.10);
-    }
-    .banner-sale-icon {
-        margin-bottom: 12px;
-    }
-    .banner-sale-content h2 {
-        font-size: 2.1rem;
-        font-weight: 800;
-        margin-bottom: 10px;
-        color: #ffd700;
-        text-shadow: 0 2px 8px rgba(255,215,0,0.10);
-    }
-    .banner-sale-desc {
-        font-size: 1.15rem;
-        margin-bottom: 18px;
-        color: #fffbe7;
-    }
-    .banner-sale-list {
-        text-align: left;
-        margin: 0 auto 18px auto;
-        display: inline-block;
-        font-size: 1.05rem;
-        color: #fff;
-    }
-    .banner-sale-list li {
-        margin-bottom: 6px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .banner-sale-list span {
-        color: rgba(0,153,247,0.45);
-        font-size: 1.1rem;
-    }
-    .banner-sale-price {
-        display: block;
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 18px;
-        color: #fff;
-    }
-    .banner-sale-btn {
-        font-size: 1.1rem;
-        padding: 12px 36px;
-        border-radius: 8px;
-        background: #ffd700;
-        color: #fff;
-        font-weight: 700;
-        box-shadow: 0 2px 8px 0 rgba(255,152,0,0.10);
-        border: none;
-        transition: background 0.2s;
-    }
-    .banner-sale-btn:hover {
-        background: #ffd700;
-    }
-    .banner-sale-note {
-        margin-top: 12px;
-        font-size: 0.98rem;
-        color: #fffbe7;
-        opacity: 0.85;
-    }
-
-    /* Summer Mood Section */
-    .summer-mood {
-        padding: 48px 0 32px 0; 
-        background: linear-gradient(120deg, #fdf6e3 0%, #e0f7fa 100%);
-    }
-    .summer-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 28px;
-        margin-bottom: 18px;
-    }
-    @media (max-width: 1000px) {
-        .summer-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-    @media (max-width: 600px) {
-        .summer-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-    .summer-card {
-        background: #fff;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 2px 16px 0 rgba(42,110,220,0.08);
-        transition: box-shadow 0.2s, transform 0.2s;
-        position: relative;
-        height: 320px;
-    }
-    .summer-card:hover {
-        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.18);
-        transform: translateY(-8px) scale(1.03);
-    }
-    .summer-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    .summer-info {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 0 10px;
-        background: linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0.15) 60%, transparent 100%);
-        color: #fff;
-        text-align: center;
-    }
-    .summer-info h3 {
-        margin: 0 0 8px 0;
-        color: #fff;
-        font-size: 1.3rem;
-        font-weight: 700;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    }
-    .summer-info p {
-        font-size: 1rem;
-        color: #f0f0f0;
-        margin-bottom: 8px;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    }
-
-    /* Favorite Destinations */
-    .favorite-destinations {
-        padding: 48px 0;
-        background: linear-gradient(120deg, #fdf6e3 0%, #fff8e1 100%);
-    }
-    .golden-spiral-grid {
-        display: grid;
-        grid-template-columns: repeat(8, 1fr);
-        grid-template-rows: repeat(8, 1fr);
-        gap: 20px;
-        height: 800px;
-        position: relative;
-    }
-    .destination-card {
-        position: relative;
-        overflow: hidden;
-        border-radius: 16px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .destination-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    }
-    .destination-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-    }
-    .destination-card:hover img {
-        transform: scale(1.1);
-    }
-    .destination-info {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 20px;
-        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-        color: white;
-    }
-    .destination-info h3 {
-        margin: 0 0 8px 0;
-        font-size: 1.5rem;
-        font-weight: 700;
-    }
-    .destination-info p {
-        margin: 0;
-        font-size: 1rem;
-        opacity: 0.9;
-    }
-    /* Golden Spiral Layout */
-    .destination-card.large {
-        grid-column: 1 / 6;
-        grid-row: 1 / 6;
-    }
-    .destination-card.medium {
-        grid-column: 6 / 9;
-        grid-row: 1 / 4;
-    }
-    .destination-card.small:nth-of-type(3) {
-        grid-column: 6 / 9;
-        grid-row: 4 / 6;
-    }
-    .destination-card.small:nth-of-type(4) {
-        grid-column: 1 / 4;
-        grid-row: 6 / 9;
-    }
-    .destination-card.small:nth-of-type(5) {
-        grid-column: 4 / 9;
-        grid-row: 6 / 9;
-    }
-    @media (max-width: 768px) {
-        .golden-spiral-grid {
-            grid-template-columns: 1fr;
-            grid-template-rows: repeat(5, 300px);
-            height: auto;
-            gap: 16px;
-        }
-        .destination-card.large,
-        .destination-card.medium,
-        .destination-card.small {
-            grid-column: 1;
-            grid-row: auto;
-        }
-    }
-
-    /* Banner Sale */
-    .banner-sale {
-        background: url('https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-        min-height: 320px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 48px 0;
-        border-radius: 24px;
-        position: relative;
-        box-shadow: 0 8px 32px 0 rgba(42,110,220,0.10);
-        overflow: hidden;
-    }
-    .banner-sale-overlay {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: linear-gradient(120deg, rgba(0,153,247,0.45) 0%, rgba(241,23,18,0.35) 100%);
-        z-index: 1;
-        border-radius: 24px;
-    }
-    .banner-sale-content {
-        position: relative;
-        z-index: 2;
-        color: #fff;
-        text-align: center;
-        max-width: 520px;
-        padding: 32px 24px 28px 24px;
-        background: rgba(0,0,0,0.18);
-        border-radius: 20px;
-        box-shadow: 0 2px 16px 0 rgba(255,152,0,0.10);
-    }
-    .banner-sale-icon {
-        margin-bottom: 12px;
-    }
-    .banner-sale-content h2 {
-        font-size: 2.1rem;
-        font-weight: 800;
-        margin-bottom: 10px;
-        color: #ffd700;
-        text-shadow: 0 2px 8px rgba(255,215,0,0.10);
-    }
-    .banner-sale-desc {
-        font-size: 1.15rem;
-        margin-bottom: 18px;
-        color: #fffbe7;
-    }
-    .banner-sale-list {
-        text-align: left;
-        margin: 0 auto 18px auto;
-        display: inline-block;
-        font-size: 1.05rem;
-        color: #fff;
-    }
-    .banner-sale-list li {
-        margin-bottom: 6px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .banner-sale-list span {
-        color: #ffd700;
-        font-size: 1.1rem;
-    }
-    .banner-sale-price {
-        display: block;
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 18px;
-        color: #fff;
-    }
-    .banner-sale-btn {
-        font-size: 1.1rem;
-        padding: 12px 36px;
-        border-radius: 8px;
-        background: #ffd700;
-        color: #fff;
-        font-weight: 700;
-        box-shadow: 0 2px 8px 0 rgba(255,152,0,0.10);
-        border: none;
-        transition: background 0.2s;
-    }
-    .banner-sale-btn:hover {
-        background: rgba(0,153,247,0.45);
-    }
-    .banner-sale-note {
-        margin-top: 12px;
-        font-size: 0.98rem;
-        color: #fffbe7;
-        opacity: 0.85;
-    }
-    @media (max-width: 700px) {
-        .banner-sale-content {padding: 18px 6px;}
-        .banner-sale {min-height: 220px;}
-    }
-
-    .combo-center-text {
-        text-align: center;
-        margin-bottom: 24px;
-        color: #666;
-    }
-    
-    /* Thêm CSS cho .job-card */
-    .job-card {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 100%;
-    }
-    .job-card .btn-gradient {
-      margin-top: auto;
-      width: 100%;
-      min-height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-     .modal-backdrop.show {
-    z-index: 1050 !important;
-}
-.modal.show {
-    z-index: 1060 !important;
-    display: block;
-}
-    </style>
 </head>
-<body>
-   <nav class="navbar">
+<!-- Navbar -->
+    <nav class="navbar">
         <div class="container">
             <div class="nav-flex">
                 <!-- Logo -->
                 <a class="navbar-brand" href="#">
                     <img src="../images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
                 </a>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-btn d-md-none" id="mobile-menu-btn" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
 
                 <!-- Search Box -->
                 <div class="nav-search">
@@ -1540,7 +82,7 @@
         </div>
     </nav>
 
-    <!-- Hero Section with Search -->
+ <!-- Hero Section with Search -->
     <section class="hero-section">
         <p class="nautica-script">LuxuryHavenTravel</p>
         <div class="hero-content"><br><br><br><br><br><br><br><br>
@@ -1556,7 +98,7 @@
             <div class="col-lg-8">
                 <div class="mb-4">
                     <h2 class="mb-3 text-primary"><i class="fas fa-handshake me-2"></i>Đăng ký làm đối tác</h2>
-                    <p>Chào mừng bạn đến với chương trình đối tác của chúng tôi! Hợp tác cùng LuxuryHaven để phát triển kinh doanh khách sạn, homestay, villa, tour du lịch hoặc dịch vụ liên quan.</p>
+                    <p>Chào mừng bạn đến với chương trình đối tác của chúng tôi! Hợp tác cùng LuxuryHavenTravel để phát triển kinh doanh khách sạn, homestay, villa, tour du lịch hoặc dịch vụ liên quan.</p>
                 </div>
                 <div class="mb-4">
                     <h4 class="mb-2 text-secondary"><i class="fas fa-user-plus me-2"></i>Quyền lợi đối tác</h4>
@@ -1622,9 +164,11 @@
                 <div class="bg-light rounded shadow-sm p-4 mb-4">
                     <h5 class="mb-3 text-primary"><i class="fas fa-phone-volume me-2"></i>Liên hệ hợp tác</h5>
                     <ul class="list-unstyled mb-0">
-                        <li><strong>Email:</strong> partner@hotel.com</li>
-                        <li><strong>Hotline:</strong> (84) 123-456-789</li>
-                        <li><strong>Địa chỉ:</strong> 123 Đường ABC, Quận XYZ, TP.HCM</li>
+                        <li><strong>Email:</strong> LuxuryHavenTravel@gmail.com</li>
+                        <li><strong>Hotline:</strong> 0837 918 274  -
+0912 38 4956 </li>
+                        <li><strong>Địa chỉ:</strong> Lầu 5, Tòa nhà ABC, 456 Đường Lê Lai, Phường Bến Thành, Quận 1, TP. Hồ Chí Minh, Việt Nam
+</li>
                     </ul>
                 </div>
                 <div class="alert alert-success mt-3" role="alert">
@@ -1633,36 +177,35 @@
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
+   
     <!-- Footer -->
 <footer class="footer">
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <h4>Về LuxuryHaven</h4>
+                <h4>Về LuxuryHavenTravel</h4>
                 <ul>
-                    <li><a href="footer\about.html">Giới thiệu</a></li>
-                    <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
-                    <li><a href="footer\news.html">Tin tức</a></li>
-                    <li><a href="footer\contact.html">Liên hệ</a></li>
+                    <li><a href="..\footer\about.html">Giới thiệu</a></li>
+                    <li><a href="..\footer\recruitment.html">Tuyển dụng</a></li>
+                    <li><a href="..\footer\news.html">Tin tức</a></li>
+                    <li><a href="..\footer\contact.html">Liên hệ</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
                 <h4>Hỗ trợ</h4>
                 <ul>
-                    <li><a href="footer\help.html">Trung tâm trợ giúp</a></li>
-                    <li><a href="footer\privacy.html">Chính sách bảo mật</a></li>
-                    <li><a href="footer\terms.html">Điều khoản sử dụng</a></li>
-                    <li><a href="footer\cookie.html">Chính sách cookie</a></li>
+                    <li><a href="..\footer\help.html">Trung tâm trợ giúp</a></li>
+                    <li><a href="..\footer\privacy.html">Chính sách bảo mật</a></li>
+                    <li><a href="..\footer\terms.html">Điều khoản sử dụng</a></li>
+                    <li><a href="..\footer\cookie.html">Chính sách cookie</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
                 <h4>Đối tác</h4>
                 <ul>
-                    <li><a href="footer\partner.html">Đăng ký làm đối tác</a></li>
-                    <li><a href="footer\marketing.html">Chương trình tiếp thị</a></li>
-                    <li><a href="footer\affiliate.html">Affiliate</a></li>
+                    <li><a href="..\footer\partner.html">Đăng ký làm đối tác</a></li>
+                    <li><a href="..\footer\marketing.html">Chương trình tiếp thị</a></li>
+                    <li><a href="..\footer\affiliate.html">Affiliate</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
@@ -1676,55 +219,11 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 LuxuryHaven. Tất cả quyền được bảo lưu.</p>
+            <p>&copy; 2024 LuxuryHavenTravel. Tất cả quyền được bảo lưu.</p>
         </div>
     </div>
 </footer>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Form Step Navigation
-        let currentStep = 1;
-        const totalSteps = 3;
-        const steps = document.querySelectorAll('.step-content');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const submitBtn = document.getElementById('submitBtn');
-        const stepIndicators = document.querySelectorAll('.step');
-
-        function showStep(step) {
-            steps.forEach((s, index) => {
-                s.style.display = index + 1 === step ? 'block' : 'none';
-            });
-            
-            stepIndicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index + 1 <= step);
-            });
-
-            prevBtn.style.display = step === 1 ? 'none' : 'inline-block';
-            nextBtn.style.display = step === totalSteps ? 'none' : 'inline-block';
-            submitBtn.style.display = step === totalSteps ? 'inline-block' : 'none';
-        }
-
-        nextBtn.addEventListener('click', () => {
-            if (currentStep < totalSteps) {
-                currentStep++;
-                showStep(currentStep);
-            }
-        });
-
-        prevBtn.addEventListener('click', () => {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        });
-
-        // Initialize first step
-        showStep(1);
-    </script>
-     <!-- Auth Modal -->
+ <!-- Auth Modal -->
 <div id="auth-modal" class="modal">
     <div class="modal-content" style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
         <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
@@ -1804,12 +303,40 @@
     </div>
 </div> 
 
+<!-- Modal Ứng tuyển ngay -->
+<div class="modal" id="apply-modal" tabindex="-1" style="display:none; background:rgba(0,0,0,0.35);">
+  <div class="modal-content" style="max-width: 420px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); margin: 80px auto;">
+    <span class="close" id="close-apply-modal" style="right: 18px; top: 12px; font-size: 32px; cursor:pointer; position:absolute;">&times;</span>
+    <h4 class="mb-3 text-center">Ứng tuyển vị trí <span id="apply-position" class="text-primary"></span></h4>
+    <form id="apply-form">
+      <div class="mb-3">
+        <label for="apply-name" class="form-label">Họ và tên</label>
+        <input type="text" class="form-control" id="apply-name" required>
+      </div>
+      <div class="mb-3">
+        <label for="apply-email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="apply-email" required>
+      </div>
+      <div class="mb-3">
+        <label for="apply-cv" class="form-label">Tải lên CV (PDF, DOC, DOCX)</label>
+        <input type="file" class="form-control" id="apply-cv" accept=".pdf,.doc,.docx" required>
+      </div>
+      <div class="mb-3">
+        <label for="apply-note" class="form-label">Ghi chú (tuỳ chọn)</label>
+        <textarea class="form-control" id="apply-note" rows="2"></textarea>
+      </div>
+      <button type="submit" class="btn btn-gradient w-100 py-2 rounded-pill fw-bold">Gửi ứng tuyển</button>
+    </form>
+  </div>
+</div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
     // Firebase config và xử lý xác thực
@@ -1818,7 +345,7 @@
         authDomain: "websitedatphongkhachsan.firebaseapp.com",
         databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
         projectId: "websitedatphongkhachsan",
-        storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+        storageBucket: "websitedatphongkhachsan.appspot.com",
         messagingSenderId: "732884739524",
         appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
         measurementId: "G-RC61EXTZH7"
@@ -2054,6 +581,92 @@
                 });
             });
         }
+
+        // Ứng tuyển ngay modal
+        document.querySelectorAll('.job-card .btn-gradient').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const card = btn.closest('.job-card');
+            const position = card.querySelector('h4')?.innerText || '';
+            document.getElementById('apply-position').innerText = position;
+            document.getElementById('apply-modal').style.display = 'block';
+          });
+        });
+        document.getElementById('close-apply-modal').onclick = function() {
+          document.getElementById('apply-modal').style.display = 'none';
+        };
+        window.onclick = function(event) {
+          const modal = document.getElementById('apply-modal');
+          if (event.target === modal) {
+            modal.style.display = 'none';
+          }
+        };
+
+        // Xử lý gửi form ứng tuyển
+        const applyForm = document.getElementById('apply-form');
+        if (applyForm) {
+          applyForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            // Lấy dữ liệu form
+            const name = document.getElementById('apply-name').value.trim();
+            const email = document.getElementById('apply-email').value.trim();
+            const note = document.getElementById('apply-note').value.trim();
+            const position = document.getElementById('apply-position').innerText;
+            const fileInput = document.getElementById('apply-cv');
+            const file = fileInput.files[0];
+            if (!file) {
+              Swal.fire({
+                title: 'Lỗi!',
+                text: 'Vui lòng chọn file CV.',
+                icon: 'error',
+                confirmButtonColor: '#e67e22'
+              });
+              return;
+            }
+            // Hiển thị loading
+            Swal.fire({
+              title: 'Đang gửi hồ sơ...!',
+              text: 'Vui lòng đợi trong giây lát',
+              allowOutsideClick: false,
+              didOpen: () => Swal.showLoading()
+            });
+            try {
+              // Gửi file CV qua EmailJS
+              const formData = new FormData();
+              formData.append('from_name', name);
+              formData.append('from_email', email);
+              formData.append('position', position);
+              formData.append('note', note);
+              formData.append('cv_file', file);
+              // Gửi email qua EmailJS (service_id, template_id, public_key)
+            await emailjs.sendForm('service_6spwxxw', 'template_vcjlg02', applyForm, 'yI6xhpzYSnD3AGzbX');              const db = firebase.database();
+              const appRef = db.ref('applications').push();
+              await appRef.set({
+                name,
+                email,
+                position,
+                note,
+                createdAt: Date.now()
+              });
+              Swal.fire({
+                title: 'Nộp hồ sơ thành công!',
+                text: 'Cảm ơn bạn đã ứng tuyển. Chúng tôi sẽ liên hệ nếu phù hợp.',
+                icon: 'success',
+                confirmButtonColor: '#e67e22'
+              });
+              applyForm.reset();
+              document.getElementById('apply-modal').style.display = 'none';
+            } catch (err) {
+              Swal.fire({
+                title: 'Lỗi!',
+                text: 'Không thể gửi hồ sơ. Vui lòng thử lại sau.',
+                icon: 'error',
+                confirmButtonColor: '#e67e22'
+              });
+              console.error('Lỗi nộp hồ sơ:', err);
+            }
+          });
+        }
     });
 
     // Khởi tạo EmailJS với public key
@@ -2062,14 +675,14 @@
     })();
 
     // Xử lý form liên hệ
-    document.getElementById('contact-form').addEventListener('submit', function(e) {
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
-
         // Lấy thông tin từ form
         const name = document.getElementById('contact-name').value;
         const email = document.getElementById('contact-email').value;
         const message = document.getElementById('contact-message').value;
-
         // Hiển thị loading
         Swal.fire({
             title: 'Đang gửi...',
@@ -2079,7 +692,6 @@
                 Swal.showLoading();
             }
         });
-
         // Gửi email
         emailjs.send("service_6spwxxw", "template_vcjlg02", {
             to_email: "quantrikhachsan001@gmail.com",
@@ -2087,7 +699,6 @@
             from_email: email,
             message: message
         })
-
         .then(function() {
             // Thành công
             Swal.fire({
@@ -2109,7 +720,8 @@
             });
             console.error("Error sending email:", error);
         });
-    });
+      });
+    }
 
     let autoSlideInterval;
     let currentSlideIndex = 0;
@@ -2178,6 +790,47 @@
             container.addEventListener('mouseleave', startAutoSlide);
         });
     });
+
+    // Xử lý menu mobile
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        const body = document.body;
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('show');
+            body.classList.toggle('menu-open');
+        });
+
+        // Đóng menu khi click ra ngoài
+        document.addEventListener('click', function(e) {
+            if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+                mobileMenuBtn.classList.remove('active');
+                navLinks.classList.remove('show');
+                body.classList.remove('menu-open');
+            }
+        });
+
+        // Đóng menu khi resize màn hình lớn hơn breakpoint mobile
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                mobileMenuBtn.classList.remove('active');
+                navLinks.classList.remove('show');
+                body.classList.remove('menu-open');
+            }
+        });
+
+        // Thêm sự kiện click cho các menu item
+        const menuItems = navLinks.querySelectorAll('a');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                mobileMenuBtn.classList.remove('active');
+                navLinks.classList.remove('show');
+                body.classList.remove('menu-open');
+            });
+        });
+    });
     </script>
-</body>
+    </body>
 </html>

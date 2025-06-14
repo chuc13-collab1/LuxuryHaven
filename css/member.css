@@ -1691,3 +1691,40 @@ body {
     }
 }
 
+@media (max-width: 768px) {
+    .footer {
+        text-align: center;
+    }
+    
+    .footer .row {
+        justify-content: center;
+    }
+    
+    .footer .col-md-3 {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    
+    .footer h4 {
+        margin-bottom: 15px;
+    }
+    
+    .footer ul {
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .footer .social-links {
+        justify-content: center;
+        margin-top: 10px;
+    }
+    
+    .footer-bottom {
+        text-align: center;
+        padding: 15px 0;
+    }
+}
+
