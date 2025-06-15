@@ -1,0 +1,23 @@
+/* Ví dụ ghi đè CSS cho chatbox TuDongChat */
+.tudongchat-widget {
+  bottom: 40px !important; /* Thay đổi vị trí */
+  right: 40px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2) !important;
+  background: #f8fafc !important;
+  font-family: 'Arial', sans-serif !important;
+}
+.tudongchat-header {
+  background: #1e90ff !important; /* Màu header */
+  color: #fff !important;
+  font-size: 18px !important;
+}
+.tudongchat-message {
+  font-size: 15px !important;
+  color: #222 !important;
+}
+.tudongchat-input {
+  border-radius: 8px !important;
+  border: 1px solid #1e90ff !important;
+}
+/* Thêm các class khác nếu cần */
