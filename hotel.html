@@ -141,12 +141,12 @@
             </div>
         </div>
         <div class="container">
-            <h2 class="section-title">✨ KHÁCH SẠN</h2>
-            <!-- City Navigation -->
+            <h2 class="section-title">✨ KHÁCH SẠN</h2> <!-- City Navigation -->
             <div class="city-nav-wrapper" style="position:relative; margin-bottom:32px;">
                 <!-- <button class="city-nav-btn left" aria-label="Cuộn trái">&lt;</button> -->
                 <div class="city-nav" style="overflow-x:auto; white-space:nowrap; padding:8px 0;">
-                    <a href="#" class="btn btn-outline-primary me-3 active" data-city="Buôn Ma Thuột">Buôn Ma Thuột</a>
+                    <a href="#" class="btn btn-outline-primary me-3 active" data-city="Cần Thơ">Cần Thơ</a>
+                    <a href="#" class="btn btn-outline-primary me-3" data-city="Buôn Ma Thuột">Buôn Ma Thuột</a>
                     <a href="#" class="btn btn-outline-primary me-3" data-city="Hà Nội">Hà Nội</a>
                     <a href="#" class="btn btn-outline-primary me-3" data-city="Tp. Hồ Chí Minh">Tp. Hồ Chí Minh</a>
                     <a href="#" class="btn btn-outline-primary me-3" data-city="Nha Trang">Nha Trang</a>
@@ -155,7 +155,6 @@
                     <a href="#" class="btn btn-outline-primary me-3" data-city="Phan Thiết">Phan Thiết</a>
                     <a href="#" class="btn btn-outline-primary me-3" data-city="Huế">Huế</a>
                     <a href="#" class="btn btn-outline-primary me-3" data-city="Quy Nhơn">Quy Nhơn</a>
-                    <a href="#" class="btn btn-outline-primary me-3" data-city="Cần Thơ">Cần Thơ</a>
                     <a href="#" class="btn btn-outline-primary me-3" data-city="Kiên Giang">Kiên Giang</a>
                     <!-- Thêm các thành phố khác nếu muốn -->
                 </div>
@@ -270,12 +269,10 @@
         window.tours = []; // hoặc window.offers = [];
         document.addEventListener('DOMContentLoaded', function () {
             // Add default hotel image as base64
-            const defaultHotelImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2YwZjBmMCIvPjxwYXRoIGQ9Ik0zMDAgMjAwaDIwMHYyMDBoLTIwMHoiIGZpbGw9IiNkZGQiLz48cGF0aCBkPSJNMzI1IDIyNWgxNTB2MTUwaC0xNTB6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTM1MCAyNzVoMTAwdjUwaC0xMDB6IiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNDAwIiB5PSI0NTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Tm8gaW1hZ2UgYXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg==';
-
-            // Reference to the location node in Firebase
+            const defaultHotelImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2YwZjBmMCIvPjxwYXRoIGQ9Ik0zMDAgMjAwaDIwMHYyMDBoLTIwMHoiIGZpbGw9IiNkZGQiLz48cGF0aCBkPSJNMzI1IDIyNWgxNTB2MTUwaC0xNTB6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTM1MCAyNzVoMTAwdjUwaC0xMDB6IiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNDAwIiB5PSI0NTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Tm8gaW1hZ2UgYXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg==';            // Reference to the location node in Firebase
             const locationRef = firebase.database().ref('location');
             const hotelGrid = document.getElementById('hotel-grid');
-            let currentCity = 'Buôn Ma Thuột';
+            let currentCity = 'Cần Thơ';
 
             // Function to format price with dots
             function formatPrice(price) {
@@ -1341,17 +1338,17 @@
         }
     </script>
     <script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/684e312c6b65fa190ea6f4dd/1iton06be';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-End of Tawk.to Script
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/684e312c6b65fa190ea6f4dd/1iton06be';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    End of Tawk.to Script
 </body>
 
 </html>
