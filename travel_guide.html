@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,27 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Thêm SweetAlert2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="css/travel_guide.css">
+    <link rel="stylesheet" href="css\chatbox.css">
+    <style>
+        @font-face {
+            font-family: 'Nautica Script Bold';
+            src: url('fonts/nautica-bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        .nautica-script {
+            font-family: 'Nautica Script Bold', cursive;
+            font-size: 3em;
+            font-weight: bold;
+            color: #cddae6;
+            text-align: center;
+        }
+    </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar">
@@ -19,7 +37,7 @@
                 <!-- Logo -->
                 <a class="navbar-brand" href="#">
                     <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
-                </a>                <!-- Mobile Menu Toggle Button -->
+                </a> <!-- Mobile Menu Button -->
                 <button class="mobile-menu-btn" id="mobile-menu-btn">
                     <span></span>
                     <span></span>
@@ -35,13 +53,13 @@
                         </button>
                     </div>
                 </div>
-                <div class="nav-menu">
-                    <ul id="nav-links" class="nav-links">
-                        <li><a href="index.html" >Trang chủ</a></li>
-                        <li><a href="hotel.html" >Khách sạn</a></li>
-                    
+                <div class="nav-right">
+                    <ul class="nav-links" id="nav-links">
+                        <li><a href="index.html">Trang chủ</a></li>
+                        <li><a href="hotel.html">Khách sạn</a></li>
+
                         <li class="dropdown"><a href="tours.html">Tours</a></li>
-                        
+
                         <li class="dropdown"><a href="prioritize.html">Ưu đãi</a></li>
                         <li class="dropdown"><a href="travel_guide.html" class="active">Cẩm nang du lịch</a></li>
                         <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
@@ -50,12 +68,15 @@
                         <li>
                             <div class="d-flex align-items-center">
                                 <div class="dropdown" id="user-dropdown" style="display:none;">
-                                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                                        id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-user"></i> <span id="user-name"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                        <li><a class="dropdown-item" href="member.html"><i class="fas fa-user-circle"></i> Tài khoản</a></li>
-                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                                        <li><a class="dropdown-item" href="member.html"><i
+                                                    class="fas fa-user-circle"></i> Tài khoản</a></li>
+                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i
+                                                    class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
                                     </ul>
                                 </div>
                                 <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
@@ -69,44 +90,98 @@
         </div>
     </nav>
 
-    <!-- Hero Section with Search -->
-    <section class="hero-section">
-        <p class="nautica-script">LuxuryHavenTravel</p>
-        <div class="hero-content"><br><br><br><br><br><br><br><br>
-            
-            <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
-            <p>Đặt phòng khách sạn, tour du lịch, vé máy bay với giá tốt nhất</p>
-        </div><br><br><br><br><br><br><br><br>
-    </section>
-<main>
-  <!-- Cẩm nang du lịch nổi bật -->
-  <section class="container section-spacing">
-    <div id="destination-content"></div>
-  </section>
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section-new">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="hero-content">
+                            <h1>Time to Explore the World!</h1>
+                            <p>Khám phá những điểm đến tuyệt vời, lên kế hoạch cho chuyến đi mơ ước của bạn cùng chúng tôi.</p>
+                            <a href="#packages-section" class="btn btn-enquire">Khám phá ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image-container d-none d-lg-block">
+                <img src="/images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg" alt="Travelers exploring">
+            </div>
+        </section>
 
- <!-- Điểm đến nổi bật -->
-<section class="container section-spacing">
-  <div class="featured-destinations-grid" id="dest-featured"></div>
-</section>
+        <!-- Tour Packages Section -->
+        <section id="packages-section" class="packages-section section-spacing">
+            <div class="container">
+                <div class="section-heading">
+                    <h1>Tour Packages</h1>
+                    <p>Chúng tôi gọi đây là Cẩm Nang Du Lịch</p>
+                </div>
 
-  <!-- Điểm đến theo vùng -->
-  <section class="container section-spacing">
-    <div class="row">
-      <div class="col-md-4"><div id="dest-north"></div></div>
-      <div class="col-md-4"><div id="dest-central"></div></div>
-      <div class="col-md-4"><div id="dest-south"></div></div>
-    </div>
-  </section>
+                <h3 class="sub-heading">Cẩm nang nổi bật</h3>
+                <div class="row" id="featured-guides-container">
+                    <!-- Featured guides will be injected here by JavaScript -->
+                </div>
 
-  <!-- Những cẩm nang mới nhất -->
-  <section class="container section-spacing">
-    <div id="latest-guides"></div>
-  </section>
+                <h3 class="sub-heading">Cẩm nang mới nhất</h3>
+                <div class="row" id="latest-guides-container">
+                    <!-- Latest guides will be injected here by JavaScript -->
+                </div>
+            </div>
+        </section>
+        <section class="offers-section">
+            <div class="container text-center">
+                <p class="offers-subtitle">ƯU ĐÃI ĐA DẠNG</p>
+                <h2 class="section-title">Lựa Chọn Các Loại Hình Du Lịch</h2>
+                <div class="offers-grid">
+                    <div class="offer-item">
+                        <div class="icon-container"><i class="fas fa-gopuram"></i></div>
+                        <p>Khám Phá Văn Hóa</p>
+                    </div>
+                    <div class="offer-item">
+                        <div class="icon-container"><i class="fas fa-bus-alt"></i></div>
+                        <p>Tour Đường Bộ</p>
+                    </div>
+                    <div class="offer-item">
+                        <div class="icon-container"><i class="fas fa-utensils"></i></div>
+                        <p>Tour Ẩm Thực</p>
+                    </div>
+                    <div class="offer-item">
+                        <div class="icon-container"><i class="fas fa-umbrella-beach"></i></div>
+                        <p>Nghỉ Dưỡng Biển</p>
+                    </div>
+                    <div class="offer-item">
+                        <div class="icon-container"><i class="fas fa-ship"></i></div>
+                        <p>Du Thuyền Xa Hoa</p>
+                    </div>
+                    <div class="offer-item">
+                        <div class="icon-container"><i class="fas fa-mountain"></i></div>
+                        <p>Chinh Phục Núi Cao</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+       
 
-  <!-- Popup chi tiết -->
-  <section class="container" id="destination-detail" style="display:none;"></section>
-</main>
-
+        <!-- About Us Section -->
+        <section class="about-section section-spacing">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="about-image">
+                            <img src="../images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg" alt="About Us">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="about-content">
+                            <h2>Về chúng tôi</h2>
+                            <p>Chúng tôi là một điểm dừng duy nhất cho mọi nhu cầu du lịch của bạn. Chúng tôi hiểu tầm quan trọng của chuyến đi đối với bạn, vì vậy chúng tôi nỗ lực hết mình để làm cho chuyến đi của bạn trở nên đáng nhớ. Kỳ nghỉ của bạn phải thực sự khó quên, từ yêu cầu đầu tiên cho đến khi bạn trở về nhà sau chuyến đi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- End Contact Section -->
 
     <!-- Footer -->
     <footer class="footer">
@@ -115,7 +190,7 @@
                 <div class="col-md-3">
                     <h4>Về LuxuryHavenTravel</h4>
                     <ul>
-                        <li><a href="footer\about.html">Giới thiệu</a></li>
+                        <li><a href="about_us.html">Giới thiệu</a></li>
                         <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
                         <li><a href="footer\news.html">Tin tức</a></li>
                         <li><a href="footer\contact.html">Liên hệ</a></li>
@@ -155,171 +230,711 @@
     </footer>
 
     <!-- Auth Modal -->
-<div id="auth-modal" class="modal">
-    <div class="modal-content" style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
-        <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
-        
-        <div id="auth-forms">
-            <form id="login-form" class="auth-form" style="text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="login-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
-                    </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
-                    </div>
-                </div>
-                <button type="submit" class="btn-gradient">Đăng nhập</button>
-                <div class="login-links">
-                    <a href="#" id="to-register">Không có tài khoản?</a>
-                    <a href="#" id="to-forgot">Quên mật khẩu?</a>
-                </div>
-            </form>
+    <div id="auth-modal" class="modal">
+        <div class="modal-content"
+            style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
+            <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
 
-            <form id="register-form" class="auth-form" style="display: none; text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
-                    <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+            <div id="auth-forms">
+                <form id="login-form" class="auth-form" style="text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+                    <button type="submit" class="btn-gradient">Đăng nhập</button>
+                    <div class="login-links">
+                        <a href="#" id="to-register">Không có tài khoản?</a>
+                        <a href="#" id="to-forgot">Quên mật khẩu?</a>
                     </div>
-                </div>
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
-                    <div class="input-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu" required />
-                    </div>
-                </div>
-                <button type="submit" class="btn-gradient">Đăng ký</button>
-                <div class="login-links">
-                    <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
-                </div>
-            </form>
+                </form>
 
-            <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
-                <div class="form-group" style="margin-bottom: 18px; text-align:left;">
-                    <label for="forgot-email" style="font-weight: 500;">Email</label>
-                    <div class="input-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+                <form id="register-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+                        </div>
                     </div>
-                </div>
-                <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
-                <div class="login-links">
-                    <a href="#" id="back-to-login">Quay lại đăng nhập</a>
-                </div>
-            </form>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu"
+                                required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Đăng ký</button>
+                    <div class="login-links">
+                        <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
+                    </div>
+                </form>
+
+                <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="forgot-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
+                    <div class="login-links">
+                        <a href="#" id="back-to-login">Quay lại đăng nhập</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>     <!-- Scripts -->
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-      <!-- Mobile Menu Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const navMenu = document.querySelector('.nav-menu');
-            const navLinks = document.getElementById('nav-links');
-            const dropdowns = document.querySelectorAll('.dropdown');
+        // Firebase config và xử lý xác thực
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
 
-            // Toggle menu
-            if (mobileMenuBtn && navMenu) {
-                mobileMenuBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    this.classList.toggle('active');
-                    navMenu.classList.toggle('active');
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+    
+        // Đợi DOM load xong
+        document.addEventListener('DOMContentLoaded', function () {
+            // Lấy các elements
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const forgotForm = document.getElementById('forgot-form');
+            const closeAuthModal = document.getElementById('close-auth-modal');
+            const openLoginModal = document.getElementById('open-login-modal');
+            const userDropdown = document.getElementById('user-dropdown');
+            const userName = document.getElementById('user-name');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // Xử lý đăng nhập
+            if (loginForm) {
+                loginForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+
+                    firebase.auth().signInWithEmailAndPassword(email, password)
+                        .then((userCredential) => {
+                            const user = userCredential.user;
+                            document.getElementById('auth-modal').style.display = 'none';
+
+                            // Kiểm tra nếu là admin
+                            if (email === 'quantrikhachsan@gmail.com') {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    text: 'Chào mừng Admin!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                }).then(() => {
+                                    window.location.href = 'admin-dashboard.html';
+                                });
+                            } else if (email === 'nhanvien2@luxuryhaven.com') {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    text: 'Chào mừng Nhân viên!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                }).then(() => {
+                                    window.location.href = 'admin-dashboard.html';
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi đăng nhập!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
                 });
             }
 
-            // Handle dropdowns
-            dropdowns.forEach(dropdown => {
-                const link = dropdown.querySelector('a');
-                if (link) {
-                    link.addEventListener('click', function(e) {
-                        if (window.innerWidth <= 768) {
-                            e.preventDefault();
-                            this.parentElement.classList.toggle('active');
-                        }
+            // Xử lý đăng ký
+            if (registerForm) {
+                registerForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('register-email').value;
+                    const password = document.getElementById('register-password').value;
+                    const confirmPassword = document.getElementById('register-confirm-password').value;
+                    const username = document.getElementById('register-username').value;
+
+                    if (password.length < 6) {
+                        Swal.fire({
+                            title: 'Lỗi đăng ký!',
+                            text: 'Mật khẩu phải có ít nhất 6 ký tự.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        return;
+                    }
+
+                    if (password !== confirmPassword) {
+                        Swal.fire({
+                            title: 'Lỗi đăng ký!',
+                            text: 'Mật khẩu nhập lại không khớp.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        return;
+                    }
+
+                    firebase.auth().createUserWithEmailAndPassword(email, password)
+                        .then((userCredential) => {
+                            return userCredential.user.updateProfile({
+                                displayName: username
+                            });
+                        })
+                        .then(() => {
+                            document.getElementById('auth-modal').style.display = 'none';
+                            Swal.fire({
+                                title: 'Đăng ký thành công!',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi đăng ký!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
+                });
+            }
+
+            // Xử lý quên mật khẩu
+            if (forgotForm) {
+                forgotForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('forgot-email').value;
+
+                    firebase.auth().sendPasswordResetEmail(email)
+                        .then(() => {
+                            Swal.fire({
+                                title: 'Email đã được gửi!',
+                                text: 'Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
+                });
+            }
+
+            // Xử lý chuyển đổi giữa các form
+            document.getElementById('to-register').addEventListener('click', function (e) {
+                e.preventDefault();
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                forgotForm.style.display = 'none';
+            });
+
+            document.getElementById('to-login').addEventListener('click', function (e) {
+                e.preventDefault();
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                forgotForm.style.display = 'none';
+            });
+
+            document.getElementById('to-forgot').addEventListener('click', function (e) {
+                e.preventDefault();
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                forgotForm.style.display = 'block';
+            });
+
+            document.getElementById('back-to-login').addEventListener('click', function (e) {
+                e.preventDefault();
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                forgotForm.style.display = 'none';
+            });
+
+            // Xử lý đóng modal
+            if (closeAuthModal) {
+                closeAuthModal.addEventListener('click', () => {
+                    document.getElementById('auth-modal').style.display = 'none';
+                });
+            }
+
+            // Xử lý mở modal đăng nhập
+            if (openLoginModal) {
+                openLoginModal.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById('auth-modal').style.display = 'block';
+                });
+            }
+
+            // Đóng modal khi click ra ngoài
+            window.onclick = function (event) {
+                const modal = document.getElementById('auth-modal');
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            // Theo dõi trạng thái đăng nhập
+            firebase.auth().onAuthStateChanged(function (user) {
+                const loginBtn = document.getElementById('open-login-modal');
+                if (user) {
+                    if (loginBtn) loginBtn.style.display = 'none';
+                    if (userDropdown) userDropdown.style.display = 'block';
+                    if (userName) userName.textContent = user.displayName || user.email;
+                } else {
+                    if (loginBtn) loginBtn.style.display = 'block';
+                    if (userDropdown) userDropdown.style.display = 'none';
+                }
+            });
+
+            // Xử lý đăng xuất
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    firebase.auth().signOut().then(() => {
+                        Swal.fire({
+                            title: 'Đăng xuất thành công!',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    }).catch((error) => {
+                        Swal.fire({
+                            title: 'Lỗi đăng xuất!',
+                            text: error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
                     });
-                }
-            });
-
-            // Close menu when clicking on links
-            if (navLinks) {
-                navLinks.addEventListener('click', function(e) {
-                    if (e.target.tagName === 'A' && !e.target.parentElement.classList.contains('dropdown')) {
-                        mobileMenuBtn.classList.remove('active');
-                        navMenu.classList.remove('active');
-                    }
                 });
             }
 
-            // Close menu when clicking outside
-            document.addEventListener('click', function(e) {
-                if (window.innerWidth <= 768) {
-                    if (!navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                        mobileMenuBtn.classList.remove('active');
-                        navMenu.classList.remove('active');
-                        dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
-                    }
+            // --- Logic for Travel Guide Content ---
+            const database = firebase.database();
+
+            function renderGuides(guides, containerId) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                container.innerHTML = '';
+                if (guides.length === 0) {
+                    container.innerHTML = '<p class="col-12">Không có cẩm nang nào để hiển thị.</p>';
+                    return;
+                }
+                guides.forEach(guide => {
+                    container.innerHTML += `
+                        <div class="col-md-6">
+                            <div class="guide-card">
+                                <a href="destination_detail.html?slug=${guide.slug}" style="display:flex;align-items:center;text-decoration:none;width:100%">
+                                    <img src="${guide.image_url}" alt="" class="guide-item-icon">
+                                    <span class="guide-item-title">${guide.title}</span>
+                                </a>
+                            </div>
+                        </div>`;
+                });
+            }
+
+            database.ref('travelGuides').once('value', (snapshot) => {
+                const guidesData = snapshot.val();
+                if (guidesData) {
+                    const allGuides = Object.values(guidesData);
+                    const featuredGuides = allGuides.filter(g => g.is_featured_on_homepage).slice(0, 4);
+                    renderGuides(featuredGuides, 'featured-guides-container');
+                    const latestGuides = allGuides.sort((a, b) => (b.id || 0) - (a.id || 0)).slice(0, 8);
+                    renderGuides(latestGuides, 'latest-guides-container');
+                } else {
+                    document.getElementById('featured-guides-container').innerHTML = '<p class="col-12">Không tìm thấy cẩm nang nổi bật.</p>';
+                    document.getElementById('latest-guides-container').innerHTML = '<p class="col-12">Không tìm thấy cẩm nang mới nhất.</p>';
+                }
+            }).catch(error => {
+                console.error("Firebase read error:", error);
+                document.getElementById('featured-guides-container').innerHTML = '<p class="col-12">Lỗi khi tải dữ liệu.</p>';
+                document.getElementById('latest-guides-container').innerHTML = '<p class="col-12">Lỗi khi tải dữ liệu.</p>';
+            });
+        });
+
+        // Khởi tạo EmailJS với public key
+        (function () {
+            emailjs.init("yI6xhpzYSnD3AGzbX");
+        })();
+
+        // Xử lý form liên hệ
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Lấy thông tin từ form
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            // Hiển thị loading
+            Swal.fire({
+                title: 'Đang gửi...',
+                text: 'Vui lòng đợi trong giây lát',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
                 }
             });
 
-            // Close menu when window is resized
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    mobileMenuBtn.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
-                }
+            // Gửi email
+            emailjs.send("service_6spwxxw", "template_vcjlg02", {
+                to_email: "quantrikhachsan001@gmail.com",
+                from_name: name,
+                from_email: email,
+                message: message
+            })
+                .then(function () {
+                    // Thành công
+                    Swal.fire({
+                        title: 'Gửi thành công!',
+                        text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
+                        icon: 'success',
+                        confirmButtonColor: '#e67e22'
+                    });
+                    // Reset form
+                    document.getElementById('contact-form').reset();
+                })
+                .catch(function (error) {
+                    // Thất bại
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Không thể gửi email. Vui lòng thử lại sau.',
+                        icon: 'error',
+                        confirmButtonColor: '#e67e22'
+                    });
+                    console.error("Error sending email:", error);
+                });
+        });
+
+        let autoSlideInterval;
+        let currentSlideIndex = 0;
+
+        function startAutoSlide() {
+            stopAutoSlide(); // Clear any existing interval
+            autoSlideInterval = setInterval(() => {
+                document.querySelectorAll('.slider-container').forEach(container => {
+                    const nextBtn = container.querySelector('.next');
+                    if (nextBtn) nextSlide(nextBtn);
+                });
+            }, 4000); // Chuyển slide mỗi 4 giây
+        }
+
+        function stopAutoSlide() {
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+            }
+        }
+
+        function nextSlide(btn) {
+            const container = btn.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+            const slides = container.querySelectorAll('.slide');
+
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            updateSlider(slider, dots, currentSlideIndex);
+        }
+
+        function prevSlide(btn) {
+            const container = btn.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+            const slides = container.querySelectorAll('.slide');
+
+            currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+            updateSlider(slider, dots, currentSlideIndex);
+        }
+
+        function currentSlide(dot, index) {
+            const container = dot.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+
+            currentSlideIndex = index;
+            updateSlider(slider, dots, index);
+        }
+
+        function updateSlider(slider, dots, index) {
+            const sliderWidth = slider.offsetWidth;
+            slider.style.transform = `translateX(${-index * sliderWidth}px)`;
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        // Khởi động auto slide và xử lý các sự kiện khi trang load xong
+        document.addEventListener('DOMContentLoaded', () => {
+            startAutoSlide();
+
+            // Thêm sự kiện hover để dừng/tiếp tục auto slide
+            document.querySelectorAll('.slider-container').forEach(container => {
+                container.addEventListener('mouseenter', stopAutoSlide);
+                container.addEventListener('mouseleave', startAutoSlide);
             });
         });
     </script>
+
+    <!-- Nút mở modal đánh giá -->
+    <button id="open-review-modal" class="btn btn-primary"
+        style="position: fixed; bottom: 20px; right: 20px; z-index: 999; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-star" style="font-size: 24px;"></i>
+    </button>
+
+    <!-- Modal đánh giá -->
+    <div id="review-modal" class="modal"
+        style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+        <div class="modal-content"
+            style="background-color: #fff; margin: 15% auto; padding: 20px; border-radius: 12px; max-width: 500px; position: relative;">
+            <span class="close-review-modal"
+                style="position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer;">&times;</span>
+            <h2 style="color: #003366; margin-bottom: 20px;">Đánh giá của bạn</h2>
+            <form id="review-form">
+                <div class="rating" style="margin-bottom: 20px; text-align: center;">
+                    <i class="far fa-star star" data-rating="1"
+                        style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="2"
+                        style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="3"
+                        style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="4"
+                        style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="5"
+                        style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="review-title" style="display: block; margin-bottom: 5px;">Tiêu đề</label>
+                    <input type="text" id="review-title" class="form-control" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="review-content" style="display: block; margin-bottom: 5px;">Nội dung đánh giá</label>
+                    <textarea id="review-content" class="form-control" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 10px; background: linear-gradient(45deg, #1a237e, #0d47a1); border: none;">Gửi
+                    đánh giá</button>
+            </form>
+        </div>
+    </div>
+
     <script>
-    // Firebase config và xử lý xác thực
-    const firebaseConfig = {
-        apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
-        authDomain: "websitedatphongkhachsan.firebaseapp.com",
-        databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
-        projectId: "websitedatphongkhachsan",
-        storageBucket: "websitedatphongkhachsan.firebasestorage.app",
-        messagingSenderId: "732884739524",
-        appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
-        measurementId: "G-RC61EXTZH7"
-    };
+        document.addEventListener('DOMContentLoaded', function () {
+            const reviewModal = document.getElementById('review-modal');
+            const openReviewBtn = document.getElementById('open-review-modal');
+            const closeReviewBtn = document.querySelector('.close-review-modal');
+            const reviewForm = document.getElementById('review-form');
+            const stars = document.querySelectorAll('.star');
+            let currentRating = 0;
 
-    // Khởi tạo Firebase
-    firebase.initializeApp(firebaseConfig);
+            // Mở modal
+            openReviewBtn.addEventListener('click', () => {
+                reviewModal.style.display = 'block';
+            });
 
-    // Đợi DOM load xong
-    document.addEventListener('DOMContentLoaded', function() {
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            // Đóng modal
+            closeReviewBtn.addEventListener('click', () => {
+                reviewModal.style.display = 'none';
+            });
+
+            // Đóng modal khi click ngoài modal
+            window.addEventListener('click', (event) => {
+                if (event.target == reviewModal) {
+                    reviewModal.style.display = 'none';
+                }
+            });
+
+            // Xử lý hover và click cho sao
+            stars.forEach(star => {
+                // Hover effect
+                star.addEventListener('mouseover', function () {
+                    const rating = this.getAttribute('data-rating');
+                    highlightStars(rating);
+                });
+
+                // Click event
+                star.addEventListener('click', function () {
+                    currentRating = this.getAttribute('data-rating');
+                    highlightStars(currentRating);
+                });
+            });
+
+            // Reset stars khi mouse out khỏi container
+            document.querySelector('.rating').addEventListener('mouseleave', () => {
+                highlightStars(currentRating);
+            });
+
+            // Hàm highlight sao
+            function highlightStars(rating) {
+                stars.forEach(star => {
+                    const starRating = star.getAttribute('data-rating');
+                    if (starRating <= rating) {
+                        star.classList.remove('far');
+                        star.classList.add('fas');
+                    } else {
+                        star.classList.remove('fas');
+                        star.classList.add('far');
+                    }
+                });
+            }
+
+            // Xử lý submit form
+            reviewForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                if (currentRating === 0) {
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Vui lòng chọn số sao đánh giá',
+                        icon: 'error',
+                        confirmButtonColor: '#e67e22'
+                    });
+                    return;
+                }
+
+                // Kiểm tra đăng nhập
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    Swal.fire({
+                        title: 'Yêu cầu đăng nhập',
+                        text: 'Vui lòng đăng nhập để gửi đánh giá',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Đăng nhập',
+                        cancelButtonText: 'Hủy',
+                        confirmButtonColor: '#1a237e',
+                        cancelButtonColor: '#d33'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Mở modal đăng nhập
+                            document.getElementById('login-modal').style.display = 'block';
+                        }
+                    });
+                    return;
+                }
+
+                const reviewData = {
+                    rating: currentRating,
+                    title: document.getElementById('review-title').value,
+                    content: document.getElementById('review-content').value,
+                    timestamp: new Date().toISOString(),
+                    userId: user.uid,
+                    userEmail: user.email,
+                    userName: user.displayName || user.email
+                };
+
+
+
+                // Hiển thị loading
+                Swal.fire({
+                    title: 'Đang gửi...',
+                    text: 'Vui lòng đợi trong giây lát',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Lưu đánh giá vào Firebase và gửi qua EmailJS
+                Promise.all([
+                    // Lưu vào Firebase
+                    firebase.database().ref('reviews').push({
+                        userId: reviewData.userId,
+                        hotelId: "general", // Đánh giá chung
+                        rating: parseInt(reviewData.rating),
+                        comment: reviewData.content,
+                        date: Date.now(),
+                        userName: reviewData.userName,
+                        title: reviewData.title
+                    }),
+
+                    // Gửi qua EmailJS
+                    emailjs.send("service_6spwxxw", "template_vcjlg02", {
+                        to_email: "quantrikhachsan001@gmail.com",
+                        from_name: reviewData.userId || "Khách vãng lai",
+                        rating: reviewData.rating + " sao",
+                        title: reviewData.title,
+                        message: reviewData.content,
+                        timestamp: new Date().toLocaleString('vi-VN')
+                    })
+                ])
+                    .then(() => {
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Cảm ơn bạn đã gửi đánh giá',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        reviewModal.style.display = 'none';
+                        reviewForm.reset();
+                        currentRating = 0;
+                        highlightStars(0);
+                    })
+                    .catch((error) => {
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Không thể gửi đánh giá. Vui lòng thử lại sau.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        console.error("Error sending review: ", error);
+                    });
+            });
+
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const navLinks = document.getElementById('nav-links');
 
             if (mobileMenuBtn && navLinks) {
@@ -344,429 +959,15 @@
                     }
                 });
             }
-
-        // Lấy các elements
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const forgotForm = document.getElementById('forgot-form');
-        const closeAuthModal = document.getElementById('close-auth-modal');
-        const openLoginModal = document.getElementById('open-login-modal');
-        const userDropdown = document.getElementById('user-dropdown');
-        const userName = document.getElementById('user-name');
-        const logoutBtn = document.getElementById('logout-btn');
-
-        // Xử lý đăng nhập
-        if (loginForm) {
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-
-                firebase.auth().signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        const user = userCredential.user;
-                        document.getElementById('auth-modal').style.display = 'none';
-                        
-                        // Kiểm tra nếu là admin
-                        if (email === 'quantrikhachsan@gmail.com') {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                text: 'Chào mừng Admin!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            }).then(() => {
-                                window.location.href = 'admin-dashboard.html';
-                            });
-                        } else if (email === 'nhanvien2@luxuryhaven.com') {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                text: 'Chào mừng Nhân viên!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            }).then(() => {
-                                window.location.href = 'admin-dashboard.html';
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Đăng nhập thành công!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            });
-                        }
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi đăng nhập!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
-            });
-        }
-
-        // Xử lý đăng ký
-        if (registerForm) {
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('register-email').value;
-                const password = document.getElementById('register-password').value;
-                const confirmPassword = document.getElementById('register-confirm-password').value;
-                const username = document.getElementById('register-username').value;
-
-                if (password.length < 6) {
-                    Swal.fire({
-                        title: 'Lỗi đăng ký!',
-                        text: 'Mật khẩu phải có ít nhất 6 ký tự.',
-                        icon: 'error',
-                        confirmButtonColor: '#e67e22'
-                    });
-                    return;
-                }
-
-                if (password !== confirmPassword) {
-                    Swal.fire({
-                        title: 'Lỗi đăng ký!',
-                        text: 'Mật khẩu nhập lại không khớp.',
-                        icon: 'error',
-                        confirmButtonColor: '#e67e22'
-                    });
-                    return;
-                }
-
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        return userCredential.user.updateProfile({
-                            displayName: username
-                        });
-                    })
-                    .then(() => {
-                        document.getElementById('auth-modal').style.display = 'none';
-                        Swal.fire({
-                            title: 'Đăng ký thành công!',
-                            icon: 'success',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi đăng ký!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
-            });
-        }
-
-        // Xử lý quên mật khẩu
-        if (forgotForm) {
-            forgotForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('forgot-email').value;
-
-                firebase.auth().sendPasswordResetEmail(email)
-                    .then(() => {
-                        Swal.fire({
-                            title: 'Email đã được gửi!',
-                            text: 'Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.',
-                            icon: 'success',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: 'Lỗi!',
-                            text: error.message,
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                    });
-            });
-        }
-
-        // Xử lý chuyển đổi giữa các form
-        const toRegister = document.getElementById('to-register');
-        if (toRegister) {
-            toRegister.addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-            forgotForm.style.display = 'none';
         });
-        }
-
-        const toLogin = document.getElementById('to-login');
-        if (toLogin) {
-            toLogin.addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'none';
-        });
-        }
-
-        const toForgot = document.getElementById('to-forgot');
-        if (toForgot) {
-            toForgot.addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'block';
-        });
-        }
-
-        const backToLogin = document.getElementById('back-to-login');
-        if (backToLogin) {
-            backToLogin.addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            forgotForm.style.display = 'none';
-        });
-        }
-
-        // Xử lý đóng modal
-        if (closeAuthModal) {
-            closeAuthModal.addEventListener('click', () => {
-                document.getElementById('auth-modal').style.display = 'none';
-            });
-        }
-
-        // Xử lý mở modal đăng nhập
-        if (openLoginModal) {
-            openLoginModal.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('auth-modal').style.display = 'block';
-            });
-        }
-
-        // Đóng modal khi click ra ngoài
-        window.onclick = function(event) {
-            const modal = document.getElementById('auth-modal');
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        };
-
-        // Theo dõi trạng thái đăng nhập
-        firebase.auth().onAuthStateChanged(function(user) {
-            const loginBtn = document.getElementById('open-login-modal');
-            if (user) {
-                if (loginBtn) loginBtn.style.display = 'none';
-                if (userDropdown) userDropdown.style.display = 'block';
-                if (userName) userName.textContent = user.displayName || user.email;
-            } else {
-                if (loginBtn) loginBtn.style.display = 'block';
-                if (userDropdown) userDropdown.style.display = 'none';
-            }
-        });
-
-        // Xử lý đăng xuất
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                firebase.auth().signOut().then(() => {
-                    Swal.fire({
-                        title: 'Đăng xuất thành công!',
-                        icon: 'success',
-                        confirmButtonColor: '#e67e22'
-                    });
-                }).catch((error) => {
-                    Swal.fire({
-                        title: 'Lỗi đăng xuất!',
-                        text: error.message,
-                        icon: 'error',
-                        confirmButtonColor: '#e67e22'
-                    });
-                });
-            });
-        }
-
-        // --- LẤY DỮ LIỆU TRAVELGUIDE TỪ FIREBASE REALTIME DATABASE ---
-        const db = firebase.database();
-        const travelGuideRef = db.ref('travelGuide');
-
-        // Hàm render card điểm đến
-        function renderDestinationCards(destinations, containerId, title) {
-          let html = '';
-          if (title) html += `<h2 class="section-title">${title}</h2>`;
-          html += '<div class="destination-grid">';
-          destinations.forEach(dest => {
-            html += `
-              <div class="destination-card" style="background-image:url('${dest.image}')" data-slug="${dest.slug}">
-                <div class="destination-label">${dest.name}</div>
-              </div>
-            `;
-          });
-          html += '</div>';
-          document.getElementById(containerId).innerHTML = html;
-        }
-
-        // Hàm render cẩm nang du lịch nổi bật (3 guide mới nhất từ latestGuides)
-        function renderFeaturedGuidesFromLatest(latestGuidesObj, containerId) {
-          const guides = Object.values(latestGuidesObj)
-            .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
-            .slice(0, 3);
-          let html = `
-            <h2 class="section-title">Cẩm nang du lịch nổi bật</h2>
-            <div class="featured-guides-list">
-          `;
-          guides.forEach((g, idx) => {
-            html += `
-              <div class="featured-guide-card" data-guide-idx="${idx}">
-                <div class="featured-guide-title">${g.title}</div>
-                <div class="featured-guide-desc">${g.overview}</div>
-              </div>
-            `;
-          });
-          html += '</div>';
-          document.getElementById(containerId).innerHTML = html;
-
-          // Gắn sự kiện click cho từng card
-          document.querySelectorAll('.featured-guide-card').forEach(card => {
-            card.addEventListener('click', function() {
-              const idx = this.getAttribute('data-guide-idx');
-              const guide = guides[idx];
-              let modalHtml = `<div class='modal fade' id='guideDetailModal' tabindex='-1' aria-labelledby='guideDetailModalLabel' aria-hidden='true'>
-                <div class='modal-dialog modal-lg'>
-                  <div class='modal-content'>
-                    <div class='modal-header'>
-                      <h5 class='modal-title' id='guideDetailModalLabel'>${guide.title}</h5>
-                      <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Đóng'></button>
-                    </div>
-                    <div class='modal-body'>
-                      <div><b>Mô tả:</b> ${guide.overview || ''}</div>
-                      <div style='margin-top:12px;'>${guide.content || ''}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>`;
-              // Xóa modal cũ nếu có
-              const oldModal = document.getElementById('guideDetailModal');
-              if (oldModal) oldModal.remove();
-              document.body.insertAdjacentHTML('beforeend', modalHtml);
-              var modal = new bootstrap.Modal(document.getElementById('guideDetailModal'));
-              modal.show();
-            });
-          });
-        }
-
-        // Hàm render những cẩm nang mới nhất (5 guide mới nhất từ latestGuides)
-        function renderLatestGuidesFromLatest(latestGuidesObj, containerId) {
-          const guides = Object.values(latestGuidesObj)
-            .sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated))
-            .slice(0, 5);
-          let html = '<h2 class="section-title">Những cẩm nang mới nhất</h2>';
-          html += '<div class="guide-grid">';
-          guides.forEach(g => {
-            html += `
-              <div class="guide-card">
-                ${g.image ? `<img src="${g.image}" />` : ''}
-                <div class="guide-title">${g.title}</div>
-                <div class="guide-desc">${g.overview}</div>
-              </div>
-            `;
-          });
-          html += '</div>';
-          document.getElementById(containerId).innerHTML = html;
-        }
-
-        // Hàm render popup chi tiết điểm đến
-        function renderDestinationDetail(dest) {
-          let html = `
-          <div class="travel-modern-container">
-            <div class="travel-header">
-              <h2><i class="fas fa-map-marker-alt"></i> ${dest.name}</h2>
-              <p class="travel-overview">${dest.overview}</p>
-              <div class="travel-besttime"><i class="fas fa-calendar-alt"></i> <b>Thời gian lý tưởng:</b> ${dest.best_time_to_visit||''}</div>
-            </div>
-            <div class="travel-section travel-highlights">
-              <h4><i class="fas fa-star"></i> Điểm nổi bật</h4>
-              <div class="highlight-list">
-                ${(dest.highlights||[]).map(h => `
-                  <div class="highlight-card">
-                    <div class="highlight-title">${h.title}</div>
-                    <div class="highlight-desc">${h.description}</div>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-            <div class="travel-section travel-foods">
-              <h4><i class="fas fa-utensils"></i> Ẩm thực đặc sắc</h4>
-              <div class="food-list">
-                ${(dest.foods||[]).map(f => `
-                  <div class="food-card">
-                    <div class="food-name">${f.name}</div>
-                    <div class="food-desc">${f.description}</div>
-                    <div class="food-place"><i class="fas fa-store"></i> <b>Gợi ý:</b> ${(f.recommended_places||[]).join(', ')}</div>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-            <div class="travel-section travel-hotels">
-              <h4><i class="fas fa-hotel"></i> Khách sạn gợi ý</h4>
-              <div class="hotel-list">
-                ${(dest.accommodations||[]).map(h => `
-                  <div class="hotel-card">
-                    <div class="hotel-name">${h.name} <span class="hotel-star">${'★'.repeat(h.star||0)}</span></div>
-                    <div class="hotel-address"><i class="fas fa-map-pin"></i> ${h.address}</div>
-                    <div class="hotel-price"><i class="fas fa-money-bill"></i> ${h.price_range}</div>
-                    <div class="hotel-amenities"><i class="fas fa-check-circle"></i> ${(h.amenities||[]).join(', ')}</div>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-            <div class="travel-section travel-images">
-              <h4><i class="fas fa-images"></i> Hình ảnh</h4>
-              <div class="image-gallery">
-                ${(dest.images||[]).map(img => `<img src="${img}" alt="Hình ảnh ${dest.name}" class="gallery-img">`).join('')}
-              </div>
-            </div>
-          </div>
-          `;
-          document.getElementById('destination-detail').innerHTML = html;
-          document.getElementById('destination-detail').style.display = 'block';
-          window.scrollTo({top: document.getElementById('destination-detail').offsetTop-60, behavior:'smooth'});
-        }
-
-        // --- LẤY DỮ LIỆU CẨM NANG NỔI BẬT VÀ CÁC SECTION KHÁC TỪ FIREBASE ---
-        // Đã có const db = firebase.database(); ở trên, không khai báo lại
-        db.ref('travelGuide').once('value')
-          .then((snapshot) => {
-            const data = snapshot.val();
-            // ĐÚNG: latestGuides cho nổi bật, featuredGuides cho mới nhất
-            if (data && data.latestGuides) {
-              renderFeaturedGuidesFromLatest(data.latestGuides, 'destination-content');
-            }
-            if (data && data.featuredGuides) {
-              renderLatestGuidesFromLatest(data.featuredGuides, 'latest-guides');
-            }
-            // Thêm lại section Điểm đến nổi bật (top 8)
-            if (data && data.destinations) {
-              const destArr = Object.values(data.destinations);
-            renderDestinationCards(destArr.slice(0,16), 'dest-featured', 'Điểm đến nổi bật');
-            renderDestinationCards(destArr.filter(d=>d.region==='Bắc'), 'dest-north', 'Điểm đến miền Bắc');
-              renderDestinationCards(destArr.filter(d=>d.region==='Trung'), 'dest-central', 'Điểm đến miền Trung');
-              renderDestinationCards(destArr.filter(d=>d.region==='Nam'), 'dest-south', 'Điểm đến miền Nam');
-            }
-          })
-          .catch((error) => {
-            document.getElementById('destination-content').innerHTML = '<p style=\"color:red;\">Không thể tải dữ liệu từ Firebase.</p>';
-            console.error(error);
-          });
-
-        // Gắn sự kiện click card để xem chi tiết
-        document.querySelectorAll('.destination-card').forEach(card => {
-          card.addEventListener('click', function() {
-            const slug = this.getAttribute('data-slug');
-            const dest = destArr.find(d => d.slug === slug);
-            if(dest) renderDestinationDetail(dest);
-          });
-        });
-    });
     </script>
-    <script type="text/javascript">
+    <!-- <script src="https://app.tudongchat.com/js/chatbox.js"></script>
+<script>
+  const tudong_chatbox = new TuDongChat('uJVgdUIOTh0OIAMlQoEWD')
+  tudong_chatbox.initial()
+</script> -->
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -779,4 +980,5 @@ s0.parentNode.insertBefore(s1,s0);
 </script>
 End of Tawk.to Script
 </body>
+
 </html>

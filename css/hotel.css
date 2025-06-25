@@ -1636,12 +1636,6 @@ body {
     .banner-sale {min-height: 220px;}
 }
 
-.combo-center-text {
-    text-align: center;
-    margin-bottom: 24px;
-    color: #666;
-}
-
 /* Hotel Grid Layout */
 .hotel-grid {
     display: grid;
@@ -2482,3 +2476,194 @@ font-size: 16px;
     font-size: 0.95rem;
   }
 }
+
+/* Hiển thị checkbox chọn so sánh luôn rõ ràng ở góc trái trên */
+.hotel-compare-checkbox {
+  display: block !important;
+  opacity: 1 !important;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+.compare-checkbox {
+  opacity: 1 !important;
+  width: 20px;
+  height: 20px;
+  accent-color: #ffc107;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 4px;
+  border: 2px solid #ffc107;
+}
+/* Đảm bảo không bị che bởi nút yêu thích */
+.hotel-card .hotel-compare-checkbox {
+  z-index: 3;
+}
+
+/* Đảm bảo checkbox chọn so sánh luôn hiển thị rõ ràng */
+.hotel-compare-checkbox, .compare-checkbox {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* --- REMOVE ALL MOBILE FILTER STYLE, USE DESKTOP STYLE FOR MOBILE --- */
+@media (max-width: 768px), (max-width: 480px) {
+  .hotel-filter,
+  .hotel-filter-form,
+  .filter-group,
+  .filter-group label,
+  .filter-group input,
+  .filter-group select,
+  .filter-btn-group,
+  .filter-btn {
+    all: unset !important;
+  }
+}
+/* --- END REMOVE ALL MOBILE FILTER STYLE --- */
+
+/* --- HIGHLIGHT HOTEL FILTER WITH WHITE BACKGROUND --- */
+.hotel-filter {
+  background: #fff !important;
+  border-radius: 18px !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10) !important;
+  padding: 18px 12px !important;
+  margin: 18px auto 0 auto !important;
+  max-width: 1100px;
+}
+/* --- END HIGHLIGHT HOTEL FILTER --- */
+
+/* --- ALWAYS HORIZONTAL FILTER FORM --- */
+.hotel-filter-form {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 18px !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+}
+/* --- END ALWAYS HORIZONTAL FILTER FORM --- */
+
+/* --- MOBILE FILTER WHITE BACKGROUND --- */
+@media (max-width: 768px) {
+  .hotel-filter {
+    background: #fff !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.13) !important;
+    padding: 14px 8px !important;
+    margin: 12px auto !important;
+    max-width: 98vw !important;
+  }
+}
+/* --- END MOBILE FILTER WHITE BACKGROUND --- */
+
+/* --- Bổ sung cho bộ lọc khách sạn (filter) --- */
+.hero-section .hotel-filter, .modern-hotel-filter {
+    background: #fff !important;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+}
+.hotel-filter-form .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.hotel-filter-form .form-label {
+    margin-bottom: 0;
+    min-width: 120px;
+    color: #003366;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.hotel-filter-form .form-control, .hotel-filter-form .form-select {
+    flex: 1;
+    min-width: 0;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+/* Loại bỏ checkbox lạ ở input date trên một số trình duyệt */
+input[type="date"]::-webkit-clear-button,
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    display: block;
+}
+input[type="date"]::-ms-clear,
+input[type="date"]::-ms-reveal {
+    display: none;
+}
+input[type="date"]::-o-clear {
+    display: none;
+}
+input[type="date"]::-moz-focus-inner {
+    border: 0;
+}
+
+@media (max-width: 900px) {
+    .hotel-filter-form .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+    }
+    .hotel-filter-form .form-label {
+        min-width: 0;
+        font-size: 0.98rem;
+    }
+}
+
+@media (max-width: 600px) {
+  .hotel-filter {
+    max-width: 100vw;
+    width: 100vw;
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    margin: 0 -16px 20px -16px;
+    padding: 18px 10px 14px 10px;
+  }
+  .hotel-filter-form {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .hotel-filter-form .filter-group {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0;
+    max-width: 100%;
+  }
+  .hotel-filter-form .form-label {
+    min-width: 38px;
+    font-size: 1rem;
+    margin-bottom: 0;
+    color: #003366;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hotel-filter-form .form-control,
+  .hotel-filter-form .form-select {
+    flex: 1;
+    min-width: 0;
+    font-size: 1rem;
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+  .filter-btn-group {
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .filter-btn {
+    width: 100%;
+    max-width: 100%;
+    font-size: 1.1rem;
+    padding: 12px 0;
+    border-radius: 8px;
+  }
+}
+
+
+
+

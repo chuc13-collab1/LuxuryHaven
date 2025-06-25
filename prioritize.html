@@ -11,84 +11,7 @@
     <!-- Thêm SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/prioritize.css">
-    <style>
-        @font-face {
-            font-family: 'Nautica Script Bold';
-            src: url('fonts/nautica-bold.otf') format('opentype');
-            font-weight: bold;
-            font-style: normal;
-        }
 
-        .nautica-script {
-            font-family: 'Nautica Script Bold', cursive;
-            font-size: 3em;
-            font-weight: bold;
-            color: #cddae6;
-            text-align: center;
-        }
-    </style>
-    <style>
-        .offer-content-overlay,
-        .offer-content-overlay h4,
-        .offer-content-overlay p,
-        .offer-content-overlay .price,
-        .offer-content-overlay .offer-label,
-        .offer-content-overlay * {
-            color: #111 !important;
-        }
-
-        .content-wrapper {
-            display: flex;
-            max-width: 1400px;
-            margin: 48px auto;
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 4px 32px rgba(44, 62, 80, 0.10);
-            overflow: hidden;
-            min-height: 350px;
-        }
-
-        .image-section {
-            flex: 2;
-            min-width: 0;
-        }
-
-        .image-section img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .text-section {
-            flex: 1;
-            padding: 0px 32px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        @media (max-width: 900px) {
-            .content-wrapper {
-                flex-direction: column;
-            }
-
-            .image-section,
-            .text-section {
-                flex: unset;
-                width: 100%;
-            }
-
-            .text-section {
-                padding: 0px 16px;
-            }
-        }
-
-        .section-photo-memories {
-            margin-top: 16px;
-            margin-bottom: 32px;
-        }
-    </style>
 </head>
 
 <body> <!-- Navbar -->
@@ -163,23 +86,43 @@
     </section>
 
     <main>
-        <div class="content-wrapper">
-            <div class="image-section">
-                <img src="images/vecteezy_ai-generated-travelling-to-thailand-advertisment-background_37248582.jpg"
-                    alt="Luxury Haven Travel">
+        
+
+        <!-- This section will be populated by Firebase -->
+        <div id="featured-offer-container" style="display: none;">
+            <div class="featured-offer-grid">
+                <div class="featured-text-section">
+                    <span class="special-label" id="featured-label"></span>
+                    <h1 id="featured-title"></h1>
+                    <h2 id="featured-subtitle"></h2>
+                    <p class="description" id="featured-desc"></p>
+                    <div class="featured-price-section">
+                        <span class="price-label">Chỉ từ</span>
+                        <div>
+                            <span class="price" id="featured-price"></span>
+                            <span class="price-unit" id="featured-price-unit"></span>
             </div>
-            <div class="text-section">
-                <h1>Ưu Đãi Đặc Biệt Mùa Hè</h1>
-                <p>Giảm giá lên đến <strong>30%</strong> cho tất cả các đặt phòng!</p>
-                <p>Đặt ngay để nhận thêm <strong>bữa sáng miễn phí</strong> và ưu đãi đặc biệt.</p>
+                    </div>
+                    <a href="#" id="featured-book-btn" class="featured-book-now-btn"></a>
+                </div>
+                <div class="featured-image-grid" id="featured-image-grid-container">
+                    <!-- Images will be injected here by JS -->
+                </div>
             </div>
         </div>
-
 
         <div class="main-sections-wrapper" style="max-width:1200px;margin:40px auto 0 auto;padding:0 12px;">
             <div class="main-section-card"
                 style="background:#fff;border-radius:18px;box-shadow:0 2px 16px rgba(0,0,0,0.07);padding:32px 20px 28px 20px;margin-bottom:32px;">
                 <h2 class="section-title" style="margin-top:0;">Ưu đãi nổi bật</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active">Tất cả</button>
+                    <button class="filter-btn">Flash Sale</button>
+                    <button class="filter-btn">Hot</button>
+                    <button class="filter-btn">Chỉ hôm nay</button>
+                    <button class="filter-btn">Độc quyền</button>
+                    <button class="filter-btn">Genius</button>
+                </div>
                 <div id="deals-list" class="row"></div>
             </div>
             <div class="main-section-card"
@@ -699,19 +642,47 @@
     <!-- Thêm lại script gọi realtime specialOffers và specialVouchers -->
     <script>
         function renderDealCard(deal) {
+            const featuresHtml = (deal.features && Array.isArray(deal.features) && deal.features.length > 0)
+                ? `<ul>${deal.features.map(f => `<li>${f}</li>`).join('')}</ul>`
+                : '';
+
+            const priceString = deal.newPrice || '0';
+            const priceNumber = Number(priceString.replace(/\D/g, ''));
+            const numberOfNights = parseInt(deal.nights, 10) || 1;
+            let pricePerNightHtml = '';
+            
+            if (!isNaN(priceNumber) && priceNumber > 0 && numberOfNights > 0) {
+                const pricePerNight = priceNumber / numberOfNights;
+                const pricePerNightFormatted = new Intl.NumberFormat('vi-VN').format(pricePerNight);
+                pricePerNightHtml = `<span class="price-per-night">${pricePerNightFormatted} VNĐ / đêm</span>`;
+            }
+
+            // --- Logic mới để hiển thị số lượng hoặc số suất có sẵn ---
+            let availabilityHtml = '';
+            if (deal.quantity !== undefined && deal.quantity !== null) {
+                 availabilityHtml = `<p class="availability">Số lượng còn lại: <b>${deal.quantity}</b></p>`;
+            } else if (deal.availability) {
+                availabilityHtml = `<p class="availability">${deal.availability}</p>`;
+            }
+            // --- Kết thúc logic mới ---
+
             return `
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
-          <div class="offer-card w-100 d-flex flex-column">
+        <div class="col-md-6 mb-4 d-flex">
+          <div class="offer-card-new w-100">
             <img src="${deal.image}" alt="${deal.title}">
-            <div class="offer-content-overlay d-flex flex-column flex-grow-1">
-              <span class="offer-label">${deal.label || ""}</span>
-              <h4>${deal.title}</h4>
-              <p>${deal.desc}</p>
-              <div class="price mb-2">
+            <div class="offer-card-content">
+              ${deal.label ? `<span class="offer-label-new ${String(deal.label).toLowerCase().replace(' ', '-')}">${deal.label}</span>` : ''}
+              <h3>${deal.title}</h3>
+              <div class="price">
                 <span class="old-price">${deal.oldPrice || ""}</span>
                 <span class="new-price">${deal.newPrice || ""}</span>
               </div>
-              <button class='btn btn-primary w-100 mt-2' style='border-radius:20px;font-weight:600;'>Đặt ngay</button>
+              ${pricePerNightHtml}
+              <p class="desc">${deal.desc || ''}</p>
+              ${featuresHtml}
+              ${availabilityHtml}
+              ${deal.note ? `<p class="note">${deal.note}</p>` : ''}
+              <button class='btn-booking' data-deal-id="${deal.id || ''}" ${deal.quantity === 0 ? 'disabled' : ''}>${deal.quantity === 0 ? 'Đã hết' : 'Đặt ngay'}</button>
             </div>
           </div>
         </div>
@@ -720,67 +691,97 @@
 
         function renderVoucherCard(voucher) {
             return `
-    <div class="col-md-3">
-      <div class="offer-card voucher-card">
-            <img src="${voucher.image}" alt="${voucher.title}">
-            <div class="offer-content-overlay">
-              <span class="offer-label">${voucher.label || ""}</span>
-              <h4>${voucher.title}</h4>
-              <p>${voucher.desc}</p>
-              <div class="price">
-                <span class="old-price">${voucher.oldPrice || ""}</span>
-                <span class="new-price">${voucher.newPrice || ""}</span>
-              </div>
-              <div class="voucher-code">${voucher.code ? "Mã: <b>" + voucher.code + "</b>" : ""}</div>
-            </div>
+<div class="col-md-3">
+  <div class="offer-card voucher-card" data-voucher-code="${voucher.code || ''}">
+        <img src="${voucher.image}" alt="${voucher.title}">
+        <div class="offer-content-overlay">
+          <span class="offer-label">${voucher.label || ""}</span>
+          <h4>${voucher.title}</h4>
+          <p>${voucher.desc}</p>
+          <div class="price">
+            <span class="old-price">${voucher.oldPrice || ""}</span>
+            <span class="new-price">${voucher.newPrice || ""}</span>
           </div>
+          <div class="voucher-code">${voucher.code ? "Mã: <b>" + voucher.code + "</b>" : ""}</div>
         </div>
-        `;
-        }
+      </div>
+    </div>
+    `;
+}
 
-        function renderSpecialOffers(data) {
-            const dealsList = document.getElementById('deals-list');
-            let dealsArr = Array.isArray(data) ? data : [];
-            const validDeals = dealsArr.filter(
-                d => d && d.image && d.title && d.desc && d.image.trim() && d.title.trim() && d.desc.trim()
-            );
-            if (dealsList) {
-                if (validDeals.length > 0) {
-                    dealsList.innerHTML = validDeals.map(renderDealCard).join('');
-                } else {
-                    dealsList.innerHTML = '<div class="col-12 text-center">Hiện chưa có ưu đãi nào.</div>';
+function attachVoucherDetailEvents(vouchersArr) {
+    setTimeout(() => {
+        document.querySelectorAll('.voucher-card').forEach((card, idx) => {
+            if (!card.dataset.voucherDetailAttached) {
+                card.dataset.voucherDetailAttached = '1';
+                card.onclick = function () {
+                    const voucher = vouchersArr[idx];
+                    if (!voucher) return;
+                    let html = `<div style='text-align:left;'>`;
+                    html += `<img src='${voucher.image}' alt='${voucher.title}' style='width:100%;max-width:220px;border-radius:8px;margin-bottom:12px;'>`;
+                    html += `<h3 style='font-size:20px;font-weight:700;'>${voucher.title}</h3>`;
+                    html += `<p style='margin-bottom:8px;'>${voucher.desc || ''}</p>`;
+                    if (voucher.code) html += `<p><b>Mã voucher:</b> <span style='color:#e67e22;font-size:18px;'>${voucher.code}</span></p>`;
+                    if (voucher.value) html += `<p><b>Giá trị ưu đãi:</b> ${voucher.value}</p>`;
+                    if (voucher.condition) html += `<p><b>Điều kiện:</b> ${voucher.condition}</p>`;
+                    if (voucher.expiry) html += `<p><b>Hạn sử dụng:</b> ${voucher.expiry}</p>`;
+                    html += `</div>`;
+                    Swal.fire({
+                        title: 'Chi tiết voucher',
+                        html: html,
+                        confirmButtonText: 'Đóng',
+                        width: 400
+                    });
                 }
             }
-        }
-
-        function renderVouchers(data) {
-            const vouchersList = document.getElementById('vouchers-list');
-            let vouchersArr = Array.isArray(data) ? data : [];
-            const validVouchers = vouchersArr.filter(
-                v => v && v.image && v.title && v.desc && v.image.trim() && v.title.trim() && v.desc.trim()
-            );
-            if (vouchersList) {
-                if (validVouchers.length > 0) {
-                    vouchersList.innerHTML = validVouchers.map(renderVoucherCard).join('');
-                } else {
-                    vouchersList.innerHTML = '<div class="col-12 text-center">Hiện chưa có voucher nào.</div>';
-                }
-            }
-        }
-
-        firebase.database().ref('specialOffers').on('value', function (snapshot) {
-            const data = snapshot.val();
-            if (data) {
-                renderSpecialOffers(data);
-            }
         });
+    }, 300);
+}
 
-        firebase.database().ref('vouchers').on('value', function (snapshot) {
-            const data = snapshot.val();
-            if (data) {
-                renderVouchers(data);
-            }
-        });
+function renderSpecialOffers(data) {
+    const dealsList = document.getElementById('deals-list');
+    let dealsArr = Array.isArray(data) ? data : [];
+    const validDeals = dealsArr.filter(
+        d => d && d.image && d.title && d.desc && d.image.trim() && d.title.trim() && d.desc.trim()
+    );
+    if (dealsList) {
+        if (validDeals.length > 0) {
+            dealsList.innerHTML = validDeals.map(renderDealCard).join('');
+        } else {
+            dealsList.innerHTML = '<div class="col-12 text-center">Hiện chưa có ưu đãi nào.</div>';
+        }
+    }
+}
+
+function renderVouchers(data) {
+    const vouchersList = document.getElementById('vouchers-list');
+    let vouchersArr = Array.isArray(data) ? data : [];
+    const validVouchers = vouchersArr.filter(
+        v => v && v.image && v.title && v.desc && v.image.trim() && v.title.trim() && v.desc.trim()
+    );
+    if (vouchersList) {
+        if (validVouchers.length > 0) {
+            vouchersList.innerHTML = validVouchers.map(renderVoucherCard).join('');
+            attachVoucherDetailEvents(validVouchers);
+        } else {
+            vouchersList.innerHTML = '<div class="col-12 text-center">Hiện chưa có voucher nào.</div>';
+        }
+    }
+}
+
+firebase.database().ref('specialOffers').on('value', function (snapshot) {
+    const data = snapshot.val();
+    if (data) {
+        renderSpecialOffers(data);
+    }
+});
+
+firebase.database().ref('vouchers').on('value', function (snapshot) {
+    const data = snapshot.val();
+    if (data) {
+        renderVouchers(data);
+    }
+});
     </script>
     <script>
         // ... existing code ...
@@ -799,20 +800,138 @@
                 });
                 return;
             }
-            // Tạo bookingData cơ bản từ deal
+
+            // Nếu ưu đãi có giới hạn ngày, hiển thị cửa sổ chọn ngày
+            if (deal.stayStartDate && deal.stayEndDate) {
+                // Tính toán giá mỗi đêm để hiển thị
+                const priceString = deal.newPrice || '0';
+                const priceNumber = Number(priceString.replace(/\D/g, ''));
+                // Đảm bảo số đêm là một con số nguyên để tính toán, phòng trường hợp dữ liệu là "2 đêm"
+                const rawNights = deal.nights || 1;
+                const numberOfNights = parseInt(rawNights, 10) || 1;
+                
+                let pricePerNightFormatted = 'Đang cập nhật';
+
+                if (!isNaN(priceNumber) && numberOfNights > 0) {
+                    const pricePerNight = priceNumber / numberOfNights;
+                    // Làm tròn và định dạng tiền tệ
+                    pricePerNightFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(pricePerNight);
+                }
+
+
+                Swal.fire({
+                    title: 'Xác nhận đặt phòng',
+                    html: `
+                        <div style="text-align: left; font-size: 15px;">
+                            <h3 style="font-size: 18px; font-weight: 700; color: #333; margin-bottom: 12px;">${deal.title}</h3>
+
+                            <div style="background-color: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #555;">
+                                    <span>Đơn giá (ước tính)</span>
+                                    <span>${pricePerNightFormatted} / đêm</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #555;">
+                                    <span>Số đêm</span>
+                                    <span>${numberOfNights} đêm</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 12px; color: #555;">
+                                    <span>Số khách</span>
+                                    <span>${deal.guests || 1} khách</span>
+                                </div>
+                                <hr style="border: 0; border-top: 1px dashed #ccc; margin: 8px 0;">
+                                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 17px; margin-top: 12px;">
+                                    <span>Tổng cộng</span>
+                                    <span style="color: #e74c3c;">${deal.newPrice}</span>
+                                </div>
+                            </div>
+                            
+                            <p style="font-weight: 600; margin-bottom: 8px;">Vui lòng chọn ngày nhận phòng:</p>
+                            <p style="font-size: 13px; color: #777; margin-top: -5px;">(Áp dụng từ ${new Date(deal.stayStartDate).toLocaleDateString('vi-VN')} đến ${new Date(deal.stayEndDate).toLocaleDateString('vi-VN')})</p>
+                            
+                            <input type="date" id="checkin-date-picker" class="swal2-input" 
+                                   min="${deal.stayStartDate}" max="${deal.stayEndDate}" 
+                                   style="width: 60%; padding: 10px; border-radius: 5px; border: 1px solid #ddd; margin-top: 5px; display: block; margin-left: auto; margin-right: auto;">
+                                   
+                            <p style="margin-top: 12px; text-align: center;"><strong>Ngày trả phòng (dự kiến):</strong> <span id="checkout-date-display" style="font-weight: bold;">--/--/----</span></p>
+                        </div>
+                    `,
+                    confirmButtonText: 'Xác nhận & Đặt phòng',
+                    showCancelButton: true,
+                    cancelButtonText: 'Hủy',
+                    didOpen: () => {
+                        const checkinPicker = document.getElementById('checkin-date-picker');
+                        const checkoutDisplay = document.getElementById('checkout-date-display');
+                        const numberOfNights = deal.nights || 1;
+
+                        checkinPicker.onchange = function() {
+                            if (this.value) {
+                                const checkInDate = new Date(this.value);
+                                const checkoutDate = new Date(checkInDate.getTime() + numberOfNights * 86400000);
+                                checkoutDisplay.textContent = checkoutDate.toLocaleDateString('vi-VN');
+                            } else {
+                                checkoutDisplay.textContent = '--/--/----';
+                            }
+                        };
+                    },
+                    preConfirm: () => {
+                        const selectedDate = document.getElementById('checkin-date-picker').value;
+                        if (!selectedDate) {
+                            Swal.showValidationMessage('Vui lòng chọn ngày nhận phòng của bạn');
+                            return false; // Ngăn không cho đóng modal
+                        }
+                        return selectedDate;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed && result.value) {
+                        const selectedCheckIn = result.value;
+                        const checkInDate = new Date(selectedCheckIn);
+                        const numberOfNights = deal.nights || 1;
+                        const checkOutDate = new Date(checkInDate.getTime() + (numberOfNights * 86400000));
+                        const selectedCheckOut = checkOutDate.toISOString().split('T')[0];
+                        
+                        // Sau khi có ngày, tiến hành tạo đơn hàng
+                        createAndRedirectBooking(deal, user, selectedCheckIn, selectedCheckOut);
+                    }
+                });
+            } else {
+                // Nếu không có giới hạn ngày, dùng logic cũ (tính từ ngày mai) và sửa lỗi tính toán
+                const checkInTime = new Date().getTime() + 86400000; // Bắt đầu từ ngày mai
+                const checkIn = new Date(checkInTime).toISOString().split('T')[0];
+                const checkOut = new Date(checkInTime + (deal.nights || 1) * 86400000).toISOString().split('T')[0];
+                createAndRedirectBooking(deal, user, checkIn, checkOut);
+            }
+        }
+
+        // Tách logic tạo đơn hàng và chuyển hướng ra một hàm riêng để tái sử dụng
+        function createAndRedirectBooking(deal, user, checkInDate, checkOutDate) {
             const bookingData = {
-                email: user.email,
-                hotelId: deal.title,
-                roomId: deal.label,
-                checkIn: new Date().toISOString().split('T')[0],
-                checkOut: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-                guests: 1,
-                name: user.displayName || user.name || '',
-                phone: user.phoneNumber || '',
+                // Dữ liệu bắt buộc cho validation
+                userId: user.uid,
+                bookingType: 'hotel',
                 createdAt: Date.now(),
-                type: 'deal',
-                price: deal.newPrice.replace(/[^0-9]/g, '') || 0
+                
+                // Thông tin lấy từ deal
+                hotelId: deal.id || deal.title,
+                hotelName: deal.title,
+                roomId: deal.label,
+                totalPrice: parseInt(String(deal.newPrice).replace(/[^0-9]/g, ''), 10),
+
+                // Thông tin lấy từ người dùng đã đăng nhập
+                customerName: user.displayName || user.email.split('@')[0],
+                customerEmail: user.email,
+                customerPhone: user.phoneNumber || '',
+
+                // Lấy thông tin từ lựa chọn của người dùng hoặc mặc định
+                checkIn: checkInDate,
+                checkOut: checkOutDate,
+                guests: String(deal.guests || 1),
+                status: 'pending',
+                paymentStatus: 'unpaid',
+                note: `Đặt từ trang Ưu đãi: ${deal.title}`,
+                nights: deal.nights || 1,
+                updatedAt: Date.now()
             };
+
             firebase.database().ref('bookings').push(bookingData)
                 .then((ref) => {
                     const bookingId = ref.key;
@@ -835,19 +954,25 @@
         // Gắn sự kiện cho nút Đặt ngay
         function attachDealBookingEvents() {
             setTimeout(() => {
-                document.querySelectorAll('.btn.btn-primary').forEach(btn => {
-                    if (btn.textContent.trim() === 'Đặt ngay' && !btn.dataset.bookingAttached) {
+                document.querySelectorAll('.btn-booking').forEach(btn => {
+                    if (!btn.dataset.bookingAttached) {
                         btn.dataset.bookingAttached = '1';
                         btn.onclick = function (e) {
-                            const card = btn.closest('.offer-card');
-                            if (!card) return;
-                            // Lấy thông tin deal từ DOM
-                            const title = card.querySelector('h4')?.textContent || '';
-                            const oldPrice = card.querySelector('.old-price')?.textContent || '';
-                            const newPrice = card.querySelector('.new-price')?.textContent || '';
-                            const label = card.querySelector('.offer-label')?.textContent || '';
-                            const img = card.querySelector('img')?.src || '';
-                            handleDealBooking({ title, oldPrice, newPrice, label, image: img });
+                            const dealId = e.target.dataset.dealId;
+                            if (!dealId) {
+                                console.error("Không tìm thấy deal ID trên nút.");
+                                return;
+                            }
+                            
+                            // Tìm lại đối tượng deal đầy đủ thông tin từ mảng allDeals
+                            const targetDeal = allDeals.find(deal => deal.id === dealId);
+
+                            if (targetDeal) {
+                                handleDealBooking(targetDeal);
+                            } else {
+                                console.error(`Không tìm thấy deal với ID: ${dealId}`);
+                                Swal.fire('Lỗi', 'Không tìm thấy thông tin chi tiết cho ưu đãi này.', 'error');
+                            }
                         };
                     }
                 });
@@ -886,6 +1011,141 @@
                 }
             });
         }
+    </script>
+    <script>
+        let allDeals = [];
+
+        // Lắng nghe sự kiện click trên các nút lọc
+        const filterContainer = document.querySelector('.filter-buttons');
+        if (filterContainer) {
+            filterContainer.addEventListener('click', function (e) {
+                if (e.target.tagName === 'BUTTON') {
+                    // Bỏ class active ở nút cũ và thêm cho nút mới
+                    const currentActive = filterContainer.querySelector('.active');
+                    if (currentActive) {
+                        currentActive.classList.remove('active');
+                    }
+                    e.target.classList.add('active');
+
+                    const filterType = e.target.textContent.trim();
+                    filterAndRenderDeals(filterType);
+                }
+            });
+        }
+
+        // Hàm lọc và render lại deal
+        function filterAndRenderDeals(filterType) {
+            let filteredDeals = [];
+
+            if (filterType === 'Tất cả') {
+                filteredDeals = allDeals;
+            } else {
+                filteredDeals = allDeals.filter(deal =>
+                    deal.label && deal.label.toLowerCase() === filterType.toLowerCase()
+                );
+            }
+
+            const dealsList = document.getElementById('deals-list');
+            if (dealsList) {
+                if (filteredDeals.length > 0) {
+                    dealsList.innerHTML = filteredDeals.map(renderDealCard).join('');
+                } else {
+                    dealsList.innerHTML = `<div class="col-12 text-center">Không tìm thấy ưu đãi phù hợp với mục "${filterType}".</div>`;
+                }
+                attachDealBookingEvents(); // Gắn lại sự kiện cho các nút "Đặt ngay" mới
+            }
+        }
+
+        // Cập nhật hàm gọi firebase
+        firebase.database().ref('specialOffers').on('value', function (snapshot) {
+            const data = snapshot.val();
+            if (data) {
+                // Chuyển đổi object từ Firebase thành mảng nếu cần
+                allDeals = Array.isArray(data) ? data : Object.values(data);
+                
+                // Lọc bỏ các deal không hợp lệ
+                allDeals = allDeals.filter(
+                    d => d && d.image && d.title && d.desc && d.image.trim() && d.title.trim() && d.desc.trim()
+                );
+
+                // Mặc định hiển thị tất cả
+                const activeFilter = document.querySelector('.filter-btn.active');
+                const initialFilterType = activeFilter ? activeFilter.textContent.trim() : 'Tất cả';
+                filterAndRenderDeals(initialFilterType);
+            }
+        });
+
+        firebase.database().ref('featuredOffer').on('value', function (snapshot) {
+            const data = snapshot.val();
+            const container = document.getElementById('featured-offer-container');
+
+            if (data && data.isActive && container) {
+                // Populate text content
+                document.getElementById('featured-label').textContent = data.specialLabel || '';
+                document.getElementById('featured-title').textContent = data.title || '';
+                document.getElementById('featured-subtitle').textContent = data.subtitle || '';
+                document.getElementById('featured-desc').textContent = data.description || '';
+                document.getElementById('featured-price').textContent = data.price || '';
+                document.getElementById('featured-price-unit').textContent = data.priceUnit || '';
+                
+                const bookBtn = document.getElementById('featured-book-btn');
+                bookBtn.textContent = data.buttonText || 'ĐẶT NGAY';
+                bookBtn.href = data.bookingLink || '#';
+
+                bookBtn.onclick = function(e) {
+                    e.preventDefault(); // Ngăn chặn việc chuyển trang mặc định
+
+                    const user = firebase.auth().currentUser;
+                    if (!user) {
+                        Swal.fire({
+                            title: 'Thông báo',
+                            text: 'Vui lòng đăng nhập để đặt phòng',
+                            icon: 'warning',
+                            confirmButtonText: 'Đăng nhập ngay'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('open-login-modal').click();
+                            }
+                        });
+                        return;
+                    }
+
+                    if (!data.bookingLink || !data.bookingLink.includes('id=')) {
+                        Swal.fire('Lỗi', 'Không tìm thấy thông tin ưu đãi liên kết.', 'error');
+                        return;
+                    }
+
+                    // Trích xuất ID của deal từ bookingLink, ví dụ: "hotel-detail.html?id=deal1" -> "deal1"
+                    const dealId = data.bookingLink.split('=').pop();
+
+                    // Tìm deal thực tế trong mảng allDeals (được lấy từ specialOffers)
+                    const targetDeal = allDeals.find(deal => deal.id === dealId);
+
+                    if (targetDeal) {
+                        // Nếu tìm thấy, sử dụng hàm đặt phòng đã có
+                        handleDealBooking(targetDeal);
+                    } else {
+                        Swal.fire('Lỗi', `Không tìm thấy chi tiết cho ưu đãi với ID: ${dealId}. Vui lòng liên hệ hỗ trợ.`, 'error');
+                    }
+                };
+
+                // Populate image grid
+                const imageGrid = document.getElementById('featured-image-grid-container');
+                if (imageGrid && data.images) {
+                    imageGrid.innerHTML = `
+                        <img src="${data.images.main || ''}" alt="Main offer view" class="main-image">
+                        <img src="${data.images.thumb1 || ''}" alt="Offer thumbnail 1" class="thumb-1">
+                        <img src="${data.images.thumb2 || ''}" alt="Offer thumbnail 2" class="thumb-2">
+                    `;
+                }
+
+                // Show the container
+                container.style.display = 'block';
+            } else if (container) {
+                // Hide the container if not active or no data
+                container.style.display = 'none';
+            }
+        });
     </script>
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();

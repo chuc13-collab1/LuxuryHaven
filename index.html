@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="css\index.css">
     <link rel="stylesheet" href="css\chatbox.css">
+    <link rel="stylesheet" href="js\search.js">
     <style>
         @font-face {
             font-family: 'Nautica Script Bold';
@@ -47,8 +48,8 @@
                 <!-- Search Box -->
                 <div class="nav-search">
                     <div class="search-input-group">
-                        <input type="text" placeholder="Tìm kiếm...">
-                        <button type="button">
+                        <input type="text" placeholder="Tìm kiếm..." id="main-search-input" autocomplete="off">
+                        <button type="button" id="main-search-btn">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
@@ -339,7 +340,7 @@
                     </div>
                 </div>
                 <div class="destination-card small">
-                    <img src="https://images.unsplash.com/photo-1465156799763-2c087c332922?auto=format&fit=crop&w=400&q=80"
+                    <img src="https://images.unsplash.com/photo-1465156799763-2c087c7f28ca?auto=format&fit=crop&w=400&q=80"
                         alt="Sapa">
                     <div class="destination-info">
                         <h3>Sapa</h3>
@@ -598,6 +599,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="module" src="js/search.js"></script>
     <script>
         // Firebase config và xử lý xác thực
         const firebaseConfig = {
@@ -707,9 +709,22 @@
 
                     firebase.auth().createUserWithEmailAndPassword(email, password)
                         .then((userCredential) => {
-                            return userCredential.user.updateProfile({
-                                displayName: username
-                            });
+                            const user = userCredential.user;
+                            // Cập nhật displayName
+                            return Promise.all([
+                                user.updateProfile({
+                                    displayName: username
+                                }),
+                                // Thêm thông tin user vào Realtime Database
+                                firebase.database().ref('users/' + user.uid).set({
+                                    name: username,
+                                    email: user.email,
+                                    loyaltyPoints: 0, // Điểm thành viên mặc định
+                                    memberLevel: 'Đồng', // Hạng thành viên mặc định
+                                    createdAt: firebase.database.ServerValue.TIMESTAMP,
+                                    updatedAt: firebase.database.ServerValue.TIMESTAMP
+                                })
+                            ]);
                         })
                         .then(() => {
                             document.getElementById('auth-modal').style.display = 'none';

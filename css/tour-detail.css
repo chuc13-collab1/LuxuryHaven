@@ -1,0 +1,152 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.tour-detail-container {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+/* Main Info Section */
+.tour-main-info h1 {
+    font-weight: 700;
+    color: #333;
+}
+
+.tour-highlights-card {
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    height: 100%;
+}
+
+.tour-meta-list {
+    padding-left: 0;
+}
+
+.tour-meta-list li {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+}
+
+.tour-meta-list li i {
+    color: #007bff;
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Description & Other Info */
+.tour-description h2 {
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+.more-info-wrapper .card {
+     border: none;
+     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Sticky aside column */
+.sticky-top {
+    top: 100px; /* Adjust based on navbar height */
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .sticky-top {
+        position: static;
+        margin-top: 2rem;
+    }
+}
+
+/* Ảnh lớn bo góc và shadow */
+#tour-main-image {
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    margin-bottom: 16px;
+}
+
+/* Card thông tin nổi bật */
+.tour-highlights-card.card {
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border: none;
+    margin-bottom: 16px;
+}
+.tour-highlights-card .tour-price {
+    font-size: 2rem;
+    color: #007bff;
+    font-weight: bold;
+}
+.tour-meta-list li {
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+/* Nút đặt tour nổi bật */
+.tour-highlights-card .btn-primary {
+    font-size: 1.1rem;
+    padding: 10px 0;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* Mô tả chi tiết trình bày đẹp */
+.tour-description.card {
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border: none;
+    margin-bottom: 24px;
+}
+.tour-description h2 {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+#tour-description-content {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #333;
+}
+
+/* Sidebar sticky */
+.more-info-wrapper.sticky-top {
+    top: 90px;
+    z-index: 2;
+}
+
+/* Card chính sách */
+.more-info-wrapper .card {
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border: none;
+}
+.more-info-wrapper .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.list-group-item {
+    font-size: 0.98rem;
+    padding: 8px 14px;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+}
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .more-info-wrapper.sticky-top {
+        position: static !important;
+        top: auto;
+    }
+    #tour-main-image {
+        height: auto;
+    }
+} 

@@ -81,13 +81,19 @@
                         <div class="card-body">
                             <div class="text-center mb-4">
                                 <div class="avatar-wrapper mb-3">
-                                    <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+                                    <img id="sidebar-avatar" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
                                         alt="Avatar" class="rounded-circle"
                                         style="width: 100px; height: 100px; object-fit: cover;"
                                         onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'">
+                                    <label for="sidebar-avatar-upload" style="position:absolute;bottom:0;right:0;cursor:pointer;background:#fff;border-radius:50%;padding:4px;">
+                                        <i class="fas fa-camera" style="font-size:18px;color:#1a237e;"></i>
+                                    </label>
+                                    <input type="file" id="sidebar-avatar-upload" accept="image/*" style="display:none;">
                                 </div>
                                 <h5 class="mb-1" id="sidebar-user-name">Tên người dùng</h5>
                                 <p class="text-muted" id="sidebar-user-email">email@example.com</p>
+                                <div id="sidebar-memberLevel" style="font-weight:600;color:#1a237e;"></div>
+                                <div id="sidebar-loyaltyPoints" style="color:#e67e22;"></div>
                             </div>
                             <div class="list-group">
                                 <a href="#profile" class="list-group-item list-group-item-action active"
@@ -96,7 +102,7 @@
                                 </a>
                                 <a href="#bookings" class="list-group-item list-group-item-action"
                                     data-bs-toggle="list">
-                                    <i class="fas fa-calendar-alt me-2"></i> Lịch sử đặt phòng
+                                    <i class="fas fa-calendar-alt me-2"></i> Lịch sử
                                 </a>
                                 <a href="#favorites" class="list-group-item list-group-item-action"
                                     data-bs-toggle="list">
@@ -109,6 +115,8 @@
                                     data-bs-toggle="list">
                                     <i class="fas fa-cog me-2"></i> Cài đặt tài khoản
                                 </a>
+                                <li><a href="#payments" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-file-invoice-dollar me-2"></i> Lịch sử thanh toán</a></li>
+                                <!-- <li><a href="#notifications" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-bell me-2"></i> Thông báo</a></li> -->
                             </div>
                         </div>
                     </div>
@@ -143,6 +151,32 @@
                                             <div class="col-12 mb-3">
                                                 <label class="form-label">Địa chỉ</label>
                                                 <textarea class="form-control" id="profile-address" rows="2"></textarea>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Giới tính</label>
+                                                <select class="form-control" id="profile-gender">
+                                                    <option value="">Chọn giới tính</option>
+                                                    <option value="Nam">Nam</option>
+                                                    <option value="Nữ">Nữ</option>
+                                                    <option value="Khác">Khác</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Quốc tịch</label>
+                                                <input type="text" class="form-control" id="profile-nationality">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Số CMND/CCCD</label>
+                                                <input type="text" class="form-control" id="profile-identityNumber">
+                                            </div>
+                                           
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Điểm thành viên</label>
+                                                <input type="number" class="form-control" id="profile-loyaltyPoints" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Hạng thành viên</label>
+                                                <input type="text" class="form-control" id="profile-memberLevel" readonly>
                                             </div>
                                             <div class="col-12">
                                                 <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
@@ -187,8 +221,8 @@
                                                     <th>Tên tour</th>
                                                     <th>Ngày khởi hành</th>
                                                     <th>Số người</th>
-                                                    <th>Khách</th>
-                                                    <th>Ghi chú</th>
+                                                    <th>Tên khách hàng</th>
+                                                    <th>Trạng thái</th>
                                                     <th>Thao tác</th>
                                                 </tr>
                                             </thead>
@@ -248,6 +282,44 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Payments Tab -->
+                        <div class="tab-pane fade" id="payments">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Lịch sử thanh toán/giao dịch</h4>
+                                    <div class="table-responsive">
+                                        <table class="table align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Mã giao dịch</th>
+                                                    <th>Ngày</th>
+                                                    <th>Số tiền</th>
+                                                    <th>Phương thức</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Hóa đơn</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="payments-table">
+                                                <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notifications Tab -->
+                        <!-- <div class="tab-pane fade" id="notifications">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Thông báo cá nhân</h4>
+                                    <ul class="list-group" id="notifications-list">
+                                        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                                    <!-- </ul>
+                                </div>
+                            </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -255,51 +327,8 @@
     </main>
     <!-- End Contact Section -->
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <h4>Về LuxuryHaven</h4>
-                    <ul>
-                        <li><a href="footer\about.html">Giới thiệu</a></li>
-                        <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
-                        <li><a href="footer\news.html">Tin tức</a></li>
-                        <li><a href="footer\contact.html">Liên hệ</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h4>Hỗ trợ</h4>
-                    <ul>
-                        <li><a href="footer\help-center.html">Trung tâm trợ giúp</a></li>
-                        <li><a href="footer\privacy-policy.html">Chính sách bảo mật</a></li>
-                        <li><a href="footer\terms.html">Điều khoản sử dụng</a></li>
-                        <li><a href="footer\cookie-policy.html">Chính sách cookie</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h4>Đối tác</h4>
-                    <ul>
-                        <li><a href="footer\partner.html">Đăng ký làm đối tác</a></li>
-                        <li><a href="footer\marketing.html">Chương trình tiếp thị</a></li>
-                        <li><a href="footer\affiliate.html">Affiliate</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h4>Theo dõi chúng tôi</h4>
-                    <div class="social-links">
-                        <a href="https://facebook.com/100083035936090"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 LuxuryHaven. Tất cả quyền được bảo lưu.</p>
-            </div>
-        </div>
-    </footer>
+   
+    
 
     <!-- Auth Modal -->
     <div id="auth-modal" class="modal">
@@ -389,6 +418,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         // Firebase config
@@ -421,6 +451,8 @@
             loadBookings(user);
             loadFavorites(user);
             loadReviews(user);
+            loadPayments(user);
+            loadNotifications(user);
         });
 
         // Hàm cập nhật UI người dùng
@@ -447,20 +479,98 @@
             userRef.on('value', (snapshot) => {
                 const userData = snapshot.val() || {};
 
-                // Cập nhật form thông tin cá nhân
                 document.getElementById('profile-name').value = userData.name || user.displayName || '';
                 document.getElementById('profile-email').value = user.email;
                 document.getElementById('profile-phone').value = userData.phone || '';
                 document.getElementById('profile-birthday').value = userData.birthday || '';
                 document.getElementById('profile-address').value = userData.address || '';
+                document.getElementById('profile-gender').value = userData.gender || '';
+                document.getElementById('profile-nationality').value = userData.nationality || '';
+                document.getElementById('profile-identityNumber').value = userData.identityNumber || '';
+                document.getElementById('profile-loyaltyPoints').value = userData.loyaltyPoints || 0;
+                document.getElementById('profile-memberLevel').value = userData.memberLevel || '';
 
-                // Cập nhật sidebar
+                // Sidebar
                 document.getElementById('sidebar-user-name').textContent = userData.name || user.displayName || 'Chưa cập nhật';
+                document.getElementById('sidebar-user-email').textContent = user.email;
+                // Thay đổi dòng này để có icon:
+                document.getElementById('sidebar-memberLevel').innerHTML = userData.memberLevel ? getMemberLevelIcon(userData.memberLevel) : '';
+                document.getElementById('sidebar-loyaltyPoints').textContent = userData.loyaltyPoints ? `Điểm: ${userData.loyaltyPoints}` : '';
+                const avatarImg = document.getElementById('sidebar-avatar');
+                if (avatarImg) avatarImg.src = userData.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+
+                // Gọi phân hạng tự động
+                updateMemberLevel(user);
             });
 
             // Xử lý form cập nhật thông tin
             document.getElementById('profile-form').addEventListener('submit', function (e) {
                 e.preventDefault();
+                // Kiểm tra dữ liệu nhập vào
+                const name = document.getElementById('profile-name').value.trim();
+                const phone = document.getElementById('profile-phone').value.trim();
+                const birthday = document.getElementById('profile-birthday').value.trim();
+                const address = document.getElementById('profile-address').value.trim();
+                const gender = document.getElementById('profile-gender').value.trim();
+                const nationality = document.getElementById('profile-nationality').value.trim();
+                const identity = document.getElementById('profile-identityNumber').value.trim();
+
+                // Regex kiểm tra định dạng
+                const phoneRegex = /^(0[3-9][0-9]{8,9})$/;
+                const identityRegex = /^\d{9,12}$/;
+                const nameRegex = /^[a-zA-ZÀ-ỹ\s'.-]{2,}$/u;
+                // Kiểm tra địa chỉ: phải có đủ 3 nhóm từ khóa, mỗi nhóm không trùng nhau
+                function isValidVietnamAddress(address) {
+                    if (!address) return false;
+                    const adr = address.toLowerCase();
+                    // Tách từ khóa để tránh trùng lặp giữa các nhóm
+                    const xaPhuong = ["xã", "xa", "phường", "phuong", "thị trấn", "thi tran", "thị xã", "thi xa"];
+                    const huyenQuan = ["huyện", "huyen", "quận", "quan"];
+                    const tinhTp = ["tỉnh", "tinh", "thành phố", "thanh pho", "tp", "tp."];
+                    // Nhóm 1: xã/phường/thị trấn
+                    const hasXaPhuong = xaPhuong.some(k => adr.includes(k));
+                    // Nhóm 2: huyện/quận (không nhận thành phố ở đây)
+                    const hasHuyenQuan = huyenQuan.some(k => adr.includes(k));
+                    // Nhóm 3: tỉnh/thành phố
+                    const hasTinhTp = tinhTp.some(k => adr.includes(k));
+                    return hasXaPhuong && hasHuyenQuan && hasTinhTp;
+                }
+                const today = new Date();
+                let valid = true;
+                let msg = '';
+
+                if (!name || !nameRegex.test(name)) {
+                    valid = false;
+                    msg = 'Vui lòng nhập họ tên thật, không chứa ký tự đặc biệt và tối thiểu 2 ký tự.';
+                } else if (!phone || !phoneRegex.test(phone)) {
+                    valid = false;
+                    msg = 'Số điện thoại không hợp lệ. Vui lòng nhập số Việt Nam hợp lệ.';
+                } else if (!birthday) {
+                    valid = false;
+                    msg = 'Vui lòng nhập ngày sinh.';
+                } else if (new Date(birthday) > today) {
+                    valid = false;
+                    msg = 'Ngày sinh không hợp lệ.';
+                } else if (!address || !isValidVietnamAddress(address)) {
+                    valid = false;
+                    msg = 'Vui lòng nhập địa chỉ hợp lệ tại Việt Nam (phường/xã, quận/huyện, tỉnh/thành phố, không cần đúng thứ tự, có thể nhập liền mạch).';
+                } else if (!nationality) {
+                    valid = false;
+                    msg = 'Vui lòng nhập quốc tịch.';
+                } else if (!identity || !identityRegex.test(identity)) {
+                    valid = false;
+                    msg = 'Số CMND/CCCD phải là 9-12 chữ số.';
+                }
+
+                if (!valid) {
+                    Swal.fire({
+                        title: 'Thông tin không hợp lệ!',
+                        text: msg,
+                        icon: 'warning',
+                        confirmButtonColor: '#1a237e'
+                    });
+                    return;
+                }
                 updateProfile(user, userRef);
             });
         }
@@ -468,7 +578,7 @@
         // Hàm lấy lịch sử đặt phòng
         function loadBookings(user) {
             const bookingsRef = firebase.database().ref('bookings');
-            bookingsRef.orderByChild('email').equalTo(user.email).on('value', (snapshot) => {
+            bookingsRef.orderByChild('customerEmail').equalTo(user.email).on('value', (snapshot) => {
                 const hotelTable = document.getElementById('bookings-table-hotel');
                 const tourTable = document.getElementById('bookings-table-tour');
                 if (!hotelTable || !tourTable) return;
@@ -486,7 +596,7 @@
                     bookings.sort((a, b) => b.createdAt - a.createdAt);
                     let hasHotel = false, hasTour = false;
                     bookings.forEach(booking => {
-                        if (booking.type === 'tour') {
+                        if (booking.bookingType === 'tour') {
                             addTourBookingRow(booking, tourTable);
                             hasTour = true;
                         } else {
@@ -527,7 +637,7 @@
 
             row.innerHTML = `
             <td>
-                <div class="fw-semibold">${booking.hotelId}</div>
+                <div class="fw-semibold">${booking.hotelName || booking.hotelId}</div>
             </td>
             <td>
                 <div class="mb-1">${booking.roomId}</div>
@@ -539,8 +649,8 @@
             </td>
             <td>
                 <div class="mb-1">Khách: ${booking.guests} người</div>
-                <div class="mb-1">Tên: ${booking.name}</div>
-                <div>SĐT: ${booking.phone}</div>
+                <div class="mb-1">Tên: ${booking.customerName}</div>
+                <div>SĐT: ${booking.customerPhone}</div>
             </td>
             <td>
                 <span class="badge bg-${statusClass}">${status}</span>
@@ -548,6 +658,12 @@
             <td>
                 <button class="btn btn-sm btn-outline-primary" onclick="viewBookingDetails('${booking.id}')">
                     <i class="fas fa-info-circle me-1"></i> Chi tiết
+                </button>
+                <button class="btn btn-sm btn-outline-warning ms-1" onclick="editBooking('${booking.id}', 'hotel')">
+                    <i class="fas fa-edit me-1"></i> Sửa
+                </button>
+                <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteBooking('${booking.id}')">
+                    <i class="fas fa-trash-alt me-1"></i> Xóa
                 </button>
             </td>
         `;
@@ -601,9 +717,9 @@
             col.className = 'col-md-4';
             col.innerHTML = `
             <div class="favorite-item">
-                <img src="${favorite.image || 'https://via.placeholder.com/300x200?text=Hotel+Image'}" 
-                     alt="${favorite.name}" 
-                     onerror="this.src='https://via.placeholder.com/300x200?text=Hotel+Image'">
+                <img src="${favorite.image || 'https://placehold.co/300x200?text=Hotel+Image'}" 
+     alt="${favorite.name}" 
+     onerror="this.src='https://placehold.co/300x200?text=Hotel+Image'">
                 <div class="overlay">
                     <h5>${favorite.name || 'Không có tên'}</h5>
                     <p>${favorite.location || 'Không có địa chỉ'}</p>
@@ -655,7 +771,9 @@
                 phone: document.getElementById('profile-phone').value,
                 birthday: document.getElementById('profile-birthday').value,
                 address: document.getElementById('profile-address').value,
-                email: user.email,
+                gender: document.getElementById('profile-gender').value,
+                nationality: document.getElementById('profile-nationality').value,
+                identityNumber: document.getElementById('profile-identity').value,
                 updatedAt: firebase.database.ServerValue.TIMESTAMP
             };
 
@@ -669,7 +787,8 @@
             });
 
             user.updateProfile({
-                displayName: updates.name
+                displayName: updates.name,
+                photoURL: updates.avatar
             }).then(() => {
                 return userRef.update(updates);
             }).then(() => {
@@ -682,6 +801,7 @@
 
                 document.getElementById('sidebar-user-name').textContent = updates.name;
                 document.getElementById('user-name').textContent = updates.name;
+                document.getElementById('sidebar-avatar').src = updates.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
             }).catch((error) => {
                 console.error('Lỗi cập nhật:', error);
                 Swal.fire({
@@ -699,13 +819,31 @@
             bookingRef.once('value').then((snapshot) => {
                 const booking = snapshot.val();
                 if (booking) {
-                    Swal.fire({
-                        title: 'Chi tiết đặt phòng',
-                        html: `
-                        <div class="text-start">
+                    // This function now correctly handles both tour and hotel bookings
+                    const isTour = booking.bookingType === 'tour';
+                    const title = isTour ? 'Chi tiết đặt tour' : 'Chi tiết đặt phòng';
+
+                    let detailsHtml = '';
+
+                    if (isTour) {
+                        detailsHtml = `
+                            <div class="mb-3">
+                                <h5 class="mb-2">Thông tin tour</h5>
+                                <p class="mb-1"><strong>Tên tour:</strong> ${booking.tourName || booking.hotelName || ''}</p>
+                                <p class="mb-1"><strong>Địa điểm:</strong> ${booking.tourLocation || 'Không xác định'}</p>
+                                <p class="mb-1"><strong>Thời gian:</strong> ${booking.tourDuration || 'Không xác định'}</p>
+                            </div>
+                            <div class="mb-3">
+                                <h5 class="mb-2">Lịch trình</h5>
+                                <p class="mb-1"><strong>Ngày khởi hành:</strong> ${formatDate(booking.checkIn)}</p>
+                                <p class="mb-1"><strong>Ngày đặt:</strong> ${formatDateTime(booking.createdAt)}</p>
+                            </div>
+                        `;
+                    } else {
+                        detailsHtml = `
                             <div class="mb-3">
                                 <h5 class="mb-2">Thông tin khách sạn</h5>
-                                <p class="mb-1"><strong>Khách sạn:</strong> ${booking.hotelId}</p>
+                                <p class="mb-1"><strong>Khách sạn:</strong> ${booking.hotelName || booking.hotelId}</p>
                                 <p class="mb-1"><strong>Loại phòng:</strong> ${booking.roomId}</p>
                             </div>
                             <div class="mb-3">
@@ -714,15 +852,23 @@
                                 <p class="mb-1"><strong>Trả phòng:</strong> ${formatDate(booking.checkOut)}</p>
                                 <p class="mb-1"><strong>Ngày đặt:</strong> ${formatDateTime(booking.createdAt)}</p>
                             </div>
-                            <div class="mb-3">
-                                <h5 class="mb-2">Thông tin khách hàng</h5>
-                                <p class="mb-1"><strong>Họ tên:</strong> ${booking.name}</p>
-                                <p class="mb-1"><strong>Email:</strong> ${booking.email}</p>
-                                <p class="mb-1"><strong>Số điện thoại:</strong> ${booking.phone}</p>
-                                <p class="mb-1"><strong>Số khách:</strong> ${booking.guests} người</p>
-                            </div>
+                        `;
+                    }
+
+                    detailsHtml += `
+                        <div class="mb-3">
+                            <h5 class="mb-2">Thông tin khách hàng</h5>
+                            <p class="mb-1"><strong>Họ tên:</strong> ${booking.customerName || ''}</p>
+                            <p class="mb-1"><strong>Email:</strong> ${booking.customerEmail || ''}</p>
+                            <p class="mb-1"><strong>Số điện thoại:</strong> ${booking.customerPhone || ''}</p>
+                            <p class="mb-1"><strong>Số khách:</strong> ${booking.numberOfGuests || booking.guests || 1} người</p>
+                            <p class="mb-1"><strong>Ghi chú:</strong> ${booking.note || 'Không có'}</p>
                         </div>
-                    `,
+                    `;
+
+                    Swal.fire({
+                        title: title,
+                        html: `<div class="text-start">${detailsHtml}</div>`,
                         confirmButtonColor: '#1a237e',
                         confirmButtonText: 'Đóng',
                         customClass: {
@@ -751,56 +897,54 @@
 
         function addTourBookingRow(booking, table) {
             const row = document.createElement('tr');
+            const departureDate = new Date(booking.checkIn);
+            const today = new Date();
+            let status = '';
+            let statusClass = '';
+
+            if (departureDate < today) {
+                status = 'Đã hoàn thành';
+                statusClass = 'success';
+            } else if (departureDate.toDateString() === today.toDateString()) {
+                status = 'Đang diễn ra';
+                statusClass = 'primary';
+            } else {
+                status = 'Sắp tới';
+                statusClass = 'warning';
+            }
+
             row.innerHTML = `
-            <td>${booking.hotelId || booking.tourName || ''}</td>
-            <td>${booking.checkIn || booking.date || ''}</td>
-            <td>${booking.guests || booking.people || ''}</td>
-            <td>${booking.name || ''}<br><span class="text-muted">${booking.phone || ''}</span></td>
-            <td>${booking.note || ''}</td>
-            <td>
-                <button class="btn btn-sm btn-outline-primary" onclick="viewTourBookingDetails('${booking.id}')">
-                    <i class="fas fa-info-circle me-1"></i> Chi tiết
-                </button>
-            </td>
-        `;
+                <td>
+                    <div class="fw-semibold">${booking.tourName || booking.hotelName || 'N/A'}</div>
+                    <small class="text-muted">${booking.tourLocation || ''}</small>
+                </td>
+                <td>
+                    <div>${formatDate(booking.checkIn)}</div>
+                    <small class="text-muted">Đặt ngày: ${formatDateTime(booking.createdAt)}</small>
+                </td>
+                <td>${booking.numberOfGuests || booking.guests || 1}</td>
+                <td>${booking.customerName || 'N/A'}</td>
+                <td>
+                    <span class="badge bg-${statusClass}">${status}</span>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary" onclick="viewBookingDetails('${booking.id}')">
+                        <i class="fas fa-info-circle me-1"></i> Chi tiết
+                    </button>
+                    <button class="btn btn-sm btn-outline-warning ms-1" onclick="editBooking('${booking.id}', 'tour')">
+                        <i class="fas fa-edit me-1"></i> Sửa
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteBooking('${booking.id}')">
+                        <i class="fas fa-trash-alt me-1"></i> Xóa
+                    </button>
+                </td>
+            `;
             table.appendChild(row);
         }
 
         function viewTourBookingDetails(bookingId) {
-            const bookingRef = firebase.database().ref('bookings/' + bookingId);
-            bookingRef.once('value').then((snapshot) => {
-                const booking = snapshot.val();
-                if (booking) {
-                    Swal.fire({
-                        title: 'Chi tiết đặt tour',
-                        html: `
-                        <div class="text-start">
-                            <div class="mb-3">
-                                <h5 class="mb-2">Thông tin tour</h5>
-                                <p class="mb-1"><strong>Tên tour:</strong> ${booking.hotelId || ''}</p>
-                                <p class="mb-1"><strong>Ngày khởi hành:</strong> ${booking.checkIn || ''}</p>
-                                <p class="mb-1"><strong>Số người:</strong> ${booking.guests || ''}</p>
-                            </div>
-                            <div class="mb-3">
-                                <h5 class="mb-2">Thông tin khách hàng</h5>
-                                <p class="mb-1"><strong>Họ tên:</strong> ${booking.name || ''}</p>
-                                <p class="mb-1"><strong>Email:</strong> ${booking.email || ''}</p>
-                                <p class="mb-1"><strong>Số điện thoại:</strong> ${booking.phone || ''}</p>
-                            </div>
-                            <div class="mb-3">
-                                <h5 class="mb-2">Ghi chú</h5>
-                                <p class="mb-1">${booking.note || ''}</p>
-                            </div>
-                        </div>
-                    `,
-                        confirmButtonColor: '#1a237e',
-                        confirmButtonText: 'Đóng',
-                        customClass: {
-                            container: 'booking-detail-modal'
-                        }
-                    });
-                }
-            });
+            // This function is now merged into viewBookingDetails
+            viewBookingDetails(bookingId);
         }
 
         // Mobile Menu Toggle
@@ -829,6 +973,371 @@
                 }
             });
         }
+
+        const sidebarAvatarUpload = document.getElementById('sidebar-avatar-upload');
+        if (sidebarAvatarUpload) {
+            sidebarAvatarUpload.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const user = firebase.auth().currentUser;
+                if (!user) return;
+
+                // Hiển thị ảnh ngay lập tức
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    document.getElementById('sidebar-avatar').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                // Upload lên Cloudinary
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', 'nguyentienchuc'); // preset unsigned
+
+                Swal.fire({
+                    title: 'Đang tải ảnh lên Cloudinary...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                fetch('https://api.cloudinary.com/v1_1/dwrc3ig9e/image/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.secure_url) {
+                        document.getElementById('sidebar-avatar').src = data.secure_url;
+                        return firebase.database().ref('users/' + user.uid).update({
+                            avatar: data.secure_url,
+                            updatedAt: firebase.database.ServerValue.TIMESTAMP
+                        });
+                    } else {
+                        throw new Error('Upload thất bại');
+                    }
+                })
+                .then(() => {
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Ảnh đại diện đã được cập nhật.',
+                        icon: 'success',
+                        confirmButtonColor: '#1a237e'
+                    });
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Không thể tải ảnh lên Cloudinary. Vui lòng thử lại.',
+                        icon: 'error',
+                        confirmButtonColor: '#1a237e'
+                    });
+                    console.error('Upload avatar error:', error);
+                });
+            });
+        }
+
+        function loadPayments(user) {
+            const paymentsRef = firebase.database().ref('payments').orderByChild('userId').equalTo(user.uid);
+            paymentsRef.on('value', (snapshot) => {
+                const table = document.getElementById('payments-table');
+                if (!table) return;
+                table.innerHTML = '';
+                if (snapshot.exists()) {
+                    snapshot.forEach((paymentSnapshot) => {
+                        const payment = paymentSnapshot.val();
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${payment.transactionId || ''}</td>
+                            <td>${payment.date ? new Date(payment.date).toLocaleDateString('vi-VN') : ''}</td>
+                            <td>${payment.amount ? payment.amount.toLocaleString('vi-VN') + '₫' : ''}</td>
+                            <td>${payment.method || ''}</td>
+                            <td><span class="badge bg-${payment.status === 'success' ? 'success' : 'danger'}">${payment.status === 'success' ? 'Thành công' : 'Thất bại'}</span></td>
+                            <td></td>
+                        `;
+                        table.appendChild(row);
+
+                        // --- Cộng điểm thành viên khi thanh toán thành công, chỉ 1 lần ---
+                        if (payment.status === 'success' && !payment.loyaltyAdded) {
+                            const paymentRef = paymentSnapshot.ref;
+                            paymentRef.transaction(function(currentPayment) {
+                                if (currentPayment && currentPayment.status === 'success' && !currentPayment.loyaltyAdded) {
+                                    currentPayment.loyaltyAdded = true;
+                                    return currentPayment;
+                                }
+                                return; // Không thay đổi nếu đã cộng điểm
+                            }, function(error, committed, snap) {
+                                if (error) {
+                                    console.error('Transaction failed:', error);
+                                } else if (committed) {
+                                    // Chỉ khi loyaltyAdded vừa được set thành công mới cộng điểm
+                                    const points = Math.floor((payment.amount || 0) / 1000);
+                                    if (points > 0) {
+                                        const userRef = firebase.database().ref('users/' + user.uid + '/loyaltyPoints');
+                                        userRef.transaction(function(currentPoints) {
+                                            return (currentPoints || 0) + points;
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                        // --- End cộng điểm ---
+                    });
+                } else {
+                    table.innerHTML = '<tr><td colspan="6" class="text-center py-4">Chưa có giao dịch nào</td></tr>';
+                }
+            });
+        }
+
+        function viewInvoice(paymentId) {
+            const paymentRef = firebase.database().ref('payments/' + paymentId);
+            paymentRef.once('value').then(snapshot => {
+                const payment = snapshot.val();
+                if (payment) {
+                    Swal.fire({
+                        title: 'Chi tiết hóa đơn',
+                        html: `
+                            <div class="text-start">
+                                <p><strong>Mã giao dịch:</strong> ${payment.transactionId || ''}</p>
+                                <p><strong>Ngày:</strong> ${payment.date ? new Date(payment.date).toLocaleDateString('vi-VN') : ''}</p>
+                                <p><strong>Số tiền:</strong> ${payment.amount ? payment.amount.toLocaleString('vi-VN') + '₫' : ''}</p>
+                                <p><strong>Phương thức:</strong> ${payment.method || ''}</p>
+                                <p><strong>Trạng thái:</strong> ${payment.status === 'success' ? 'Thành công' : 'Thất bại'}</p>
+                                <p><strong>Chi tiết:</strong> ${payment.detail || ''}</p>
+                            </div>
+                        `,
+                        confirmButtonColor: '#1a237e'
+                    });
+                }
+            });
+        }
+
+        function loadNotifications(user) {
+            const notificationsRef = firebase.database().ref('notifications/' + user.uid);
+            notificationsRef.on('value', (snapshot) => {
+                const list = document.getElementById('notifications-list');
+                if (!list) return;
+                list.innerHTML = '';
+                if (snapshot.exists()) {
+                    snapshot.forEach((notiSnapshot) => {
+                        const noti = notiSnapshot.val();
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.innerHTML = `
+                            <div>
+                                <strong>${noti.title || 'Thông báo'}</strong>
+                                <span class="badge bg-${noti.read ? 'secondary' : 'warning'} float-end">${noti.read ? 'Đã đọc' : 'Mới'}</span>
+                            </div>
+                            <div>${noti.content || ''}</div>
+                            <small class="text-muted">${noti.date ? new Date(noti.date).toLocaleString('vi-VN') : ''}</small>
+                        `;
+                        list.appendChild(li);
+                    });
+                } else {
+                    list.innerHTML = '<li class="list-group-item text-center">Chưa có thông báo nào</li>';
+                }
+            });
+        }
+
+        function editBooking(bookingId, type) {
+            const bookingRef = firebase.database().ref('bookings/' + bookingId);
+            bookingRef.once('value').then(snapshot => {
+                const booking = snapshot.val();
+                if (!booking) return;
+                let html = '';
+                if (type === 'hotel') {
+                    html = `
+                        <input id="edit-hotelName" class="swal2-input" placeholder="Tên khách sạn" value="${booking.hotelName || ''}">
+                        <input id="edit-roomId" class="swal2-input" placeholder="Loại phòng" value="${booking.roomId || ''}">
+                        <input id="edit-checkIn" class="swal2-input" type="date" value="${booking.checkIn ? booking.checkIn.split('T')[0] : ''}">
+                        <input id="edit-checkOut" class="swal2-input" type="date" value="${booking.checkOut ? booking.checkOut.split('T')[0] : ''}">
+                        <input id="edit-guests" class="swal2-input" type="number" placeholder="Số khách" value="${booking.guests || 1}">
+                        <input id="edit-customerName" class="swal2-input" placeholder="Tên khách" value="${booking.customerName || ''}">
+                        <input id="edit-customerPhone" class="swal2-input" placeholder="SĐT" value="${booking.customerPhone || ''}">
+                    `;
+                } else {
+                    html = `
+                        <input id="edit-tourName" class="swal2-input" placeholder="Tên tour" value="${booking.tourName || ''}">
+                        <input id="edit-tourLocation" class="swal2-input" placeholder="Địa điểm" value="${booking.tourLocation || ''}">
+                        <input id="edit-checkIn" class="swal2-input" type="date" value="${booking.checkIn ? booking.checkIn.split('T')[0] : ''}">
+                        <input id="edit-numberOfGuests" class="swal2-input" type="number" placeholder="Số khách" value="${booking.numberOfGuests || 1}">
+                        <input id="edit-customerName" class="swal2-input" placeholder="Tên khách" value="${booking.customerName || ''}">
+                        <input id="edit-customerPhone" class="swal2-input" placeholder="SĐT" value="${booking.customerPhone || ''}">
+                    `;
+                }
+                Swal.fire({
+                    title: 'Sửa thông tin',
+                    html: html,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Lưu',
+                    cancelButtonText: 'Hủy',
+                    preConfirm: () => {
+                        if (type === 'hotel') {
+                            return {
+                                hotelName: document.getElementById('edit-hotelName').value,
+                                roomId: document.getElementById('edit-roomId').value,
+                                checkIn: document.getElementById('edit-checkIn').value,
+                                checkOut: document.getElementById('edit-checkOut').value,
+                                guests: parseInt(document.getElementById('edit-guests').value),
+                                customerName: document.getElementById('edit-customerName').value,
+                                customerPhone: document.getElementById('edit-customerPhone').value
+                            };
+                        } else {
+                            return {
+                                tourName: document.getElementById('edit-tourName').value,
+                                tourLocation: document.getElementById('edit-tourLocation').value,
+                                checkIn: document.getElementById('edit-checkIn').value,
+                                numberOfGuests: parseInt(document.getElementById('edit-numberOfGuests').value),
+                                customerName: document.getElementById('edit-customerName').value,
+                                customerPhone: document.getElementById('edit-customerPhone').value
+                            };
+                        }
+                    }
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        bookingRef.update(result.value).then(() => {
+                            Swal.fire('Thành công', 'Đã cập nhật thông tin!', 'success');
+                        });
+                    }
+                });
+            });
+        }
+
+        function deleteBooking(bookingId) {
+            Swal.fire({
+                title: 'Xóa đặt phòng?',
+                text: 'Bạn chắc chắn muốn xóa lịch sử này? Hành động này không thể hoàn tác!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    firebase.database().ref('bookings/' + bookingId).remove().then(() => {
+                        Swal.fire('Đã xóa!', 'Lịch sử đã được xóa.', 'success');
+                    });
+                }
+            });
+        }
+
+        // Hàm trả về icon + tên hạng thành viên
+function getMemberLevelIcon(level) {
+    switch(level) {
+        case 'Đồng':
+            return '<i class="fas fa-medal" style="color:#b87333"></i> Đồng';
+        case 'Bạc':
+            return '<i class="fas fa-medal" style="color:#b0c4de"></i> Bạc';
+        case 'Vàng':
+            return '<i class="fas fa-medal" style="color:#ffd700"></i> Vàng';
+        case 'Kim cương':
+            return '<i class="fas fa-gem" style="color:#00bcd4"></i> Kim cương';
+        case 'Lưu ly':
+            return '<i class="fas fa-crown" style="color:#8e24aa"></i> Lưu ly';
+        default:
+            return level || '';
+    }
+}
+
+// Thêm hàm phân hạng và cập nhật memberLevel
+function updateMemberLevel() {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+    const userRef = firebase.database().ref('users/' + user.uid);
+    userRef.once('value').then(snapshot => {
+        const data = snapshot.val() || {};
+        const points = data.loyaltyPoints || 0;
+        let level = 'Đồng';
+        if (points >= 10000) level = 'Kim cương';
+        else if (points >= 5000) level = 'Vàng';
+        else if (points >= 1000) level = 'Bạc';
+        if (data.memberLevel !== level) {
+            userRef.update({ memberLevel: level });
+        }
+        // Hiển thị quyền lợi khi hover
+        const sidebarLevel = document.getElementById('sidebar-memberLevel');
+        if (sidebarLevel) {
+            sidebarLevel.title =
+                'Đồng: Cơ bản\n' +
+                'Bạc: Giảm giá 5%\n' +
+                'Vàng: Giảm giá 10%, ưu tiên hỗ trợ\n' +
+                'Kim cương: Giảm giá 15%, quà tặng đặc biệt';
+        }
+    });
+}
+
+// Hàm reset lại điểm thành viên dựa trên các payment thành công
+function resetLoyaltyPoints(user) {
+    Swal.fire({
+        title: 'Xác nhận',
+        text: 'Bạn có chắc muốn reset và tính lại điểm thành viên? Điểm sẽ được tính lại theo các giao dịch thành công!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+        // Reset điểm về 0
+        const userRef = firebase.database().ref('users/' + user.uid);
+        userRef.update({ loyaltyPoints: 0 }).then(() => {
+            // Lấy tất cả payment thành công
+            firebase.database().ref('payments').orderByChild('userId').equalTo(user.uid).once('value', (snapshot) => {
+                let totalPoints = 0;
+                let updates = {};
+                snapshot.forEach((paymentSnapshot) => {
+                    const payment = paymentSnapshot.val();
+                    if (payment.status === 'success') {
+                        // 100.000đ = 10 điểm
+                        const points = Math.floor((payment.amount || 0) / 100000) * 10;
+                        if (points > 0) {
+                            totalPoints += points;
+                        }
+                        // Đánh dấu đã cộng điểm
+                        if (!payment.loyaltyAdded) {
+                            updates[paymentSnapshot.key + '/loyaltyAdded'] = true;
+                        }
+                    }
+                });
+                // Cập nhật điểm và loyaltyAdded
+                const updatesObj = {};
+                updatesObj['users/' + user.uid + '/loyaltyPoints'] = totalPoints;
+                Object.keys(updates).forEach(k => {
+                    updatesObj['payments/' + k] = true;
+                });
+                firebase.database().ref().update(updatesObj).then(() => {
+                    // Cập nhật phân hạng
+                    updateMemberLevelCustom(user, totalPoints);
+                    Swal.fire('Thành công!', 'Điểm thành viên đã được reset và tính lại: ' + totalPoints + ' điểm.', 'success');
+                });
+            });
+        });
+    });
+}
+
+// Hàm phân hạng mới (có thêm Lưu ly)
+function updateMemberLevelCustom(user, points) {
+    let level = 'Đồng';
+    if (points >= 20000) level = 'Lưu ly';
+    else if (points >= 10000) level = 'Kim cương';
+    else if (points >= 5000) level = 'Vàng';
+    else if (points >= 1000) level = 'Bạc';
+    firebase.database().ref('users/' + user.uid + '/memberLevel').set(level);
+}
+
+// Thêm nút vào tab Lịch sử thanh toán
+// setTimeout(() => {
+//     const paymentsTab = document.querySelector('#payments .card-body');
+//     if (paymentsTab && !document.getElementById('reset-loyalty-btn')) {
+//         const btn = document.createElement('button');
+//         btn.id = 'reset-loyalty-btn';
+//         btn.className = 'btn btn-warning mb-3';
+//         btn.innerHTML = '<i class="fas fa-sync-alt me-1"></i> Reset & Tính lại điểm thành viên';
+//         btn.onclick = function() {
+//             const user = firebase.auth().currentUser;
+//             if (user) resetLoyaltyPoints(user);
+//         };
+//         paymentsTab.prepend(btn);
+//     }
+// }, 1000);
     </script>
     <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
@@ -842,6 +1351,26 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 End of Tawk.to Script
+
+    <script>
+        // Hiển thị ảnh vừa chọn lên avatar ngay lập tức
+        document.addEventListener('DOMContentLoaded', function() {
+            var avatarInput = document.getElementById('sidebar-avatar-upload');
+            var avatarImg = document.getElementById('sidebar-avatar');
+            if (avatarInput && avatarImg) {
+                avatarInput.addEventListener('change', function(event) {
+                    var file = event.target.files[0];
+                    if (file) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            avatarImg.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

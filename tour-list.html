@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sách Tour - LuxuryHavenTravel</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="css/tours.css">
+    <link rel="stylesheet" href="css/tour-list.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-flex">
+                <!-- Logo -->
+                <a class="navbar-brand" href="index.html">
+                    <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <!-- Search Box -->
+                <div class="nav-search">
+                    <div class="search-input-group">
+                        <input type="text" placeholder="Tìm kiếm...">
+                        <button type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <ul class="nav-links" id="nav-links">
+                        <li><a href="index.html">Trang chủ</a></li>
+                        <li><a href="hotel.html">Khách sạn</a></li>
+                        <li><a href="tours.html" class="active">Tours</a></li>
+                        <li><a href="prioritize.html">Ưu đãi</a></li>
+                        <li><a href="travel_guide.html">Cẩm nang du lịch</a></li>
+                        <li><a href="about_us.html">Về chúng tôi</a></li>
+                        <!-- <li class="dropdown"><a href="vuichoi.html">🌐</a></li> -->
+
+                        <li>
+                            <div class="d-flex align-items-center">
+                                <div class="dropdown" id="user-dropdown" style="display:none;">
+                                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-user"></i> <span id="user-name"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="member.html"><i class="fas fa-user-circle"></i> Tài khoản</a></li>
+                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                                    </ul>
+                                </div>
+                                <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
+                                    <i class="fas fa-user"></i> Đăng nhập
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 id="category-title" class="category-title">Khám Phá Kỳ Thú</h1>
+            <p id="category-description" class="category-description">Khám phá các tour du lịch được tuyển chọn đặc biệt.</p>
+        </div>
+    </section>
+
+    <!-- Inspiration Section -->
+    <section class="inspiration-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-3 inspiration-text-content">
+                    <p class="small-title">Bật tung cảm hứng du lịch!</p>
+                    <h2 class="h1">Lấy cảm hứng</h2>
+                    <p class="lead">Khám phá những điểm đến đẹp nhất ở Việt Nam và tìm chuyến đi hoàn hảo cho bạn.</p>
+                    <a href="travel_guide.html" class="btn btn-success btn-lg">Khám phá ngay</a>
+                </div>
+                <div class="col-lg-9">
+                    <div class="inspiration-cards-wrapper">
+                        <div class="inspiration-cards-container" id="inspiration-cards-container">
+                            <!-- Cards will be injected here by JS -->
+                        </div>
+                    </div>
+                    <div class="inspiration-progress-bar-container">
+                        <div class="inspiration-progress-bar" id="inspiration-progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        <div class="row">
+            <!-- Filter Sidebar -->
+            <aside class="col-lg-3">
+                <div class="filter-sidebar">
+                    <div class="filter-widget">
+                        <h4 class="filter-widget-title">Tìm kiếm Tour</h4>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tên tour...">
+                            <!-- <button class="btn btn-outline-secondary" type="button" disabled><i class="fas fa-search"></i></button> -->
+                        </div>
+                    </div>
+
+                    <div class="filter-widget">
+                        <h4 class="filter-widget-title">Lọc theo giá</h4>
+                        <input type="range" class="form-range" id="price-range" min="0" max="5000000" step="100000" value="5000000">
+                        <div class="d-flex justify-content-between">
+                            <span id="price-min">0đ</span>
+                            <span id="price-max">5,000,000đ</span>
+                        </div>
+                    </div>
+
+                    <div class="filter-widget">
+                        <h4 class="filter-widget-title">Xếp hạng</h4>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="ratingFilter" id="rating5" value="5">
+                            <label class="form-check-label" for="rating5">
+                                <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i>
+                            </label>
+                        </div>
+                         <div class="form-check">
+                            <input class="form-check-input" type="radio" name="ratingFilter" id="rating4" value="4">
+                            <label class="form-check-label" for="rating4">
+                                <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i> <i class="far fa-star text-warning"></i> & trở lên
+                            </label>
+                        </div>
+                         <div class="form-check">
+                            <input class="form-check-input" type="radio" name="ratingFilter" id="rating3" value="3">
+                            <label class="form-check-label" for="rating3">
+                                <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i> <i class="far fa-star text-warning"></i> <i class="far fa-star text-warning"></i> & trở lên
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="ratingFilter" id="rating-all" value="0" checked>
+                            <label class="form-check-label" for="rating-all">
+                                Tất cả
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary w-100">Áp dụng</button>
+                </div>
+            </aside>
+
+            <!-- Tours Grid -->
+            <div class="col-lg-9">
+                <div id="tours-grid" class="row g-4">
+                    <div id="loading-indicator" class="col-12">
+                        <div class="custom-spinner">
+                            <div class="dot1"></div>
+                            <div class="dot2"></div>
+                            <div class="dot3"></div>
+                        </div>
+                        <p class="loading-text">Đang tìm kiếm những chuyến đi tuyệt vời nhất...</p>
+                    </div>
+                </div>
+                <nav aria-label="Page navigation" class="mt-5" id="pagination-container">
+                    <ul class="pagination justify-content-center"></ul>
+                </nav>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Useful Info & Testimonials Section -->
+    <section class="extra-info-section">
+        <div class="container">
+            <!-- Useful Information -->
+            <div class="useful-info-header text-center">
+                <h3 class="section-title">Thông tin hữu ích</h3>
+            </div>
+            <div class="useful-info-grid">
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-route"></i></div>
+                    <p>Sắp xếp kế hoạch</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-concierge-bell"></i></div>
+                    <p>Những gì chúng tôi cung cấp</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-puzzle-piece"></i></div>
+                    <p>Tiện ích bổ sung</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-heart"></i></div>
+                    <p>Yêu thích</p>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-briefcase"></i></div>
+                    <p>Sự nghiệp</p>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="testimonial-slider-container" id="testimonial-slider">
+                <div class="testimonial-background"></div>
+                <div class="testimonial-slides" id="testimonial-slides">
+                    <!-- Testimonials will be loaded here -->
+                </div>
+                <button class="testimonial-nav prev"><i class="fas fa-chevron-left"></i></button>
+                <button class="testimonial-nav next"><i class="fas fa-chevron-right"></i></button>
+                <div class="testimonial-dots" id="testimonial-dots"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h4>Về LuxuryHavenTravel</h4>
+                    <ul>
+                        <li><a href="footer\about.html">Giới thiệu</a></li>
+                        <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
+                        <li><a href="footer\news.html">Tin tức</a></li>
+                        <li><a href="footer\contact.html">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Hỗ trợ</h4>
+                    <ul>
+                        <li><a href="footer\help-center.html">Trung tâm trợ giúp</a></li>
+                        <li><a href="footer\privacy-policy.html">Chính sách bảo mật</a></li>
+                        <li><a href="footer\terms.html">Điều khoản sử dụng</a></li>
+                        <li><a href="footer\cookie-policy.html">Chính sách cookie</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Đối tác</h4>
+                    <ul>
+                        <li><a href="footer\partner.html">Đăng ký làm đối tác</a></li>
+                        <li><a href="footer\marketing.html">Chương trình tiếp thị</a></li>
+                        <li><a href="footer\affiliate.html">Affiliate</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Theo dõi chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="https://facebook.com/100083035936090"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 LuxuryHavenTravel. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content" style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
+            <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
+            
+            <div id="auth-forms">
+                <form id="login-form" class="auth-form" style="text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Đăng nhập</button>
+                    <div class="login-links">
+                        <a href="#" id="to-register">Không có tài khoản?</a>
+                        <a href="#" id="to-forgot">Quên mật khẩu?</a>
+                    </div>
+                </form>
+
+                <form id="register-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Đăng ký</button>
+                    <div class="login-links">
+                        <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
+                    </div>
+                </form>
+
+                <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="forgot-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
+                    <div class="login-links">
+                        <a href="#" id="back-to-login">Quay lại đăng nhập</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Cấu hình Firebase ---
+            const firebaseConfig = {
+                apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+                authDomain: "websitedatphongkhachsan.firebaseapp.com",
+                databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+                projectId: "websitedatphongkhachsan",
+                storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+                messagingSenderId: "732884739524",
+                appId: "1:732884739524:web:a9c34746f5704a9c3eb091"
+            };
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+
+            // --- Logic Menu Di Động ---
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const navLinks = document.getElementById('nav-links');
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
+            }
+
+            // --- Logic Xác thực (Auth) ---
+            // (Dán toàn bộ code xử lý đăng nhập, đăng ký, đăng xuất, modal... của bạn vào đây)
+            // Ví dụ: firebase.auth().onAuthStateChanged(...) , loginForm.addEventListener(...)
+
+            // --- Inspiration Section Logic ---
+            function loadInspirationSection() {
+                const inspirationContainer = document.getElementById('inspiration-cards-container');
+                const progressBar = document.getElementById('inspiration-progress-bar');
+                const destinationsRef = firebase.database().ref('travelGuide/destinations');
+
+                if (!inspirationContainer || !progressBar) return;
+
+                destinationsRef.limitToFirst(10).once('value', snapshot => { // Limit to 10 for performance
+                    if (snapshot.exists()) {
+                        let cardsHtml = '';
+                        snapshot.forEach(childSnapshot => {
+                            const dest = childSnapshot.val();
+                            if (dest.slug && dest.image && dest.name && dest.overview) {
+                                cardsHtml += `
+                                    <div class="inspiration-card" style="background-image: url('${dest.image}');" title="${dest.name}">
+                                        <div class="card-overlay">
+                                            <h5>${dest.name}</h5>
+                                            <p>${dest.overview}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        });
+                        inspirationContainer.innerHTML = cardsHtml;
+
+                        // Progress bar logic
+                        inspirationContainer.addEventListener('scroll', () => {
+                            const scrollableWidth = inspirationContainer.scrollWidth - inspirationContainer.clientWidth;
+                            if (scrollableWidth > 0) {
+                                const progress = (inspirationContainer.scrollLeft / scrollableWidth) * 100;
+                                progressBar.style.width = `${progress}%`;
+                            }
+                        });
+                    }
+                });
+            }
+
+            // --- Logic Tải Tour, Lọc và Phân Trang ---
+            let allTours = []; // The original, unfiltered list from Firebase
+            let filteredTours = []; // The list of tours to be displayed after filtering
+            let currentPage = 1;
+            const toursPerPage = 9;
+            const toursGrid = document.getElementById('tours-grid');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const paginationContainer = document.getElementById('pagination-container');
+
+            // Filter Elements
+            const searchInput = document.querySelector('.filter-sidebar input[type="text"]');
+            const priceRange = document.getElementById('price-range');
+            const priceMaxDisplay = document.getElementById('price-max');
+            const applyFilterBtn = document.querySelector('.filter-sidebar .btn-primary');
+
+            function formatPrice(price) {
+                return typeof price === 'number'
+                    ? price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+                    : 'Liên hệ';
+            }
+
+            function renderTourCard(tour) {
+                const priceText = formatPrice(tour.price);
+                return `
+                <div class="col-lg-4 col-md-4 mb-4 d-flex align-items-stretch">
+                    <div class="tour-card-item">
+                        <div class="tour-card-image">
+                            <img src="${tour.image}" alt="${tour.name}">
+                            <div class="tour-card-price-tag">${priceText}</div>
+                        </div>
+                        <div class="tour-card-content">
+                            <h5 class="tour-card-name">${tour.name}</h5>
+                            <div class="tour-card-info-list">
+                                <li><i class="fas fa-map-marker-alt"></i> ${tour.location}</li>
+                                <li><i class="far fa-clock"></i> ${tour.duration || 'N/A'}</li>
+                            </div>
+                            <div class="tour-card-footer">
+                                <div class="tour-card-rating">
+                                    <i class="fas fa-star"></i> ${tour.rating || 'Mới'}
+                                    <span class="reviews">(${tour.reviewsCount || 0} reviews)</span>
+                                </div>
+                                <a href="tour-detail.html?id=${tour.id}&category=${tour.category}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            function displayPage(page) {
+                currentPage = page;
+                const startIndex = (page - 1) * toursPerPage;
+                const paginatedTours = filteredTours.slice(startIndex, startIndex + toursPerPage);
+                toursGrid.innerHTML = paginatedTours.map(renderTourCard).join('') || '<p class="text-center col-12">Không có tour nào phù hợp với bộ lọc của bạn.</p>';
+                updatePaginationUI();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            function updatePaginationUI() {
+                document.querySelectorAll('#pagination-container .page-item').forEach(item => item.classList.remove('active'));
+                const activeLink = document.querySelector(`#pagination-container .page-link[data-page='${currentPage}']`);
+                if (activeLink) activeLink.parentElement.classList.add('active');
+            }
+
+            function setupPagination() {
+                const paginationList = document.querySelector('#pagination-container .pagination');
+                const pageCount = Math.ceil(filteredTours.length / toursPerPage);
+                paginationList.innerHTML = '';
+
+                if (pageCount <= 1) {
+                    document.getElementById('pagination-container').style.display = 'none';
+                    return;
+                }
+                
+                document.getElementById('pagination-container').style.display = 'block';
+                for (let i = 1; i <= pageCount; i++) {
+                    const li = document.createElement('li');
+                    li.className = 'page-item' + (i === currentPage ? ' active' : '');
+                    li.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
+                    li.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        displayPage(i);
+                    });
+                    paginationList.appendChild(li);
+                }
+            }
+
+            function applyFilters() {
+                const searchText = searchInput.value.toLowerCase().trim();
+                const maxPrice = parseInt(priceRange.value, 10);
+                const selectedRatingRadio = document.querySelector('input[name="ratingFilter"]:checked');
+                const minRating = selectedRatingRadio ? parseFloat(selectedRatingRadio.value) : 0;
+
+                filteredTours = allTours.filter(tour => {
+                    const nameMatch = !searchText || tour.name.toLowerCase().includes(searchText);
+                    const priceMatch = tour.price <= maxPrice;
+                    const tourRating = tour.rating || 0; // Default rating to 0 if not present
+                    const ratingMatch = tourRating >= minRating;
+                    return nameMatch && priceMatch && ratingMatch;
+                });
+
+                currentPage = 1; // Reset to first page after filtering
+                setupPagination();
+                displayPage(currentPage);
+            }
+
+            function loadTours() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const categoryId = urlParams.get('category');
+                const categoryTitleEl = document.getElementById('category-title');
+                const categoryDescEl = document.getElementById('category-description');
+
+                if (!categoryId) {
+                    categoryTitleEl.textContent = 'Không Tìm Thấy Danh Mục';
+                    categoryDescEl.textContent = 'Vui lòng chọn một danh mục tour từ trang trước.';
+                    loadingIndicator.innerHTML = '<p>Danh mục không hợp lệ.</p>';
+                    return;
+                }
+
+                // Load category info
+                firebase.database().ref('tourCategories/' + categoryId).on('value', snapshot => {
+                    const data = snapshot.val();
+                    if (data) {
+                        categoryTitleEl.textContent = data.title;
+                        categoryDescEl.textContent = data.description;
+                    }
+                });
+
+                // Load tours
+                const toursRef = firebase.database().ref('specialTours/' + categoryId);
+                toursRef.on('value', snapshot => {
+                    loadingIndicator.style.display = 'none';
+                    const toursData = snapshot.val();
+                    if (toursData) {
+                        allTours = Object.keys(toursData).map(tourId => {
+                            const tourData = toursData[tourId];
+                            return { ...tourData, id: tourId, category: categoryId };
+                        });
+                        
+                        filteredTours = [...allTours]; // Initialize filtered list
+
+                        setupPagination();
+                        displayPage(currentPage);
+                    } else {
+                        allTours = []; 
+                        filteredTours = [];
+                        toursGrid.innerHTML = `<p class="text-center col-12">Hiện chưa có tour nào trong danh mục này.</p>`;
+                        paginationContainer.style.display = 'none';
+                    }
+                }, error => {
+                    console.error(error);
+                    loadingIndicator.style.display = 'none';
+                    toursGrid.innerHTML = '<p class="col-12 text-center text-danger">Lỗi tải dữ liệu.</p>';
+                });
+            }
+
+            // Add Event Listeners
+            if (applyFilterBtn) {
+                applyFilterBtn.addEventListener('click', applyFilters);
+            }
+            if (priceRange && priceMaxDisplay) {
+                priceRange.addEventListener('input', () => {
+                    priceMaxDisplay.textContent = parseInt(priceRange.value, 10).toLocaleString('vi-VN') + 'đ';
+                });
+            }
+
+            // --- Testimonial Slider Logic ---
+            function loadTestimonials() {
+                const reviewsRef = firebase.database().ref('reviews').orderByChild('rating').limitToLast(5); // Get 5 best reviews
+                const slidesContainer = document.getElementById('testimonial-slides');
+                const dotsContainer = document.getElementById('testimonial-dots');
+                const prevBtn = document.querySelector('.testimonial-nav.prev');
+                const nextBtn = document.querySelector('.testimonial-nav.next');
+                
+                if (!slidesContainer) return;
+
+                reviewsRef.once('value', snapshot => {
+                    if (snapshot.exists()) {
+                        let slidesHtml = '';
+                        let dotsHtml = '';
+                        let slideIndex = 0;
+                        const reviews = [];
+                        snapshot.forEach(child => { reviews.unshift(child.val()) }); // unshift to show best first
+
+                        reviews.forEach((review, index) => {
+                             slidesHtml += `
+                                <div class="testimonial-slide ${index === 0 ? 'active' : ''}">
+                                    <h4>"${review.title || 'Amazing Experience'}"</h4>
+                                    <p>${review.comment || ''}</p>
+                                    <div class="testimonial-intro">Happy Traveler</div>
+                                    <div class="author">- ${review.userName || 'Anonymous'} -</div>
+                                </div>
+                            `;
+                            dotsHtml += `<span class="testimonial-dot ${index === 0 ? 'active' : ''}" data-slide="${index}"></span>`;
+                        });
+                        
+                        slidesContainer.innerHTML = slidesHtml;
+                        dotsContainer.innerHTML = dotsHtml;
+                        
+                        let currentSlide = 0;
+                        const slides = document.querySelectorAll('.testimonial-slide');
+                        const dots = document.querySelectorAll('.testimonial-dot');
+
+                        function showSlide(n) {
+                            slides.forEach(slide => slide.classList.remove('active'));
+                            dots.forEach(dot => dot.classList.remove('active'));
+                            slides[n].classList.add('active');
+                            dots[n].classList.add('active');
+                            currentSlide = n;
+                        }
+
+                        prevBtn.addEventListener('click', () => {
+                            let newIndex = currentSlide - 1;
+                            if (newIndex < 0) newIndex = slides.length - 1;
+                            showSlide(newIndex);
+                        });
+
+                        nextBtn.addEventListener('click', () => {
+                            let newIndex = currentSlide + 1;
+                            if (newIndex >= slides.length) newIndex = 0;
+                            showSlide(newIndex);
+                        });
+
+                        dots.forEach(dot => {
+                            dot.addEventListener('click', (e) => {
+                                showSlide(parseInt(e.target.dataset.slide));
+                            });
+                        });
+                    } else {
+                        document.getElementById('testimonial-slider').style.display = 'none';
+                    }
+                });
+            }
+
+            // Khởi chạy
+            loadTours();
+            loadInspirationSection();
+            loadTestimonials();
+        });
+    </script>
+    
+    <!-- Tawk.to Script -->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/684e312c6b65fa190ea6f4dd/1iton06be';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+</body>
+</html> 
