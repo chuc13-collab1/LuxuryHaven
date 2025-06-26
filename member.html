@@ -519,21 +519,9 @@
                 const phoneRegex = /^(0[3-9][0-9]{8,9})$/;
                 const identityRegex = /^\d{9,12}$/;
                 const nameRegex = /^[a-zA-ZÀ-ỹ\s'.-]{2,}$/u;
-                // Kiểm tra địa chỉ: phải có đủ 3 nhóm từ khóa, mỗi nhóm không trùng nhau
+                // Địa chỉ: cho phép nhập tự do, chỉ kiểm tra không rỗng
                 function isValidVietnamAddress(address) {
-                    if (!address) return false;
-                    const adr = address.toLowerCase();
-                    // Tách từ khóa để tránh trùng lặp giữa các nhóm
-                    const xaPhuong = ["xã", "xa", "phường", "phuong", "thị trấn", "thi tran", "thị xã", "thi xa"];
-                    const huyenQuan = ["huyện", "huyen", "quận", "quan"];
-                    const tinhTp = ["tỉnh", "tinh", "thành phố", "thanh pho", "tp", "tp."];
-                    // Nhóm 1: xã/phường/thị trấn
-                    const hasXaPhuong = xaPhuong.some(k => adr.includes(k));
-                    // Nhóm 2: huyện/quận (không nhận thành phố ở đây)
-                    const hasHuyenQuan = huyenQuan.some(k => adr.includes(k));
-                    // Nhóm 3: tỉnh/thành phố
-                    const hasTinhTp = tinhTp.some(k => adr.includes(k));
-                    return hasXaPhuong && hasHuyenQuan && hasTinhTp;
+                    return !!address && address.length > 0;
                 }
                 const today = new Date();
                 let valid = true;
@@ -553,7 +541,7 @@
                     msg = 'Ngày sinh không hợp lệ.';
                 } else if (!address || !isValidVietnamAddress(address)) {
                     valid = false;
-                    msg = 'Vui lòng nhập địa chỉ hợp lệ tại Việt Nam (phường/xã, quận/huyện, tỉnh/thành phố, không cần đúng thứ tự, có thể nhập liền mạch).';
+                    msg = 'Vui lòng nhập địa chỉ.';
                 } else if (!nationality) {
                     valid = false;
                     msg = 'Vui lòng nhập quốc tịch.';
@@ -773,7 +761,7 @@
                 address: document.getElementById('profile-address').value,
                 gender: document.getElementById('profile-gender').value,
                 nationality: document.getElementById('profile-nationality').value,
-                identityNumber: document.getElementById('profile-identity').value,
+                identityNumber: document.getElementById('profile-identityNumber').value,
                 updatedAt: firebase.database.ServerValue.TIMESTAMP
             };
 

@@ -274,163 +274,140 @@
     }
   },
   "bookings": {
-    "-OTM-273eFyAMW4fSKOY": {
+    "-OTUnpszmOsky6xqOTIP": {
       "bookingType": "hotel",
-      "checkIn": "2025-06-24",
+      "checkIn": "2025-06-25",
       "checkOut": "2025-06-26",
-      "createdAt": 1750585062130,
+      "createdAt": 1750732857127,
       "customerEmail": "baokhangml99@gmail.com",
-      "customerName": "Nguyến Tiến Chức",
+      "customerName": "Nguyễn Huy Điền",
+      "customerPhone": "0365211213",
+      "email": "baokhangml99@gmail.com",
+      "guests": 2,
+      "hotelId": "Buôn Ma Thuột_1",
+      "hotelName": "Sai Gon Ban Me Hotel",
+      "nights": 1,
+      "note": "",
+      "paymentMethod": "vnpay",
+      "roomId": "Superior Room",
+      "roomPrice": 1000000,
+      "status": "confirmed",
+      "totalPrice": 950000,
+      "updatedAt": 1750748287814,
+      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
+    },
+    "-OTWrhWlDl3Ulia-T47Y": {
+      "bookingType": "hotel",
+      "checkIn": "2025-06-25",
+      "checkOut": "2025-06-26",
+      "createdAt": 1750767425867,
+      "customerEmail": "nguyentienchuc2023ct@gmail.com",
+      "customerName": "Nguyễn Văn A",
+      "customerPhone": "0365211213",
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Buôn Ma Thuột_1",
+      "hotelName": "Sai Gon Ban Me Hotel",
+      "nights": 1,
+      "note": "",
+      "paymentMethod": "vnpay",
+      "paymentStatus": "paid",
+      "roomId": "Superior Room",
+      "roomPrice": 1000000,
+      "status": "confirmed",
+      "totalPrice": 1000000,
+      "updatedAt": 1750767468024,
+      "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+    },
+    "-OTXS9mQxG4XzrqQY1_D": {
+      "bookingType": "tour",
+      "checkIn": "2025-06-28T00:00:00.000Z",
+      "checkOut": "2025-06-29T00:00:00.000Z",
+      "createdAt": 1750777245045,
+      "customerEmail": "hhhan@gmail.com",
+      "customerName": "Hồ Hảo Hán",
+      "customerPhone": "1233444433",
+      "email": "hhhan@gmail.com",
+      "note": "",
+      "numberOfGuests": 1,
+      "paymentMethod": "vnpay",
+      "paymentStatus": "paid",
+      "status": "confirmed",
+      "totalPrice": 600000,
+      "tourDuration": "4 giờ",
+      "tourId": "hb001",
+      "tourLocation": "Hà Nội",
+      "tourName": "Lớp học nấu phở tại nhà",
+      "tourPrice": 600000,
+      "tourType": "nearby_activity",
+      "updatedAt": 1750777283388,
+      "userId": "RQO2JBnf47VYRD9FI9X8gs5d0x23"
+    },
+    "-OT_TmVBdCCH_RnepDDy": {
+      "bookingType": "hotel",
+      "checkIn": "2025-07-03",
+      "checkOut": "2025-07-04",
+      "createdAt": 1750828001546,
+      "email": "nguyentienchuc2023ct@gmail.com",
+      "guests": "2",
+      "hotelId": "Buôn Ma Thuột_1",
+      "hotelName": "Sai Gon Ban Me Hotel",
+      "roomId": "Superior Room",
+      "roomPrice": 1000000,
+      "userId": "HazZBKeqSvfclLzTW9LTKG6JF1w2"
+    },
+    "-OTgLzxI3Vitq4j6Igtr": {
+      "bookingType": "hotel",
+      "checkIn": "2025-06-28",
+      "checkOut": "2025-06-29",
+      "createdAt": 1750943399991,
+      "customerEmail": "baokhangml99@gmail.com",
+      "customerName": "Nguyễn Tiến Chức",
       "customerPhone": "0365211213",
       "email": "baokhangml99@gmail.com",
       "guests": "2",
       "hotelId": "Buôn Ma Thuột_6",
       "hotelName": "Hai Ba Trung Hotel",
-      "nights": 2,
-      "note": "",
-      "paymentMethod": "vnpay",
-      "roomId": "Standard Room",
-      "roomPrice": 600000,
-      "status": "pending",
-      "totalPrice": 1200000,
-      "updatedAt": 1750585067415,
-      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
-    },
-    "-OTM-K3q-vR00P7Z0cxm": {
-      "bookingType": "tour",
-      "checkIn": "2025-06-24T00:00:00.000Z",
-      "checkOut": "2025-06-25T00:00:00.000Z",
-      "createdAt": 1750585135726,
-      "customerEmail": "baokhangml99@gmail.com",
-      "customerName": "Nguyến Tiến Chức",
-      "customerPhone": "0365211213",
-      "email": "baokhangml99@gmail.com",
-      "note": "",
-      "numberOfGuests": 1,
-      "paymentMethod": "vnpay",
-      "status": "pending",
-      "totalPrice": 1200000,
-      "tourDuration": "1 ngày",
-      "tourId": "tn001",
-      "tourLocation": "Hạ Long, Quảng Ninh",
-      "tourName": "Kayak và câu cá tại Vịnh Hạ Long",
-      "tourPrice": 1200000,
-      "tourType": "local_experience",
-      "updatedAt": 1750585140739,
-      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
-    },
-    "-OTM-WLXPewq0k9nmyJf": {
-      "bookingType": "hotel",
-      "checkIn": "2025-06-26",
-      "checkOut": "2025-06-28",
-      "createdAt": 1750585186175,
-      "customerEmail": "baokhangml99@gmail.com",
-      "customerName": "Nguyến Tiến Chức",
-      "customerPhone": "0365211213",
-      "guests": "2",
-      "hotelId": "deal4",
-      "hotelName": "Trốn Nóng Sapa Mờ Sương",
-      "nights": 2,
-      "note": "",
-      "paymentMethod": "bank",
-      "paymentStatus": "unpaid",
-      "roomId": "Chỉ hôm nay",
-      "status": "pending",
-      "totalPrice": 2100000,
-      "updatedAt": 1750585188942,
-      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
-    },
-    "-OTM-aoePHRG5Fla4Jhw": {
-      "bookingType": "hotel",
-      "checkIn": "2025-06-23",
-      "checkOut": "2025-06-24",
-      "createdAt": 1750585208672,
-      "customerEmail": "baokhangml99@gmail.com",
-      "customerName": "Nguyến Tiến Chức",
-      "customerPhone": "0365211213",
-      "guests": "2",
-      "hotelId": "deal6",
-      "hotelName": "Biển Vắng Vũng Tàu - Giữa Tuần",
       "nights": 1,
       "note": "",
       "paymentMethod": "vnpay",
-      "paymentStatus": "unpaid",
-      "roomId": "Hot",
+      "roomId": "Twin Room",
+      "roomPrice": 650000,
       "status": "pending",
-      "totalPrice": 990000,
-      "updatedAt": 1750585213974,
+      "totalPrice": 617500,
+      "updatedAt": 1750943416728,
       "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
     },
-    "-OTM1O1_qPqQ3snKcWCZ": {
+    "-OTgMFa7-_-9EUUYMGX9": {
       "bookingType": "hotel",
-      "checkIn": "2025-06-24",
-      "checkOut": "2025-06-26",
-      "createdAt": 1750585676397,
+      "checkIn": "2025-06-28",
+      "checkOut": "2025-06-29",
+      "createdAt": 1750943468138,
       "customerEmail": "baokhangml99@gmail.com",
-      "customerName": "Nguyến Tiến Chức",
-      "customerPhone": "0365211213",
-      "guests": "2",
-      "hotelId": "deal1",
-      "hotelName": "Combo Nghỉ Dưỡng Biển 5*",
-      "nights": 2,
-      "note": "",
-      "paymentMethod": "vnpay",
-      "paymentStatus": "unpaid",
-      "roomId": "Flash Sale",
-      "status": "pending",
-      "totalPrice": 3200000,
-      "updatedAt": 1750585682428,
-      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
-    },
-    "-OTM2N--4Z-DV_8mzIhI": {
-      "bookingType": "hotel",
-      "checkIn": "2025-06-25",
-      "checkOut": "2025-06-27",
-      "createdAt": 1750585934284,
-      "customerEmail": "baokhangml99@gmail.com",
-      "customerName": "Nguyến Tiến Chức",
-      "customerPhone": "",
-      "guests": "2",
-      "hotelId": "deal1",
-      "hotelName": "Combo Nghỉ Dưỡng Biển 5*",
-      "nights": 2,
-      "note": "Đặt từ trang Ưu đãi: Combo Nghỉ Dưỡng Biển 5*",
-      "paymentStatus": "unpaid",
-      "roomId": "Flash Sale",
-      "status": "pending",
-      "totalPrice": 3200000,
-      "updatedAt": 1750585934284,
-      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
-    },
-    "-OTQJWywdyOUwLF0egEb": {
-      "bookingType": "hotel",
-      "checkIn": "2025-06-24",
-      "checkOut": "2025-06-26",
-      "createdAt": 1750657540261,
-      "customerEmail": "baokhangml99@gmail.com",
-      "customerName": "Nguyến Tiến Chức",
+      "customerName": "Nguyễn Tiến Chức",
       "customerPhone": "0365211213",
       "email": "baokhangml99@gmail.com",
       "guests": "2",
-      "hotelId": "Buôn Ma Thuột_7",
-      "hotelName": "Lak Resort",
-      "nights": 2,
+      "hotelId": "Buôn Ma Thuột_6",
+      "hotelName": "Hai Ba Trung Hotel",
+      "nights": 1,
       "note": "",
       "paymentMethod": "vnpay",
-      "roomId": "Deluxe Lake View",
-      "roomPrice": 1500000,
-      "status": "pending",
-      "totalPrice": 3000000,
-      "updatedAt": 1750657546031,
+      "paymentStatus": "paid",
+      "roomId": "Twin Room",
+      "roomPrice": 650000,
+      "status": "confirmed",
+      "totalPrice": 617500,
+      "updatedAt": 1750943515771,
       "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
     },
-    "-OTQKDgok7rsbglGcsh2": {
+    "-OTgSmWbpm1aR3KXI7zQ": {
       "bookingType": "hotel",
-      "checkIn": "2025-06-24",
-      "checkOut": "2025-06-25",
-      "createdAt": 1750657723434,
+      "checkIn": "2025-06-27",
+      "checkOut": "2025-06-28",
+      "createdAt": 1750945179975,
       "customerEmail": "baokhangml99@gmail.com",
-      "customerName": "Nguyến Tiến Chức",
+      "customerName": "Nguyễn Tiến Chức",
       "customerPhone": "0365211213",
       "email": "baokhangml99@gmail.com",
       "guests": "2",
@@ -439,11 +416,58 @@
       "nights": 1,
       "note": "",
       "paymentMethod": "vnpay",
+      "paymentStatus": "paid",
+      "roomId": "Deluxe Suite",
+      "roomPrice": 1800000,
+      "status": "confirmed",
+      "totalPrice": 1710000,
+      "updatedAt": 1750945224067,
+      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
+    },
+    "-OTgYCYxW0Nm1nG59Fn1": {
+      "bookingType": "hotel",
+      "checkIn": "2025-06-27",
+      "checkOut": "2025-06-28",
+      "createdAt": 1750946601435,
+      "customerEmail": "baokhangml99@gmail.com",
+      "customerName": "Nguyễn Tiến Chức",
+      "customerPhone": "0365211213",
+      "email": "baokhangml99@gmail.com",
+      "guests": "2",
+      "hotelId": "Buôn Ma Thuột_1",
+      "hotelName": "Sai Gon Ban Me Hotel",
+      "nights": 1,
+      "note": "",
+      "paymentMethod": "vnpay",
+      "paymentStatus": "paid",
       "roomId": "Superior Room",
       "roomPrice": 1000000,
-      "status": "pending",
-      "totalPrice": 1000000,
-      "updatedAt": 1750657727022,
+      "status": "confirmed",
+      "totalPrice": 950000,
+      "updatedAt": 1750946637855,
+      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
+    },
+    "-OTgZ6TnsyeVgXPQ-0Am": {
+      "bookingType": "hotel",
+      "checkIn": "2025-06-28",
+      "checkOut": "2025-06-30",
+      "createdAt": 1750946838667,
+      "customerEmail": "baokhangml99@gmail.com",
+      "customerName": "Nguyễn Tiến Chức",
+      "customerPhone": "0365211213",
+      "email": "baokhangml99@gmail.com",
+      "guests": "2",
+      "hotelId": "Buôn Ma Thuột_2",
+      "hotelName": "Dakruco Hotel",
+      "nights": 2,
+      "note": "",
+      "paymentMethod": "vnpay",
+      "paymentStatus": "paid",
+      "roomId": "Deluxe Room",
+      "roomPrice": 1100000,
+      "status": "confirmed",
+      "totalPrice": 2090000,
+      "updatedAt": 1750946870807,
       "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
     }
   },
@@ -532,7 +556,7 @@
               "Phòng họp",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/muongthanh.jpg",
+            "image": "https://cdn1.ivivu.com/iVivu/2021/01/27/18/104949240-1216898478646536-6218887510609060018-o-2-800x450.jpg",
             "rooms": [
               {
                 "availableRooms": 30,
@@ -591,6 +615,7 @@
           "moTa": "Khách sạn 5 sao hiện đại, trung tâm thành phố, lý tưởng cho du lịch và công tác.",
           "phone": "0262 386 7890",
           "rating": 4.5,
+          "serviceFee": 0,
           "soLuongPhong": 180,
           "tenKhachSan": "Mường Thanh Luxury Buôn Ma Thuột",
           "xepHangSao": 5
@@ -605,7 +630,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/saigonbanme.jpg",
+            "image": "https://pix10.agoda.net/hotelImages/305316/-1/3402e4b2377b0d110b23f21a5a25e248.jpg?s=1024x768",
             "rooms": [
               {
                 "availableRooms": 25,
@@ -664,6 +689,7 @@
           "moTa": "Khách sạn 4 sao nằm gần trung tâm, thuận tiện khám phá văn hóa cà phê và các điểm tham quan như Bảo tàng Đắk Lắk.",
           "phone": "0262 385 1234",
           "rating": 4.3,
+          "serviceFee": 0,
           "soLuongPhong": 120,
           "tenKhachSan": "Sai Gon Ban Me Hotel",
           "xepHangSao": 4
@@ -678,7 +704,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/dakruco.jpg",
+            "image": "http://reviewvilla.vn/wp-content/uploads/2022/04/Dakruco-Hotel-1.jpg",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -737,6 +763,7 @@
           "moTa": "Khách sạn 4 sao với không gian xanh, gần trung tâm, phù hợp cho du khách yêu thích sự yên tĩnh và tiện nghi.",
           "phone": "0262 385 6789",
           "rating": 4.4,
+          "serviceFee": 0,
           "soLuongPhong": 100,
           "tenKhachSan": "Dakruco Hotel",
           "xepHangSao": 4
@@ -750,7 +777,7 @@
               "Bãi đỗ xe",
               "Dịch vụ tour du lịch"
             ],
-            "image": "https://example.com/images/coffeetour.jpg",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/14/5e/7b/3f/coffee-tour-resort.jpg?w=1200&h=-1&s=1",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -807,6 +834,7 @@
           "moTa": "Resort 3 sao với không gian gần gũi thiên nhiên, trải nghiệm văn hóa cà phê, phù hợp cho du khách yêu thích khám phá.",
           "phone": "0262 387 2345",
           "rating": 4.1,
+          "serviceFee": 0,
           "soLuongPhong": 60,
           "tenKhachSan": "Coffee Tour Resort",
           "xepHangSao": 3
@@ -819,7 +847,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/hoangloc.jpg",
+            "image": "https://en.hotelhoangloc.com.vn/saigoncms/files/files/__thumbs/DJI_0134.JPG/DJI_0134__600x450.JPG",
             "rooms": [
               {
                 "availableRooms": 10,
@@ -876,6 +904,7 @@
           "moTa": "Khách sạn 3 sao gần trung tâm, với không gian đơn giản, phù hợp cho du khách tiết kiệm chi phí.",
           "phone": "0262 385 4567",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 50,
           "tenKhachSan": "Hoang Loc Hotel",
           "xepHangSao": 3
@@ -890,7 +919,7 @@
               "Dịch vụ đưa đón",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/banmegreen.jpg",
+            "image": "https://ezstatic1.ezweb.online/ezweb_2157/ros-raty/genial/update/update-6/96.jpg",
             "rooms": [
               {
                 "availableRooms": 12,
@@ -949,6 +978,7 @@
           "moTa": "Resort 4 sao với không gian xanh mát, gần hồ Ea Kao, mang đến trải nghiệm nghỉ dưỡng gần gũi thiên nhiên.",
           "phone": "0262 387 6789",
           "rating": 4.5,
+          "serviceFee": 0,
           "soLuongPhong": 70,
           "tenKhachSan": "Ban Me Green Resort",
           "xepHangSao": 4
@@ -961,7 +991,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/haibatrung.jpg",
+            "image": "https://lvp.happyvivu.com/wp-content/uploads/2020/10/khach-san-sapa-relax-spa-46-6.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -1018,6 +1048,7 @@
           "moTa": "Khách sạn 3 sao nằm gần trung tâm, thuận tiện cho việc mua sắm và khám phá các quán cà phê nổi tiếng.",
           "phone": "0262 385 2345",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 60,
           "tenKhachSan": "Hai Ba Trung Hotel",
           "xepHangSao": 3
@@ -1031,7 +1062,7 @@
               "Dịch vụ tour văn hóa",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/lakresort.jpg",
+            "image": "https://www.asiandreams.de/wp-content/uploads/2017/03/thailand-khao-lak-khao-lak-merlin-pool.jpg",
             "rooms": [
               {
                 "availableRooms": 10,
@@ -1090,6 +1121,7 @@
           "moTa": "Resort 4 sao nằm bên hồ Lắk, mang đến trải nghiệm văn hóa dân tộc M’Nông và thiên nhiên yên bình.",
           "phone": "0262 387 1234",
           "rating": 4.5,
+          "serviceFee": 0,
           "soLuongPhong": 50,
           "tenKhachSan": "Lak Resort",
           "xepHangSao": 4
@@ -1102,7 +1134,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/thanhcong.jpg",
+            "image": "https://hoh.vn/wp-content/uploads/2024/05/Mian-Thanh-cong-hotel-38.webp",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -1159,6 +1191,7 @@
           "moTa": "Khách sạn 3 sao với vị trí trung tâm, gần các quán cà phê và khu mua sắm, phù hợp cho du khách công tác và du lịch.",
           "phone": "0262 385 5678",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 70,
           "tenKhachSan": "Thanh Cong Hotel",
           "xepHangSao": 3
@@ -1177,7 +1210,7 @@
               "Phòng họp",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/cantho_vinpearl.jpg",
+            "image": "https://datphongresort.com/wp-content/uploads/2019/04/v-2.jpg",
             "rooms": [
               {
                 "availableRooms": 40,
@@ -1236,6 +1269,7 @@
           "moTa": "Khách sạn 5 sao hiện đại, tọa lạc gần bến Ninh Kiều, mang đến trải nghiệm nghỉ dưỡng sang trọng.",
           "phone": "0292 382 8888",
           "rating": 4.6,
+          "serviceFee": 0,
           "soLuongPhong": 200,
           "tenKhachSan": "Vinpearl Hotel Cần Thơ",
           "xepHangSao": 5
@@ -1250,7 +1284,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/cantho_ninhkieu.jpg",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/6a/24/22/ninh-kieu-riverside-hotel.jpg?w=900&h=-1&s=1",
             "rooms": [
               {
                 "availableRooms": 25,
@@ -1309,6 +1343,7 @@
           "moTa": "Khách sạn 4 sao nằm ngay bến Ninh Kiều, lý tưởng để khám phá chợ đêm và văn hóa miền Tây.",
           "phone": "0292 381 1234",
           "rating": 4.3,
+          "serviceFee": 0,
           "soLuongPhong": 150,
           "tenKhachSan": "Ninh Kiều Riverside Hotel",
           "xepHangSao": 4
@@ -1321,7 +1356,7 @@
               "Bãi đỗ xe miễn phí",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/cantho_saomai.jpg",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/ef/3d/6b/sao-mai-hotel.jpg?w=700&h=-1&s=1",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -1378,6 +1413,7 @@
           "moTa": "Khách sạn 3 sao với giá cả phải chăng, gần trung tâm thương mại và chợ đêm Cần Thơ.",
           "phone": "0292 383 4321",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 80,
           "tenKhachSan": "Sao Mai Hotel",
           "xepHangSao": 3
@@ -1391,7 +1427,7 @@
               "Phòng họp",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/cantho_mekongstar.jpg",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/07/ab/6c/2f/mekong-star-hotel.jpg?w=700&h=-1&s=1",
             "rooms": [
               {
                 "availableRooms": 25,
@@ -1450,6 +1486,7 @@
           "moTa": "Khách sạn 4 sao với không gian sang trọng, gần bến Ninh Kiều, lý tưởng cho kỳ nghỉ gia đình hoặc công tác.",
           "phone": "0292 384 6789",
           "rating": 4.4,
+          "serviceFee": 0,
           "soLuongPhong": 120,
           "tenKhachSan": "Mekong Star Hotel",
           "xepHangSao": 4
@@ -1462,7 +1499,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/cantho_hongha.jpg",
+            "image": "https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/136990192.jpg?k=45438dfb3b79ceda6d72750007101590470def35efaf0154fb80093721e17011&o=",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -1519,6 +1556,7 @@
           "moTa": "Khách sạn 2 sao với không gian ấm cúng, giá cả hợp lý, phù hợp cho du khách tiết kiệm chi phí.",
           "phone": "0292 385 2345",
           "rating": 3.8,
+          "serviceFee": 0,
           "soLuongPhong": 50,
           "tenKhachSan": "Hồng Hà Hotel",
           "xepHangSao": 2
@@ -1533,7 +1571,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/cantho_victoria.jpg",
+            "image": "https://www.victoriahotels.asia/wp-content/uploads/2023/04/2C5A6901.jpg",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -1592,6 +1630,7 @@
           "moTa": "Resort 5 sao với kiến trúc cổ điển, nằm bên sông Hậu, mang đến trải nghiệm nghỉ dưỡng cao cấp.",
           "phone": "0292 386 9999",
           "rating": 4.7,
+          "serviceFee": 0,
           "soLuongPhong": 100,
           "tenKhachSan": "Victoria Cần Thơ Resort",
           "xepHangSao": 5
@@ -1604,7 +1643,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/cantho_taydo.jpg",
+            "image": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/476061825.jpg?k=0d3256b47f0f0b5308b94bd593544a3189f69239b12392218f0fc44c235f744e&o=&hp=1",
             "rooms": [
               {
                 "availableRooms": 12,
@@ -1661,8 +1700,9 @@
           "moTa": "Khách sạn 2 sao với không gian đơn giản, gần chợ đêm và các quán ăn địa phương.",
           "phone": "0292 387 1111",
           "rating": 3.7,
+          "serviceFee": 0,
           "soLuongPhong": 40,
-          "tenKhachSan": "Tây Đô Hotel",
+          "tenKhachSan": "Resort Tây Đô",
           "xepHangSao": 2
         },
         {
@@ -1674,7 +1714,7 @@
               "Phòng họp",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/cantho_holidayone.jpg",
+            "image": "https://vietair.com.vn/Media/Images/holiday-one-hotel.jpg",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -1733,6 +1773,7 @@
           "moTa": "Khách sạn 4 sao với thiết kế hiện đại, gần trung tâm, phù hợp cho du lịch và công tác.",
           "phone": "0292 388 2222",
           "rating": 4.2,
+          "serviceFee": 0,
           "soLuongPhong": 130,
           "tenKhachSan": "Holiday One Hotel",
           "xepHangSao": 4
@@ -1745,7 +1786,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/cantho_kimtho.jpg",
+            "image": "http://pix4.agoda.net/hotelimages/240/240224/240224_15052811270027902058.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -1802,6 +1843,7 @@
           "moTa": "Khách sạn 3 sao với không gian thoải mái, gần bến Ninh Kiều và các điểm tham quan.",
           "phone": "0292 389 3333",
           "rating": 4.1,
+          "serviceFee": 0,
           "soLuongPhong": 90,
           "tenKhachSan": "Kim Thơ Hotel",
           "xepHangSao": 3
@@ -1820,7 +1862,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/dalat_anamandara.jpg",
+            "image": "https://www.anamandara-resort.com/wp-content/uploads/sites/233/2022/05/ana-mandara-dalat-homepage-4-1.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -1880,6 +1922,7 @@
           "moTa": "Resort 5 sao với kiến trúc Pháp cổ điển, tọa lạc giữa đồi thông, mang đến trải nghiệm nghỉ dưỡng sang trọng.",
           "phone": "0263 383 9999",
           "rating": 4.7,
+          "serviceFee": 0,
           "soLuongPhong": 80,
           "tenKhachSan": "Ana Mandara Villas Dalat Resort & Spa",
           "xepHangSao": 5
@@ -1894,7 +1937,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/dalat_sammy.jpg",
+            "image": "https://www.hoteljob.vn/uploads/images/2022/06/07/629ef429d90d70_42518969.jpg",
             "rooms": [
               {
                 "availableRooms": 25,
@@ -1953,6 +1996,7 @@
           "moTa": "Khách sạn 4 sao hiện đại, gần hồ Xuân Hương, lý tưởng cho du lịch và công tác.",
           "phone": "0263 382 1234",
           "rating": 4.3,
+          "serviceFee": 0,
           "soLuongPhong": 120,
           "tenKhachSan": "Sammy Hotel Đà Lạt",
           "xepHangSao": 4
@@ -1966,7 +2010,7 @@
               "Dịch vụ giặt ủi",
               "Khu vực uống trà chiều"
             ],
-            "image": "https://example.com/images/dalat_ngoclan.jpg",
+            "image": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/203753512.jpg?k=aaafe229d63b8fb80700f90b8f535de47e8ad1885104e2f2a142c2ba008fcb0e&o=&hp=1",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -2023,6 +2067,7 @@
           "moTa": "Khách sạn 3 sao với vị trí trung tâm, gần chợ Đà Lạt, giá cả phải chăng.",
           "phone": "0263 384 4321",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 90,
           "tenKhachSan": "Ngọc Lan Hotel",
           "xepHangSao": 3
@@ -2036,7 +2081,7 @@
               "Khu vườn hoa",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/dalat_tuyenlam.jpg",
+            "image": "https://ik.imagekit.io/tvlk/blog/2022/06/resort-gan-ho-tuyen-lam-9-1024x659.jpeg?tr=dpr-2,w-675",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -2095,6 +2140,7 @@
           "moTa": "Resort 4 sao tọa lạc bên hồ Tuyền Lâm, không gian lãng mạn, lý tưởng cho kỳ nghỉ gia đình hoặc cặp đôi.",
           "phone": "0263 385 6789",
           "rating": 4.4,
+          "serviceFee": 0,
           "soLuongPhong": 100,
           "tenKhachSan": "Tuyền Lâm Resort",
           "xepHangSao": 4
@@ -2107,7 +2153,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/dalat_thanhxuan.jpg",
+            "image": "https://www.sslock.vn/public/uploads/posts/2023-02/z4123944329341-0b986a473ce15a1e68397752b8c30a5c.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -2164,6 +2210,7 @@
           "moTa": "Khách sạn 2 sao với không gian ấm cúng, giá cả hợp lý, gần chợ đêm Đà Lạt.",
           "phone": "0263 386 2345",
           "rating": 3.8,
+          "serviceFee": 0,
           "soLuongPhong": 50,
           "tenKhachSan": "Thanh Xuân Hotel",
           "xepHangSao": 2
@@ -2178,7 +2225,7 @@
               "Spa",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/dalat_swissbel.jpg",
+            "image": "https://cdn2.vietnambooking.com/wp-content/uploads/hotel_pro/hotel_352127/9e55f0ee37752d528aab3558070d6e26.jpg",
             "rooms": [
               {
                 "availableRooms": 30,
@@ -2237,6 +2284,7 @@
           "moTa": "Resort 5 sao với thiết kế hiện đại, gần hồ Tuyền Lâm, mang đến trải nghiệm nghỉ dưỡng cao cấp.",
           "phone": "0263 387 9999",
           "rating": 4.6,
+          "serviceFee": 0,
           "soLuongPhong": 150,
           "tenKhachSan": "Swiss-Belresort Tuyền Lâm",
           "xepHangSao": 5
@@ -2249,7 +2297,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/dalat_hongphuc.jpg",
+            "image": "https://comnieuhongphuc.com/wp-content/uploads/2021/01/020_3160-copy.jpg",
             "rooms": [
               {
                 "availableRooms": 12,
@@ -2306,6 +2354,7 @@
           "moTa": "Khách sạn 2 sao với không gian đơn giản, gần hồ Xuân Hương và các quán cà phê nổi tiếng.",
           "phone": "0263 388 1111",
           "rating": 3.7,
+          "serviceFee": 0,
           "soLuongPhong": 40,
           "tenKhachSan": "Hồng Phúc Hotel",
           "xepHangSao": 2
@@ -2319,7 +2368,7 @@
               "Khu vườn hoa",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/dalat_lavender.jpg",
+            "image": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/58982106.jpg?k=b3bb03396a540eedae5a610ca4c9c4292fba52a38164014800df650e5c07823f&o=&hp=1",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -2378,6 +2427,7 @@
           "moTa": "Khách sạn 4 sao với thiết kế hiện đại, gần trung tâm, mang đến trải nghiệm thoải mái cho du khách.",
           "phone": "0263 389 2222",
           "rating": 4.2,
+          "serviceFee": 0,
           "soLuongPhong": 110,
           "tenKhachSan": "Lavender Hotel",
           "xepHangSao": 4
@@ -2396,7 +2446,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/danang_hyatt.jpg",
+            "image": "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2017/04/10/1203/Hyatt-Regency-Danang-Resort-and-Spa-P300-Main-Pool.jpg/Hyatt-Regency-Danang-Resort-and-Spa-P300-Main-Pool.16x9.jpg?imwidth=1280",
             "rooms": [
               {
                 "availableRooms": 40,
@@ -2455,6 +2505,7 @@
           "moTa": "Resort 5 sao sang trọng nằm bên bãi biển Non Nước, mang đến trải nghiệm nghỉ dưỡng đẳng cấp với tầm nhìn biển tuyệt đẹp.",
           "phone": "0236 398 1234",
           "rating": 4.8,
+          "serviceFee": 0,
           "soLuongPhong": 200,
           "tenKhachSan": "Hyatt Regency Đà Nẵng Resort & Spa",
           "xepHangSao": 5
@@ -2469,7 +2520,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/danang_grandocean.jpg",
+            "image": "https://grandoceanhotel.com.vn/wp-content/uploads/2019/06/Receptionist-1-1-1.jpg",
             "rooms": [
               {
                 "availableRooms": 30,
@@ -2528,6 +2579,7 @@
           "moTa": "Khách sạn 4 sao tọa lạc ngay bãi biển Mỹ Khê, gần trung tâm thành phố, lý tưởng cho du lịch và thư giãn.",
           "phone": "0236 391 5678",
           "rating": 4.4,
+          "serviceFee": 0,
           "soLuongPhong": 150,
           "tenKhachSan": "Grand Ocean Hotel",
           "xepHangSao": 4
@@ -2540,7 +2592,7 @@
               "Bãi đỗ xe miễn phí",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/danang_seaside.jpg",
+            "image": "https://www.seasideporta.com/gallery/hotel/exterior3.jpg",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -2597,6 +2649,7 @@
           "moTa": "Khách sạn 3 sao với không gian thân thiện, gần bãi biển Mỹ Khê, phù hợp cho du khách muốn tiết kiệm chi phí.",
           "phone": "0236 392 4321",
           "rating": 4.1,
+          "serviceFee": 0,
           "soLuongPhong": 80,
           "tenKhachSan": "Seaside Boutique Hotel",
           "xepHangSao": 3
@@ -2611,7 +2664,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/danang_intercontinental.jpg",
+            "image": "https://pix10.agoda.net/hotelImages/287965/0/bb6dab78cdc95e492e8a43bad893aac9.jpg?s=1024x768",
             "rooms": [
               {
                 "availableRooms": 30,
@@ -2670,6 +2723,7 @@
           "moTa": "Resort 5 sao đẳng cấp thế giới nằm trên bán đảo Sơn Trà, với thiết kế độc đáo và tầm nhìn biển ngoạn mục.",
           "phone": "0236 393 8888",
           "rating": 4.9,
+          "serviceFee": 0,
           "soLuongPhong": 180,
           "tenKhachSan": "InterContinental Đà Nẵng Sun Peninsula Resort",
           "xepHangSao": 5
@@ -2684,7 +2738,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/danang_goldenbay.jpg",
+            "image": "https://goldenbay.com.cy/wp-content/uploads/2020/11/DJI_0188.jpg",
             "rooms": [
               {
                 "availableRooms": 25,
@@ -2743,6 +2797,7 @@
           "moTa": "Khách sạn 4 sao với thiết kế hiện đại, gần bãi biển Mỹ Khê và cầu Rồng, lý tưởng cho du lịch và công tác.",
           "phone": "0236 387 6789",
           "rating": 4.3,
+          "serviceFee": 0,
           "soLuongPhong": 130,
           "tenKhachSan": "Golden Bay Hotel",
           "xepHangSao": 4
@@ -2755,7 +2810,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/danang_sunrise.jpg",
+            "image": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/199641361.jpg?k=bdd00f8c38e96999df1d4d733b8126995e84de8cbb573f669aa85ab823bc3a6e&o=&hp=1",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -2812,6 +2867,7 @@
           "moTa": "Khách sạn 3 sao với không gian ấm cúng, gần bãi biển Mỹ Khê, giá cả hợp lý cho du khách.",
           "phone": "0236 388 2345",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 70,
           "tenKhachSan": "Sunrise Hotel Đà Nẵng",
           "xepHangSao": 3
@@ -2826,7 +2882,7 @@
               "Sân chơi trẻ em",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/danang_furama.jpg",
+            "image": "https://danangfantasticity.com/wp-content/uploads/2015/12/furama-resort-da-nang-01.jpg",
             "rooms": [
               {
                 "availableRooms": 35,
@@ -2885,6 +2941,7 @@
           "moTa": "Resort 5 sao nổi tiếng với bãi biển riêng và kiến trúc sang trọng, gần trung tâm Đà Nẵng.",
           "phone": "0236 384 7333",
           "rating": 4.7,
+          "serviceFee": 0,
           "soLuongPhong": 190,
           "tenKhachSan": "Furama Resort Đà Nẵng",
           "xepHangSao": 5
@@ -2897,7 +2954,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/danang_blueocean.jpg",
+            "image": "https://www.viajeselcorteingles.es/imagenes/tm/america/republica-dominicana-do/puj-punta-cana/pujpu-punta-cana/73mmk3h6/mdm-17pujpu610-pool-obs-25-folleto-america-2017_x.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -2954,6 +3011,7 @@
           "moTa": "Khách sạn 3 sao với không gian đơn giản, gần bãi biển Mỹ Khê, phù hợp cho du khách tiết kiệm chi phí.",
           "phone": "0236 389 1111",
           "rating": 3.9,
+          "serviceFee": 0,
           "soLuongPhong": 60,
           "tenKhachSan": "Blue Ocean Hotel",
           "xepHangSao": 3
@@ -2968,7 +3026,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/danang_vinpearl.jpg",
+            "image": "http://alphareal.vn/wp-content/uploads/2020/06/vinpearl-villas-da-nang-toan-canh.jpg",
             "rooms": [
               {
                 "availableRooms": 40,
@@ -3027,6 +3085,7 @@
           "moTa": "Resort 5 sao với không gian sang trọng, bãi biển riêng, và tầm nhìn tuyệt đẹp ra biển Đông.",
           "phone": "0236 390 8888",
           "rating": 4.8,
+          "serviceFee": 0,
           "soLuongPhong": 220,
           "tenKhachSan": "Vinpearl Resort & Spa Đà Nẵng",
           "xepHangSao": 5
@@ -3039,7 +3098,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/danang_seaphoenix.jpg",
+            "image": "https://owa.bestprice.vn/images/hotels/large/sea-phoenix-hotel-da-nang-648991d479978-848x477.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -3096,6 +3155,7 @@
           "moTa": "Khách sạn 3 sao với không gian thoải mái, gần bãi biển Mỹ Khê và các quán ăn nổi tiếng.",
           "phone": "0236 386 2222",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 90,
           "tenKhachSan": "Sea Phoenix Hotel",
           "xepHangSao": 3
@@ -3114,7 +3174,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/hanoi_sofitel.jpg",
+            "image": "https://www.qantas.com/content/travelinsider/en/explore/asia/vietnam/hanoi/sofitel-metropole-hanoi-review/_jcr_content/parsysTop/hero.img.full.medium.jpg/1655876602255.jpg",
             "rooms": [
               {
                 "availableRooms": 50,
@@ -3173,6 +3233,7 @@
           "moTa": "Khách sạn 5 sao với kiến trúc Pháp cổ điển, tọa lạc tại trung tâm Hà Nội, gần Hồ Hoàn Kiếm và Nhà hát Lớn.",
           "phone": "024 3826 6919",
           "rating": 4.9,
+          "serviceFee": 0,
           "soLuongPhong": 364,
           "tenKhachSan": "Sofitel Legend Metropole Hanoi",
           "xepHangSao": 5
@@ -3187,7 +3248,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/hanoi_lasiesta.jpg",
+            "image": "https://cdn.audleytravel.com/1050/749/79/1021914-la-siesta-hotel-hanoi-exterior.jpg",
             "rooms": [
               {
                 "availableRooms": 25,
@@ -3246,6 +3307,7 @@
           "moTa": "Khách sạn 4 sao nằm trong khu phố cổ, gần chợ đêm và Hồ Hoàn Kiếm, mang đến trải nghiệm văn hóa Hà Nội.",
           "phone": "024 3926 3641",
           "rating": 4.5,
+          "serviceFee": 0,
           "soLuongPhong": 120,
           "tenKhachSan": "Hanoi La Siesta Hotel",
           "xepHangSao": 4
@@ -3258,7 +3320,7 @@
               "Bãi đỗ xe miễn phí",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/hanoi_oldquarter.jpg",
+            "image": "https://pix1.agoda.net/hotelImages/108/108533/108533_15121016220038413248.jpg?s=1100x825",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -3315,6 +3377,7 @@
           "moTa": "Khách sạn 3 sao với không gian thân thiện, nằm trong khu phố cổ, gần các điểm tham quan và quán ăn địa phương.",
           "phone": "024 3938 2430",
           "rating": 4.2,
+          "serviceFee": 0,
           "soLuongPhong": 80,
           "tenKhachSan": "Hanoi Old Quarter Hotel",
           "xepHangSao": 3
@@ -3329,7 +3392,7 @@
               "Phòng họp",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/hanoi_hilton.jpg",
+            "image": "https://assets.hospitalityonline.com/photos/employers/235444/71643_l.jpg",
             "rooms": [
               {
                 "availableRooms": 40,
@@ -3388,6 +3451,7 @@
           "moTa": "Khách sạn 5 sao với thiết kế hiện đại, nằm gần Nhà hát Lớn và Hồ Hoàn Kiếm, lý tưởng cho du lịch và công tác.",
           "phone": "024 3933 0500",
           "rating": 4.7,
+          "serviceFee": 0,
           "soLuongPhong": 268,
           "tenKhachSan": "Hilton Hanoi Opera",
           "xepHangSao": 5
@@ -3400,7 +3464,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/hanoi_golden.jpg",
+            "image": "https://firstclasse.com.my/wp-content/uploads/2020/12/Vietnams-Dolce-Hanoi-Golden-Lake.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -3457,6 +3521,7 @@
           "moTa": "Khách sạn 3 sao với không gian ấm cúng, gần Hồ Hoàn Kiếm và khu phố cổ, phù hợp cho du khách tiết kiệm chi phí.",
           "phone": "024 3928 4567",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 60,
           "tenKhachSan": "Hanoi Golden Hotel",
           "xepHangSao": 3
@@ -3471,7 +3536,7 @@
               "Phòng họp",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/hanoi_lotte.jpg",
+            "image": "https://hotel84.com/hotel84-images/product/photo/lotte-hotel-hanoi.jpg",
             "rooms": [
               {
                 "availableRooms": 50,
@@ -3530,6 +3595,7 @@
           "moTa": "Khách sạn 5 sao hiện đại với tầm nhìn toàn cảnh Hà Nội, gần Lăng Bác và trung tâm thương mại.",
           "phone": "024 3333 1000",
           "rating": 4.8,
+          "serviceFee": 0,
           "soLuongPhong": 318,
           "tenKhachSan": "Lotte Hotel Hanoi",
           "xepHangSao": 5
@@ -3544,7 +3610,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/hanoi_emerald.jpg",
+            "image": "https://owa.bestprice.vn/images/hotels/large/hanoi-emerald-waters-hotel-spa-629db63763e54-848x477.jpg",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -3603,6 +3669,7 @@
           "moTa": "Khách sạn 4 sao với thiết kế hiện đại, nằm trong khu phố cổ, gần các điểm tham quan như Hồ Hoàn Kiếm.",
           "phone": "024 3938 1234",
           "rating": 4.4,
+          "serviceFee": 0,
           "soLuongPhong": 100,
           "tenKhachSan": "Hanoi Emerald Waters Hotel",
           "xepHangSao": 4
@@ -3615,7 +3682,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/hanoi_lotus.jpg",
+            "image": "http://atvyyc.net/wp-content/uploads/2020/10/24879877_10159636773430511_1703854467395893111_o.jpg",
             "rooms": [
               {
                 "availableRooms": 12,
@@ -3672,6 +3739,7 @@
           "moTa": "Khách sạn 3 sao với không gian đơn giản, gần khu phố cổ và chợ Đồng Xuân, phù hợp cho du khách tiết kiệm chi phí.",
           "phone": "024 3938 5678",
           "rating": 3.9,
+          "serviceFee": 0,
           "soLuongPhong": 50,
           "tenKhachSan": "Hanoi Lotus Boutique Hotel",
           "xepHangSao": 3
@@ -3690,7 +3758,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/halong_vinpearl.jpg",
+            "image": "https://pix10.agoda.net/hotelImages/101/1015998/1015998_15120409390038243694.jpg?s=1024x768",
             "rooms": [
               {
                 "availableRooms": 40,
@@ -3749,6 +3817,7 @@
           "moTa": "Resort 5 sao sang trọng tọa lạc trên đảo Rều, mang đến tầm nhìn toàn cảnh Vịnh Hạ Long, lý tưởng cho nghỉ dưỡng cao cấp.",
           "phone": "0203 355 8888",
           "rating": 4.8,
+          "serviceFee": 0,
           "soLuongPhong": 200,
           "tenKhachSan": "Vinpearl Resort & Spa Hạ Long",
           "xepHangSao": 5
@@ -3763,7 +3832,7 @@
               "Phòng họp",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/halong_muongthanh.jpg",
+            "image": "https://booking.muongthanh.com/images/hotels/hotels/original/muong-thanh-ha-long-residence_1660548737.jpg",
             "rooms": [
               {
                 "availableRooms": 30,
@@ -3822,6 +3891,7 @@
           "moTa": "Khách sạn 5 sao hiện đại, gần bãi biển Bãi Cháy và khu vui chơi Sun World, phù hợp cho du lịch và công tác.",
           "phone": "0203 384 5678",
           "rating": 4.6,
+          "serviceFee": 0,
           "soLuongPhong": 180,
           "tenKhachSan": "Mường Thanh Luxury Hạ Long",
           "xepHangSao": 5
@@ -3836,7 +3906,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/halong_saigon.jpg",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/d6/bd/db/whole-view.jpg?w=1400&h=-1&s=1",
             "rooms": [
               {
                 "availableRooms": 25,
@@ -3895,6 +3965,7 @@
           "moTa": "Khách sạn 4 sao với vị trí thuận tiện tại Bãi Cháy, gần các điểm du lịch như Vịnh Hạ Long và công viên Sun World.",
           "phone": "0203 382 1234",
           "rating": 4.3,
+          "serviceFee": 0,
           "soLuongPhong": 150,
           "tenKhachSan": "Saigon Halong Hotel",
           "xepHangSao": 4
@@ -3908,7 +3979,7 @@
               "Phòng họp",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/halong_paradise.jpg",
+            "image": "https://owa.bestprice.vn/images/hotels/large/paradise-suites-hotel-ha-long-64705a8d1098e-848x477.jpg",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -3967,6 +4038,7 @@
           "moTa": "Khách sạn 4 sao tọa lạc trên đảo Tuần Châu, gần bến tàu du lịch, lý tưởng cho du khách khám phá Vịnh Hạ Long.",
           "phone": "0203 383 6789",
           "rating": 4.4,
+          "serviceFee": 0,
           "soLuongPhong": 100,
           "tenKhachSan": "Paradise Suites Hotel",
           "xepHangSao": 4
@@ -3979,7 +4051,7 @@
               "Bãi đỗ xe miễn phí",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/halong_bayhotel.jpg",
+            "image": "https://www.uncovervietnam.com/wp-content/uploads/2019/08/vinpearl-resort-ha-long-bay-vietnam-1164x655.jpg",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -4036,6 +4108,7 @@
           "moTa": "Khách sạn 3 sao với không gian thân thiện, gần bãi biển Bãi Cháy, giá cả hợp lý cho du khách.",
           "phone": "0203 384 4321",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 80,
           "tenKhachSan": "Hạ Long Bay Hotel",
           "xepHangSao": 3
@@ -4050,7 +4123,7 @@
               "Phòng họp",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/halong_wyndham.jpg",
+            "image": "https://www.halongbaycruise.vn/userfiles/image/hotel/wyndham-hotel.jpg",
             "rooms": [
               {
                 "availableRooms": 40,
@@ -4109,6 +4182,7 @@
           "moTa": "Khách sạn 5 sao với tầm nhìn toàn cảnh Vịnh Hạ Long, gần trung tâm Bãi Cháy, mang đến trải nghiệm nghỉ dưỡng cao cấp.",
           "phone": "0203 363 9999",
           "rating": 4.7,
+          "serviceFee": 0,
           "soLuongPhong": 220,
           "tenKhachSan": "Wyndham Legend Halong",
           "xepHangSao": 5
@@ -4121,7 +4195,7 @@
               "Bãi đỗ xe",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/halong_sunrise.jpg",
+            "image": "https://i.pinimg.com/originals/72/81/a2/7281a27a7025409553f5c7555a20a519.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -4178,6 +4252,7 @@
           "moTa": "Khách sạn 3 sao với không gian đơn giản, gần bãi biển Bãi Cháy, phù hợp cho du khách tiết kiệm chi phí.",
           "phone": "0203 388 2345",
           "rating": 3.9,
+          "serviceFee": 0,
           "soLuongPhong": 60,
           "tenKhachSan": "Sunrise Halong Hotel",
           "xepHangSao": 3
@@ -4196,7 +4271,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/hoian_anantara.jpg",
+            "image": "https://cdn.audleytravel.com/1400/1000/79/485775-anantara-hoi-an-resort--hoi-an.jpg",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -4255,6 +4330,7 @@
           "moTa": "Resort 5 sao sang trọng bên sông Hoài, gần phố cổ Hội An, mang đến trải nghiệm nghỉ dưỡng đẳng cấp với không gian truyền thống Việt Nam.",
           "phone": "0235 391 4555",
           "rating": 4.8,
+          "serviceFee": 0,
           "soLuongPhong": 94,
           "tenKhachSan": "Anantara Hoi An Resort",
           "xepHangSao": 5
@@ -4269,7 +4345,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/hoian_silk.jpg",
+            "image": "https://cdn.kimkim.com/files/a/images/6cb9c3ffdf6a68c25b5127aa6eba9edddcc65fc4/original-239e84b3d89f429bce6508559da33f98.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -4328,6 +4404,7 @@
           "moTa": "Khách sạn 4 sao nằm trong khu vực phố cổ, gần Chùa Cầu và chợ đêm, mang đến không gian ấm cúng và tiện nghi.",
           "phone": "0235 392 3456",
           "rating": 4.5,
+          "serviceFee": 0,
           "soLuongPhong": 80,
           "tenKhachSan": "Hoi An Silk Boutique Hotel",
           "xepHangSao": 4
@@ -4342,7 +4419,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/hoian_littlebeach.jpg",
+            "image": "https://bazantravel.com/cdn/medias/uploads/54/54188-little-hoi-an-700x438.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -4401,6 +4478,7 @@
           "moTa": "Khách sạn 4 sao nằm gần bãi biển An Bàng, cách phố cổ 5km, mang đến không gian yên bình và gần gũi với thiên nhiên.",
           "phone": "0235 393 6789",
           "rating": 4.4,
+          "serviceFee": 0,
           "soLuongPhong": 70,
           "tenKhachSan": "Little Hoi An Beach Hotel",
           "xepHangSao": 4
@@ -4413,7 +4491,7 @@
               "Bãi đỗ xe miễn phí",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/hoian_lantern.jpg",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/67/76/23/hoi-an-lantern-hotel.jpg?w=900&h=-1&s=1",
             "rooms": [
               {
                 "availableRooms": 10,
@@ -4470,6 +4548,7 @@
           "moTa": "Khách sạn 3 sao với không gian truyền thống, nằm trong phố cổ, gần Chùa Cầu và các quán cà phê nổi tiếng.",
           "phone": "0235 386 4321",
           "rating": 4.2,
+          "serviceFee": 0,
           "soLuongPhong": 50,
           "tenKhachSan": "Hoi An Lantern Hotel",
           "xepHangSao": 3
@@ -4484,7 +4563,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/hoian_palmgarden.jpg",
+            "image": "https://www.tnktravel.com/wp-content/uploads/2015/07/Hoi-An-Lantern-Hotel.jpg",
             "rooms": [
               {
                 "availableRooms": 30,
@@ -4543,6 +4622,7 @@
           "moTa": "Resort 5 sao nằm bên bãi biển Cửa Đại, với không gian xanh mát và thiết kế truyền thống, cách phố cổ Hội An 5km.",
           "phone": "0235 392 7927",
           "rating": 4.7,
+          "serviceFee": 0,
           "soLuongPhong": 188,
           "tenKhachSan": "Palm Garden Resort",
           "xepHangSao": 5
@@ -4555,7 +4635,7 @@
               "Bãi đỗ xe",
               "Dịch vụ xe đạp miễn phí"
             ],
-            "image": "https://example.com/images/hoian_greenapple.jpg",
+            "image": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/76059596.jpg?k=a65bdb2d28e4df7846fef8380dcf501ca4d4881cfd87dc22c9562c134a2435e5&o=&hp=1",
             "rooms": [
               {
                 "availableRooms": 10,
@@ -4612,6 +4692,7 @@
           "moTa": "Khách sạn 3 sao với không gian đơn giản, cách phố cổ 1km, phù hợp cho du khách tiết kiệm chi phí.",
           "phone": "0235 386 2345",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 40,
           "tenKhachSan": "Hoi An Green Apple Hotel",
           "xepHangSao": 3
@@ -4630,7 +4711,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/hue_imperial.jpg",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/08/09/d8/3b/imperial-hotel.jpg?w=900&h=-1&s=1",
             "rooms": [
               {
                 "availableRooms": 30,
@@ -4689,6 +4770,7 @@
           "moTa": "Khách sạn 5 sao sang trọng với kiến trúc cung đình, gần sông Hương và Đại Nội, mang đến trải nghiệm văn hóa Huế độc đáo.",
           "phone": "0234 388 2222",
           "rating": 4.8,
+          "serviceFee": 0,
           "soLuongPhong": 194,
           "tenKhachSan": "Imperial Hue Hotel",
           "xepHangSao": 5
@@ -4703,7 +4785,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/hue_riverside.jpg",
+            "image": "https://www.tnktravel.com/wp-content/uploads/2015/07/Hue-Riverside-Boutique-Resort.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -4762,6 +4844,7 @@
           "moTa": "Khách sạn 4 sao nằm bên sông Hương, gần cầu Trường Tiền, mang đến không gian yên bình và gần gũi với văn hóa Huế.",
           "phone": "0234 393 4567",
           "rating": 4.5,
+          "serviceFee": 0,
           "soLuongPhong": 80,
           "tenKhachSan": "Hue Riverside Boutique Hotel",
           "xepHangSao": 4
@@ -4774,7 +4857,7 @@
               "Bãi đỗ xe miễn phí",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/hue_thanhlich.jpg",
+            "image": "https://vietnam-tour-packages.in/wp-content/uploads/2022/11/Thanh-lich-H-1view-1.jpg",
             "rooms": [
               {
                 "availableRooms": 10,
@@ -4831,6 +4914,7 @@
           "moTa": "Khách sạn 3 sao với không gian thân thiện, gần trung tâm Huế, phù hợp cho du khách muốn tiết kiệm chi phí.",
           "phone": "0234 382 1234",
           "rating": 4.2,
+          "serviceFee": 0,
           "soLuongPhong": 50,
           "tenKhachSan": "Thanh Lich Hotel",
           "xepHangSao": 3
@@ -4845,7 +4929,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/hue_azerai.jpg",
+            "image": "https://azerai.com/wp-content/uploads/2020/11/AZLRH-Terrace-Coupole-scaled-e1623421149618.jpg",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -4904,6 +4988,7 @@
           "moTa": "Khách sạn 5 sao với kiến trúc cổ điển Pháp, nằm bên sông Hương, mang đến trải nghiệm nghỉ dưỡng cao cấp.",
           "phone": "0234 383 7475",
           "rating": 4.9,
+          "serviceFee": 0,
           "soLuongPhong": 122,
           "tenKhachSan": "Azerai La Residence Hue",
           "xepHangSao": 5
@@ -4916,7 +5001,7 @@
               "Bãi đỗ xe",
               "Dịch vụ xe đạp miễn phí"
             ],
-            "image": "https://example.com/images/hue_serene.jpg",
+            "image": "https://tse1.mm.bing.net/th?id=OIP.NSRWBYOez6MtsZ85ink3dAHaGL&pid=Api&P=0&h=180",
             "rooms": [
               {
                 "availableRooms": 10,
@@ -4973,6 +5058,7 @@
           "moTa": "Khách sạn 3 sao với không gian đơn giản, gần trung tâm Huế và các điểm tham quan như Kinh Thành Huế.",
           "phone": "0234 386 7890",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 60,
           "tenKhachSan": "Hue Serene Palace Hotel",
           "xepHangSao": 3
@@ -4987,7 +5073,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/hue_eldora.jpg",
+            "image": "https://photos.hotelbeds.com/giata/bigger/37/373876/373876a_hb_a_002.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -5046,6 +5132,7 @@
           "moTa": "Khách sạn 4 sao với thiết kế hiện đại, gần sông Hương và các điểm tham quan như Chợ Đông Ba.",
           "phone": "0234 394 6699",
           "rating": 4.4,
+          "serviceFee": 0,
           "soLuongPhong": 90,
           "tenKhachSan": "Eldora Hotel",
           "xepHangSao": 4
@@ -5064,7 +5151,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/phuquoc_intercontinental.jpg",
+            "image": "https://phuquoc.intercontinental.com/uploads/phuquoc/homepage/Sunset%20View%20from%20Resort%20%26%20Ombra%20-%2016x9.jpg",
             "rooms": [
               {
                 "availableRooms": 50,
@@ -5123,6 +5210,7 @@
           "moTa": "Resort 5 sao đẳng cấp thế giới tại Bãi Trường, với bãi biển riêng và tầm nhìn hoàng hôn tuyệt đẹp.",
           "phone": "0297 397 8888",
           "rating": 4.9,
+          "serviceFee": 0,
           "soLuongPhong": 459,
           "tenKhachSan": "InterContinental Phu Quoc Long Beach Resort",
           "xepHangSao": 5
@@ -5137,7 +5225,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/phuquoc_sol.jpg",
+            "image": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/130505661.jpg?k=07da201f7aa250e97d2ea9e50e235f07f5c2848290b8aeb329a585f1d2d763e5&o=&hp=1",
             "rooms": [
               {
                 "availableRooms": 30,
@@ -5196,6 +5284,7 @@
           "moTa": "Khách sạn 4 sao hiện đại tại Bãi Trường, gần sân bay Phú Quốc, lý tưởng cho du khách yêu thích biển và giải trí.",
           "phone": "0297 392 9999",
           "rating": 4.5,
+          "serviceFee": 0,
           "soLuongPhong": 284,
           "tenKhachSan": "Sol by Melia Phu Quoc",
           "xepHangSao": 4
@@ -5208,7 +5297,7 @@
               "Bãi đỗ xe miễn phí",
               "Dịch vụ giặt ủi"
             ],
-            "image": "https://example.com/images/phuquoc_oceanpearl.jpg",
+            "image": "https://pix10.agoda.net/hotelImages/1157795/-1/9dd721a057062315dcdcb233a2216a1a.jpg?s=1024x768",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -5265,6 +5354,7 @@
           "moTa": "Khách sạn 3 sao gần chợ đêm Dinh Cậu, phù hợp cho du khách muốn khám phá văn hóa địa phương và tiết kiệm chi phí.",
           "phone": "0297 399 1234",
           "rating": 4.2,
+          "serviceFee": 0,
           "soLuongPhong": 80,
           "tenKhachSan": "Phu Quoc Ocean Pearl Hotel",
           "xepHangSao": 3
@@ -5279,7 +5369,7 @@
               "Phòng gym",
               "Dịch vụ đưa đón sân bay"
             ],
-            "image": "https://example.com/images/phuquoc_salinda.jpg",
+            "image": "https://media-cdn.holidaycheck.com/w_1280,h_720,c_fit,q_80/ugc/images/5254131c-be2f-4215-87a2-e2d05cd4c212",
             "rooms": [
               {
                 "availableRooms": 20,
@@ -5338,6 +5428,7 @@
           "moTa": "Resort 5 sao với không gian yên bình tại Bãi Trường, nổi tiếng với dịch vụ cao cấp và bãi biển riêng.",
           "phone": "0297 399 0011",
           "rating": 4.8,
+          "serviceFee": 0,
           "soLuongPhong": 121,
           "tenKhachSan": "Salinda Resort Phu Quoc",
           "xepHangSao": 5
@@ -5352,7 +5443,7 @@
               "Dịch vụ đưa đón sân bay",
               "Wifi miễn phí"
             ],
-            "image": "https://example.com/images/phuquoc_greenbay.jpg",
+            "image": "https://pix10.agoda.net/hotelImages/2169131/12737821/439502c560e85f76ad9f5fc483e54ded.jpg",
             "rooms": [
               {
                 "availableRooms": 15,
@@ -5411,6 +5502,7 @@
           "moTa": "Resort 4 sao tại Bãi Sao, nổi tiếng với bãi biển cát trắng mịn và không gian gần gũi thiên nhiên.",
           "phone": "0297 398 4567",
           "rating": 4.4,
+          "serviceFee": 0,
           "soLuongPhong": 70,
           "tenKhachSan": "Phu Quoc Green Bay Resort",
           "xepHangSao": 4
@@ -5423,7 +5515,7 @@
               "Bãi biển riêng",
               "Dịch vụ xe đạp miễn phí"
             ],
-            "image": "https://example.com/images/phuquoc_mangobay.jpg",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/19/56/c9/30/mango-bay-resort.jpg?w=900&h=-1&s=1",
             "rooms": [
               {
                 "availableRooms": 10,
@@ -5480,6 +5572,7 @@
           "moTa": "Resort 3 sao với phong cách gần gũi thiên nhiên tại Bãi Ông Lang, lý tưởng cho du khách tìm kiếm sự yên bình.",
           "phone": "0297 398 1693",
           "rating": 4,
+          "serviceFee": 0,
           "soLuongPhong": 44,
           "tenKhachSan": "Mango Bay Resort",
           "xepHangSao": 3
@@ -8467,6 +8560,655 @@
       ]
     }
   },
+  "notifications": {
+    "-OTbh6eAjrEudLAA3Nuj": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Mường Thanh Luxury Buôn Ma Thuột.",
+      "timestamp": 1750865312652
+    },
+    "-OTbhHxMDkGoW8SBJejt": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Sai Gon Ban Me Hotel.",
+      "timestamp": 1750865358932
+    },
+    "-OTbhRJucNcaBWeIap9T": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Dakruco Hotel.",
+      "timestamp": 1750865397292
+    },
+    "-OTbhb3bmPGU9DlWNb0m": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Coffee Tour Resort.",
+      "timestamp": 1750865441309
+    },
+    "-OTbhj9Eh--1XRKgYBrY": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hoang Loc Hotel.",
+      "timestamp": 1750865474427
+    },
+    "-OTbi067puBNeHlq4aDP": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Ban Me Green Resort.",
+      "timestamp": 1750865547951
+    },
+    "-OTbiDpbo6TcK9lzvy8Y": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hai Ba Trung Hotel.",
+      "timestamp": 1750865604177
+    },
+    "-OTbiMsrhgrKLPgsaV5I": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Lak Resort.",
+      "timestamp": 1750865641250
+    },
+    "-OTbiVzHX024kpf_MSbq": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Thanh Cong Hotel.",
+      "timestamp": 1750865678513
+    },
+    "-OTbigpjQFe5j5eWm6M_": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Vinpearl Hotel Cần Thơ.",
+      "timestamp": 1750865727048
+    },
+    "-OTbiqCoQNORKXkkaVDT": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Ninh Kiều Riverside Hotel.",
+      "timestamp": 1750865765458
+    },
+    "-OTbj-4okuPrBvPky8-l": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Sao Mai Hotel.",
+      "timestamp": 1750865805897
+    },
+    "-OTbj7XhFdhR_ycqRJrj": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Mekong Star Hotel.",
+      "timestamp": 1750865840515
+    },
+    "-OTbjIKwHh23r6iXZfEY": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Mekong Star Hotel.",
+      "timestamp": 1750865884752
+    },
+    "-OTbjZ0EbhT65r0ek0ek": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hồng Hà Hotel.",
+      "timestamp": 1750865953053
+    },
+    "-OTbjh9rRV6rNG5TK3Gj": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Victoria Cần Thơ Resort.",
+      "timestamp": 1750865990531
+    },
+    "-OTbkGiEhIQZclkukgsQ": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Resort Tây Đô.",
+      "timestamp": 1750866140241
+    },
+    "-OTbkUI4neJzBu28fJZ6": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Holiday One Hotel.",
+      "timestamp": 1750866195842
+    },
+    "-OTbkgs08Mme4a7OrZ44": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Kim Thơ Hotel.",
+      "timestamp": 1750866251448
+    },
+    "-OTbksBoZyNUbzdnMSKJ": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Ana Mandara Villas Dalat Resort & Spa.",
+      "timestamp": 1750866297832
+    },
+    "-OTbl2Ge9Zpl2Mfe8RI_": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Sammy Hotel Đà Lạt.",
+      "timestamp": 1750866343194
+    },
+    "-OTblBfZ35umapaoJ5vC": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Ngọc Lan Hotel.",
+      "timestamp": 1750866381706
+    },
+    "-OTblUAOjpYxaZoYE4Mn": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Ngọc Lan Hotel.",
+      "timestamp": 1750866457473
+    },
+    "-OTbldyenimA8e-GUNhB": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Tuyền Lâm Resort.",
+      "timestamp": 1750866501709
+    },
+    "-OTbltYYTK4tTARt9c5S": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Thanh Xuân Hotel.",
+      "timestamp": 1750866565505
+    },
+    "-OTbm2NM7EiN3ZRLDYWE": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Swiss-Belresort Tuyền Lâm.",
+      "timestamp": 1750866605747
+    },
+    "-OTbmHKDirFzP3csQqr8": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hồng Phúc Hotel.",
+      "timestamp": 1750866666981
+    },
+    "-OTbmRsSbvteW3bbD05P": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Lavender Hotel.",
+      "timestamp": 1750866710192
+    },
+    "-OTbmeTxuRhfhrjnpAR1": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hyatt Regency Đà Nẵng Resort & Spa.",
+      "timestamp": 1750866766097
+    },
+    "-OTbmp_OYM7Av1_TnAXj": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Grand Ocean Hotel.",
+      "timestamp": 1750866811364
+    },
+    "-OTbn0KUdn0r1Q5YzdTz": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Seaside Boutique Hotel.",
+      "timestamp": 1750866859495
+    },
+    "-OTbngDkSUI7UzMrCnJO": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn InterContinental Đà Nẵng Sun Peninsula Resort.",
+      "timestamp": 1750867035179
+    },
+    "-OTbnthBI20izqH7w-qv": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Golden Bay Hotel.",
+      "timestamp": 1750867090371
+    },
+    "-OTbo3cRUvXr92-e8Fbb": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Sunrise Hotel Đà Nẵng.",
+      "timestamp": 1750867135119
+    },
+    "-OTbormI2382u4S_heI6": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Furama Resort Đà Nẵng.",
+      "timestamp": 1750867344626
+    },
+    "-OTbpHkrrkjlTPz6O-uf": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Blue Ocean Hotel.",
+      "timestamp": 1750867455120
+    },
+    "-OTbpkMRggZudlRcz38g": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Vinpearl Resort & Spa Đà Nẵng.",
+      "timestamp": 1750867576361
+    },
+    "-OTbq-W3vyOK1FRFvNrG": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Sea Phoenix Hotel.",
+      "timestamp": 1750867642508
+    },
+    "-OTbqC_vq_vPPB3ZxPhK": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Sofitel Legend Metropole Hanoi.",
+      "timestamp": 1750867696063
+    },
+    "-OTbqLl9onK8_6mG_uns": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hanoi La Siesta Hotel.",
+      "timestamp": 1750867733642
+    },
+    "-OTbqfD7vf7w6HLQ8VEa": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hanoi Old Quarter Hotel.",
+      "timestamp": 1750867817410
+    },
+    "-OTbqxv3T74tBNPpQoxz": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hilton Hanoi Opera.",
+      "timestamp": 1750867894008
+    },
+    "-OTbsTjpCYG-vRuWgeSO": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hanoi Golden Hotel.",
+      "timestamp": 1750868290563
+    },
+    "-OTbscIwTIdv_1BNg2L-": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hanoi Golden Hotel.",
+      "timestamp": 1750868329740
+    },
+    "-OTbsmj97TBTMGzBhpBz": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Lotte Hotel Hanoi.",
+      "timestamp": 1750868372434
+    },
+    "-OTbswIlRXTFMeV7RYue": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hanoi Emerald Waters Hotel.",
+      "timestamp": 1750868411636
+    },
+    "-OTbt8gBK303JyIbJT_n": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hanoi Lotus Boutique Hotel.",
+      "timestamp": 1750868466443
+    },
+    "-OTbtIEr2C2q2Qou4mGK": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Vinpearl Resort & Spa Hạ Long.",
+      "timestamp": 1750868505587
+    },
+    "-OTbtS1aHqXtjzRisI5r": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Mường Thanh Luxury Hạ Long.",
+      "timestamp": 1750868545700
+    },
+    "-OTbtbSoPMZF-DB7FaO8": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Saigon Halong Hotel.",
+      "timestamp": 1750868588401
+    },
+    "-OTbtjgF372PoU5cKITO": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Paradise Suites Hotel.",
+      "timestamp": 1750868622084
+    },
+    "-OTbtxlt5NX5-e7K8MFl": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hạ Long Bay Hotel.",
+      "timestamp": 1750868679783
+    },
+    "-OTbu6xyST10Hc1Rv1k1": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Wyndham Legend Halong.",
+      "timestamp": 1750868721516
+    },
+    "-OTbuQOGj_eZYjzq0Lgp": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Sunrise Halong Hotel.",
+      "timestamp": 1750868801081
+    },
+    "-OTbuZuqkIWWZuuLXZqQ": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Anantara Hoi An Resort.",
+      "timestamp": 1750868840085
+    },
+    "-OTbuoUo5FVY0rf1VwdV": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hoi An Silk Boutique Hotel.",
+      "timestamp": 1750868903893
+    },
+    "-OTbuxOdPn6AUPEI8IbU": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Little Hoi An Beach Hotel.",
+      "timestamp": 1750868940351
+    },
+    "-OTbvKXcD-u97MEiArFj": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hoi An Lantern Hotel.",
+      "timestamp": 1750869039224
+    },
+    "-OTbvUaQoxoYxnx3nkEx": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Palm Garden Resort.",
+      "timestamp": 1750869080430
+    },
+    "-OTbvsJtbTpo-Wk3eJ39": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hoi An Lantern Hotel.",
+      "timestamp": 1750869181701
+    },
+    "-OTbw7dmsjGCsKrEvMpp": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hoi An Green Apple Hotel.",
+      "timestamp": 1750869248566
+    },
+    "-OTbwK8oEE7XiO8MLfD_": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Imperial Hue Hotel.",
+      "timestamp": 1750869299766
+    },
+    "-OTbwSnTVH7JCqVO1GqA": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hue Riverside Boutique Hotel.",
+      "timestamp": 1750869335197
+    },
+    "-OTbwbLsZG5KjzSQUmm6": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Thanh Lich Hotel.",
+      "timestamp": 1750869374324
+    },
+    "-OTbwkq581cLpfrobjb2": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Azerai La Residence Hue.",
+      "timestamp": 1750869413177
+    },
+    "-OTbxDhIRqWuKdvZ5k4y": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Hue Serene Palace Hotel.",
+      "timestamp": 1750869535493
+    },
+    "-OTbxMmyIWdTEDMzXD_u": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Eldora Hotel.",
+      "timestamp": 1750869572712
+    },
+    "-OTf0VAUaaTDCPw2H-oI": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn InterContinental Phu Quoc Long Beach Resort.",
+      "timestamp": 1750920987611
+    },
+    "-OTf0iBHudbl-bpaeYJK": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Sol by Melia Phu Quoc.",
+      "timestamp": 1750921045002
+    },
+    "-OTf15rdlPHuSjDwPRUp": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Phu Quoc Ocean Pearl Hotel.",
+      "timestamp": 1750921146102
+    },
+    "-OTf1YZa7hOqJ27V27Q6": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Salinda Resort Phu Quoc.",
+      "timestamp": 1750921263631
+    },
+    "-OTf1l23Yhz9npse6jLk": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Phu Quoc Green Bay Resort.",
+      "timestamp": 1750921318827
+    },
+    "-OTf2UDiAlpoj-aBfskL": {
+      "color": "bg-info",
+      "icon": "fas fa-hotel",
+      "link": "#",
+      "read": false,
+      "text": "Đã cập nhật khách sạn Mango Bay Resort.",
+      "timestamp": 1750921507970
+    },
+    "znKsJjausdR0vcdhpUoWUt9BYtM2": {
+      "-OTR8YAy6Iv_T3gLUNTe": {
+        "createdAt": 1750671438276,
+        "message": "Bạn đã thanh toán thành công đơn hàng -OTR8PbskeHS4817Gcyw.",
+        "read": false,
+        "title": "Thanh toán thành công",
+        "type": "booking"
+      },
+      "-OTR9EXlg_qUlDaTfrfP": {
+        "createdAt": 1750671619959,
+        "message": "Bạn đã thanh toán thành công đơn hàng -OTR95mYnNlQXJ9tTUSH.",
+        "read": false,
+        "title": "Thanh toán thành công",
+        "type": "booking"
+      },
+      "-OTR9pjee8VkWNin88nD": {
+        "createdAt": 1750671776428,
+        "message": "Bạn đã thanh toán thành công đơn hàng -OTR9h8rO188rbIahkFa.",
+        "read": false,
+        "title": "Thanh toán thành công",
+        "type": "booking"
+      },
+      "-OTRAOCZuOhBVGa7LsEl": {
+        "createdAt": 1750671921704,
+        "message": "Bạn đã thanh toán thành công đơn hàng -OTRAG0BJzIEgEviK_SB.",
+        "read": false,
+        "title": "Thanh toán thành công",
+        "type": "booking"
+      },
+      "-OTRB0oB95ztBOt87aMX": {
+        "createdAt": 1750672088019,
+        "message": "Bạn đã thanh toán thành công đơn hàng -OTRAr7kGiqlM_5NSmbW.",
+        "read": false,
+        "title": "Thanh toán thành công",
+        "type": "booking"
+      },
+      "-OTRBBGtw0JCv7fiMARX": {
+        "createdAt": 1750672130880,
+        "message": "Bạn đã thanh toán thành công đơn hàng -OTRAr7kGiqlM_5NSmbW.",
+        "read": false,
+        "title": "Thanh toán thành công",
+        "type": "booking"
+      },
+      "-OTRBgFH65-k-yvkfYZK": {
+        "createdAt": 1750672261842,
+        "message": "Bạn đã thanh toán thành công đơn hàng -OTRAr7kGiqlM_5NSmbW.",
+        "read": false,
+        "title": "Thanh toán thành công",
+        "type": "booking"
+      }
+    }
+  },
+  "payments": {
+    "-OTR7VSKr3AdJdACB4GJ": {
+      "amount": 30000000,
+      "date": 1750671164959,
+      "detail": "Thanh toán đặt phòng/đặt tour qua VNPAY",
+      "loyaltyAdded": true,
+      "method": "VNPAY",
+      "status": "success",
+      "transactionId": "-OTR6KmhZj-ySsscdqzO",
+      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
+    }
+  },
   "reviews": {
     "-OSDGFaYQmuGOseLpp_1": {
       "comment": "hi",
@@ -8495,6 +9237,12 @@
       "userId": "FNNRvmaVBUSwhpNI93SK6zz0pRn1",
       "userName": "ekitty0001"
     }
+  },
+  "settings": {
+    "address": "Lầu 5, Tòa nhà ABC, 456 Đường Lê Lai, Phường Bến Thành, Quận 1, TP. Hồ Chí Minh, Việt Nam",
+    "contactEmail": "LuxuryHavenTravel@gmail.com",
+    "phoneNumber": "0837 918 274 - 0912 38 4956 ",
+    "websiteName": "LuxuryHavenTravel"
   },
   "specialOffers": {
     "deal1": {
@@ -8619,6 +9367,8 @@
       "nights": 1,
       "note": "Không áp dụng cho cuối tuần và ngày lễ. Không có giới hạn ngày nhận phòng.",
       "oldPrice": "1.500.000đ",
+      "stayEndDate": "2025-07-02",
+      "stayStartDate": "2025-06-28",
       "title": "Biển Vắng Vũng Tàu - Giữa Tuần"
     },
     "deal7": {
@@ -10869,6 +11619,8 @@
       "address": "cần thơ",
       "birthday": "2002-06-05",
       "email": "nguyentienchuc2023@gmail.com",
+      "loyaltyPoints": 0,
+      "memberLevel": "đồng",
       "name": "Nguyễn Tiến Chức",
       "phone": "0705014669",
       "updatedAt": 1749129513733
@@ -10877,9 +11629,21 @@
       "address": "ninh kiều cần thơ",
       "birthday": "2025-06-08",
       "email": "nguyentienchuc2023ct@gmail.com",
+      "memberLevel": "Đồng",
       "name": "Nguyễn Văn A",
       "phone": "0826673271",
       "updatedAt": 1749363001603
+    },
+    "RQO2JBnf47VYRD9FI9X8gs5d0x23": {
+      "address": "123/49 Lê Lợi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
+      "birthday": "2006-03-03",
+      "gender": "Nam",
+      "identityNumber": "098765432176",
+      "memberLevel": "Đồng",
+      "name": "Hồ Hảo Hán",
+      "nationality": "việt nam",
+      "phone": "0705014668",
+      "updatedAt": 1750777200103
     },
     "Rbvt0id6PoeM3IGc4QnGvEjDzL53": {
       "address": "An Giang",
@@ -10898,7 +11662,7 @@
       "updatedAt": 1749530834508
     },
     "znKsJjausdR0vcdhpUoWUt9BYtM2": {
-      "address": "zbaxyz",
+      "address": "123 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
       "avatar": "https://res.cloudinary.com/dwrc3ig9e/image/upload/v1750657379/xthdmecb8zqp6ye6yuqh.jpg",
       "birthdate": "2025-05-05",
       "birthday": "2025-05-09",
@@ -11042,13 +11806,15 @@
       },
       "createdAt": "2025-05-13T17:53:46.167Z",
       "email": "baokhangml99@gmail.com",
-      "gender": "Nam",
-      "identityNumber": "098765432123",
-      "name": "Nguyến Tiến Chức",
+      "gender": "Khác",
+      "identityNumber": "098765432122",
+      "loyaltyPoints": 3000,
+      "memberLevel": "Bạc",
+      "name": "Nguyễn Tiến Chức",
       "nationality": "việt nam",
       "phone": "0705014619",
       "points": 0,
-      "updatedAt": 1750657379972,
+      "updatedAt": 1750831633534,
       "username": "chuc nè"
     }
   },
@@ -11086,25 +11852,5 @@
       "title": "Voucher cuối tuần 500k",
       "type": "voucher"
     }
-  ],
-    "payments": {
-    "paymentId1": {
-      "transactionId": "TXN123456",
-      "userId": "uid_cua_nguoi_dung",
-      "date": 1719148800000,
-      "amount": 1500000,
-      "method": "VNPAY",
-      "status": "success",
-      "detail": "Thanh toán đặt phòng khách sạn"
-    },
-    "paymentId2": {
-      "transactionId": "TXN654321",
-      "userId": "uid_khac",
-      "date": 1719062400000,
-      "amount": 2000000,
-      "method": "MOMO",
-      "status": "failed",
-      "detail": "Thanh toán đặt tour"
-    }
-  }
+  ]
 }

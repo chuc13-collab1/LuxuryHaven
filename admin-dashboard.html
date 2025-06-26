@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+    
 
 <head>
     <meta charset="UTF-8">
@@ -231,16 +232,16 @@
                         </div>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive">
+                    <div class="table-responsive bookings-scroll">
                         <table class="table data-table mb-0">
                             <thead>
                                 <tr>
-                                        <th><input type="checkbox" class="form-check-input" id="selectAllBookings"></th>
+                                    <th><input type="checkbox" class="form-check-input" id="selectAllBookings"></th>
                                     <th>ID</th>
                                     <th>Khách hàng</th>
                                     <th>Email</th>
                                     <th>Số điện thoại</th>
-                                        <th>Chi tiết dịch vụ</th>
+                                    <th>Chi tiết dịch vụ</th>
                                     <th>Ngày check-in</th>
                                     <th>Ngày check-out</th>
                                     <th>Số khách</th>
@@ -566,53 +567,48 @@
 
         function renderBookingsTable(bookings) {
             const tableBody = document.getElementById('bookingsTable');
-            tableBody.innerHTML = ''; // Clear existing data
-
+            tableBody.innerHTML = '';
             if (bookings.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="13" class="text-center py-5">Không tìm thấy dữ liệu phù hợp.</td></tr>';
-                    return;
-                }
-
+                return;
+            }
             bookings.forEach(booking => {
-                    const row = document.createElement('tr');
-
+                const row = document.createElement('tr');
                 // Status Badge
                 const statusBadge = `<span class="status status-${booking.status || 'pending'}">${booking.status || 'Chờ xác nhận'}</span>`;
-
                 // Service Details
                 let serviceDetails = '';
                 if (booking.type === 'hotel') {
                     serviceDetails = `
-                        <strong>${booking.hotelName || 'N/A'}</strong><br>
-                        <small class="text-muted">${booking.roomName || 'N/A'}</small>
+                        <strong title="${booking.hotelName || ''}">${booking.hotelName || 'N/A'}</strong><br>
+                        <small class="text-muted" title="${booking.roomName || ''}">${booking.roomName || 'N/A'}</small>
                     `;
                 } else if (booking.type === 'tour') {
                     serviceDetails = `
-                        <strong>${booking.tourName || 'N/A'}</strong><br>
+                        <strong title="${booking.tourName || ''}">${booking.tourName || 'N/A'}</strong><br>
                         <small class="text-muted">Tour</small>
                     `;
                 } else {
-                     serviceDetails = 'Không xác định';
+                    serviceDetails = 'Không xác định';
                 }
-
-                    row.innerHTML = `
+                row.innerHTML = `
                     <td><input type="checkbox" class="form-check-input booking-checkbox" data-id="${booking.id}"></td>
-                    <td>${booking.id}</td>
-                    <td>${booking.customerName || 'N/A'}</td>
-                    <td>${booking.customerEmail || 'N/A'}</td>
-                    <td>${booking.customerPhone || 'N/A'}</td>
+                    <td title="${booking.id}">${booking.id}</td>
+                    <td title="${booking.customerName || ''}">${booking.customerName || 'N/A'}</td>
+                    <td title="${booking.customerEmail || ''}">${booking.customerEmail || 'N/A'}</td>
+                    <td title="${booking.customerPhone || ''}">${booking.customerPhone || 'N/A'}</td>
                     <td>${serviceDetails}</td>
-                    <td>${booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString('vi-VN') : 'N/A'}</td>
-                    <td>${booking.checkOutDate ? new Date(booking.checkOutDate).toLocaleDateString('vi-VN') : 'N/A'}</td>
-                        <td>${booking.guests || 'N/A'}</td>
-                    <td style="max-width: 150px; white-space: pre-wrap; word-wrap: break-word;">${booking.notes || ''}</td>
-                    <td>${booking.createdAt ? new Date(booking.createdAt).toLocaleString('vi-VN') : 'N/A'}</td>
+                    <td title="${booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString('vi-VN') : ''}">${booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                    <td title="${booking.checkOutDate ? new Date(booking.checkOutDate).toLocaleDateString('vi-VN') : ''}">${booking.checkOutDate ? new Date(booking.checkOutDate).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                    <td title="${booking.guests || ''}">${booking.guests || 'N/A'}</td>
+                    <td style="max-width: 150px; white-space: pre-wrap; word-wrap: break-word;" title="${booking.notes || ''}">${booking.notes || ''}</td>
+                    <td title="${booking.createdAt ? new Date(booking.createdAt).toLocaleString('vi-VN') : ''}">${booking.createdAt ? new Date(booking.createdAt).toLocaleString('vi-VN') : 'N/A'}</td>
                     <td>${statusBadge}</td>
                     <td>
                         <button class="btn btn-sm btn-info" onclick="editBooking('${booking.id}')"><i class="fas fa-edit"></i></button>
                         <button class="btn btn-sm btn-danger" onclick="deleteBooking('${booking.id}')"><i class="fas fa-trash"></i></button>
-                        </td>
-                    `;
+                    </td>
+                `;
                 tableBody.appendChild(row);
             });
         }
@@ -1032,10 +1028,10 @@
         // Edit booking
         function editBooking(bookingId) {
             const booking = allBookings.find(b => b.id === bookingId);
-                if (!booking) {
-                     Swal.fire('Lỗi', 'Không tìm thấy đặt phòng này.', 'error');
-                     return;
-                }
+            if (!booking) {
+                Swal.fire('Lỗi', 'Không tìm thấy đặt phòng này.', 'error');
+                return;
+            }
              // Placeholder for new modal design
             Swal.fire('Chức năng đang được thiết kế lại', 'Cửa sổ Sửa sẽ sớm được nâng cấp giao diện.', 'info');
         }
@@ -1767,6 +1763,11 @@
                            return false;
                         }
                         return {
+                            location: location,
+                            tenKhachSan: document.getElementById('addHotelName').value,
+                            diaChi: document.getElementById('addHotelAddress').value,
+                            phone: document.getElementById('addHotelPhone').value,
+                            moTa: document.getElementById('addHotelDesc').value,
                             location: location,
                             tenKhachSan: document.getElementById('addHotelName').value,
                             diaChi: document.getElementById('addHotelAddress').value,

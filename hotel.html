@@ -681,7 +681,7 @@ document.getElementById('city-nav').innerHTML = '';
 loadAllHotels();
         });
         function showHotelDetail(hotel, hotelsInCity = []) {
-            const defaultHotelImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2YwZjBmMCIvPjxwYXRoIGQ9Ik0zMDAgMjAwaDIwMHYyMDBoLTIwMHoiIGZpbGw9IiNkZGQiLz48cGF0aCBkPSJNMzI1IDIyNWgxNTB2MTUwaC0xNTB6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTM1MCAyNzVoMTAwdjUwaC0xMDB6IiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNDAwIiB5PSI0NTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Tm8gaW1hZ2UgYXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg==';
+            const defaultHotelImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2YwZjBmMCIvPjxwYXRoIGQ9Ik0zMDAgMjAwaDIwMHYyMDBoLTIwMHoiIGZpbGw9IiNkZGQiLz48cGF0aCBkPSJNMzI1IDIyNWgxNTB2MTUwaC0xNTB6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTM1MCAyNzVoMTAwdjUwaC0xMDB6IiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNDAwIiB5PSI0NTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Tm8gaW1hZ2UgYXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg==';
             // Lấy thông tin phòng
             let rooms = hotel.chiTiet?.rooms || [];
             const priceMin = window.selectedPriceMin || 0;
@@ -1634,6 +1634,101 @@ loadAllHotels();
                 }
             });
         }
+
+        // GỢI Ý KHÁCH SẠN THEO ĐỊA CHỈ NGƯỜI DÙNG
+function suggestHotelsByUserAddress() {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+    firebase.database().ref('users/' + user.uid).once('value').then(userSnap => {
+        const userData = userSnap.val();
+        if (!userData || !userData.address) return;
+        // Chuẩn hóa tên thành phố: loại bỏ tiền tố, ký tự đặc biệt, viết thường, bỏ khoảng trắng thừa
+        function normalizeCity(str) {
+            if (!str) return '';
+            return str
+                .toLowerCase()
+                .replace(/tp\.?|thành phố|city|t\.?/g, '')
+                .replace(/[^a-zà-ỹ0-9\s]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+        const userAddress = userData.address.trim().toLowerCase();
+        let city = '';
+        // Ưu tiên lấy thành phố từ cuối chuỗi (sau dấu phẩy cuối cùng)
+        const parts = userAddress.split(',');
+        if (parts.length > 1) {
+            city = parts[parts.length - 1];
+        } else {
+            // fallback: tìm "tp." hoặc "thành phố"
+            const cityMatch = userAddress.match(/tp\.?\s*\.?([a-zà-ỹ\s]+)/i);
+            if (cityMatch) {
+                city = cityMatch[0];
+            } else {
+                city = userAddress;
+            }
+        }
+        city = normalizeCity(city);
+        if (!city) return;
+        firebase.database().ref('location').once('value').then(snapshot => {
+            let suggestedHotels = [];
+            const data = snapshot.val();
+            if (data) {
+                Object.keys(data).forEach(cityKey => {
+                    const hotels = data[cityKey]?.hotels;
+                    if (hotels) {
+                        let hotelArr = Array.isArray(hotels) ? hotels : Object.values(hotels);
+                        hotelArr.forEach(hotel => {
+                            const hotelCity = normalizeCity(hotel.cityName || '');
+                            const hotelAddress = normalizeCity(hotel.diaChi || '');
+                            // So khớp city với cityName hoặc với phần cuối địa chỉ khách sạn
+                            let hotelCityFromAddress = '';
+                            const hotelParts = hotelAddress.split(',');
+                            if (hotelParts.length > 1) hotelCityFromAddress = normalizeCity(hotelParts[hotelParts.length - 1]);
+                            if (
+                                (city && hotelCity.includes(city)) ||
+                                (city && hotelCityFromAddress && hotelCityFromAddress.includes(city))
+                            ) {
+                                suggestedHotels.push(hotel);
+                            }
+                        });
+                    }
+                });
+            }
+            renderSuggestedHotels(suggestedHotels);
+        });
+    });
+}
+
+function renderSuggestedHotels(hotels) {
+    let container = document.getElementById('suggested-hotels');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'suggested-hotels';
+        container.className = 'card shadow mb-4 p-3';
+        const main = document.querySelector('main .container') || document.body;
+        main.insertBefore(container, main.firstChild);
+    }
+    if (!hotels || hotels.length === 0) {
+        container.innerHTML = `<div class="text-muted">Không tìm thấy khách sạn phù hợp với địa chỉ của bạn.</div>`;
+        return;
+    }
+    container.innerHTML = `<h4 class='mb-3 text-primary'><i class='fas fa-map-marker-alt'></i> Gợi ý khách sạn gần bạn</h4>` +
+        `<div class='row'>` +
+        hotels.slice(0, 4).map(hotel =>
+            `<div class='col-md-3 mb-3'>${createHotelCardWithSuggest(hotel, hotels)}</div>`
+        ).join('') +
+        `</div>`;
+}
+
+// Gọi hàm này sau khi đăng nhập thành công hoặc khi trang load nếu đã đăng nhập
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        suggestHotelsByUserAddress();
+    } else {
+        const container = document.getElementById('suggested-hotels');
+        if (container) container.innerHTML = '';
+    }
+});
     </script>
     <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
@@ -1938,8 +2033,3 @@ function showHotelDetailById(hotelId) {
     }
 }
 </script>
-
-
-</body>
-
-</html>
