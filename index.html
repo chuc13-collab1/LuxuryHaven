@@ -727,6 +727,9 @@
                             ]);
                         })
                         .then(() => {
+                            // Gửi thông báo cho admin khi có member mới đăng ký
+                            generateNotification('fas fa-user-plus', 'bg-success', `Thành viên mới: ${username} (${email}) đã đăng ký tài khoản.`);
+                            
                             document.getElementById('auth-modal').style.display = 'none';
                             Swal.fire({
                                 title: 'Đăng ký thành công!',
@@ -979,6 +982,19 @@
                 container.addEventListener('mouseleave', startAutoSlide);
             });
         });
+
+        // Hàm tạo thông báo cho admin
+        function generateNotification(icon, color, text, link = '#') {
+            const newNotif = {
+                icon: icon,
+                color: color,
+                text: text,
+                link: link,
+                read: false,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+            firebase.database().ref('notifications').push(newNotif);
+        }
     </script>
 
     <!-- Nút mở modal đánh giá -->

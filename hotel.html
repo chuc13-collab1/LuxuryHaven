@@ -1164,11 +1164,27 @@ loadAllHotels();
 
                     firebase.auth().createUserWithEmailAndPassword(email, password)
                         .then((userCredential) => {
-                            return userCredential.user.updateProfile({
-                                displayName: username
-                            });
+                            const user = userCredential.user;
+                            // Cập nhật displayName và lưu thông tin user vào database
+                            return Promise.all([
+                                user.updateProfile({
+                                    displayName: username
+                                }),
+                                // Thêm thông tin user vào Realtime Database
+                                firebase.database().ref('users/' + user.uid).set({
+                                    name: username,
+                                    email: user.email,
+                                    loyaltyPoints: 0, // Điểm thành viên mặc định
+                                    memberLevel: 'Đồng', // Hạng thành viên mặc định
+                                    createdAt: firebase.database.ServerValue.TIMESTAMP,
+                                    updatedAt: firebase.database.ServerValue.TIMESTAMP
+                                })
+                            ]);
                         })
                         .then(() => {
+                            // Gửi thông báo cho admin khi có member mới đăng ký
+                            generateNotification('fas fa-user-plus', 'bg-success', `Thành viên mới: ${username} (${email}) đã đăng ký tài khoản.`);
+                            
                             document.getElementById('auth-modal').style.display = 'none';
                             Swal.fire({
                                 title: 'Đăng ký thành công!',
@@ -2031,5 +2047,20 @@ function showHotelDetailById(hotelId) {
         // Chuyển hướng đến trang chi tiết
         window.location.href = `hotel-detail.html?id=${hotel.id}`;
     }
+}
+</script>
+
+<script>
+// Hàm tạo thông báo cho admin
+function generateNotification(icon, color, text, link = '#') {
+    const newNotif = {
+        icon: icon,
+        color: color,
+        text: text,
+        link: link,
+        read: false,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    };
+    firebase.database().ref('notifications').push(newNotif);
 }
 </script>

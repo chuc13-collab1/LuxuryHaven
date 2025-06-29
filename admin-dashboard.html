@@ -39,7 +39,10 @@
             <div class="nav-group">
                 <span class="nav-group-title">QUẢN LÝ</span>
             <a href="#bookings" class="nav-item">
-                    <i class="fas fa-calendar-check"></i> <span>Đặt phòng</span>
+                <i class="fas fa-bed"></i><span>Đặt phòng</span>
+             </a>
+            <a href="#bookings-tours" class="nav-item">
+                <i class="fas fa-route"></i> <span>Đặt tours</span>
             </a>
             <a href="#hotels" class="nav-item">
                     <i class="fas fa-hotel"></i> <span>Khách sạn</span>
@@ -232,27 +235,60 @@
                         </div>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive bookings-scroll">
-                        <table class="table data-table mb-0">
-                            <thead>
-                                <tr>
-                                    <th><input type="checkbox" class="form-check-input" id="selectAllBookings"></th>
+                    <div class="table-responsive">
+                      <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                          <tr>
                                     <th>ID</th>
                                     <th>Khách hàng</th>
                                     <th>Email</th>
                                     <th>Số điện thoại</th>
-                                    <th>Chi tiết dịch vụ</th>
-                                    <th>Ngày check-in</th>
-                                    <th>Ngày check-out</th>
+                            <th>Khách sạn</th>
+                            <th>Dịch vụ</th>
+                            <th>Check-in</th>
+                            <th>Check-out</th>
                                     <th>Số khách</th>
-                                    <th>Ghi chú</th>
-                                    <th>Ngày tạo</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody id="bookingsTable">
-                                <!-- Data will be loaded here -->
+                          <!-- Dữ liệu sẽ được render bằng JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Tours Section -->
+        <div id="bookings-tours" class="content-section" style="display: none;">
+          <div class="card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap gap-2">
+              <h5 class="mb-0">Danh sách đặt tours</h5>
+              <button class="btn btn-primary btn-sm" onclick="addTourBooking()">
+                <i class="fas fa-plus-circle me-1"></i> Thêm đặt tours
+              </button>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>ID</th>
+                      <th>Khách hàng</th>
+                      <th>Email</th>
+                      <th>Số điện thoại</th>
+                      <th>Tên tour</th>
+                      <th>Điểm đến</th>
+                      <th>Check-in</th>
+                      <th>Số khách</th>
+                      <th>Trạng thái</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bookingsToursTable">
+                    <!-- Dữ liệu sẽ được render bằng JS -->
                             </tbody>
                         </table>
                     </div>
@@ -446,16 +482,17 @@
         // Biến lưu trữ dữ liệu gốc
         let allBookings = [], allUsers = [], allHotels = [], allTours = [], allDeals = [], allTravelGuides = [];
 
-        // Kiểm tra đăng nhập và quyền admin
+        // Kiểm tra đăng nhập và quyền admin/nhân viên
         function checkAuth() {
             auth.onAuthStateChanged((user) => {
                 if (!user) {
                     window.location.href = 'index.html';
                     return;
                 }
-
-                // Kiểm tra email admin
-                if (user.email !== 'quantrikhachsan@gmail.com') {
+                // Cho phép cả admin và nhân viên truy cập dashboard
+                const isAdmin = user.email === 'quantrikhachsan@gmail.com';
+                const isStaff = user.email === 'nhanvien2@luxuryhaven.com';
+                if (!isAdmin && !isStaff) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Truy cập bị từ chối',
@@ -464,6 +501,27 @@
                         auth.signOut();
                         window.location.href = 'index.html';
                     });
+                    return;
+                }
+                // Phân quyền giao diện
+                if (isStaff) {
+                    // Sidebar
+                    const dealsNav = document.querySelector('a[href="#deals"]');
+                    const guidesNav = document.querySelector('a[href="#travel-guides"]');
+                    const settingsNav = document.querySelector('a[href="#settings"]');
+                    if (dealsNav) dealsNav.style.display = 'none';
+                    if (guidesNav) guidesNav.style.display = 'none';
+                    if (settingsNav) settingsNav.style.display = 'none';
+                    // Main content sections
+                    const dealsSection = document.getElementById('deals');
+                    const guidesSection = document.getElementById('travel-guides');
+                    const settingsSection = document.getElementById('settings');
+                    if (dealsSection) dealsSection.style.display = 'none';
+                    if (guidesSection) guidesSection.style.display = 'none';
+                    if (settingsSection) settingsSection.style.display = 'none';
+                    // Ẩn notification bell
+                    const notifBell = document.getElementById('notificationBell');
+                    if (notifBell) notifBell.style.display = 'none';
                 }
             });
         }
@@ -504,7 +562,7 @@
             });
 
             // Load total users
-            db.ref('users').once('value').then((snapshot) => {
+            db.ref('users').on('value', (snapshot) => {
                 document.getElementById('totalUsers').textContent = snapshot.numChildren();
             });
 
@@ -554,13 +612,15 @@
                     );
                 }
             }
-           
 
             // 2. Status filter
             const statusFilter = document.getElementById('bookingStatusFilter').value;
             if (statusFilter !== 'all') {
                 filteredBookings = filteredBookings.filter(b => b.status === statusFilter);
             }
+
+            // Lọc chỉ booking khách sạn, loại bỏ hoàn toàn booking tour
+            filteredBookings = filteredBookings.filter(b => (!b.type && !b.bookingType) || b.type === 'hotel' || b.bookingType === 'hotel');
             
             renderBookingsTable(filteredBookings);
         }
@@ -578,31 +638,29 @@
                 const statusBadge = `<span class="status status-${booking.status || 'pending'}">${booking.status || 'Chờ xác nhận'}</span>`;
                 // Service Details
                 let serviceDetails = '';
-                if (booking.type === 'hotel') {
+                if (booking.type === 'hotel' || booking.roomId || booking.roomName) {
                     serviceDetails = `
                         <strong title="${booking.hotelName || ''}">${booking.hotelName || 'N/A'}</strong><br>
-                        <small class="text-muted" title="${booking.roomName || ''}">${booking.roomName || 'N/A'}</small>
+                        <small class="text-muted" title="${booking.roomId || booking.roomName || ''}">${booking.roomId || booking.roomName || 'N/A'}</small>
                     `;
                 } else if (booking.type === 'tour') {
                     serviceDetails = `
-                        <strong title="${booking.tourName || ''}">${booking.tourName || 'N/A'}</strong><br>
+                        <strong title="${booking.tourName || ''}">${booking.tourName || 'Tour'}</strong><br>
                         <small class="text-muted">Tour</small>
                     `;
                 } else {
                     serviceDetails = 'Không xác định';
                 }
                 row.innerHTML = `
-                    <td><input type="checkbox" class="form-check-input booking-checkbox" data-id="${booking.id}"></td>
                     <td title="${booking.id}">${booking.id}</td>
                     <td title="${booking.customerName || ''}">${booking.customerName || 'N/A'}</td>
                     <td title="${booking.customerEmail || ''}">${booking.customerEmail || 'N/A'}</td>
                     <td title="${booking.customerPhone || ''}">${booking.customerPhone || 'N/A'}</td>
+                    <td title="${booking.hotelName || ''}">${booking.hotelName || 'N/A'}</td>
                     <td>${serviceDetails}</td>
-                    <td title="${booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString('vi-VN') : ''}">${booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString('vi-VN') : 'N/A'}</td>
-                    <td title="${booking.checkOutDate ? new Date(booking.checkOutDate).toLocaleDateString('vi-VN') : ''}">${booking.checkOutDate ? new Date(booking.checkOutDate).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                    <td title="${booking.checkIn ? new Date(booking.checkIn).toLocaleDateString('vi-VN') : ''}">${booking.checkIn ? new Date(booking.checkIn).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                    <td title="${booking.checkOut ? new Date(booking.checkOut).toLocaleDateString('vi-VN') : ''}">${booking.checkOut ? new Date(booking.checkOut).toLocaleDateString('vi-VN') : 'N/A'}</td>
                     <td title="${booking.guests || ''}">${booking.guests || 'N/A'}</td>
-                    <td style="max-width: 150px; white-space: pre-wrap; word-wrap: break-word;" title="${booking.notes || ''}">${booking.notes || ''}</td>
-                    <td title="${booking.createdAt ? new Date(booking.createdAt).toLocaleString('vi-VN') : ''}">${booking.createdAt ? new Date(booking.createdAt).toLocaleString('vi-VN') : 'N/A'}</td>
                     <td>${statusBadge}</td>
                     <td>
                         <button class="btn btn-sm btn-info" onclick="editBooking('${booking.id}')"><i class="fas fa-edit"></i></button>
@@ -618,7 +676,7 @@
             const usersTable = document.getElementById('usersTable');
             usersTable.innerHTML = '<tr><td colspan="8" class="text-center">Đang tải dữ liệu...</td></tr>';
 
-            db.ref('users').once('value').then((snapshot) => {
+            db.ref('users').on('value', (snapshot) => {
                 allUsers = []; // Reset
                 if (snapshot.exists()) {
                     snapshot.forEach((userSnapshot) => {
@@ -629,7 +687,7 @@
                 }
                 // Initial render after loading.
                 filterAndDisplayUsers();
-            }).catch(error => {
+            }, (error) => {
                 console.error('Error loading users:', error);
                 usersTable.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Lỗi khi tải dữ liệu</td></tr>';
             });
@@ -637,39 +695,48 @@
         
         function renderUsersTable(users) {
             const usersTable = document.getElementById('usersTable');
-                usersTable.innerHTML = '';
+            usersTable.innerHTML = '';
 
             if (users.length === 0) {
                 usersTable.innerHTML = '<tr><td colspan="8" class="text-center py-5">Không tìm thấy người dùng phù hợp.</td></tr>';
                 return;
             }
 
+            // Debug log để kiểm tra dữ liệu
+            console.log('Rendering users:', users);
+
             users.forEach(user => {
                 const avatar = user.avatar ? `<img src="${user.avatar}" alt="avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">` : '<span class="avatar-placeholder"><i class="fas fa-user"></i></span>';
-                    const birthday = user.birthday || user.birthdate || '';
+                const birthday = user.birthday || user.birthdate || '';
                 const createdAt = user.createdAt ? new Date(user.createdAt).toLocaleDateString('vi-VN') : (user.updatedAt ? new Date(user.updatedAt).toLocaleDateString('vi-VN') : 'N/A');
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${avatar}</td>
-                        <td>${user.name || 'N/A'}</td>
-                        <td>${user.email || 'N/A'}</td>
-                        <td>${user.phone || 'N/A'}</td>
-                        <td>${user.address || 'N/A'}</td>
-                        <td>${birthday}</td>
-                        <td>${createdAt}</td>
-                        <td>
+                const memberLevel = user.memberLevel || 'Đồng';
+                const loyaltyPoints = user.loyaltyPoints || 0;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${avatar}</td>
+                    <td>
+                        <strong>${user.name || 'N/A'}</strong><br>
+                        <small class="text-muted">${memberLevel} - ${loyaltyPoints} điểm</small>
+                    </td>
+                    <td>${user.email || 'N/A'}</td>
+                    <td>${user.phone || 'N/A'}</td>
+                    <td>${user.address || 'N/A'}</td>
+                    <td>${birthday}</td>
+                    <td>${createdAt}</td>
+                    <td>
                         <button class="btn btn-sm btn-info" onclick="viewUser('${user.id}')">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                            <i class="fas fa-eye"></i>
+                        </button>
                         <button class="btn btn-sm btn-warning" onclick="editUser('${user.id}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
+                            <i class="fas fa-edit"></i>
+                        </button>
                         <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.id}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    `;
-                    usersTable.appendChild(row);
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                usersTable.appendChild(row);
             });
         }
         
@@ -1032,8 +1099,100 @@
                 Swal.fire('Lỗi', 'Không tìm thấy đặt phòng này.', 'error');
                 return;
             }
-             // Placeholder for new modal design
-            Swal.fire('Chức năng đang được thiết kế lại', 'Cửa sổ Sửa sẽ sớm được nâng cấp giao diện.', 'info');
+            // Nếu là booking tour
+            if (booking.type === 'tour' || booking.bookingType === 'tour') {
+                Swal.fire({
+                    title: 'Sửa thông tin đặt tour',
+                    html: `
+                        <input id="edit-tourName" class="swal2-input" placeholder="Tên tour" value="${booking.tourName || ''}">
+                        <input id="edit-tourLocation" class="swal2-input" placeholder="Điểm đến" value="${booking.tourLocation || ''}">
+                        <input id="edit-checkIn" class="swal2-input" type="date" value="${booking.checkIn ? booking.checkIn.split('T')[0] : ''}">
+                        <input id="edit-numberOfGuests" class="swal2-input" type="number" min="1" placeholder="Số khách" value="${booking.numberOfGuests || booking.guests || 1}">
+                        <input id="edit-customerName" class="swal2-input" placeholder="Tên khách" value="${booking.customerName || ''}">
+                        <input id="edit-customerPhone" class="swal2-input" placeholder="Số điện thoại" value="${booking.customerPhone || ''}">
+                        <select id="edit-status" class="swal2-input">
+                            <option value="pending" ${booking.status === 'pending' ? 'selected' : ''}>Chờ xác nhận</option>
+                            <option value="confirmed" ${booking.status === 'confirmed' ? 'selected' : ''}>Đã xác nhận</option>
+                            <option value="cancelled" ${booking.status === 'cancelled' ? 'selected' : ''}>Đã hủy</option>
+                            <option value="completed" ${booking.status === 'completed' ? 'selected' : ''}>Hoàn thành</option>
+                        </select>
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Lưu',
+                    cancelButtonText: 'Hủy',
+                    preConfirm: () => {
+                        return {
+                            tourName: document.getElementById('edit-tourName').value,
+                            tourLocation: document.getElementById('edit-tourLocation').value,
+                            checkIn: document.getElementById('edit-checkIn').value,
+                            numberOfGuests: parseInt(document.getElementById('edit-numberOfGuests').value),
+                            customerName: document.getElementById('edit-customerName').value,
+                            customerPhone: document.getElementById('edit-customerPhone').value,
+                            status: document.getElementById('edit-status').value
+                        };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        db.ref('bookings/' + bookingId).update(result.value).then(() => {
+                            Swal.fire('Thành công', 'Đã cập nhật thông tin!', 'success');
+                            loadBookingsTours();
+                            loadBookings(); // Để đồng bộ nếu có thay đổi
+                        }).catch(() => {
+                            Swal.fire('Lỗi', 'Không thể cập nhật thông tin.', 'error');
+                        });
+                    }
+                });
+            } else {
+                // Booking khách sạn giữ như cũ
+                Swal.fire({
+                    title: 'Sửa thông tin đặt phòng',
+                    html: `
+                        <input id="edit-customerName" class="swal2-input" placeholder="Tên khách" value="${booking.customerName || ''}">
+                        <input id="edit-customerEmail" class="swal2-input" placeholder="Email" value="${booking.customerEmail || ''}">
+                        <input id="edit-customerPhone" class="swal2-input" placeholder="Số điện thoại" value="${booking.customerPhone || ''}">
+                        <input id="edit-hotelName" class="swal2-input" placeholder="Khách sạn" value="${booking.hotelName || ''}">
+                        <input id="edit-roomId" class="swal2-input" placeholder="Phòng" value="${booking.roomId || ''}">
+                        <input id="edit-checkIn" class="swal2-input" type="date" value="${booking.checkIn ? booking.checkIn.split('T')[0] : ''}">
+                        <input id="edit-checkOut" class="swal2-input" type="date" value="${booking.checkOut ? booking.checkOut.split('T')[0] : ''}">
+                        <input id="edit-guests" class="swal2-input" type="number" min="1" placeholder="Số khách" value="${booking.guests || 1}">
+                        <select id="edit-status" class="swal2-input">
+                            <option value="pending" ${booking.status === 'pending' ? 'selected' : ''}>Chờ xác nhận</option>
+                            <option value="confirmed" ${booking.status === 'confirmed' ? 'selected' : ''}>Đã xác nhận</option>
+                            <option value="cancelled" ${booking.status === 'cancelled' ? 'selected' : ''}>Đã hủy</option>
+                            <option value="completed" ${booking.status === 'completed' ? 'selected' : ''}>Hoàn thành</option>
+                        </select>
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Lưu',
+                    cancelButtonText: 'Hủy',
+                    preConfirm: () => {
+                        const roomIdValue = document.getElementById('edit-roomId').value;
+                        return {
+                            customerName: document.getElementById('edit-customerName').value,
+                            customerEmail: document.getElementById('edit-customerEmail').value,
+                            customerPhone: document.getElementById('edit-customerPhone').value,
+                            hotelName: document.getElementById('edit-hotelName').value,
+                            roomId: roomIdValue,
+                            roomName: roomIdValue,
+                            checkIn: document.getElementById('edit-checkIn').value,
+                            checkOut: document.getElementById('edit-checkOut').value,
+                            guests: parseInt(document.getElementById('edit-guests').value),
+                            status: document.getElementById('edit-status').value
+                        };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        db.ref('bookings/' + bookingId).update(result.value).then(() => {
+                            Swal.fire('Thành công', 'Đã cập nhật thông tin!', 'success');
+                            loadBookings();
+                        }).catch(() => {
+                            Swal.fire('Lỗi', 'Không thể cập nhật thông tin.', 'error');
+                        });
+                    }
+                });
+            }
         }
 
         // Delete booking
@@ -1294,8 +1453,103 @@
 
         // Thêm đặt phòng mới
         function addBooking() {
-            // Placeholder for new modal design
-            Swal.fire('Chức năng đang được thiết kế lại', 'Cửa sổ Thêm mới sẽ sớm được nâng cấp giao diện.', 'info');
+            // Lấy danh sách khách sạn
+            db.ref('location').once('value').then(snapshot => {
+                let hotelOptions = '';
+                let hotelsData = [];
+                snapshot.forEach(locationSnap => {
+                    const location = locationSnap.val();
+                    if (location.hotels) {
+                        Object.entries(location.hotels).forEach(([hotelKey, hotel]) => {
+                            hotelsData.push({
+                                id: hotelKey,
+                                name: hotel.tenKhachSan,
+                                rooms: hotel.chiTiet && hotel.chiTiet.rooms ? hotel.chiTiet.rooms : [],
+                                locationId: locationSnap.key
+                            });
+                            hotelOptions += `<option value="${locationSnap.key}__${hotelKey}">${hotel.tenKhachSan}</option>`;
+                        });
+                    }
+                });
+                Swal.fire({
+                    title: 'Thêm đặt phòng mới',
+                    html: `
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <input id="add-customerName" class="swal2-input" placeholder="Tên khách">
+                            <input id="add-customerEmail" class="swal2-input" placeholder="Email">
+                            <input id="add-customerPhone" class="swal2-input" placeholder="Số điện thoại">
+                            <select id="add-hotelSelect" class="swal2-input" style="width: 100%"><option value="">Chọn khách sạn</option>${hotelOptions}</select>
+                            <select id="add-roomSelect" class="swal2-input" style="width: 100%" disabled><option value="">Chọn phòng</option></select>
+                            <input id="add-checkIn" class="swal2-input" type="date">
+                            <input id="add-checkOut" class="swal2-input" type="date">
+                            <input id="add-guests" class="swal2-input" type="number" min="1" placeholder="Số khách" value="1">
+                            <select id="add-status" class="swal2-input" style="width: 100%">
+                                <option value="pending">Chờ xác nhận</option>
+                                <option value="confirmed">Đã xác nhận</option>
+                                <option value="cancelled">Đã hủy</option>
+                                <option value="completed">Hoàn thành</option>
+                            </select>
+                        </div>
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Lưu',
+                    cancelButtonText: 'Hủy',
+                    didOpen: () => {
+                        const hotelSelect = document.getElementById('add-hotelSelect');
+                        const roomSelect = document.getElementById('add-roomSelect');
+                        hotelSelect.addEventListener('change', function() {
+                            const value = this.value;
+                            roomSelect.innerHTML = '<option value="">Chọn phòng</option>';
+                            roomSelect.disabled = true;
+                            if (!value) return;
+                            const [locationId, hotelKey] = value.split('__');
+                            const hotel = hotelsData.find(h => h.id === hotelKey && h.locationId === locationId);
+                            if (hotel && Array.isArray(hotel.rooms)) {
+                                hotel.rooms.forEach(room => {
+                                    if (room && room.name) {
+                                        const option = document.createElement('option');
+                                        option.value = room.name;
+                                        option.textContent = room.name;
+                                        roomSelect.appendChild(option);
+                                    }
+                                });
+                                roomSelect.disabled = false;
+                            }
+                        });
+                    },
+                    preConfirm: () => {
+                        const hotelSelect = document.getElementById('add-hotelSelect');
+                        const roomSelect = document.getElementById('add-roomSelect');
+                        const hotelValue = hotelSelect.value;
+                        const [locationId, hotelKey] = hotelValue.split('__');
+                        const hotel = hotelsData.find(h => h.id === hotelKey && h.locationId === locationId);
+                        return {
+                            customerName: document.getElementById('add-customerName').value,
+                            customerEmail: document.getElementById('add-customerEmail').value,
+                            customerPhone: document.getElementById('add-customerPhone').value,
+                            hotelName: hotel ? hotel.name : '',
+                            roomId: roomSelect.value,
+                            roomName: roomSelect.value,
+                            checkIn: document.getElementById('add-checkIn').value,
+                            checkOut: document.getElementById('add-checkOut').value,
+                            guests: parseInt(document.getElementById('add-guests').value),
+                            status: document.getElementById('add-status').value,
+                            type: 'hotel',
+                            createdAt: new Date().toISOString()
+                        };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        db.ref('bookings').push(result.value).then(() => {
+                            Swal.fire('Thành công', 'Đã thêm đặt phòng mới!', 'success');
+                            loadBookings();
+                        }).catch(() => {
+                            Swal.fire('Lỗi', 'Không thể thêm đặt phòng.', 'error');
+                        });
+                    }
+                });
+            });
         }
 
         // Load danh sách khách sạn và phòng
@@ -1453,6 +1707,9 @@
                     break;
                 case 'bookings':
                     loadBookings();
+                    break;
+                case 'bookings-tours':
+                    loadBookingsTours();
                     break;
                 case 'hotels':
                     loadHotels();
@@ -1813,14 +2070,25 @@
         function viewUser(userId) {
             db.ref('users/' + userId).once('value').then((snapshot) => {
                 const user = snapshot.val();
+                const memberLevel = user.memberLevel || 'Đồng';
+                const loyaltyPoints = user.loyaltyPoints || 0;
+                const createdAt = user.createdAt ? new Date(user.createdAt).toLocaleDateString('vi-VN') : 'N/A';
+                const updatedAt = user.updatedAt ? new Date(user.updatedAt).toLocaleDateString('vi-VN') : 'N/A';
+                
                 Swal.fire({
                     title: user.name || 'Thông tin người dùng',
                     html: `
-                        <p><strong>Email:</strong> ${user.email || ''}</p>
-                        <p><strong>Số điện thoại:</strong> ${user.phone || ''}</p>
-                        <p><strong>Ngày tham gia:</strong> ${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : ''}</p>
+                        <div class="text-start">
+                            <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+                            <p><strong>Số điện thoại:</strong> ${user.phone || 'N/A'}</p>
+                            <p><strong>Địa chỉ:</strong> ${user.address || 'N/A'}</p>
+                            <p><strong>Cấp độ thành viên:</strong> <span class="badge bg-primary">${memberLevel}</span></p>
+                            <p><strong>Điểm tích lũy:</strong> <span class="badge bg-success">${loyaltyPoints} điểm</span></p>
+                            <p><strong>Ngày tham gia:</strong> ${createdAt}</p>
+                            <p><strong>Cập nhật lần cuối:</strong> ${updatedAt}</p>
+                        </div>
                     `,
-                    width: '500px'
+                    width: '600px'
                 });
             });
         }
@@ -1844,6 +2112,23 @@
                                 <label class="form-label">Số điện thoại</label>
                                 <input type="tel" class="form-control" id="editUserPhone" value="${user.phone || ''}">
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label">Địa chỉ</label>
+                                <input type="text" class="form-control" id="editUserAddress" value="${user.address || ''}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Cấp độ thành viên</label>
+                                <select class="form-control" id="editUserMemberLevel">
+                                    <option value="Đồng" ${user.memberLevel === 'Đồng' ? 'selected' : ''}>Đồng</option>
+                                    <option value="Bạc" ${user.memberLevel === 'Bạc' ? 'selected' : ''}>Bạc</option>
+                                    <option value="Vàng" ${user.memberLevel === 'Vàng' ? 'selected' : ''}>Vàng</option>
+                                    <option value="Kim cương" ${user.memberLevel === 'Kim cương' ? 'selected' : ''}>Kim cương</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Điểm tích lũy</label>
+                                <input type="number" class="form-control" id="editUserLoyaltyPoints" value="${user.loyaltyPoints || 0}" min="0">
+                            </div>
                         </form>
                     `,
                     showCancelButton: true,
@@ -1858,7 +2143,11 @@
                         return {
                             name: document.getElementById('editUserName').value,
                             email: document.getElementById('editUserEmail').value,
-                            phone: document.getElementById('editUserPhone').value
+                            phone: document.getElementById('editUserPhone').value,
+                            address: document.getElementById('editUserAddress').value,
+                            memberLevel: document.getElementById('editUserMemberLevel').value,
+                            loyaltyPoints: parseInt(document.getElementById('editUserLoyaltyPoints').value, 10),
+                            updatedAt: Date.now()
                         };
                     }
                 }).then((result) => {
@@ -2735,8 +3024,100 @@
                 Swal.fire('Lỗi', 'Không tìm thấy đặt phòng này.', 'error');
                 return;
             }
-             // Placeholder for new modal design
-            Swal.fire('Chức năng đang được thiết kế lại', 'Cửa sổ Sửa sẽ sớm được nâng cấp giao diện.', 'info');
+            // Nếu là booking tour
+            if (booking.type === 'tour' || booking.bookingType === 'tour') {
+                Swal.fire({
+                    title: 'Sửa thông tin đặt tour',
+                    html: `
+                        <input id="edit-tourName" class="swal2-input" placeholder="Tên tour" value="${booking.tourName || ''}">
+                        <input id="edit-tourLocation" class="swal2-input" placeholder="Điểm đến" value="${booking.tourLocation || ''}">
+                        <input id="edit-checkIn" class="swal2-input" type="date" value="${booking.checkIn ? booking.checkIn.split('T')[0] : ''}">
+                        <input id="edit-numberOfGuests" class="swal2-input" type="number" min="1" placeholder="Số khách" value="${booking.numberOfGuests || booking.guests || 1}">
+                        <input id="edit-customerName" class="swal2-input" placeholder="Tên khách" value="${booking.customerName || ''}">
+                        <input id="edit-customerPhone" class="swal2-input" placeholder="Số điện thoại" value="${booking.customerPhone || ''}">
+                        <select id="edit-status" class="swal2-input">
+                            <option value="pending" ${booking.status === 'pending' ? 'selected' : ''}>Chờ xác nhận</option>
+                            <option value="confirmed" ${booking.status === 'confirmed' ? 'selected' : ''}>Đã xác nhận</option>
+                            <option value="cancelled" ${booking.status === 'cancelled' ? 'selected' : ''}>Đã hủy</option>
+                            <option value="completed" ${booking.status === 'completed' ? 'selected' : ''}>Hoàn thành</option>
+                        </select>
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Lưu',
+                    cancelButtonText: 'Hủy',
+                    preConfirm: () => {
+                        return {
+                            tourName: document.getElementById('edit-tourName').value,
+                            tourLocation: document.getElementById('edit-tourLocation').value,
+                            checkIn: document.getElementById('edit-checkIn').value,
+                            numberOfGuests: parseInt(document.getElementById('edit-numberOfGuests').value),
+                            customerName: document.getElementById('edit-customerName').value,
+                            customerPhone: document.getElementById('edit-customerPhone').value,
+                            status: document.getElementById('edit-status').value
+                        };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        db.ref('bookings/' + bookingId).update(result.value).then(() => {
+                            Swal.fire('Thành công', 'Đã cập nhật thông tin!', 'success');
+                            loadBookingsTours();
+                            loadBookings(); // Để đồng bộ nếu có thay đổi
+                        }).catch(() => {
+                            Swal.fire('Lỗi', 'Không thể cập nhật thông tin.', 'error');
+                        });
+                    }
+                });
+            } else {
+                // Booking khách sạn giữ như cũ
+                Swal.fire({
+                    title: 'Sửa thông tin đặt phòng',
+                    html: `
+                        <input id="edit-customerName" class="swal2-input" placeholder="Tên khách" value="${booking.customerName || ''}">
+                        <input id="edit-customerEmail" class="swal2-input" placeholder="Email" value="${booking.customerEmail || ''}">
+                        <input id="edit-customerPhone" class="swal2-input" placeholder="Số điện thoại" value="${booking.customerPhone || ''}">
+                        <input id="edit-hotelName" class="swal2-input" placeholder="Khách sạn" value="${booking.hotelName || ''}">
+                        <input id="edit-roomId" class="swal2-input" placeholder="Phòng" value="${booking.roomId || ''}">
+                        <input id="edit-checkIn" class="swal2-input" type="date" value="${booking.checkIn ? booking.checkIn.split('T')[0] : ''}">
+                        <input id="edit-checkOut" class="swal2-input" type="date" value="${booking.checkOut ? booking.checkOut.split('T')[0] : ''}">
+                        <input id="edit-guests" class="swal2-input" type="number" min="1" placeholder="Số khách" value="${booking.guests || 1}">
+                        <select id="edit-status" class="swal2-input">
+                            <option value="pending" ${booking.status === 'pending' ? 'selected' : ''}>Chờ xác nhận</option>
+                            <option value="confirmed" ${booking.status === 'confirmed' ? 'selected' : ''}>Đã xác nhận</option>
+                            <option value="cancelled" ${booking.status === 'cancelled' ? 'selected' : ''}>Đã hủy</option>
+                            <option value="completed" ${booking.status === 'completed' ? 'selected' : ''}>Hoàn thành</option>
+                        </select>
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Lưu',
+                    cancelButtonText: 'Hủy',
+                    preConfirm: () => {
+                        const roomIdValue = document.getElementById('edit-roomId').value;
+                        return {
+                            customerName: document.getElementById('edit-customerName').value,
+                            customerEmail: document.getElementById('edit-customerEmail').value,
+                            customerPhone: document.getElementById('edit-customerPhone').value,
+                            hotelName: document.getElementById('edit-hotelName').value,
+                            roomId: roomIdValue,
+                            roomName: roomIdValue,
+                            checkIn: document.getElementById('edit-checkIn').value,
+                            checkOut: document.getElementById('edit-checkOut').value,
+                            guests: parseInt(document.getElementById('edit-guests').value),
+                            status: document.getElementById('edit-status').value
+                        };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        db.ref('bookings/' + bookingId).update(result.value).then(() => {
+                            Swal.fire('Thành công', 'Đã cập nhật thông tin!', 'success');
+                            loadBookings();
+                        }).catch(() => {
+                            Swal.fire('Lỗi', 'Không thể cập nhật thông tin.', 'error');
+                        });
+                    }
+                });
+            }
         }
 
         // === NOTIFICATIONS ===
@@ -2815,6 +3196,166 @@
                         updates[childSnapshot.key + '/read'] = true;
                     });
                     notificationsRef.update(updates);
+                }
+            });
+        }
+
+        function updateMissingRoomId() {
+          Swal.fire({
+            title: 'Cập nhật dữ liệu phòng?',
+            text: 'Tự động cập nhật tất cả booking bị thiếu trường Phòng thành "Chưa cập nhật". Bạn có chắc muốn thực hiện?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Cập nhật',
+            cancelButtonText: 'Hủy'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              db.ref('bookings').once('value').then(snapshot => {
+                let count = 0;
+                snapshot.forEach(child => {
+                  const data = child.val();
+                  if (!data.roomId || !String(data.roomId).trim()) {
+                    db.ref('bookings/' + child.key).update({ roomId: 'Chưa cập nhật' });
+                    count++;
+                  }
+                });
+                Swal.fire('Thành công', `Đã cập nhật ${count} booking bị thiếu trường Phòng!`, 'success');
+                loadBookings();
+              });
+            }
+          });
+        }
+
+        function updateRoomIdKhongXacDinh() {
+          Swal.fire({
+            title: 'Cập nhật phòng "Không xác định"?',
+            text: 'Tự động cập nhật tất cả booking có trường Phòng là "Không xác định" thành "Phòng chưa đặt". Bạn có chắc muốn thực hiện?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Cập nhật',
+            cancelButtonText: 'Hủy'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              db.ref('bookings').once('value').then(snapshot => {
+                let count = 0;
+                snapshot.forEach(child => {
+                  const data = child.val();
+                  if (data.roomId && data.roomId.trim() === 'Không xác định') {
+                    db.ref('bookings/' + child.key).update({ roomId: 'Phòng chưa đặt' });
+                    count++;
+                  }
+                });
+                Swal.fire('Thành công', `Đã cập nhật ${count} booking có phòng "Không xác định"!`, 'success');
+                loadBookings();
+              });
+                }
+            });
+        }
+
+        // JS: Thêm hàm loadBookingsTours để lọc và render các booking tour
+        function loadBookingsTours() {
+          const tableBody = document.getElementById('bookingsToursTable');
+          tableBody.innerHTML = '';
+          // Lọc booking tour theo cả type và bookingType
+          const tourBookings = allBookings.filter(b => b.type === 'tour' || b.bookingType === 'tour');
+          if (tourBookings.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="10" class="text-center py-5">Không có booking tour nào.</td></tr>';
+            return;
+          }
+          tourBookings.forEach(booking => {
+            const row = document.createElement('tr');
+            const statusBadge = `<span class="status status-${booking.status || 'pending'}">${booking.status || 'Chờ xác nhận'}</span>`;
+            row.innerHTML = `
+              <td>${booking.id}</td>
+              <td>${booking.customerName || 'N/A'}</td>
+              <td>${booking.customerEmail || 'N/A'}</td>
+              <td>${booking.customerPhone || 'N/A'}</td>
+              <td>${booking.tourName || 'Tour'}</td>
+              <td>${booking.tourLocation || 'N/A'}</td>
+              <td>${booking.checkIn ? new Date(booking.checkIn).toLocaleDateString('vi-VN') : 'N/A'}</td>
+              <td>${booking.numberOfGuests || booking.guests || 'N/A'}</td>
+              <td>${statusBadge}</td>
+              <td>
+                <button class="btn btn-sm btn-info" onclick="editBooking('${booking.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-danger" onclick="deleteBooking('${booking.id}')"><i class="fas fa-trash"></i></button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        }
+
+        // JS: Thêm hàm addTourBooking
+        function addTourBooking() {
+          db.ref('specialTours').once('value').then(snapshot => {
+            const tours = [];
+            snapshot.forEach(groupSnap => {
+              const group = groupSnap.val();
+              Object.values(group).forEach(tour => {
+                tours.push({
+                  name: tour.name || '',
+                  location: tour.location || ''
+                });
+              });
+            });
+            showAddTourBookingPopup(tours);
+          });
+        }
+
+        function showAddTourBookingPopup(tours) {
+          let tourOptions = tours.map(t => `<option value="${t.name}" data-location="${t.location}">${t.name}</option>`).join('');
+          Swal.fire({
+            title: 'Thêm đặt tour mới',
+            html: `
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <select id="add-tourName" class="swal2-input" style="width: 100%"><option value="">Chọn tour</option>${tourOptions}</select>
+                <input id="add-tourLocation" class="swal2-input" placeholder="Điểm đến" readonly>
+                <input id="add-checkIn" class="swal2-input" type="date">
+                <input id="add-numberOfGuests" class="swal2-input" type="number" min="1" placeholder="Số khách" value="1">
+                <input id="add-customerName" class="swal2-input" placeholder="Tên khách">
+                <input id="add-customerPhone" class="swal2-input" placeholder="Số điện thoại">
+                <select id="add-status" class="swal2-input" style="width: 100%">
+                  <option value="pending">Chờ xác nhận</option>
+                  <option value="confirmed">Đã xác nhận</option>
+                  <option value="cancelled">Đã hủy</option>
+                  <option value="completed">Hoàn thành</option>
+                </select>
+              </div>
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Lưu',
+            cancelButtonText: 'Hủy',
+            didOpen: () => {
+              const tourSelect = document.getElementById('add-tourName');
+              const locationInput = document.getElementById('add-tourLocation');
+              tourSelect.addEventListener('change', function() {
+                const selected = tourSelect.options[tourSelect.selectedIndex];
+                locationInput.value = selected.getAttribute('data-location') || '';
+              });
+            },
+            preConfirm: () => {
+              const tourSelect = document.getElementById('add-tourName');
+              const locationInput = document.getElementById('add-tourLocation');
+              return {
+                tourName: tourSelect.value,
+                tourLocation: locationInput.value,
+                checkIn: document.getElementById('add-checkIn').value,
+                numberOfGuests: parseInt(document.getElementById('add-numberOfGuests').value),
+                customerName: document.getElementById('add-customerName').value,
+                customerPhone: document.getElementById('add-customerPhone').value,
+                status: document.getElementById('add-status').value,
+                type: 'tour',
+                createdAt: new Date().toISOString()
+              };
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              db.ref('bookings').push(result.value).then(() => {
+                Swal.fire('Thành công', 'Đã thêm đặt tour mới!', 'success');
+                loadBookingsTours();
+              }).catch(() => {
+                Swal.fire('Lỗi', 'Không thể thêm đặt tour.', 'error');
+              });
                 }
             });
         }
