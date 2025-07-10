@@ -11,6 +11,95 @@
     <!-- Thêm SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/member.css">
+    <link rel="stylesheet" href="css\chatbox.css">
+    <script type="module" src="js/search.js"></script>
+    <style>
+    
+    .loyalty-container {
+      max-width: 600px;
+      margin: 40px auto 0 auto;
+      background: #fffbe6;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      padding: 32px 24px 24px 24px;
+    }
+    .loyalty-header {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .loyalty-box {
+      min-width: 160px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 18px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .loyalty-box.point {
+      background: #fff3e0;
+    }
+    .loyalty-box.rank {
+      background: #e3f2fd;
+    }
+    .loyalty-box i {
+      font-size: 2.2em;
+      margin-bottom: 6px;
+    }
+    .loyalty-value {
+      font-size: 2em;
+      font-weight: 700;
+      color: #e67e22;
+    }
+    .loyalty-box.rank .loyalty-value {
+      color: #1a237e;
+    }
+    .loyalty-label {
+      font-size: 1em;
+      color: #888;
+      margin-top: 2px;
+    }
+    .barcode-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 24px 12px 16px 12px;
+      margin-top: 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #user-barcode {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      height: auto;
+    }
+    .barcode-label {
+      font-size: 1em;
+      color: #888;
+      margin-top: 8px;
+    }
+    @media (max-width: 700px) {
+      .loyalty-header {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .loyalty-container {
+        padding: 16px 4px 12px 4px;
+      }
+      .barcode-card {
+        padding: 16px 2px 10px 2px;
+      }
+    }
+    </style>
 </head>
 
 <body>
@@ -28,14 +117,15 @@
                     <span></span>
                     <span></span>
                 </button>
-                <div class="nav-search">
-                    <div class="search-input-group">
-                        <input type="text" placeholder="Tìm kiếm...">
-                        <button type="button">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
+                <!-- Search Box -->
+<div class="nav-search">
+    <div class="search-input-group">
+        <input type="text" placeholder="Tìm kiếm..." id="main-search-input" autocomplete="off">
+        <button type="button" id="main-search-btn">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</div>
                 <div class="nav-right">
                     <ul class="nav-links" id="nav-links">
                         <li><a href="index.html" class="active">Trang chủ</a></li>
@@ -104,6 +194,10 @@
                                     data-bs-toggle="list">
                                     <i class="fas fa-calendar-alt me-2"></i> Lịch sử
                                 </a>
+                                <a href="#loyalty" class="list-group-item list-group-item-action"
+                                    data-bs-toggle="list">
+                                    <i class="fas fa-star me-2"></i> Điểm thành viên
+                                </a>
                                 <a href="#favorites" class="list-group-item list-group-item-action"
                                     data-bs-toggle="list">
                                     <i class="fas fa-heart me-2"></i> Danh sách yêu thích
@@ -170,19 +264,33 @@
                                                 <input type="text" class="form-control" id="profile-identityNumber">
                                             </div>
                                            
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label">Điểm thành viên</label>
-                                                <input type="number" class="form-control" id="profile-loyaltyPoints" readonly>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label">Hạng thành viên</label>
-                                                <input type="text" class="form-control" id="profile-memberLevel" readonly>
-                                            </div>
                                             <div class="col-12">
                                                 <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loyalty Tab (Điểm thành viên) -->
+                        <div class="tab-pane fade" id="loyalty">
+                            <div class="loyalty-container">
+                                <div class="loyalty-header">
+                                    <div class="loyalty-box point">
+                                        <i class="fas fa-star"></i>
+                                        <span class="loyalty-value" id="profile-loyaltyPoints">0</span>
+                                        <div class="loyalty-label">Điểm thành viên</div>
+                                    </div>
+                                    <div class="loyalty-box rank">
+                                        <i class="fas fa-medal"></i>
+                                        <span class="loyalty-value" id="profile-memberLevel"></span>
+                                        <div class="loyalty-label">Hạng thành viên</div>
+                                    </div>
+                                </div>
+                                <div class="barcode-card">
+                                    <svg id="user-barcode"></svg>
+                                    <div class="barcode-label">Mã vạch cá nhân - Quét tại quầy để tích điểm</div>
                                 </div>
                             </div>
                         </div>
@@ -420,6 +528,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script>
         // Firebase config
         const firebaseConfig = {
@@ -435,6 +544,27 @@
 
         // Khởi tạo Firebase
         firebase.initializeApp(firebaseConfig);
+
+        // Hàm tạo mã vạch cá nhân cho user
+        function updateUserBarcode(user) {
+            if (!user) return;
+            var barcodeEl = document.getElementById('user-barcode');
+            if (barcodeEl) {
+                JsBarcode(barcodeEl, user.uid, {
+                    format: "CODE128",
+                    lineColor: "#1a237e",
+                    width: 2,
+                    height: 60,
+                    displayValue: true,
+                    fontSize: 16
+                });
+            }
+        }
+        // Hàm đồng bộ điểm và hạng thành viên vào tab loyalty
+        function syncLoyaltyToBarcodeBox(userData) {
+            document.getElementById('profile-loyaltyPoints').textContent = userData.loyaltyPoints || 0;
+            document.getElementById('profile-memberLevel').textContent = userData.memberLevel || '';
+        }
 
         // Theo dõi trạng thái đăng nhập và cập nhật UI
         firebase.auth().onAuthStateChanged(function (user) {
@@ -453,6 +583,7 @@
             loadReviews(user);
             loadPayments(user);
             loadNotifications(user);
+            updateUserBarcode(user); // Gọi updateUserBarcode khi user đăng nhập
         });
 
         // Hàm cập nhật UI người dùng
@@ -487,8 +618,8 @@
                 document.getElementById('profile-gender').value = userData.gender || '';
                 document.getElementById('profile-nationality').value = userData.nationality || '';
                 document.getElementById('profile-identityNumber').value = userData.identityNumber || '';
-                document.getElementById('profile-loyaltyPoints').value = userData.loyaltyPoints || 0;
-                document.getElementById('profile-memberLevel').value = userData.memberLevel || '';
+                document.getElementById('profile-loyaltyPoints').textContent = userData.loyaltyPoints || 0;
+                document.getElementById('profile-memberLevel').textContent = userData.memberLevel || '';
 
                 // Sidebar
                 document.getElementById('sidebar-user-name').textContent = userData.name || user.displayName || 'Chưa cập nhật';
@@ -501,6 +632,7 @@
 
                 // Gọi phân hạng tự động
                 updateMemberLevel(user);
+                syncLoyaltyToBarcodeBox(userData); // Đồng bộ điểm và hạng thành viên vào barcode box
             });
 
             // Xử lý form cập nhật thông tin
@@ -611,7 +743,6 @@
             // Xác định trạng thái đặt phòng
             let status = '';
             let statusClass = '';
-
             if (checkInDate < today) {
                 status = 'Đã hoàn thành';
                 statusClass = 'success';
@@ -720,20 +851,113 @@
         // Hàm lấy đánh giá
         function loadReviews(user) {
             const reviewsRef = firebase.database().ref('reviews');
-            reviewsRef.orderByChild('userId').equalTo(user.uid).on('value', (snapshot) => {
-                const reviewsList = document.getElementById('reviews-list');
-                if (!reviewsList) return;
-
-                reviewsList.innerHTML = '';
-
-                if (snapshot.exists()) {
-                    snapshot.forEach((reviewSnapshot) => {
+            const bookingsRef = firebase.database().ref('bookings');
+            const reviewsList = document.getElementById('reviews-list');
+            if (!reviewsList) return;
+            reviewsList.innerHTML = '';
+            // Lấy tất cả review của user
+            reviewsRef.orderByChild('userId').equalTo(user.uid).once('value', (reviewSnap) => {
+                let reviewedBookingIds = [];
+                let reviewsArr = [];
+                if (reviewSnap.exists()) {
+                    reviewSnap.forEach((reviewSnapshot) => {
                         const review = reviewSnapshot.val();
-                        addReviewItem(review, reviewsList);
+                        reviewedBookingIds.push(reviewSnapshot.key);
+                        reviewsArr.push(review);
                     });
-                } else {
-                    reviewsList.innerHTML = '<div class="text-center">Chưa có đánh giá nào</div>';
                 }
+                // Hiển thị các review đã có
+                if (reviewsArr.length > 0) {
+                    reviewsArr.forEach(review => addReviewItem(review, reviewsList));
+                }
+                // Lấy các booking đã hoàn thành nhưng chưa đánh giá
+                bookingsRef.orderByChild('customerEmail').equalTo(user.email).once('value', (bookingSnap) => {
+                    let hasPending = false;
+                    if (bookingSnap.exists()) {
+                        bookingSnap.forEach((bookingSnapshot) => {
+                            const booking = bookingSnapshot.val();
+                            const bookingId = bookingSnapshot.key;
+                            const checkInDate = new Date(booking.checkIn);
+                            const today = new Date();
+                            if (checkInDate < today && !reviewedBookingIds.includes(bookingId)) {
+                                // Chỉ lấy booking khách sạn (không phải tour)
+                                if (!booking.bookingType || booking.bookingType === 'hotel') {
+                                    hasPending = true;
+                                    // Thêm vào danh sách chờ đánh giá với form đánh giá trực tiếp
+                                    const div = document.createElement('div');
+                                    div.className = 'review-item';
+                                    div.innerHTML = `
+                                        <div><strong>${booking.hotelName || booking.hotelId}</strong></div>
+                                        <div>Check-in: ${formatDate(booking.checkIn)}</div>
+                                        <div>Check-out: ${formatDate(booking.checkOut)}</div>
+                                        <div class="inline-review-form" id="review-form-${bookingId}">
+                                            <div class="star-rating" style="font-size:2em; color:#ccc; cursor:pointer; margin-bottom:8px;">
+                                                <span data-value="1">&#9733;</span>
+                                                <span data-value="2">&#9733;</span>
+                                                <span data-value="3">&#9733;</span>
+                                                <span data-value="4">&#9733;</span>
+                                                <span data-value="5">&#9733;</span>
+                                            </div>
+                                            <textarea class="form-control mb-2" rows="3" placeholder="Nhận xét của bạn..."></textarea>
+                                            <button class="btn btn-primary btn-sm submit-inline-review">Gửi đánh giá</button>
+                                        </div>
+                                    `;
+                                    reviewsList.appendChild(div);
+                                    // Gắn sự kiện chọn sao và gửi đánh giá
+                                    setTimeout(() => {
+                                        let selected = 0;
+                                        const formDiv = document.getElementById(`review-form-${bookingId}`);
+                                        const stars = formDiv.querySelectorAll('.star-rating span');
+                                        const textarea = formDiv.querySelector('textarea');
+                                        const submitBtn = formDiv.querySelector('.submit-inline-review');
+                                        stars.forEach(star => {
+                                            star.addEventListener('click', function() {
+                                                selected = this.dataset.value;
+                                                stars.forEach(s => {
+                                                    s.style.color = s.dataset.value <= selected ? 'gold' : '#ccc';
+                                                });
+                                            });
+                                        });
+                                        submitBtn.addEventListener('click', function() {
+                                            if (selected == 0) {
+                                                Swal.fire('Vui lòng chọn số sao!');
+                                                return;
+                                            }
+                                            const comment = textarea.value;
+                                            if (!comment.trim()) {
+                                                Swal.fire('Vui lòng nhập nhận xét!');
+                                                return;
+                                            }
+                                            // Lấy userId từ user.uid để đúng rule Firebase
+                                            const userId = user.uid;
+                                            const reviewData = {
+                                                userId: userId,
+                                                hotelId: booking.hotelId,
+                                                rating: Number(selected),
+                                                comment: comment,
+                                                date: firebase.database.ServerValue.TIMESTAMP,
+                                                userName: user.displayName || user.email
+                                            };
+                                            // Log dữ liệu gửi lên để debug
+                                            console.log('Review gửi lên:', reviewData);
+                                            firebase.database().ref('reviews/' + bookingId).set(reviewData)
+                                                .then(() => {
+                                                    Swal.fire('Đánh giá thành công!');
+                                                    loadReviews(user);
+                                                })
+                                                .catch(err => {
+                                                    Swal.fire('Lỗi: ' + err.message);
+                                                });
+                                        });
+                                    }, 0);
+                                }
+                            }
+                        });
+                    }
+                    if (!hasPending && reviewsArr.length === 0) {
+                        reviewsList.innerHTML = '<div class="text-center">Chưa có đánh giá nào</div>';
+                    }
+                });
             });
         }
 
@@ -790,6 +1014,7 @@
                 document.getElementById('sidebar-user-name').textContent = updates.name;
                 document.getElementById('user-name').textContent = updates.name;
                 document.getElementById('sidebar-avatar').src = updates.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+                updateUserBarcode(user); // Cập nhật barcode khi cập nhật thông tin
             }).catch((error) => {
                 console.error('Lỗi cập nhật:', error);
                 Swal.fire({
@@ -935,6 +1160,41 @@
             viewBookingDetails(bookingId);
         }
 
+        // Hàm lấy lịch sử thanh toán
+        function loadPayments(user) {
+            const paymentsRef = firebase.database().ref('payments');
+            paymentsRef.orderByChild('userId').equalTo(user.uid).on('value', (snapshot) => {
+                const paymentsTable = document.getElementById('payments-table');
+                if (!paymentsTable) return;
+                paymentsTable.innerHTML = '';
+                if (snapshot.exists()) {
+                    let payments = [];
+                    snapshot.forEach((paymentSnapshot) => {
+                        payments.push({
+                            id: paymentSnapshot.key,
+                            ...paymentSnapshot.val()
+                        });
+                    });
+                    // Sắp xếp theo ngày mới nhất
+                    payments.sort((a, b) => b.date - a.date);
+                    payments.forEach(payment => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${payment.transactionId || payment.id}</td>
+                            <td>${payment.date ? new Date(payment.date).toLocaleString('vi-VN') : ''}</td>
+                            <td>${payment.amount ? payment.amount.toLocaleString('vi-VN') + ' đ' : ''}</td>
+                            <td>${payment.method || ''}</td>
+                            <td><span class="badge bg-${payment.status === 'success' ? 'success' : 'danger'}">${payment.status === 'success' ? 'Thành công' : 'Thất bại'}</span></td>
+                            <td>${payment.note || ''}</td>
+                        `;
+                        paymentsTable.appendChild(row);
+                    });
+                } else {
+                    paymentsTable.innerHTML = '<tr><td colspan="6" class="text-center py-4">Chưa có lịch sử thanh toán</td></tr>';
+                }
+            });
+        }
+
         // Mobile Menu Toggle
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const navLinks = document.getElementById('nav-links');
@@ -1024,41 +1284,6 @@
             });
         }
 
-        if (payment.status === 'success' && !payment.loyaltyAdded) {
-    const paymentRef = paymentSnapshot.ref;
-    paymentRef.transaction(function(currentPayment) {
-        if (currentPayment && currentPayment.status === 'success' && !currentPayment.loyaltyAdded) {
-            currentPayment.loyaltyAdded = true;
-            return currentPayment;
-        }
-        return;
-    }, function(error, committed, snap) {
-        if (error) {
-            console.error('Transaction failed:', error);
-        } else if (committed) {
-            // Chỉ khi loyaltyAdded vừa được set thành công mới cộng điểm
-            const points = Math.floor((payment.amount || 0) / 1000);
-            if (points > 0) {
-                const userRef = firebase.database().ref('users/' + user.uid + '/loyaltyPoints');
-                userRef.transaction(function(currentPoints) {
-                    return (currentPoints || 0) + points;
-                }, function(err, committed2, snap2) {
-                    if (committed2) {
-                        // Sau khi cộng điểm thành công, cập nhật note
-                        paymentRef.update({
-                            note: `Đã cộng điểm thành viên: +${points} điểm`
-                        });
-                    }
-                });
-            } else {
-                // Nếu không có điểm, vẫn ghi note
-                paymentRef.update({
-                    note: `Thanh toán thành công nhưng số tiền không đủ để cộng điểm thành viên`
-                });
-            }
-        }
-    });
-}
         function viewInvoice(paymentId) {
             const paymentRef = firebase.database().ref('payments/' + paymentId);
             paymentRef.once('value').then(snapshot => {
@@ -1294,23 +1519,8 @@ function updateMemberLevelCustom(user, points) {
     firebase.database().ref('users/' + user.uid + '/memberLevel').set(level);
 }
 
-// Thêm nút vào tab Lịch sử thanh toán
-// setTimeout(() => {
-//     const paymentsTab = document.querySelector('#payments .card-body');
-//     if (paymentsTab && !document.getElementById('reset-loyalty-btn')) {
-//         const btn = document.createElement('button');
-//         btn.id = 'reset-loyalty-btn';
-//         btn.className = 'btn btn-warning mb-3';
-//         btn.innerHTML = '<i class="fas fa-sync-alt me-1"></i> Reset & Tính lại điểm thành viên';
-//         btn.onclick = function() {
-//             const user = firebase.auth().currentUser;
-//             if (user) resetLoyaltyPoints(user);
-//         };
-//         paymentsTab.prepend(btn);
-//     }
-// }, 1000);
     </script>
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -1321,7 +1531,7 @@ s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-End of Tawk.to Script
+End of Tawk.to Script -->
 
     <script>
         // Hiển thị ảnh vừa chọn lên avatar ngay lập tức
@@ -1342,6 +1552,105 @@ End of Tawk.to Script
             }
         });
     </script>
+    <!-- Modal Bootstrap cho đánh giá (ngay trước </body>) -->
+    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" style="max-width:700px; min-width:500px;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="reviewModalLabel">Đánh giá khách sạn</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body">
+            <div id="star-rating" style="font-size:2.8em; color:#ccc; cursor:pointer; margin-bottom:18px; text-align:center;">
+              <span data-value="1">&#9733;</span>
+              <span data-value="2">&#9733;</span>
+              <span data-value="3">&#9733;</span>
+              <span data-value="4">&#9733;</span>
+              <span data-value="5">&#9733;</span>
+            </div>
+            <textarea id="reviewComment" class="form-control mb-3" rows="4" style="font-size:1.1em;" placeholder="Nhận xét của bạn..."></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-primary" id="submitReview">Gửi đánh giá</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+        let selectedRating = 0;
+        let currentBookingId = '';
+        let currentHotelId = '';
+        let currentHotelName = '';
+        
+        function openReviewModal(bookingId, hotelId, hotelName) {
+  currentBookingId = bookingId;
+  currentHotelId = hotelId;
+  currentHotelName = hotelName;
+  selectedRating = 0;
+  document.getElementById('reviewComment').value = '';
+  document.querySelectorAll('#star-rating span').forEach(s => s.style.color = '#ccc');
+  // Kiểm tra đã đánh giá chưa
+  firebase.database().ref('reviews/' + bookingId).once('value').then(snap => {
+    if (snap.exists()) {
+      Swal.fire('Bạn đã đánh giá đơn này!');
+      return;
+    }
+    // Đóng SweetAlert2 nếu đang mở
+    if (Swal.isVisible()) Swal.close();
+    // Mở modal Bootstrap
+    var reviewModal = new bootstrap.Modal(document.getElementById('reviewModal'));
+    reviewModal.show();
+  });
+}
+        
+        document.addEventListener('DOMContentLoaded', function() {
+          // Gắn sự kiện chọn sao
+          document.querySelectorAll('#star-rating span').forEach(star => {
+            star.addEventListener('click', function() {
+              selectedRating = this.dataset.value;
+              document.querySelectorAll('#star-rating span').forEach(s => {
+                s.style.color = s.dataset.value <= selectedRating ? 'gold' : '#ccc';
+              });
+            });
+          });
+          // Gắn sự kiện submitReview qua delegation để tránh lỗi null
+          document.body.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'submitReview') {
+              const comment = document.getElementById('reviewComment').value;
+              if (selectedRating == 0) {
+                Swal.fire('Vui lòng chọn số sao!');
+                return;
+              }
+              const user = firebase.auth().currentUser;
+              if (!user) {
+                Swal.fire('Bạn cần đăng nhập để đánh giá!');
+                return;
+              }
+              // Lưu đánh giá vào reviews/bookingId
+              const reviewData = {
+                userId: user.uid,
+                hotelId: currentHotelId,
+                hotelName: currentHotelName,
+                rating: Number(selectedRating),
+                comment: comment,
+                date: firebase.database.ServerValue.TIMESTAMP,
+                userName: user.displayName || user.email
+              };
+              firebase.database().ref('reviews/' + currentBookingId).set(reviewData)
+                .then(() => {
+                  Swal.fire('Đánh giá thành công!');
+                  var reviewModal = bootstrap.Modal.getInstance(document.getElementById('reviewModal'));
+                  if (reviewModal) reviewModal.hide();
+                  if (typeof loadBookings === 'function') loadBookings(user);
+                })
+                .catch(err => {
+                  Swal.fire('Lỗi: ' + err.message);
+                });
+            }
+          });
+        });
+        </script>
 </body>
 
 </html>

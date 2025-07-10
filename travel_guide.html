@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="css/travel_guide.css">
     <link rel="stylesheet" href="css\chatbox.css">
+    <script type="module" src="js/search.js"></script>
     <style>
         @font-face {
             font-family: 'Nautica Script Bold';
@@ -44,15 +45,15 @@
                     <span></span>
                 </button>
 
-                <!-- Search Box -->
-                <div class="nav-search">
-                    <div class="search-input-group">
-                        <input type="text" placeholder="Tìm kiếm...">
-                        <button type="button">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
+               <!-- Search Box -->
+<div class="nav-search">
+    <div class="search-input-group">
+        <input type="text" placeholder="Tìm kiếm..." id="main-search-input" autocomplete="off">
+        <button type="button" id="main-search-btn">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</div>
                 <div class="nav-right">
                     <ul class="nav-links" id="nav-links">
                         <li><a href="index.html">Trang chủ</a></li>

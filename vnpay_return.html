@@ -141,14 +141,14 @@
                     uid: user.uid,
                     email: user.email
                 });
-                debugContent.textContent = JSON.stringify({
+                if (debugContent) debugContent.textContent = JSON.stringify({
                     uid: user.uid,
                     email: user.email,
                     isLoggedIn: true
                 }, null, 2);
             } else {
                 console.log('No user logged in');
-                debugContent.textContent = JSON.stringify({
+                if (debugContent) debugContent.textContent = JSON.stringify({
                     isLoggedIn: false,
                     message: 'Không có user đăng nhập'
                 }, null, 2);
@@ -331,12 +331,12 @@
 
         function processPaymentHistory(data, orderId, isDeposit) {
             const debugContent = document.getElementById('debug-content');
-            const currentContent = JSON.parse(debugContent.textContent || '{}');
+            const currentContent = debugContent ? JSON.parse(debugContent.textContent || '{}') : {};
             
             console.log('Payment data:', data);
             if (!data) {
                 console.log('Không tìm thấy dữ liệu');
-                debugContent.textContent = JSON.stringify({
+                if (debugContent) debugContent.textContent = JSON.stringify({
                     ...currentContent,
                     data: 'Không tìm thấy',
                     orderId: orderId
@@ -354,7 +354,7 @@
                 detail: isDeposit ? 'Thanh toán đặt cọc qua VNPAY' : 'Thanh toán đặt phòng/đặt tour qua VNPAY'
             };
             
-            debugContent.textContent = JSON.stringify({
+            if (debugContent) debugContent.textContent = JSON.stringify({
                 ...currentContent,
                 data: data,
                 payment: paymentData,
@@ -425,19 +425,10 @@
                             })
                             .then(snapshot => {
                                 const updatedUser = snapshot.val();
-                                const successMessage = document.createElement('div');
-                                successMessage.className = 'alert alert-success mt-3';
-                                successMessage.innerHTML = `
-                                    <strong>Cập nhật điểm thành công!</strong><br>
-                                    + ${Math.floor((paymentData.amount / 100) / 100000)} điểm<br>
-                                    Tổng điểm: ${updatedUser.loyaltyPoints}<br>
-                                    Hạng thành viên: ${updatedUser.memberLevel}
-                                `;
-                                document.getElementById('payment-status').appendChild(successMessage);
                                 // Cập nhật debug info
                                 const debugContent = document.getElementById('debug-content');
-                                const currentContent = JSON.parse(debugContent.textContent || '{}');
-                                debugContent.textContent = JSON.stringify({
+                                const currentContent = debugContent ? JSON.parse(debugContent.textContent || '{}') : {};
+                                if (debugContent) debugContent.textContent = JSON.stringify({
                                     ...currentContent,
                                     pointsUpdate: {
                                         success: true,
@@ -457,8 +448,8 @@
                                 `;
                                 document.getElementById('payment-status').appendChild(errorMessage);
                                 const debugContent = document.getElementById('debug-content');
-                                const currentContent = JSON.parse(debugContent.textContent || '{}');
-                                debugContent.textContent = JSON.stringify({
+                                const currentContent = debugContent ? JSON.parse(debugContent.textContent || '{}') : {};
+                                if (debugContent) debugContent.textContent = JSON.stringify({
                                     ...currentContent,
                                     pointsUpdateError: {
                                         message: error.message,
@@ -553,4 +544,4 @@
     </script>
 </body>
 </html> 
-</html> 
+

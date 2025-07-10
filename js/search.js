@@ -8,7 +8,7 @@ const firebaseConfig = {
     authDomain: "websitedatphongkhachsan.firebaseapp.com",
     databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
     projectId: "websitedatphongkhachsan",
-    storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+    storageBucket: "websitedatphachsan.firebasestorage.app",
     messagingSenderId: "732884739524",
     appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
     measurementId: "G-RC61EXTZH7"
@@ -47,33 +47,36 @@ async function searchAll(query) {
         const hotelsSnapshot = await get(ref(database, 'hotels'));
         if (hotelsSnapshot.exists()) {
             const hotels = hotelsSnapshot.val();
-            results.hotels = Object.values(hotels).filter(hotel => 
-                searchCategories.hotels.some(field => 
-                    hotel[field] && hotel[field].toLowerCase().includes(query)
-                )
-            );
+            results.hotels = Object.entries(hotels).map(([id, hotel]) => ({ ...hotel, id }))
+                .filter(hotel =>
+                    searchCategories.hotels.some(field =>
+                        hotel[field] && hotel[field].toLowerCase().includes(query)
+                    )
+                );
         }
 
         // Tìm trong tours
         const toursSnapshot = await get(ref(database, 'tours'));
         if (toursSnapshot.exists()) {
             const tours = toursSnapshot.val();
-            results.tours = Object.values(tours).filter(tour => 
-                searchCategories.tours.some(field => 
-                    tour[field] && tour[field].toLowerCase().includes(query)
-                )
-            );
+            results.tours = Object.entries(tours).map(([id, tour]) => ({ ...tour, id }))
+                .filter(tour =>
+                    searchCategories.tours.some(field =>
+                        tour[field] && tour[field].toLowerCase().includes(query)
+                    )
+                );
         }
 
         // Tìm trong điểm đến
         const destinationsSnapshot = await get(ref(database, 'destinations'));
         if (destinationsSnapshot.exists()) {
             const destinations = destinationsSnapshot.val();
-            results.destinations = Object.values(destinations).filter(destination => 
-                searchCategories.destinations.some(field => 
-                    destination[field] && destination[field].toLowerCase().includes(query)
-                )
-            );
+            results.destinations = Object.entries(destinations).map(([id, destination]) => ({ ...destination, id }))
+                .filter(destination =>
+                    searchCategories.destinations.some(field =>
+                        destination[field] && destination[field].toLowerCase().includes(query)
+                    )
+                );
         }
 
         return results;
@@ -166,118 +169,270 @@ function displaySearchResults(results) {
     }
 }
 
-// Gợi ý từ khóa phổ biến
+// Gợi ý từ khóa phổ biến (không dùng trực tiếp cho showSuggestions mới)
 const SUGGESTIONS = [
     'Khách sạn', 'Tour', 'Ưu đãi', 'Cần Thơ', 'Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Nha Trang', 'Phú Quốc', 'Vũng Tàu',
     'Combo', 'Resort', 'Biển', 'Núi', 'Ẩm thực', 'Trải nghiệm', 'Flash Sale', 'Hot', 'Chỉ hôm nay', 'Độc quyền', 'Genius'
 ];
 
-function showSuggestions(value) {
-    // Không hiển thị gợi ý trên giao diện nữa
-    const suggestionBox = document.getElementById('search-suggestions');
-    if (suggestionBox) {
-        suggestionBox.style.display = 'none';
-        suggestionBox.innerHTML = '';
-    }
+// Hàm chuẩn hóa chuỗi
+function normalizeString(str) {
+    return str
+        .toLowerCase()
+        .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+        .replace(/[^a-z0-9\s]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
 }
 
-function handleSuggestionSelect(keyword) {
-    // Chuyển hướng theo từ khóa
-    const kw = keyword.trim().toLowerCase();
+// Danh sách gợi ý tĩnh
+const cityList = [
+    'Hà Nội', 'Đà Nẵng', 'Đà Lạt', 'Phú Quốc', 'Buôn Ma Thuột', 'Nha Trang', 'Vũng Tàu', 'Cần Thơ',
+    'Kiên Giang', 'Phan Thiết', 'Huế', 'Quy Nhơn', 'Sapa', 'Tp. Hồ Chí Minh', 'Hạ Long', 'Hội An'
+];
+let hotelList = [];
+
+// Lấy danh sách khách sạn từ Firebase (cho autocomplete)
+import('https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js').then(({ getDatabase, ref, get }) => {
+    const db = getDatabase();
+    get(ref(db, 'location')).then(snapshot => {
+        if (snapshot.exists()) {
+            let allHotels = [];
+            const data = snapshot.val();
+            Object.keys(data).forEach(cityKey => {
+                const hotels = data[cityKey]?.hotels;
+                if (hotels) {
+                    if (Array.isArray(hotels)) {
+                        hotels.forEach(hotel => {
+                            if (hotel.tenKhachSan) allHotels.push(hotel.tenKhachSan);
+                        });
+                    } else {
+                        Object.values(hotels).forEach(hotel => {
+                            if (hotel.tenKhachSan) allHotels.push(hotel.tenKhachSan);
+                        });
+                    }
+                }
+            });
+            hotelList = allHotels;
+        }
+    }).catch(error => {
+        console.error('Error fetching hotels from Firebase:', error);
+    });
+});
+
+// Hàm hiển thị gợi ý (cho autocomplete trên navbar)
+async function showSuggestions(value) {
+    const suggestionBox = document.getElementById('search-suggestions');
+    if (!suggestionBox) return;
+
+    if (!value.trim()) {
+        suggestionBox.style.display = 'none';
+        suggestionBox.innerHTML = '';
+        return;
+    }
+
+    const normValue = normalizeString(value);
+    // Gợi ý thành phố
+    const citySuggestions = cityList.filter(city => normalizeString(city).includes(normValue));
+    // Gợi ý khách sạn
+    const hotelSuggestions = hotelList.filter(hotel => normalizeString(hotel).includes(normValue));
+    // Gợi ý từ Firebase (hotels, tours, destinations)
+    const firebaseResults = await searchAll(value);
+
+    let suggestions = [
+        ...citySuggestions.map(city => ({ type: 'Thành phố', value: city, url: `hotel.html?city=${encodeURIComponent(city)}` })),
+        ...hotelSuggestions.map(hotel => ({ type: 'Khách sạn', value: hotel, url: `hotel-detail.html?name=${encodeURIComponent(hotel)}` })),
+        ...(firebaseResults.hotels || []).slice(0, 5).map(hotel => ({
+            type: 'Khách sạn',
+            value: hotel.name,
+            url: `hotel-detail.html?id=${hotel.id}`
+        })),
+        ...(firebaseResults.tours || []).slice(0, 5).map(tour => ({
+            type: 'Tour',
+            value: tour.name,
+            url: `tour-detail.html?id=${tour.id}`
+        })),
+        ...(firebaseResults.destinations || []).slice(0, 3).map(dest => ({
+            type: 'Điểm đến',
+            value: dest.name,
+            url: `destination_detail.html?id=${dest.id}`
+        }))
+    ].slice(0, 10); // Giới hạn tối đa 10 gợi ý
+
+    if (!suggestions.length) {
+        suggestionBox.style.display = 'none';
+        suggestionBox.innerHTML = '';
+        return;
+    }
+
+    suggestionBox.innerHTML = suggestions.map(s => `
+        <div class="suggestion-item" tabindex="0" data-url="${s.url}">
+            <span class="suggestion-type">${s.type}:</span> <span class="suggestion-name">${s.value}</span>
+        </div>
+    `).join('');
+    suggestionBox.style.display = 'block';
+
+    // Gắn sự kiện click cho từng gợi ý
+    suggestionBox.querySelectorAll('.suggestion-item').forEach(item => {
+        item.addEventListener('mousedown', function(e) {
+            // Ngăn chặn sự kiện mousedown mặc định để tránh blur input ngay lập tức
+            e.preventDefault();
+            window.location.href = this.dataset.url;
+        });
+    });
+}
+
+// Hàm xử lý khi chọn gợi ý hoặc nhấn nút tìm kiếm chính
+function handleMainSearchAction(query) {
+    const kw = query.trim().toLowerCase();
     if (kw === 'khách sạn') {
         window.location.href = 'hotel.html';
     } else if (kw === 'tour') {
         window.location.href = 'tours.html';
     } else if (kw === 'ưu đãi') {
         window.location.href = 'prioritize.html';
-    } else if ({
-        'cần thơ': 1,
-        'hà nội': 1,
-        'hồ chí minh': 1,
-        'đà nẵng': 1,
-        'nha trang': 1,
-        'phú quốc': 1,
-        'vũng tàu': 1
-    }[kw]) {
-        // Ưu tiên chuyển sang trang khách sạn với tham số thành phố
-        window.location.href = `hotel.html?city=${encodeURIComponent(keyword)}`;
+    } else if (cityList.map(c => normalizeString(c)).includes(kw)) { // Kiểm tra nếu là tên thành phố
+        window.location.href = `hotel.html?city=${encodeURIComponent(query)}`;
     } else if (kw === 'combo') {
         window.location.href = 'prioritize.html';
     } else {
-        // Nếu là từ khóa khác, thực hiện tìm kiếm toàn cục
-        window.location.href = `tours.html?search=${encodeURIComponent(keyword)}`;
+        // Nếu là từ khóa khác, ưu tiên tìm kiếm khách sạn theo tên hoặc chuyển sang trang tour với tham số tìm kiếm
+        window.location.href = `hotel.html?search=${encodeURIComponent(query)}`; // Có thể điều chỉnh để tìm kiếm toàn cục nếu cần
     }
 }
 
-// Thêm sự kiện tìm kiếm
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.querySelector('.search-input-group input');
-    const searchButton = document.querySelector('.search-input-group button');
-    let searchTimeout;
 
-    if (searchInput && searchButton) {
+// === DOM CONTENT LOADED - HỢP NHẤT CÁC SỰ KIỆN ===
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Xử lý tìm kiếm trên trang search.html (nếu có) ---
+    const searchInputPage = document.querySelector('.search-input-group input');
+    const searchButtonPage = document.querySelector('.search-input-group button');
+    let searchTimeoutPage;
+
+    if (searchInputPage && searchButtonPage) {
         // Tìm kiếm khi nhấn nút
-        searchButton.addEventListener('click', async () => {
-            const query = searchInput.value;
+        searchButtonPage.addEventListener('click', async () => {
+            const query = searchInputPage.value;
             const results = await searchAll(query);
             displaySearchResults(results);
         });
 
         // Tìm kiếm khi gõ (debounce)
-        searchInput.addEventListener('input', () => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(async () => {
-                const query = searchInput.value;
+        searchInputPage.addEventListener('input', () => {
+            clearTimeout(searchTimeoutPage);
+            searchTimeoutPage = setTimeout(async () => {
+                const query = searchInputPage.value;
                 const results = await searchAll(query);
                 displaySearchResults(results);
             }, 300);
         });
 
         // Tìm kiếm khi nhấn Enter
-        searchInput.addEventListener('keypress', async (e) => {
+        searchInputPage.addEventListener('keypress', async (e) => {
             if (e.key === 'Enter') {
-                const query = searchInput.value;
+                const query = searchInputPage.value;
                 const results = await searchAll(query);
                 displaySearchResults(results);
             }
         });
     }
 
-    // Gắn autocomplete cho ô tìm kiếm chính trên navbar
-    const input = document.getElementById('main-search-input');
+    // --- Xử lý Autocomplete và tìm kiếm trên Navbar ---
+    let suggestionBox = document.getElementById('search-suggestions');
+    // Tạo suggestionBox nếu chưa tồn tại
+    if (!suggestionBox) {
+        suggestionBox = document.createElement('div');
+        suggestionBox.id = 'search-suggestions';
+        suggestionBox.style.position = 'absolute';
+        suggestionBox.style.background = '#fff';
+        suggestionBox.style.zIndex = '9999';
+        suggestionBox.style.width = '100%';
+        suggestionBox.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+        suggestionBox.style.display = 'none';
+        suggestionBox.className = 'autocomplete-suggestions';
+        const navInputGroup = document.querySelector('.nav-search .search-input-group');
+        if (navInputGroup) navInputGroup.appendChild(suggestionBox);
+    }
+
+    const input = document.getElementById('main-search-input') || document.querySelector('.nav-search input');
     const btn = document.getElementById('main-search-btn');
-    const suggestionBox = document.getElementById('search-suggestions');
+    let suggestTimeout;
+
     if (!input) return;
+
+    // Xử lý input (debounce cho gợi ý)
     input.addEventListener('input', (e) => {
-        showSuggestions(e.target.value);
-    });
-    input.addEventListener('focus', (e) => {
-        showSuggestions(e.target.value);
-    });
-    input.addEventListener('blur', () => {
-        setTimeout(() => {
-            if (suggestionBox) suggestionBox.style.display = 'none';
+        clearTimeout(suggestTimeout);
+        suggestTimeout = setTimeout(() => {
+            showSuggestions(e.target.value);
         }, 200);
     });
-    // Nhấn Enter để tìm kiếm hoặc chuyển hướng
+
+    // Hiển thị gợi ý khi focus
+    input.addEventListener('focus', () => {
+        if (input.value.trim()) {
+            showSuggestions(input.value);
+        }
+    });
+
+    // SỬA ĐỔI: Xử lý sự kiện blur trên input
+    input.addEventListener('blur', () => {
+        // Sử dụng setTimeout để cho phép sự kiện click trên suggestion-item hoặc nút tìm kiếm được xử lý trước
+        setTimeout(() => {
+            // Kiểm tra nếu focus không nằm trong input và cũng không nằm trong suggestionBox
+            // và không nằm trong nút tìm kiếm
+            if (!input.contains(document.activeElement) &&
+                !suggestionBox.contains(document.activeElement) &&
+                (!btn || !btn.contains(document.activeElement))) {
+                suggestionBox.style.display = 'none';
+            }
+        }, 100); // Một khoảng thời gian ngắn để các sự kiện click/mousedown khác có thể kích hoạt
+    });
+
+    // Giữ suggestionBox khi di chuột vào
+    suggestionBox.addEventListener('mouseenter', () => {
+        suggestionBox.style.display = 'block';
+    });
+
+    // Ẩn suggestionBox khi rời chuột và input không có focus
+    suggestionBox.addEventListener('mouseleave', () => {
+        if (!input.contains(document.activeElement)) {
+            suggestionBox.style.display = 'none';
+        }
+    });
+
+    // SỬA ĐỔI: Ẩn suggestionBox khi nhấp ra ngoài (trừ input, suggestionBox, và nút tìm kiếm)
+    document.addEventListener('mousedown', function (e) {
+        if (!input.contains(e.target) && !suggestionBox.contains(e.target) && (!btn || !btn.contains(e.target))) {
+            suggestionBox.style.display = 'none';
+        }
+    });
+
+    // Xử lý nút tìm kiếm chính
+    if (btn) {
+        btn.addEventListener('click', () => {
+            const query = input.value.trim();
+            if (query) {
+                handleMainSearchAction(query);
+            }
+        });
+    }
+
+    // Xử lý nhấn Enter trên input chính
     input.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            if (suggestionBox && suggestionBox.style.display === 'block') {
-                // Nếu có gợi ý, chọn gợi ý đầu tiên
+            const query = input.value.trim();
+            if (suggestionBox.style.display === 'block') {
                 const first = suggestionBox.querySelector('.suggestion-item');
                 if (first) {
-                    first.click();
-                    e.preventDefault();
+                    first.click(); // Kích hoạt click trên gợi ý đầu tiên
+                    e.preventDefault(); // Ngăn chặn hành vi mặc định của Enter (ví dụ: submit form)
                     return;
                 }
             }
-            handleSuggestionSelect(input.value);
+            if (query) {
+                handleMainSearchAction(query);
+            }
         }
     });
-    // Nhấn nút tìm kiếm
-    if (btn) {
-        btn.addEventListener('click', () => {
-            handleSuggestionSelect(input.value);
-        });
-    }
 });

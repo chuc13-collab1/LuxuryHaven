@@ -33,6 +33,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/hotel.css"> <!-- Sử dụng lại CSS chung -->
     <link rel="stylesheet" href="css/hotel-detail.css"> <!-- CSS riêng cho trang chi tiết -->
+    <link rel="stylesheet" href="css\chatbox.css">
+    <script type="module" src="js/search.js"></script>
     <style>
         /* Similar Hotels Styles */
         .similar-hotels {
@@ -178,12 +180,15 @@
                     <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
                 </a>
                 <button class="mobile-menu-btn" id="mobile-menu-btn"><span></span><span></span><span></span></button>
-                <div class="nav-search">
-                    <div class="search-input-group">
-                        <input type="text" placeholder="Tìm kiếm...">
-                        <button type="button"><i class="fas fa-search"></i></button>
-                    </div>
-                </div>
+                <!-- Search Box -->
+<div class="nav-search">
+    <div class="search-input-group">
+        <input type="text" placeholder="Tìm kiếm..." id="main-search-input" autocomplete="off">
+        <button type="button" id="main-search-btn">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</div>
                 <div class="nav-right">
                     <ul class="nav-links" id="nav-links">
                         <li><a href="index.html">Trang chủ</a></li>

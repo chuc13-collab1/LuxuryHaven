@@ -219,8 +219,8 @@
         "date"
       ],
       "$paymentId": {
-        ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
-        ".validate": "newData.hasChildren(['userId', 'amount', 'date', 'status', 'method'])",
+        ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || (!data.exists() && newData.child('userId').val() === auth.uid) || (data.exists() && data.child('userId').val() === auth.uid))",
+        ".validate": "(!data.exists() && newData.hasChildren(['userId', 'amount', 'date', 'status', 'method'])) || (data.exists())",
         "userId": {
           ".validate": "newData.isString()"
         },
@@ -245,63 +245,18 @@
         "loyaltyAdded": {
           ".validate": "!newData.exists() || newData.isBoolean()"
         },
+        "note": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
         "$other": {
           ".validate": false
         }
       }
     },
     "users": {
-      ".indexOn": [
-        "email",
-        "memberLevel",
-        "loyaltyPoints",
-        "createdAt"
-      ],
-      "$uid": {
-        ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || $uid === auth.uid)",
-        ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || $uid === auth.uid)",
-        "name": {
-          ".validate": "newData.isString() && newData.val().length >= 2"
-        },
-        "email": {
-          ".validate": "newData.isString() && newData.val().matches(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$/)"
-        },
-        "phone": {
-          ".validate": "!newData.exists() || (newData.isString() && newData.val().matches(/^[0-9]{10,11}$/))"
-        },
-        "birthday": {
-          ".validate": "!newData.exists() || newData.isString()"
-        },
-        "address": {
-          ".validate": "!newData.exists() || newData.isString()"
-        },
-        "avatar": {
-          ".validate": "!newData.exists() || newData.isString()"
-        },
-        "updatedAt": {
-          ".validate": "!newData.exists() || newData.isNumber()"
-        },
-        "role": {
-          ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'user' || newData.val() === 'admin'))"
-        },
-        "gender": {
-          ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'Nam' || newData.val() === 'Nữ' || newData.val() === 'Khác'))"
-        },
-        "nationality": {
-          ".validate": "!newData.exists() || newData.isString()"
-        },
-        "identityNumber": {
-          ".validate": "!newData.exists() || (newData.isString() && newData.val().matches(/^[0-9]{9,12}$/))"
-        },
-        "loyaltyPoints": {
-          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0)"
-        },
-        "memberLevel": {
-          ".validate": "!newData.exists() || newData.isString() && (newData.val() === 'Đồng' || newData.val() === 'Bạc' || newData.val() === 'Vàng' || newData.val() === 'Kim cương')"
-        },
-        "$other": {
-          ".validate": false
-        }
+      "$userId": {
+        ".read": "auth != null && auth.uid === $userId",
+        ".write": "auth != null && auth.uid === $userId"
       }
     },
     "usernames": {
@@ -397,35 +352,9 @@
       }
     },
     "notifications": {
-      ".read": "auth != null",
-      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
-      ".indexOn": [
-        "timestamp",
-        "read"
-      ],
-      "$notificationId": {
-        ".validate": "newData.hasChildren(['icon', 'color', 'text', 'link', 'read', 'timestamp'])",
-        "icon": {
-          ".validate": "newData.isString()"
-        },
-        "color": {
-          ".validate": "newData.isString()"
-        },
-        "text": {
-          ".validate": "newData.isString()"
-        },
-        "link": {
-          ".validate": "newData.isString()"
-        },
-        "read": {
-          ".validate": "newData.isBoolean()"
-        },
-        "timestamp": {
-          ".validate": "newData.isNumber()"
-        },
-        "$other": {
-          ".validate": false
-        }
+      "$userId": {
+        ".read": "auth != null && auth.uid === $userId",
+        ".write": "auth != null && auth.uid === $userId"
       }
     },
     "specialOffers": {

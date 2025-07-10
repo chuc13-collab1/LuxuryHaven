@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="css\index.css">
     <link rel="stylesheet" href="css\chatbox.css">
-    <link rel="stylesheet" href="js/search.js">
+    <script type="module" src="js/search.js"></script>
     <link rel="stylesheet" href="css\tours.css">
     <style>
         @font-face {
@@ -47,22 +47,22 @@
                 </button>
 
                 <!-- Search Box -->
-                <div class="nav-search">
-                    <div class="search-input-group">
-                        <input type="text" placeholder="Tìm kiếm..." id="main-search-input" autocomplete="off">
-                        <button type="button" id="main-search-btn">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
+<div class="nav-search">
+    <div class="search-input-group">
+        <input type="text" placeholder="Tìm kiếm..." id="main-search-input" autocomplete="off">
+        <button type="button" id="main-search-btn">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</div>
                 <div class="nav-right">
                     <ul class="nav-links" id="nav-links">
                         <li><a href="index.html">Trang chủ</a></li>
                         <li><a href="hotel.html">Khách sạn</a></li>
 
-                        <li class="dropdown"><a href="tours.html">Tours</a></li>
+                        <li class="dropdown"><a href="tours.html" class="active">Tours</a></li>
 
-                        <li class="dropdown"><a href="prioritize.html" class="active">Ưu đãi</a></li>
+                        <li class="dropdown"><a href="prioritize.html" >Ưu đãi</a></li>
                         <li class="dropdown"><a href="travel_guide.html">Cẩm nang du lịch</a></li>
                         <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
                         <!-- <li class="dropdown"><a href="vuichoi.html">🌐</a></li> -->

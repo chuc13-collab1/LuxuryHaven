@@ -35,6 +35,8 @@
     <!-- Thêm SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/hotel.css">
+    <link rel="stylesheet" href="css\chatbox.css">
+    <script type="module" src="js/search.js"></script>
     <style>
         @font-face {
             font-family: 'Nautica Script Bold';
@@ -138,14 +140,15 @@
                 </button>
 
                 <!-- Search Box -->
-                <div class="nav-search">
-                    <div class="search-input-group">
-                        <input type="text" placeholder="Tìm kiếm...">
-                        <button type="button">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
+                <!-- Search Box -->
+<div class="nav-search">
+    <div class="search-input-group">
+        <input type="text" placeholder="Tìm kiếm..." id="main-search-input" autocomplete="off">
+        <button type="button" id="main-search-btn">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</div>
                 <div class="nav-right">
                     <ul class="nav-links" id="nav-links">
                         <li><a href="index.html">Trang chủ</a></li>
@@ -575,6 +578,89 @@
         }
         window.tours = []; // hoặc window.offers = [];
         document.addEventListener('DOMContentLoaded', function () {
+        // --- PATCH: Lấy city từ URL nếu có, ưu tiên hiển thị city đó ---
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Chuẩn hóa tên thành phố về đúng key Firebase
+        function normalizeCityName(input) {
+            if (!input) return '';
+            // Loại bỏ dấu tiếng Việt, khoảng trắng, viết hoa chữ cái đầu
+            const map = {
+                'đà nẵng': 'DaNang',
+                'da nang': 'DaNang',
+                'danang': 'DaNang',
+                'đàlat': 'DaLat',
+                'đà lạt': 'DaLat',
+                'dalat': 'DaLat',
+                'tp. hồ chí minh': 'TPHCM',
+                'tphcm': 'TPHCM',
+                'sài gòn': 'TPHCM',
+                'sai gon': 'TPHCM',
+                'hà nội': 'Ha nội',
+                'ha noi': 'Ha nội',
+                'hanoi': 'Ha nội',
+                'nha trang': 'NhaTrang',
+                'nhatrang': 'NhaTrang',
+                'phú quốc': 'PhuQuoc',
+                'phu quoc': 'PhuQuoc',
+                'phuquoc': 'PhuQuoc',
+                'vũng tàu': 'VungTau',
+                'vung tau': 'VungTau',
+                'vungtau': 'VungTau',
+                'cần thơ': 'CanTho',
+                'can tho': 'CanTho',
+                'cantho': 'CanTho',
+                'kiên giang': 'KienGiang',
+                'kien giang': 'KienGiang',
+                'kiengiang': 'KienGiang',
+                'phan thiết': 'Phan Thiet',
+                'phan thiet': 'Phan Thiet',
+                'phanthiet': 'Phan Thiet',
+                'quy nhơn': 'QuiNhon',
+                'quy nhon': 'QuiNhon',
+                'quynhon': 'QuiNhon',
+                'sapa': 'Sapa',
+                'huế': 'Hue',
+                'hue': 'Hue',
+                'hạ long': 'HaLong',
+                'ha long': 'HaLong',
+                'halong': 'HaLong',
+                'hội an': 'HoiAn',
+                'hoi an': 'HoiAn',
+                'hoian': 'HoiAn',
+                'buôn ma thuột': 'Buôn Ma Thuột',
+                'buon ma thuot': 'Buôn Ma Thuột',
+                'buonmathuot': 'Buôn Ma Thuột',
+            };
+            let str = input.trim().toLowerCase();
+            // Loại bỏ dấu tiếng Việt
+            str = str.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+            str = str.replace(/\./g, '').replace(/\s+/g, ' ');
+            if (map[str]) return map[str];
+            // Nếu không khớp map, trả về viết hoa chữ cái đầu mỗi từ
+            return input.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+        }
+
+        const cityFromUrlRaw = getQueryParam('city');
+        const cityFromUrl = normalizeCityName(cityFromUrlRaw);
+        if (cityFromUrlRaw) {
+            // Nếu có city trên URL, chỉ set giao diện tab 'Tất cả' active, KHÔNG gán currentRegion để không khóa các tab miền
+            document.querySelectorAll('.region-tab').forEach(b=>b.classList.remove('active'));
+            document.querySelector('.region-tab[data-region="all"]').classList.add('active');
+            // Hiển thị city-nav chỉ với city được chọn, làm nổi bật
+            document.getElementById('city-nav').innerHTML = `<a href="#" class="btn btn-primary active" data-city="${cityFromUrlRaw}">${cityFromUrlRaw}</a>`;
+            loadHotels(cityFromUrl);
+        } else {
+            // Khi load trang, mặc định là tab 'Tất cả'
+            currentRegion = 'all';
+            document.querySelectorAll('.region-tab').forEach(b=>b.classList.remove('active'));
+            document.querySelector('.region-tab[data-region="all"]').classList.add('active');
+            document.getElementById('city-nav').innerHTML = '';
+            loadAllHotels();
+        }
             // Add default hotel image as base64
             const defaultHotelImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2YwZjBmMCIvPjxwYXRoIGQ9Ik0zMDAgMjAwaDIwMHYyMDBoLTIwMHoiIGZpbGw9IiNkZGQiLz48cGF0aCBkPSJNMzI1IDIyNWgxNTB2MTUwaC0xNTB6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTM1MCAyNzVoMTAwdjUwaC0xMDB6IiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNDAwIiB5PSI0NTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Tm8gaW1hZ2UgYXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg==';
 
@@ -642,12 +728,8 @@
                 }
             });
 
-            // Khi load trang, mặc định là tab 'Tất cả'
-currentRegion = 'all';
-document.querySelectorAll('.region-tab').forEach(b=>b.classList.remove('active'));
-document.querySelector('.region-tab[data-region="all"]').classList.add('active');
-document.getElementById('city-nav').innerHTML = '';
-loadAllHotels();
+            // --- PATCH: Lấy city từ URL nếu có ---
+            // (Đã xử lý ở trên, xóa lặp lại)
         });
         function showHotelDetail(hotel, hotelsInCity = []) {
             const defaultHotelImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2YwZjBmMCIvPjxwYXRoIGQ9Ik0zMDAgMjAwaDIwMHYyMDBoLTIwMHoiIGZpbGw9IiNkZGQiLz48cGF0aCBkPSJNMzI1IDIyNWgxNTB2MTUwaC0xNTB6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTM1MCAyNzVoMTAwdjUwaC0xMDB6IiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNDAwIiB5PSI0NTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Tm8gaW1hZ2UgYXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg==';
@@ -1979,13 +2061,16 @@ function renderAllHotels() {
     }
 }
 // Gọi khi trang vừa load
-window.addEventListener('DOMContentLoaded', function() {
-    loadAllHotels();
-});
+// window.addEventListener('DOMContentLoaded', function() {
+//     loadAllHotels();
+// });
 // Khi chọn thành phố, chỉ lọc lại theo cityName
 function filterByCity(cityName) {
     let hotels = lastHotelsRaw;
-    if (cityName) hotels = hotels.filter(h => (h.cityName||'').toLowerCase() === cityName.toLowerCase());
+    if (cityName) {
+        const normCity = normalizeString(cityName);
+        hotels = hotels.filter(h => normalizeString(h.cityName||'') === normCity);
+    }
     const hotelGrid = document.getElementById('hotel-grid');
     hotelGrid.innerHTML = hotels.map(hotel => createHotelCardWithSuggest(hotel, hotels)).join('');
 }
@@ -2144,7 +2229,7 @@ function renderKnnSuggestedHotels(hotels) {
         container.innerHTML = `<div class="text-muted">Không tìm thấy khách sạn phù hợp với địa chỉ của bạn.</div>`;
         return;
     }
-    container.innerHTML = `<h4 class='mb-3 text-primary'><i class='fas fa-map-marker-alt'></i> Gợi ý khách sạn gần bạn (AI KNN)</h4>` +
+    container.innerHTML = `<h4 class='mb-3 text-primary'><i class='fas fa-map-marker-alt'></i> Gợi ý khách sạn gần bạn</h4>` +
         `<div class='row'>` +
         hotels.map(hotel =>
             `<div class='col-md-3 mb-3'>${createHotelCardWithSuggest ? createHotelCardWithSuggest(hotel, hotels, undefined, {suggested:true}) : hotel.tenKhachSan}</div>`
@@ -2163,3 +2248,111 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 // ... existing code ...
 </script>
+
+<script>
+function renderSuggestedHotels(hotels) {
+    const container = document.getElementById('suggested-hotels');
+    if (!container) return;
+    if (!hotels || !hotels.length) {
+        container.innerHTML = '<p>Không tìm thấy khách sạn phù hợp.</p>';
+        return;
+    }
+    container.innerHTML = hotels.map(hotel => `
+        <div class="hotel-item" style="border:1px solid #eee; border-radius:8px; padding:12px; margin-bottom:12px; display:flex; align-items:center; gap:16px;">
+            <img src="${hotel.image || 'images/default-hotel.jpg'}" alt="${hotel.name}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;">
+            <div>
+                <h5 style="margin:0 0 4px 0;">${hotel.name}</h5>
+                <div style="color:#666;">${hotel.location || ''}</div>
+            </div>
+        </div>
+    `).join('');
+}
+</script>
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js";
+
+let app;
+if (!getApps().length) {
+    const firebaseConfig = {
+        apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+        authDomain: "websitedatphongkhachsan.firebaseapp.com",
+        databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+        projectId: "websitedatphongkhachsan",
+        storageBucket: "websitedatphongkhachsan.appspot.com",
+        messagingSenderId: "732884739524",
+        appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+        measurementId: "G-RC61EXTZH7"
+    };
+    app = initializeApp(firebaseConfig);
+} else {
+    app = getApps()[0];
+}
+const db = getDatabase(app);
+
+function getCityFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('city');
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+    const city = getCityFromUrl();
+    const container = document.getElementById('suggested-hotels');
+    const snapshot = await get(ref(db, 'hotels'));
+    if (snapshot.exists()) {
+        const hotels = Object.values(snapshot.val());
+        if (city) {
+            // Lọc và chỉ hiển thị khách sạn theo city
+            const filtered = hotels.filter(hotel =>
+                hotel.location && hotel.location.toLowerCase().includes(city.toLowerCase())
+            );
+            renderSuggestedHotels(filtered);
+        } else {
+            // Hiển thị toàn bộ khách sạn nếu không có city
+            renderSuggestedHotels(hotels);
+        }
+    } else {
+        renderSuggestedHotels([]);
+    }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const params = new URLSearchParams(window.location.search);
+    const city = params.get('city');
+    const cityKeyMap = {
+        "Buôn Ma Thuột": "Buôn Ma Thuột",
+        "Cần Thơ": "CanTho",
+        "Đà Lạt": "DaLat",
+        "Đà Nẵng": "DaNang",
+        "Hà Nội": "Ha noi",
+        "Hạ Long": "HaLong",
+        "Hội An": "HoiAn",
+        "Nha Trang": "NhaTrang",
+        "Kiên Giang": "KienGiang",
+        "Phan Thiết": "Phan Thiet",
+        "Quy Nhơn": "QuiNhon",
+        "Sapa": "Sapa",
+        "Tp. Hồ Chí Minh": "TPHCM",
+        "Vũng Tàu": "VungTau",
+        "Huế": "Hue"
+    };
+    if (city) {
+        const cityKey = cityKeyMap[city] || city;
+        console.log("Load city param:", city, "->", cityKey);
+        loadHotels(cityKey);
+    } else {
+        console.log("No city param, load All hotels");
+        currentRegion = 'all';
+        document.querySelectorAll('.region-tab').forEach(b => b.classList.remove('active'));
+        document.querySelector('.region-tab[data-region=\"all\"]').classList.add('active');
+        document.getElementById('city-nav').innerHTML = '';
+        loadAllHotels();
+    }
+});
+</script>
+
+  
+  
