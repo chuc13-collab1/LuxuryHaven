@@ -137,7 +137,7 @@ function displaySearchResults(results) {
                         <div class="search-item-content">
                             <h4>${tour.name}</h4>
                             <p>${tour.destination}</p>
-                            <a href="tour-detail.html?id=${tour.id}" class="btn-view">Xem chi tiết</a>
+                            <a href="tour-list.html?id=${tour.id}" class="btn-view">Xem chi tiết</a>
                         </div>
                     </div>
                 `).join('')}
@@ -190,9 +190,26 @@ const cityList = [
     'Hà Nội', 'Đà Nẵng', 'Đà Lạt', 'Phú Quốc', 'Buôn Ma Thuột', 'Nha Trang', 'Vũng Tàu', 'Cần Thơ',
     'Kiên Giang', 'Phan Thiết', 'Huế', 'Quy Nhơn', 'Sapa', 'Tp. Hồ Chí Minh', 'Hạ Long', 'Hội An'
 ];
+
+// Danh sách gợi ý tĩnh cho tours (có thể mở rộng thêm)
+const tourList = [
+    'Tour Hà Nội - Hạ Long',
+    'Tour Sapa',
+    'Tour Đà Nẵng - Hội An',
+    'Tour Phú Quốc',
+    'Tour Nha Trang',
+    'Tour Cần Thơ',
+    'Tour Đà Lạt',
+    'Tour Vũng Tàu',
+    'Tour Miền Tây',
+    'Tour Biển Đảo'
+];
+
 let hotelList = [];
 
 // Lấy danh sách khách sạn từ Firebase (cho autocomplete)
+// Lưu ý: Phần này sử dụng import động, có thể gây ra lỗi nếu không được xử lý đúng cách trong môi trường module.
+// Tuy nhiên, theo cấu trúc ban đầu của bạn, nó được giữ nguyên.
 import('https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js').then(({ getDatabase, ref, get }) => {
     const db = getDatabase();
     get(ref(db, 'location')).then(snapshot => {
@@ -232,32 +249,67 @@ async function showSuggestions(value) {
     }
 
     const normValue = normalizeString(value);
-    // Gợi ý thành phố
+
+    // Gợi ý thành phố từ cityList tĩnh
     const citySuggestions = cityList.filter(city => normalizeString(city).includes(normValue));
-    // Gợi ý khách sạn
-    const hotelSuggestions = hotelList.filter(hotel => normalizeString(hotel).includes(normValue));
+
+    // Gợi ý khách sạn từ hotelList (được lấy từ Firebase location)
+    const hotelStaticSuggestions = hotelList.filter(hotel => normalizeString(hotel).includes(normValue));
+
+    // Gợi ý tours từ tourList tĩnh
+    const tourStaticSuggestions = tourList.filter(tour => normalizeString(tour).includes(normValue));
+
     // Gợi ý từ Firebase (hotels, tours, destinations)
     const firebaseResults = await searchAll(value);
 
+    // Gợi ý địa chỉ (region) động từ Firebase destinations
+    let regionSuggestions = [];
+    if (firebaseResults.destinations && firebaseResults.destinations.length) {
+        regionSuggestions = firebaseResults.destinations
+            .map(dest => dest.region)
+            .filter(region => region && normalizeString(region).includes(normValue))
+            .map(region => ({
+                type: 'Địa chỉ',
+                value: region,
+                url: `destination_detail.html?region=${encodeURIComponent(region)}`
+            }));
+    }
+
+    // Kết hợp tất cả các loại gợi ý
     let suggestions = [
+        // Gợi ý từ danh sách thành phố tĩnh
         ...citySuggestions.map(city => ({ type: 'Thành phố', value: city, url: `hotel.html?city=${encodeURIComponent(city)}` })),
-        // ...hotelSuggestions.map(hotel => ({ type: 'Khách sạn', value: hotel, url: `hotel-detail.html?name=${encodeURIComponent(hotel)}` })),
+
+        // Gợi ý từ danh sách tour tĩnh
+        ...tourStaticSuggestions.map(tour => ({ type: 'Tour', value: tour, url: `tour-list.html?name=${encodeURIComponent(tour)}` })),
+
+        // Gợi ý địa chỉ (region) từ Firebase destinations
+        ...regionSuggestions,
+
+        // Gợi ý khách sạn từ Firebase (kết quả tìm kiếm)
+        // Giới hạn 5 kết quả để không làm quá tải danh sách gợi ý
         ...(firebaseResults.hotels || []).slice(0, 5).map(hotel => ({
             type: 'Khách sạn',
             value: hotel.name,
             url: `hotel-detail.html?id=${hotel.id}`
         })),
+
+        // Gợi ý tour từ Firebase (kết quả tìm kiếm)
+        // Giới hạn 5 kết quả
         ...(firebaseResults.tours || []).slice(0, 5).map(tour => ({
             type: 'Tour',
             value: tour.name,
-            url: `tour-detail.html?id=${tour.id}`
+            url: `tour-list.html?id=${tour.id}`
         })),
+
+        // Gợi ý điểm đến từ Firebase (kết quả tìm kiếm)
+        // Giới hạn 3 kết quả
         ...(firebaseResults.destinations || []).slice(0, 3).map(dest => ({
             type: 'Điểm đến',
             value: dest.name,
             url: `destination_detail.html?id=${dest.id}`
         }))
-    ].slice(0, 10); // Giới hạn tối đa 10 gợi ý
+    ].slice(0, 10); // Giới hạn tổng số gợi ý hiển thị tối đa 10 mục
 
     if (!suggestions.length) {
         suggestionBox.style.display = 'none';
@@ -282,6 +334,7 @@ async function showSuggestions(value) {
     });
 }
 
+
 // Hàm xử lý khi chọn gợi ý hoặc nhấn nút tìm kiếm chính
 function handleMainSearchAction(query) {
     const kw = query.trim().toLowerCase();
@@ -293,6 +346,8 @@ function handleMainSearchAction(query) {
         window.location.href = 'prioritize.html';
     } else if (cityList.map(c => normalizeString(c)).includes(kw)) { // Kiểm tra nếu là tên thành phố
         window.location.href = `hotel.html?city=${encodeURIComponent(query)}`;
+    } else if (tourList.map(t => normalizeString(t)).includes(kw)) { // Kiểm tra nếu là tên tour tĩnh
+        window.location.href = `tour-list.html?name=${encodeURIComponent(query)}`;
     } else if (kw === 'combo') {
         window.location.href = 'prioritize.html';
     } else {
