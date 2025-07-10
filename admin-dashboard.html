@@ -1099,6 +1099,15 @@
                 Swal.fire('Lỗi', 'Không tìm thấy đặt phòng này.', 'error');
                 return;
             }
+            // Danh sách các trường hợp lệ theo rule
+            const allowedFields = [
+                'bookingType', 'checkIn', 'checkOut', 'createdAt', 'customerEmail', 'customerName', 'customerPhone', 'email',
+                'guests', 'hotelId', 'hotelName', 'nights', 'note', 'paymentMethod', 'paymentStatus', 'roomId', 'roomName',
+                'roomPrice', 'status', 'totalPrice', 'updatedAt', 'userId',
+                // Các trường cho tour
+                'numberOfGuests', 'tourId', 'tourName', 'tourCategory', 'tourLocation', 'tourDuration', 'tourImage', 'tourType',
+                'tourPrice', 'tourDescription', 'tourIncludes', 'tourExcludes', 'tourRating', 'tourReviewsCount'
+            ];
             // Nếu là booking tour
             if (booking.type === 'tour' || booking.bookingType === 'tour') {
                 Swal.fire({
@@ -1134,7 +1143,16 @@
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        db.ref('bookings/' + bookingId).update(result.value).then(() => {
+                        // Lọc dữ liệu cũ chỉ lấy các trường hợp lệ
+                        const updateData = {};
+                        allowedFields.forEach(field => {
+                            if (booking[field] !== undefined) updateData[field] = booking[field];
+                        });
+                        // Gộp với dữ liệu mới
+                        Object.assign(updateData, result.value);
+                        delete updateData.id;
+                        console.log('Dữ liệu gửi lên Firebase:', updateData);
+                        db.ref('bookings/' + bookingId).update(updateData).then(() => {
                             Swal.fire('Thành công', 'Đã cập nhật thông tin!', 'success');
                             loadBookingsTours();
                             loadBookings(); // Để đồng bộ nếu có thay đổi
@@ -1184,7 +1202,16 @@
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        db.ref('bookings/' + bookingId).update(result.value).then(() => {
+                        // Lọc dữ liệu cũ chỉ lấy các trường hợp lệ
+                        const updateData = {};
+                        allowedFields.forEach(field => {
+                            if (booking[field] !== undefined) updateData[field] = booking[field];
+                        });
+                        // Gộp với dữ liệu mới
+                        Object.assign(updateData, result.value);
+                        delete updateData.id;
+                        console.log('Dữ liệu gửi lên Firebase:', updateData);
+                        db.ref('bookings/' + bookingId).update(updateData).then(() => {
                             Swal.fire('Thành công', 'Đã cập nhật thông tin!', 'success');
                             loadBookings();
                         }).catch(() => {
@@ -3024,6 +3051,15 @@
                 Swal.fire('Lỗi', 'Không tìm thấy đặt phòng này.', 'error');
                 return;
             }
+            // Danh sách các trường hợp lệ theo rule
+            const allowedFields = [
+                'bookingType', 'checkIn', 'checkOut', 'createdAt', 'customerEmail', 'customerName', 'customerPhone', 'email',
+                'guests', 'hotelId', 'hotelName', 'nights', 'note', 'paymentMethod', 'paymentStatus', 'roomId', 'roomName',
+                'roomPrice', 'status', 'totalPrice', 'updatedAt', 'userId',
+                // Các trường cho tour
+                'numberOfGuests', 'tourId', 'tourName', 'tourCategory', 'tourLocation', 'tourDuration', 'tourImage', 'tourType',
+                'tourPrice', 'tourDescription', 'tourIncludes', 'tourExcludes', 'tourRating', 'tourReviewsCount'
+            ];
             // Nếu là booking tour
             if (booking.type === 'tour' || booking.bookingType === 'tour') {
                 Swal.fire({
@@ -3059,7 +3095,16 @@
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        db.ref('bookings/' + bookingId).update(result.value).then(() => {
+                        // Lọc dữ liệu cũ chỉ lấy các trường hợp lệ
+                        const updateData = {};
+                        allowedFields.forEach(field => {
+                            if (booking[field] !== undefined) updateData[field] = booking[field];
+                        });
+                        // Gộp với dữ liệu mới
+                        Object.assign(updateData, result.value);
+                        delete updateData.id;
+                        console.log('Dữ liệu gửi lên Firebase:', updateData);
+                        db.ref('bookings/' + bookingId).update(updateData).then(() => {
                             Swal.fire('Thành công', 'Đã cập nhật thông tin!', 'success');
                             loadBookingsTours();
                             loadBookings(); // Để đồng bộ nếu có thay đổi
@@ -3109,7 +3154,16 @@
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        db.ref('bookings/' + bookingId).update(result.value).then(() => {
+                        // Lọc dữ liệu cũ chỉ lấy các trường hợp lệ
+                        const updateData = {};
+                        allowedFields.forEach(field => {
+                            if (booking[field] !== undefined) updateData[field] = booking[field];
+                        });
+                        // Gộp với dữ liệu mới
+                        Object.assign(updateData, result.value);
+                        delete updateData.id;
+                        console.log('Dữ liệu gửi lên Firebase:', updateData);
+                        db.ref('bookings/' + bookingId).update(updateData).then(() => {
                             Swal.fire('Thành công', 'Đã cập nhật thông tin!', 'success');
                             loadBookings();
                         }).catch(() => {

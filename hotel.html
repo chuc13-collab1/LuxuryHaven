@@ -526,7 +526,7 @@
                     hotelGrid.innerHTML = `<div class="text-danger">Lỗi tải dữ liệu: ${err.message}</div>`;
                 });
         }
-        function createHotelCardWithSuggest(hotel, hotelsInCity, idx) {
+        function createHotelCardWithSuggest(hotel, hotelsInCity, idx, options = {}) {
             const defaultHotelImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2YwZjBmMCIvPjxwYXRoIGQ9Ik0zMDAgMjAwaDIwMHYyMDBoLTIwMHoiIGZpbGw9IiNkZGQiLz48cGF0aCBkPSJNMzI1IDIyNWgxNTB2MTUwaC0xNTB6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTM1MCAyNzVoMTAwdjUwaC0xMDB6IiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNDAwIiB5PSI0NTAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Tm8gaW1hZ2UgYXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg==';
             const image = hotel.chiTiet?.image || defaultHotelImage;
             const name = hotel.tenKhachSan || 'Không có tên';
@@ -543,66 +543,35 @@
             const facilitiesHtml = facilities.slice(0, 3).map(f =>
                 `<span class="badge bg-light text-dark">${f}</span>`
             ).join('');
-            // Thêm checkbox chọn so sánh
-            // Sửa nút xem chi tiết: nếu có idx (tab tất cả) thì gọi showHotelDetailByIndex, còn lại giữ nguyên
-            if (typeof idx !== 'undefined') {
-                return `
-                    <div class="hotel-card" data-hotel-id="${hotelId}">
-                        <div class="hotel-compare-checkbox" style="position:absolute;top:10px;left:10px;z-index:2;">
-                            <input type="checkbox" class="compare-checkbox" data-hotel-id="${hotelId}" title="Chọn để so sánh" style="width:20px;height:20px;">
-                        </div>
-                        <div class="hotel-image">
-                            <img src="${image}" alt="${name}" onerror="this.src='${defaultHotelImage}'">
-                            <button class="favorite-btn" data-hotel-id="${hotelId}" data-hotel-name="${name}" data-hotel-image="${image}" data-hotel-location="${address}" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">
-                                <i class="far fa-heart favorite-icon" style="color: #e74c3c; font-size: 20px;"></i>
-                            </button>
-                        </div>
-                        <div class="hotel-info">
-                            <h3 class="hotel-name">${name}</h3>
-                            <div class="hotel-rating">${starHtml}</div>
-                            <p class="hotel-address">
-                                <i class="fas fa-map-marker-alt" style="color:#e67e22;margin-right:6px;"></i>
-                                ${address}
-                            </p>
-                            <div class="hotel-facilities">
-                                ${facilitiesHtml}
-                            </div>
-                            <a href="hotel-detail.html?id=${hotelId}" class="btn-view-detail">
-                                <i class="fas fa-info-circle"></i> Xem chi tiết
-                            </a>
-                        </div>
+            // Nếu là phần gợi ý (AI KNN), options.suggested === true thì KHÔNG render checkbox
+            const showCheckbox = !(options && options.suggested);
+            return `
+                <div class="hotel-card" data-hotel-id="${hotelId}">
+                    ${showCheckbox ? `<div class="hotel-compare-checkbox" style="position:absolute;top:10px;left:10px;z-index:2;">
+                        <input type="checkbox" class="compare-checkbox" data-hotel-id="${hotelId}" title="Chọn để so sánh" style="width:20px;height:20px;">
+                    </div>` : ''}
+                    <div class="hotel-image">
+                        <img src="${image}" alt="${name}" onerror="this.src='${defaultHotelImage}'">
+                        <button class="favorite-btn" data-hotel-id="${hotelId}" data-hotel-name="${name}" data-hotel-image="${image}" data-hotel-location="${address}" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">
+                            <i class="far fa-heart favorite-icon" style="color: #e74c3c; font-size: 20px;"></i>
+                        </button>
                     </div>
-                `;
-            } else {
-                // Trường hợp tab theo miền/city, truyền object như cũ
-                return `
-                    <div class="hotel-card" data-hotel-id="${hotelId}">
-                        <div class="hotel-compare-checkbox" style="position:absolute;top:10px;left:10px;z-index:2;">
-                            <input type="checkbox" class="compare-checkbox" data-hotel-id="${hotelId}" title="Chọn để so sánh" style="width:20px;height:20px;">
+                    <div class="hotel-info">
+                        <h3 class="hotel-name">${name}</h3>
+                        <div class="hotel-rating">${starHtml}</div>
+                        <p class="hotel-address">
+                            <i class="fas fa-map-marker-alt" style="color:#e67e22;margin-right:6px;"></i>
+                            ${address}
+                        </p>
+                        <div class="hotel-facilities">
+                            ${facilitiesHtml}
                         </div>
-                        <div class="hotel-image">
-                            <img src="${image}" alt="${name}" onerror="this.src='${defaultHotelImage}'">
-                            <button class="favorite-btn" data-hotel-id="${hotelId}" data-hotel-name="${name}" data-hotel-image="${image}" data-hotel-location="${address}" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">
-                                <i class="far fa-heart favorite-icon" style="color: #e74c3c; font-size: 20px;"></i>
-                            </button>
-                        </div>
-                        <div class="hotel-info">
-                            <h3 class="hotel-name">${name}</h3>
-                            <div class="hotel-rating">${starHtml}</div>
-                            <p class="hotel-address">
-                                <i class="fas fa-map-marker-alt" style="color:#e67e22;margin-right:6px;"></i>
-                                ${address}
-                            </p>
-                            <div class="hotel-facilities">
-                                ${facilitiesHtml}
-                            </div>
-                            <a href="hotel-detail.html?id=${hotelId}" class="btn-view-detail">
-                                <i class="fas fa-info-circle"></i> Xem chi tiết
-                            </a>
-                        </div>
+                        <a href="hotel-detail.html?id=${hotelId}" class="btn-view-detail">
+                            <i class="fas fa-info-circle"></i> Xem chi tiết
+                        </a>
                     </div>
-                `;
-            }
+                </div>
+            `;
         }
         window.tours = []; // hoặc window.offers = [];
         document.addEventListener('DOMContentLoaded', function () {
@@ -916,17 +885,23 @@ loadAllHotels();
             const bookingData = {
                 userId: user.uid,
                 email: user.email || '',
-                hotelId: hotel.id || '', // Sửa: Dùng ID khách sạn
-                hotelName: hotel.tenKhachSan || '', // Thêm: Tên khách sạn
-                roomId: room.name || '',
-                roomPrice: room.price || 0, // Thêm: Giá phòng
-                checkIn: checkInDate,
-                checkOut: checkOutDate,
-                guests: guestsCount,
-                customerName: user.displayName || '', // Sửa: Đổi 'name' thành 'customerName'
-                customerPhone: user.phoneNumber || '', // Sửa: Đổi 'phone' thành 'customerPhone'
-                createdAt: firebase.database.ServerValue.TIMESTAMP, // Sửa: Dùng server time
-                status: 'pending' // Thêm: Trạng thái ban đầu
+                customerEmail: user.email || '',
+                hotelId: hotel.id || '',
+                hotelName: hotel.tenKhachSan || '',
+                roomId: room.name ? String(room.name) : '',
+                roomName: room.name ? String(room.name) : '',
+                roomPrice: Number(room.price) || 0,
+                checkIn: String(checkInDate),
+                checkOut: String(checkOutDate),
+                guests: Number(guestsCount),
+                customerName: user.displayName ? String(user.displayName) : '',
+                customerPhone: user.phoneNumber ? String(user.phoneNumber) : '',
+                createdAt: Date.now(),
+                status: 'pending',
+                bookingType: 'hotel',
+                type: 'hotel',
+                paymentStatus: 'unpaid',
+                totalPrice: Number(room.price) || 0
             };
 
             firebase.database().ref('bookings').push(bookingData)
@@ -1715,26 +1690,26 @@ function suggestHotelsByUserAddress() {
     });
 }
 
-function renderSuggestedHotels(hotels) {
-    let container = document.getElementById('suggested-hotels');
-    if (!container) {
-        container = document.createElement('div');
-        container.id = 'suggested-hotels';
-        container.className = 'card shadow mb-4 p-3';
-        const main = document.querySelector('main .container') || document.body;
-        main.insertBefore(container, main.firstChild);
-    }
-    if (!hotels || hotels.length === 0) {
-        container.innerHTML = `<div class="text-muted">Không tìm thấy khách sạn phù hợp với địa chỉ của bạn.</div>`;
-        return;
-    }
-    container.innerHTML = `<h4 class='mb-3 text-primary'><i class='fas fa-map-marker-alt'></i> Gợi ý khách sạn gần bạn</h4>` +
-        `<div class='row'>` +
-        hotels.slice(0, 4).map(hotel =>
-            `<div class='col-md-3 mb-3'>${createHotelCardWithSuggest(hotel, hotels)}</div>`
-        ).join('') +
-        `</div>`;
-}
+//  function renderSuggestedHotels(hotels) {
+//     let container = document.getElementById('suggested-hotels');
+//     if (!container) {
+//         container = document.createElement('div');
+//         container.id = 'suggested-hotels';
+//         container.className = 'card shadow mb-4 p-3';
+//         const main = document.querySelector('main .container') || document.body;
+//         main.insertBefore(container, main.firstChild);
+//     }
+//     if (!hotels || hotels.length === 0) {
+//         container.innerHTML = `<div class="text-muted">Không tìm thấy khách sạn phù hợp với địa chỉ của bạn.</div>`;
+//         return;
+//     }
+//     container.innerHTML = `<h4 class='mb-3 text-primary'><i class='fas fa-map-marker-alt'></i> Gợi ý khách sạn gần bạn</h4>` +
+//         `<div class='row'>` +
+//         hotels.slice(0, 4).map(hotel =>
+//             `<div class='col-md-3 mb-3'>${createHotelCardWithSuggest(hotel, hotels)}</div>`
+//         ).join('') +
+//         `</div>`;
+// }
 
 // Gọi hàm này sau khi đăng nhập thành công hoặc khi trang load nếu đã đăng nhập
 firebase.auth().onAuthStateChanged(function(user) {
@@ -2063,4 +2038,128 @@ function generateNotification(icon, color, text, link = '#') {
     };
     firebase.database().ref('notifications').push(newNotif);
 }
+</script>
+
+<script>
+// ... existing code ...
+// Hàm chuẩn hóa chuỗi (bỏ dấu tiếng Việt, chuyển thường, loại ký tự đặc biệt)
+function normalizeString(str) {
+    return str
+        .toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // bỏ dấu tiếng Việt
+        .replace(/[^a-z0-9\s]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+// Hàm tính khoảng cách Levenshtein
+function levenshtein(a, b) {
+    const matrix = Array(a.length + 1).fill(null).map(() =>
+        Array(b.length + 1).fill(null)
+    );
+    for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
+    for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+            const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
+            matrix[i][j] = Math.min(
+                matrix[i][j - 1] + 1, // insert
+                matrix[i - 1][j] + 1, // remove
+                matrix[i - 1][j - 1] + indicator // substitute
+            );
+        }
+    }
+    return matrix[a.length][b.length];
+}
+
+// Hàm KNN gợi ý khách sạn
+function suggestHotelsKNN(userAddress, hotels, K = 4) {
+    const userCity = normalizeString(userAddress);
+    // Ưu tiên khách sạn trùng khớp hoàn toàn
+    const exactMatch = hotels.filter(hotel => {
+        const hotelCity = normalizeString(hotel.cityName || hotel.diaChi || '');
+        return hotelCity === userCity;
+    });
+    if (exactMatch.length >= K) {
+        return exactMatch.slice(0, K);
+    }
+    // Nếu chưa đủ, lấy thêm bằng KNN từ các khách sạn còn lại
+    const remainingHotels = hotels.filter(hotel => {
+        const hotelCity = normalizeString(hotel.cityName || hotel.diaChi || '');
+        return hotelCity !== userCity;
+    });
+    const scoredHotels = remainingHotels.map(hotel => {
+        const hotelCity = normalizeString(hotel.cityName || hotel.diaChi || '');
+        const score = levenshtein(userCity, hotelCity);
+        return { ...hotel, score };
+    });
+    scoredHotels.sort((a, b) => a.score - b.score);
+    return exactMatch.concat(scoredHotels.slice(0, K - exactMatch.length));
+}
+
+// Hàm lấy user address và toàn bộ khách sạn, sau đó gợi ý
+function showKnnHotelSuggestions() {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+    firebase.database().ref('users/' + user.uid).once('value').then(userSnap => {
+        const userData = userSnap.val();
+        if (!userData || !userData.address) return;
+        // Lấy toàn bộ khách sạn
+        firebase.database().ref('location').once('value').then(snapshot => {
+            let allHotels = [];
+            const data = snapshot.val();
+            if (data) {
+                Object.keys(data).forEach(cityKey => {
+                    const hotels = data[cityKey]?.hotels;
+                    if (hotels) {
+                        if (Array.isArray(hotels)) {
+                            hotels.forEach((hotel, idx) => {
+                                allHotels.push({ ...hotel, id: `${cityKey}_${idx}` });
+                            });
+                        } else {
+                            Object.entries(hotels).forEach(([key, value]) => {
+                                allHotels.push({ ...value, id: key });
+                            });
+                        }
+                    }
+                });
+            }
+            // Gợi ý bằng KNN
+            const suggestions = suggestHotelsKNN(userData.address, allHotels, 4);
+            renderKnnSuggestedHotels(suggestions);
+        });
+    });
+}
+
+function renderKnnSuggestedHotels(hotels) {
+    let container = document.getElementById('knn-suggested-hotels');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'knn-suggested-hotels';
+        container.className = 'card shadow mb-4 p-3';
+        const main = document.querySelector('main .container') || document.body;
+        main.insertBefore(container, main.firstChild);
+    }
+    if (!hotels || hotels.length === 0) {
+        container.innerHTML = `<div class="text-muted">Không tìm thấy khách sạn phù hợp với địa chỉ của bạn.</div>`;
+        return;
+    }
+    container.innerHTML = `<h4 class='mb-3 text-primary'><i class='fas fa-map-marker-alt'></i> Gợi ý khách sạn gần bạn (AI KNN)</h4>` +
+        `<div class='row'>` +
+        hotels.map(hotel =>
+            `<div class='col-md-3 mb-3'>${createHotelCardWithSuggest ? createHotelCardWithSuggest(hotel, hotels, undefined, {suggested:true}) : hotel.tenKhachSan}</div>`
+        ).join('') +
+        `</div>`;
+}
+
+// Gọi hàm này sau khi đăng nhập thành công hoặc khi trang load nếu đã đăng nhập
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        showKnnHotelSuggestions();
+    } else {
+        const container = document.getElementById('knn-suggested-hotels');
+        if (container) container.innerHTML = '';
+    }
+});
+// ... existing code ...
 </script>

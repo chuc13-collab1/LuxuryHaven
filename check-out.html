@@ -371,20 +371,30 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let bookingData = null;
+            let isDeposit = false;
 
             const params = new URLSearchParams(window.location.search);
             const bookingId = params.get('bookingId');
+            const depositId = params.get('depositId');
 
-            if (!bookingId) {
-                document.querySelector('.checkout-container').innerHTML = '<div class="alert alert-danger">Không tìm thấy mã đơn hàng.</div>';
+            if (!bookingId && !depositId) {
+                document.querySelector('.checkout-container').innerHTML = '<div class="alert alert-danger">Không tìm thấy mã đơn hàng hoặc đặt cọc.</div>';
                 return;
             }
 
-            // Cập nhật nội dung chuyển khoản
-            document.getElementById('bank-transfer-code').textContent = bookingId;
+            // Xác định loại đơn hàng
+            const orderId = bookingId || depositId;
+            isDeposit = !!depositId;
 
-            const bookingRef = firebase.database().ref('bookings/' + bookingId);
-            bookingRef.once('value').then(snapshot => {
+            // Cập nhật nội dung chuyển khoản
+            document.getElementById('bank-transfer-code').textContent = orderId;
+
+            // Xác định đường dẫn Firebase dựa trên loại đơn hàng
+            const dataRef = isDeposit ? 
+                firebase.database().ref('deposits/' + depositId) : 
+                firebase.database().ref('bookings/' + bookingId);
+
+            dataRef.once('value').then(snapshot => {
                 if (!snapshot.exists()) {
                     document.getElementById('order-details').innerHTML = '<div class="alert alert-danger">Đơn hàng không tồn tại.</div>';
                     return;
@@ -393,7 +403,14 @@
                 bookingData = snapshot.val();
                 
                 // Cập nhật tiêu đề trang dựa trên loại booking
-                const pageTitle = bookingData.bookingType === 'tour' ? 'Hoàn tất Đặt Tour' : 'Hoàn tất Đặt Phòng';
+                let pageTitle;
+                if (isDeposit) {
+                    pageTitle = 'Hoàn tất Đặt Cọc';
+                } else if (bookingData.bookingType === 'tour') {
+                    pageTitle = 'Hoàn tất Đặt Tour';
+                } else {
+                    pageTitle = 'Hoàn tất Đặt Phòng';
+                }
                 document.querySelector('h1').textContent = pageTitle;
                 
                 // Tự động điền thông tin người dùng nếu đã đăng nhập
@@ -405,14 +422,14 @@
                     }
                 });
 
-                renderOrderSummary(bookingData);
+                renderOrderSummary(bookingData, isDeposit);
 
             }).catch(error => {
                 console.error("Lỗi tải thông tin đơn hàng:", error);
                 document.getElementById('order-details').innerHTML = `<div class="alert alert-danger">Lỗi tải dữ liệu: ${error.message}</div>`;
             });
             
-            function renderOrderSummary(data, isVoucher) {
+            function renderOrderSummary(data, isDeposit) {
                 // Ẩn loading spinner
                 document.getElementById('order-loading-spinner').style.display = 'none';
                 let summaryHtml = '';
@@ -421,8 +438,59 @@
                 let discountText = '';
                 let appliedVoucher = null;
                 let voucherDiscount = 0;
-                // Kiểm tra loại booking
-                if (data.bookingType === 'tour') {
+                
+                // Xử lý deposit
+                if (isDeposit) {
+                    const checkInDate = new Date(data.checkIn);
+                    const checkOutDate = new Date(data.checkOut);
+                    const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
+                    const nights = Math.max(1, Math.ceil(timeDiff / (1000 * 3600 * 24)));
+                    
+                    let createdAtHtml = '';
+                    if (data.createdAt) {
+                        const createdAt = new Date(data.createdAt);
+                        createdAtHtml = `<div class='d-flex justify-content-between'><span>Ngày đặt cọc:</span><span>${createdAt.toLocaleDateString('vi-VN')} ${createdAt.toLocaleTimeString('vi-VN')}</span></div>`;
+                    }
+                    
+                    summaryHtml = `
+                        <div class="order-item">
+                            <h5>${data.hotelName}</h5>
+                            <p class="text-muted">${data.roomId}</p>
+                            <div class="d-flex justify-content-between">
+                                <span>Ngày nhận phòng:</span>
+                                <span>${checkInDate.toLocaleDateString('vi-VN')}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Ngày trả phòng:</span>
+                                <span>${checkOutDate.toLocaleDateString('vi-VN')}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Số đêm:</span>
+                                <span>${nights}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Số lượng khách:</span>
+                                <span>${data.guests}</span>
+                            </div>
+                            ${createdAtHtml}
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <span>Tổng giá phòng:</span>
+                                <span>${data.totalPrice.toLocaleString()} VNĐ</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Số tiền đặt cọc (30%):</span>
+                                <span class="text-primary fw-bold">${data.depositAmount.toLocaleString()} VNĐ</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Số tiền còn lại:</span>
+                                <span>${data.remainingAmount.toLocaleString()} VNĐ</span>
+                            </div>
+                        </div>
+                    `;
+                    totalPrice = data.depositAmount; // Chỉ thanh toán số tiền đặt cọc
+                    
+                } else if (data.bookingType === 'tour') {
                     // Xử lý booking tour
                     const checkInDate = new Date(data.checkIn);
                     const checkOutDate = new Date(data.checkOut);
@@ -624,18 +692,29 @@
                 };
 
                 // Thêm thông tin đặc thù cho từng loại booking
-                if (bookingData.bookingType === 'tour') {
+                if (isDeposit) {
+                    // Không cần thêm thông tin đặc biệt cho deposit
+                } else if (bookingData.bookingType === 'tour') {
                     updates.numberOfGuests = bookingData.numberOfGuests || 1;
                 } else {
                     updates.nights = bookingData.nights;
                 }
 
-                bookingRef.update(updates)
+                // Xác định đường dẫn Firebase dựa trên loại đơn hàng
+                const updateRef = isDeposit ? 
+                    firebase.database().ref('deposits/' + depositId) : 
+                    firebase.database().ref('bookings/' + bookingId);
+
+                updateRef.update(updates)
                     .then(() => {
-                        // Đọc lại booking từ Firebase để đảm bảo đã update xong
-                        firebase.database().ref('bookings/' + bookingId).once('value').then(snapshot => {
-                            const latestBooking = snapshot.val();
-                            handlePaymentRedirect(paymentMethod, latestBooking, bookingId);
+                        // Đọc lại dữ liệu từ Firebase để đảm bảo đã update xong
+                        const readRef = isDeposit ? 
+                            firebase.database().ref('deposits/' + depositId) : 
+                            firebase.database().ref('bookings/' + bookingId);
+                        
+                        readRef.once('value').then(snapshot => {
+                            const latestData = snapshot.val();
+                            handlePaymentRedirect(paymentMethod, latestData, orderId, isDeposit);
                         });
                     })
                     .catch(error => {
@@ -643,13 +722,20 @@
                     });
             });
 
-            function handlePaymentRedirect(method, data, orderId) {
-                const bookingType = data.bookingType === 'tour' ? 'tour' : 'phòng';
+            function handlePaymentRedirect(method, data, orderId, isDeposit) {
+                let orderType;
+                if (isDeposit) {
+                    orderType = 'đặt cọc';
+                } else if (data.bookingType === 'tour') {
+                    orderType = 'tour';
+                } else {
+                    orderType = 'phòng';
+                }
                 
                 if (method === 'bank') {
                     Swal.fire({
                         title: 'Đơn hàng đã được tạo!',
-                        html: `Cảm ơn bạn đã đặt ${bookingType}. Vui lòng hoàn tất thanh toán bằng cách chuyển khoản với nội dung <strong>${orderId}</strong>.`,
+                        html: `Cảm ơn bạn đã ${orderType}. Vui lòng hoàn tất thanh toán bằng cách chuyển khoản với nội dung <strong>${orderId}</strong>.`,
                         icon: 'success',
                         confirmButtonText: 'Về trang chủ'
                     }).then(() => {
@@ -657,27 +743,32 @@
                     });
                 } else if (method === 'vnpay') {
                     // Chuyển hướng đến trang xử lý VNPAY
-                    handleVnpayPayment(data, orderId);
+                    handleVnpayPayment(data, orderId, isDeposit);
                 } else if (method === 'momo') {
                     // Xử lý tạo QR Momo
                      Swal.fire('Đang xử lý', 'Chức năng đang được phát triển...', 'info');
                 }
             }
 
-            function handleVnpayPayment(data, orderId) {
+            function handleVnpayPayment(data, orderId, isDeposit) {
+                // Xác định đường dẫn Firebase dựa trên loại đơn hàng
+                const dataRef = isDeposit ? 
+                    firebase.database().ref('deposits/' + orderId) : 
+                    firebase.database().ref('bookings/' + orderId);
+                
                 // Lấy lại tổng tiền mới nhất từ Firebase (tránh trường hợp client chưa update kịp)
-                firebase.database().ref('bookings/' + orderId).once('value').then(snapshot => {
-                    const booking = snapshot.val();
+                dataRef.once('value').then(snapshot => {
+                    const orderData = snapshot.val();
                     const vnp_TmnCode = "9SMU243L";
                     const vnp_HashSecret = "54NPAQSBPH9OZN9SEAP4JJ6MUSEY6C2G";
                     let vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
                     const vnp_ReturnUrl = window.location.origin + "/vnpay_return.html";
 
                     const vnp_TxnRef = orderId;
-                    const vnp_OrderInfo = "Thanh toan don hang " + orderId;
+                    const vnp_OrderInfo = isDeposit ? "Thanh toan dat coc " + orderId : "Thanh toan don hang " + orderId;
                     const vnp_OrderType = "billpayment";
                     // Lấy đúng tổng tiền đã giảm
-                    const vnp_Amount = booking.totalPrice * 100;
+                    const vnp_Amount = orderData.totalPrice * 100;
                     const vnp_Locale = "vn";
                     const vnp_IpAddr = "127.0.0.1";
                     const vnp_CreateDate = moment().format('YYYYMMDDHHmmss');

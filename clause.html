@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxuryHavenTravel - Đặt Phòng Khách Sạn Trực Tuyến</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Thêm SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="css/about_us.css">
+    <style>
+        @font-face {
+            font-family: 'Nautica Script Bold';
+            src: url('fonts/nautica-bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        .nautica-script {
+            font-family: 'Nautica Script Bold', cursive;
+            font-size: 6em;
+            font-weight: bold;
+            color: #cddae6;
+            text-align: center;
+        }
+
+        /* Timeline Steps */
+        .timeline-steps {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-steps::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            right: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, #007bff, #28a745);
+            z-index: 1;
+        }
+
+        .step {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            z-index: 2;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #007bff, #28a745);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            margin-right: 20px;
+            box-shadow: 0 4px 8px rgba(0,123,255,0.3);
+        }
+
+        .step-content {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #007bff;
+        }
+
+        .step-content h5 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .step-content p {
+            color: #666;
+            margin-bottom: 0;
+        }
+
+        /* Payment Methods */
+        .payment-method {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        .payment-method i {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+
+        .payment-method span {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Contact Info */
+        .contact-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+        }
+
+        .contact-info h5 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .contact-info ul li {
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timeline-steps::before {
+                left: 30px;
+                right: 30px;
+            }
+
+            .step-number {
+                width: 50px;
+                height: 50px;
+                font-size: 16px;
+                margin-right: 15px;
+            }
+
+            .step-content {
+                padding: 15px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .navbar, .footer, .btn {
+                display: none !important;
+            }
+
+            .card {
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            .timeline-steps::before {
+                background: #000 !important;
+            }
+
+            .step-number {
+                background: #000 !important;
+            }
+        }
+    </style>
+    <!-- Thêm Google Fonts Inter vào <head> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"> -->
+
+</head>
+
+<body> <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-flex">
+                <!-- Logo -->
+                <a class="navbar-brand" href="#">
+                    <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
+                </a>
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <!-- Search Box -->
+                <div class="nav-search">
+                    <div class="search-input-group">
+                        <input type="text" placeholder="Tìm kiếm...">
+                        <button type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <ul class="nav-links" id="nav-links">
+                        <li><a href="index.html">Trang chủ</a></li>
+                        <li><a href="hotel.html">Khách sạn</a></li>
+
+                        <li class="dropdown"><a href="tours.html">Tours</a></li>
+
+                        <li class="dropdown"><a href="prioritize.html">Ưu đãi</a></li>
+                        <li class="dropdown"><a href="travel_guide.html">Cẩm nang du lịch</a></li>
+                        <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
+                        <!-- <li class="dropdown"><a href="vuichoi.html">🌐</a></li> -->
+
+                        <li>
+                            <div class="d-flex align-items-center">
+                                <div class="dropdown" id="user-dropdown" style="display:none;">
+                                    <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                                        id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-user"></i> <span id="user-name"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="member.html"><i
+                                                    class="fas fa-user-circle"></i> Tài khoản</a></li>
+                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i
+                                                    class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                                    </ul>
+                                </div>
+                                <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
+                                    <i class="fas fa-user"></i> Đăng nhập
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Search -->
+    <section class="hero-section">
+        <p class="nautica-script">LuxuryHavenTravel</p>
+        <div class="hero-content"><br><br><br><br><br><br><br><br>
+
+            <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
+            <p>Đặt phòng khách sạn, tour du lịch, vé máy bay với giá tốt nhất</p>
+        </div><br><br><br><br><br><br><br><br>
+    </section>
+
+    <main>
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h1 class="h3 mb-0"><i class="fas fa-file-contract me-2"></i>Điều Khoản Đặt Cọc</h1>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Lưu ý:</strong> Vui lòng đọc kỹ các điều khoản dưới đây trước khi thực hiện đặt cọc.
+                            </div>
+
+                            <section class="mb-4">
+                                <h2 class="h4 text-primary mb-3">1. Định Nghĩa</h2>
+                                <ul class="list-unstyled">
+                                    <li><strong>Đặt cọc:</strong> Là việc khách hàng thanh toán trước 30% giá trị đơn hàng để giữ chỗ.</li>
+                                    <li><strong>Giá trị đơn hàng:</strong> Tổng số tiền phải thanh toán cho toàn bộ thời gian lưu trú.</li>
+                                    <li><strong>Số tiền còn lại:</strong> 70% giá trị đơn hàng chưa thanh toán.</li>
+                                </ul>
+                            </section>
+
+                            <section class="mb-4">
+                                <h2 class="h4 text-primary mb-3">2. Chính Sách Đặt Cọc</h2>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card border-success">
+                                            <div class="card-header bg-success text-white">
+                                                <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Mức Đặt Cọc</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-unstyled mb-0">
+                                                    <li><i class="fas fa-percentage text-success me-2"></i>30% giá trị đơn hàng</li>
+                                                    <li><i class="fas fa-calculator text-success me-2"></i>Tự động tính toán</li>
+                                                    <li><i class="fas fa-shield-alt text-success me-2"></i>Bảo mật thông tin</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card border-info">
+                                            <div class="card-header bg-info text-white">
+                                                <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Thời Hạn</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-unstyled mb-0">
+                                                    <li><i class="fas fa-calendar-check text-info me-2"></i>Giữ chỗ 24h sau đặt cọc</li>
+                                                    <li><i class="fas fa-hourglass-half text-info me-2"></i>Thanh toán còn lại trước check-in</li>
+                                                    <li><i class="fas fa-calendar-times text-info me-2"></i>Hủy trước 48h được hoàn tiền</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="mb-4">
+                                <h2 class="h4 text-primary mb-3">3. Quy Trình Đặt Cọc</h2>
+                                <div class="timeline-steps">
+                                    <div class="step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <h5>Chọn Phòng & Ngày</h5>
+                                            <p>Chọn loại phòng và ngày nhận/trả phòng phù hợp</p>
+                                        </div>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <h5>Nhập Thông Tin</h5>
+                                            <p>Điền đầy đủ thông tin cá nhân và số lượng khách</p>
+                                        </div>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <h5>Thanh Toán 30%</h5>
+                                            <p>Thanh toán đặt cọc 30% giá trị đơn hàng</p>
+                                        </div>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">4</div>
+                                        <div class="step-content">
+                                            <h5>Xác Nhận & Giữ Chỗ</h5>
+                                            <p>Nhận xác nhận và phòng được giữ chỗ thành công</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="mb-4">
+                                <h2 class="h4 text-primary mb-3">4. Điều Kiện & Hạn Chế</h2>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card border-warning">
+                                            <div class="card-header bg-warning text-dark">
+                                                <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Điều Kiện</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-unstyled mb-0">
+                                                    <li><i class="fas fa-check text-success me-2"></i>Đặt cọc tối thiểu 30%</li>
+                                                    <li><i class="fas fa-check text-success me-2"></i>Thanh toán còn lại trước check-in</li>
+                                                    <li><i class="fas fa-check text-success me-2"></i>Thông tin cá nhân chính xác</li>
+                                                    <li><i class="fas fa-check text-success me-2"></i>Tuân thủ chính sách khách sạn</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card border-danger">
+                                            <div class="card-header bg-danger text-white">
+                                                <h5 class="mb-0"><i class="fas fa-ban me-2"></i>Hạn Chế</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-unstyled mb-0">
+                                                    <li><i class="fas fa-times text-danger me-2"></i>Không hoàn tiền sau 48h</li>
+                                                    <li><i class="fas fa-times text-danger me-2"></i>Không thay đổi ngày sau đặt cọc</li>
+                                                    <li><i class="fas fa-times text-danger me-2"></i>Không chuyển nhượng cho người khác</li>
+                                                    <li><i class="fas fa-times text-danger me-2"></i>Không áp dụng cho dịp lễ tết</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="mb-4">
+                                <h2 class="h4 text-primary mb-3">5. Chính Sách Hoàn Tiền</h2>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Thời Gian Hủy</th>
+                                                <th>Mức Hoàn Tiền</th>
+                                                <th>Ghi Chú</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-success">
+                                                <td>Trước 48h</td>
+                                                <td>100% tiền đặt cọc</td>
+                                                <td>Hoàn tiền trong 3-5 ngày làm việc</td>
+                                            </tr>
+                                            <tr class="table-warning">
+                                                <td>24h - 48h</td>
+                                                <td>50% tiền đặt cọc</td>
+                                                <td>Phí xử lý 50%</td>
+                                            </tr>
+                                            <tr class="table-danger">
+                                                <td>Dưới 24h</td>
+                                                <td>Không hoàn tiền</td>
+                                                <td>Áp dụng chính sách không hoàn tiền</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+
+                            <section class="mb-4">
+                                <h2 class="h4 text-primary mb-3">6. Thanh Toán Còn Lại</h2>
+                                <div class="alert alert-success">
+                                    <h5><i class="fas fa-credit-card me-2"></i>Phương Thức Thanh Toán</h5>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <div class="payment-method">
+                                                <i class="fas fa-money-bill-wave text-success"></i>
+                                                <span>Tiền mặt</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-method">
+                                                <i class="fas fa-credit-card text-primary"></i>
+                                                <span>Thẻ tín dụng</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-method">
+                                                <i class="fas fa-mobile-alt text-info"></i>
+                                                <span>Chuyển khoản</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card border-info">
+                                    <div class="card-body">
+                                        <h6><i class="fas fa-info-circle me-2"></i>Lưu ý quan trọng:</h6>
+                                        <ul class="mb-0">
+                                            <li>Thanh toán số tiền còn lại (70%) trước khi nhận phòng</li>
+                                            <li>Không thanh toán đúng hạn sẽ mất quyền đặt phòng</li>
+                                            <li>Tiền đặt cọc sẽ được trừ vào tổng hóa đơn</li>
+                                            <li>Nhận hóa đơn VAT khi thanh toán đầy đủ</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="mb-4">
+                                <h2 class="h4 text-primary mb-3">7. Liên Hệ & Hỗ Trợ</h2>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="contact-info">
+                                            <h5><i class="fas fa-headset me-2"></i>Hỗ Trợ 24/7</h5>
+                                            <ul class="list-unstyled">
+                                                <li><i class="fas fa-phone me-2"></i>Hotline: 0837 918 274</li>
+                                                <li><i class="fas fa-envelope me-2"></i>Email: LuxuryHavenTravel@gmail.com</li>
+                                                <li><i class="fas fa-comments me-2"></i>Chat trực tuyến</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="contact-info">
+                                            <h5><i class="fas fa-clock me-2"></i>Giờ Làm Việc</h5>
+                                            <ul class="list-unstyled">
+                                                <li><i class="fas fa-calendar me-2"></i>Thứ 2 - Chủ nhật</li>
+                                                <li><i class="fas fa-time me-2"></i>08:00 - 22:00</li>
+                                                <li><i class="fas fa-map-marker-alt me-2"></i>TP. Hồ Chí Minh</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h4>Về LuxuryHavenTravel</h4>
+                    <ul>
+                        <li><a href="footer\about.html">Giới thiệu</a></li>
+                        <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
+                        <li><a href="footer\news.html">Tin tức</a></li>
+                        <li><a href="footer\contact.html">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Hỗ trợ</h4>
+                    <ul>
+                        <li><a href="footer\help-center.html">Trung tâm trợ giúp</a></li>
+                        <li><a href="footer\privacy-policy.html">Chính sách bảo mật</a></li>
+                        <li><a href="footer\terms.html">Điều khoản sử dụng</a></li>
+                        <li><a href="footer\cookie-policy.html">Chính sách cookie</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Đối tác</h4>
+                    <ul>
+                        <li><a href="footer\partner.html">Đăng ký làm đối tác</a></li>
+                        <li><a href="footer\marketing.html">Chương trình tiếp thị</a></li>
+                        <li><a href="footer\affiliate.html">Affiliate</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Theo dõi chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="https://facebook.com/100083035936090"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 LuxuryHavenTravel. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content"
+            style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
+            <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
+
+            <div id="auth-forms">
+                <form id="login-form" class="auth-form" style="text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Đăng nhập</button>
+                    <div class="login-links">
+                        <a href="#" id="to-register">Không có tài khoản?</a>
+                        <a href="#" id="to-forgot">Quên mật khẩu?</a>
+                    </div>
+                </form>
+
+                <form id="register-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu"
+                                required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Đăng ký</button>
+                    <div class="login-links">
+                        <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
+                    </div>
+                </form>
+
+                <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="forgot-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
+                    <div class="login-links">
+                        <a href="#" id="back-to-login">Quay lại đăng nhập</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        // Firebase config và xử lý xác thực
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Đợi DOM load xong
+        document.addEventListener('DOMContentLoaded', function () {
+            // Lấy các elements
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const forgotForm = document.getElementById('forgot-form');
+            const closeAuthModal = document.getElementById('close-auth-modal');
+            const openLoginModal = document.getElementById('open-login-modal');
+            const userDropdown = document.getElementById('user-dropdown');
+            const userName = document.getElementById('user-name');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // Xử lý đăng nhập
+            if (loginForm) {
+                loginForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+
+                    firebase.auth().signInWithEmailAndPassword(email, password)
+                        .then((userCredential) => {
+                            const user = userCredential.user;
+                            document.getElementById('auth-modal').style.display = 'none';
+
+                            // Kiểm tra nếu là admin
+                            if (email === 'quantrikhachsan@gmail.com') {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    text: 'Chào mừng Admin!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                }).then(() => {
+                                    window.location.href = 'admin-dashboard.html';
+                                });
+                            } else if (email === 'nhanvien2@luxuryhaven.com') {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    text: 'Chào mừng Nhân viên!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                }).then(() => {
+                                    window.location.href = 'admin-dashboard.html';
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Đăng nhập thành công!',
+                                    icon: 'success',
+                                    confirmButtonColor: '#e67e22'
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi đăng nhập!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
+                });
+            }
+
+            // Xử lý đăng ký
+            if (registerForm) {
+                registerForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('register-email').value;
+                    const password = document.getElementById('register-password').value;
+                    const confirmPassword = document.getElementById('register-confirm-password').value;
+                    const username = document.getElementById('register-username').value;
+
+                    if (password.length < 6) {
+                        Swal.fire({
+                            title: 'Lỗi đăng ký!',
+                            text: 'Mật khẩu phải có ít nhất 6 ký tự.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        return;
+                    }
+
+                    if (password !== confirmPassword) {
+                        Swal.fire({
+                            title: 'Lỗi đăng ký!',
+                            text: 'Mật khẩu nhập lại không khớp.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        return;
+                    }
+
+                    firebase.auth().createUserWithEmailAndPassword(email, password)
+                        .then((userCredential) => {
+                            return userCredential.user.updateProfile({
+                                displayName: username
+                            });
+                        })
+                        .then(() => {
+                            document.getElementById('auth-modal').style.display = 'none';
+                            Swal.fire({
+                                title: 'Đăng ký thành công!',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi đăng ký!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
+                });
+            }
+
+            // Xử lý quên mật khẩu
+            if (forgotForm) {
+                forgotForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const email = document.getElementById('forgot-email').value;
+
+                    firebase.auth().sendPasswordResetEmail(email)
+                        .then(() => {
+                            Swal.fire({
+                                title: 'Email đã được gửi!',
+                                text: 'Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.',
+                                icon: 'success',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#e67e22'
+                            });
+                        });
+                });
+            }
+
+            // Xử lý chuyển đổi giữa các form
+            const toRegister = document.getElementById('to-register');
+            if (toRegister) {
+                toRegister.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'block';
+                    forgotForm.style.display = 'none';
+                });
+            }
+            const toLogin = document.getElementById('to-login');
+            if (toLogin) {
+                toLogin.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                    forgotForm.style.display = 'none';
+                });
+            }
+            const toForgot = document.getElementById('to-forgot');
+            if (toForgot) {
+                toForgot.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'none';
+                    forgotForm.style.display = 'block';
+                });
+            }
+            const backToLogin = document.getElementById('back-to-login');
+            if (backToLogin) {
+                backToLogin.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                    forgotForm.style.display = 'none';
+                });
+            }
+
+            // Xử lý đóng modal
+            if (closeAuthModal) {
+                closeAuthModal.addEventListener('click', () => {
+                    document.getElementById('auth-modal').style.display = 'none';
+                });
+            }
+
+            // Xử lý mở modal đăng nhập
+            if (openLoginModal) {
+                openLoginModal.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById('auth-modal').style.display = 'block';
+                });
+            }
+
+            // Đóng modal khi click ra ngoài
+            const authModal = document.getElementById('auth-modal');
+            if (authModal) {
+                window.onclick = function (event) {
+                    if (event.target == authModal) {
+                        authModal.style.display = "none";
+                    }
+                };
+            }
+
+            // Theo dõi trạng thái đăng nhập
+            firebase.auth().onAuthStateChanged(function (user) {
+                const loginBtn = document.getElementById('open-login-modal');
+                if (user) {
+                    if (loginBtn) loginBtn.style.display = 'none';
+                    if (userDropdown) userDropdown.style.display = 'block';
+                    if (userName) userName.textContent = user.displayName || user.email;
+                } else {
+                    if (loginBtn) loginBtn.style.display = 'block';
+                    if (userDropdown) userDropdown.style.display = 'none';
+                }
+            });
+
+            // Xử lý đăng xuất
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    firebase.auth().signOut().then(() => {
+                        Swal.fire({
+                            title: 'Đăng xuất thành công!',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    }).catch((error) => {
+                        Swal.fire({
+                            title: 'Lỗi đăng xuất!',
+                            text: error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    });
+                });
+            }
+        });
+
+        // Khởi tạo EmailJS với public key
+        (function () {
+            emailjs.init("yI6xhpzYSnD3AGzbX");
+        })();
+
+        // Xử lý form liên hệ
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                // Lấy thông tin từ form
+                const name = document.getElementById('contact-name').value;
+                const email = document.getElementById('contact-email').value;
+                const message = document.getElementById('contact-message').value;
+                // Hiển thị loading
+                Swal.fire({
+                    title: 'Đang gửi...',
+                    text: 'Vui lòng đợi trong giây lát',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+                // Gửi email
+                emailjs.send("service_6spwxxw", "template_vcjlg02", {
+                    to_email: "quantrikhachsan001@gmail.com",
+                    from_name: name,
+                    from_email: email,
+                    message: message
+                })
+                    .then(function () {
+                        Swal.fire({
+                            title: 'Gửi thành công!',
+                            text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        contactForm.reset();
+                    })
+                    .catch(function (error) {
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Không thể gửi email. Vui lòng thử lại sau.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        console.error("Error sending email:", error);
+                    });
+            });
+        }
+
+        let autoSlideInterval;
+        let currentSlideIndex = 0;
+
+        function startAutoSlide() {
+            stopAutoSlide(); // Clear any existing interval
+            autoSlideInterval = setInterval(() => {
+                document.querySelectorAll('.slider-container').forEach(container => {
+                    const nextBtn = container.querySelector('.next');
+                    if (nextBtn) nextSlide(nextBtn);
+                });
+            }, 4000); // Chuyển slide mỗi 4 giây
+        }
+
+        function stopAutoSlide() {
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+            }
+        }
+
+        function nextSlide(btn) {
+            const container = btn.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+            const slides = container.querySelectorAll('.slide');
+
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            updateSlider(slider, dots, currentSlideIndex);
+        }
+
+        function prevSlide(btn) {
+            const container = btn.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+            const slides = container.querySelectorAll('.slide');
+
+            currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+            updateSlider(slider, dots, currentSlideIndex);
+        }
+
+        function currentSlide(dot, index) {
+            const container = dot.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+
+            currentSlideIndex = index;
+            updateSlider(slider, dots, index);
+        }
+
+        function updateSlider(slider, dots, index) {
+            const sliderWidth = slider.offsetWidth;
+            slider.style.transform = `translateX(${-index * sliderWidth}px)`;
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        // Khởi động auto slide và xử lý các sự kiện khi trang load xong
+        document.addEventListener('DOMContentLoaded', () => {
+            startAutoSlide();
+
+            // Thêm sự kiện hover để dừng/tiếp tục auto slide
+            document.querySelectorAll('.slider-container').forEach(container => {
+                container.addEventListener('mouseenter', stopAutoSlide);
+                container.addEventListener('mouseleave', startAutoSlide);
+            });
+        });
+    </script>
+    <script>
+        // Mobile menu toggle function
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const navLinks = document.getElementById('nav-links');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Close mobile menu when clicking outside        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function () {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Close mobile menu when clicking on links
+            navLinks.addEventListener('click', function (e) {
+                if (e.target.tagName === 'A') {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
+    </script>
+    <script>
+        firebase.database().ref('about_us').on('value', (snapshot) => {
+            if (snapshot.exists()) {
+                const about = snapshot.val();
+                // --- Render các section như hướng dẫn ở trên ---
+                // Ví dụ:
+                document.getElementById('about-hero').innerHTML = `
+                  <div class="about-slogan-section section-spacing" style="background-image:url('${about.hero.background_image || ''}');background-size:cover;background-position:center;">
+                    <div class="about-slogan-title">${about.hero.headline}</div>
+                    <div class="about-slogan-desc">${about.hero.subheadline}</div>
+                  </div>
+                `;
+                const intro = about.introduction;
+document.getElementById('about-introduction').innerHTML = `
+  <section class="about-intro-section">
+    <h2 class="about-intro-title">${intro.title}</h2>
+    <div class="about-intro-underline"></div>
+    <div class="about-intro-content">
+      <p>${intro.description}</p>
+    </div>
+  </section>
+`;
+const mv = about.mission_vision;
+document.getElementById('about-mission-vision').innerHTML = `
+  <section class="about-mission-vision-section">
+    <div class="mission-card">
+      <span class="mission-icon"><i class="fas fa-bullseye"></i></span>
+      <h3>Sứ Mệnh</h3>
+      <p>${mv.mission}</p>
+    </div>
+    <div class="vision-card">
+      <span class="vision-icon"><i class="fas fa-eye"></i></span>
+      <h3>Tầm Nhìn</h3>
+      <p>${mv.vision}</p>
+    </div>
+  </section>
+`;
+document.getElementById('about-core-values').innerHTML = `
+  <section class="core-values-section">
+    <h2 class="core-values-title">Giá Trị Cốt Lõi</h2>
+    <div class="core-values-underline"></div>
+    <div class="core-values-list">
+      ${about.core_values.map(v => `
+        <div class="core-value-card">
+          <div class="core-value-icon"><i class="${v.icon || 'fas fa-heart'}"></i></div>
+          <div class="core-value-title">${v.title}</div>
+          <div class="core-value-desc">${v.description}</div>
+        </div>
+      `).join('')}
+    </div>
+  </section>
+`;
+const milestones = about.milestones;
+document.getElementById('about-milestones').innerHTML = `
+  <section class="timeline-section">
+    <h2 class="timeline-title">Chặng Đường Phát Triển</h2>
+    <div class="timeline-underline"></div>
+    <div class="timeline">
+      ${milestones.map((m, i) => `
+        <div class="timeline-item ${i % 2 === 0 ? 'left' : 'right'}">
+          ${i % 2 === 0 ? `
+            <div class="timeline-content">
+              <h3>${m.event}</h3>
+            </div>
+            <div class="timeline-year">${m.year}</div>
+          ` : `
+            <div class="timeline-year">${m.year}</div>
+            <div class="timeline-content">
+              <h3>${m.event}</h3>
+            </div>
+          `}
+        </div>
+      `).join('')}
+    </div>
+  </section>
+`;
+document.getElementById('about-numbers').innerHTML = `
+  <section class="about-numbers-section">
+    <h2 class="about-numbers-title">Con Số Nổi Bật</h2>
+    <div class="about-numbers-underline"></div>
+    <div class="about-numbers-list">
+      ${about.numbers.map(n => `
+        <div class="about-number-card">
+          <div class="about-number-value"><i class="${n.icon || ''}" style="color:#f7931e;margin-right:8px;"></i>${n.value}</div>
+          <div class="about-number-label">${n.label}</div>
+        </div>
+      `).join('')}
+    </div>
+  </section>
+`;
+
+
+const press = about.press;
+document.getElementById('about-press').innerHTML = `
+  <section class="about-press-section">
+    <h2 class="about-press-title">Báo Chí & Truyền Thông</h2>
+    <div class="about-press-underline"></div>
+    <div class="about-press-list">
+      ${press.map(p => `
+        <div class="about-press-card">
+          <a href="${p.link}" target="_blank"><img src="${p.logo || 'images/default-logo.png'}" alt="${p.name}" loading="lazy" /></a>
+          <div class="about-press-name">${p.name}</div>
+        </div>
+      `).join('')}
+    </div>
+  </section>
+`;
+const partners = about.partners;
+document.getElementById('about-partners').innerHTML = `
+  <section class="about-partners-section">
+    <h2 class="about-partners-title">Đối Tác Tiêu Biểu</h2>
+    <div class="about-partners-underline"></div>
+    <div class="about-partners-list">
+      ${partners.map(pt => `
+        <div class="about-partner-card">
+          <img src="${pt.logo || 'images/default-logo.png'}" alt="${pt.name}" loading="lazy" />
+          <div class="about-partner-name">${pt.name}</div>
+        </div>
+      `).join('')}
+    </div>
+  </section>
+`;
+const contact = about.contact;
+document.getElementById('about-contact').innerHTML = `
+  <section class="about-contact-section">
+    <h2 class="about-contact-title">Liên Hệ</h2>
+    <div class="about-contact-underline"></div>
+    <ul class="about-contact-list">
+      <li><i class="fas fa-phone"></i> Hotline: ${contact.hotline}</li>
+      <li><i class="fas fa-envelope"></i> Email: ${contact.email}</li>
+      <li><i class="fas fa-map-marker-alt"></i> Địa chỉ: ${contact.address}</li>
+    </ul>
+  </section>
+`;
+            } else {
+                document.getElementById('about-hero').innerHTML = '<div style="text-align:center;color:red;">Không có dữ liệu về chúng tôi trên hệ thống!</div>';
+            }
+        }, (error) => {
+            document.getElementById('about-hero').innerHTML = '<div style="text-align:center;color:red;">Lỗi kết nối dữ liệu: ' + error.message + '</div>';
+        });
+        </script>
+    <script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/684e312c6b65fa190ea6f4dd/1iton06be';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+End of Tawk.to Script
+</body>
+
+</html>

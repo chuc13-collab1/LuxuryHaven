@@ -1658,7 +1658,7 @@ body {
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(44,62,80,0.10);
     padding: 32px 28px 24px 28px;
-    max-width: 370px;
+    max-width: 350px;
     min-width: 260px;
     text-align: left;
     position: relative;
@@ -1791,7 +1791,7 @@ body {
 .about-number-value {
     font-size: 2.2rem;
     font-weight: 800;
-    color: #f7931e;
+    color: #3710e6;
     margin-bottom: 8px;
 }
 .about-number-label {

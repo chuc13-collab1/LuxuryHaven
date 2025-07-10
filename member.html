@@ -1024,58 +1024,41 @@
             });
         }
 
-        function loadPayments(user) {
-            const paymentsRef = firebase.database().ref('payments').orderByChild('userId').equalTo(user.uid);
-            paymentsRef.on('value', (snapshot) => {
-                const table = document.getElementById('payments-table');
-                if (!table) return;
-                table.innerHTML = '';
-                if (snapshot.exists()) {
-                    snapshot.forEach((paymentSnapshot) => {
-                        const payment = paymentSnapshot.val();
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${payment.transactionId || ''}</td>
-                            <td>${payment.date ? new Date(payment.date).toLocaleDateString('vi-VN') : ''}</td>
-                            <td>${payment.amount ? payment.amount.toLocaleString('vi-VN') + '₫' : ''}</td>
-                            <td>${payment.method || ''}</td>
-                            <td><span class="badge bg-${payment.status === 'success' ? 'success' : 'danger'}">${payment.status === 'success' ? 'Thành công' : 'Thất bại'}</span></td>
-                            <td></td>
-                        `;
-                        table.appendChild(row);
-
-                        // --- Cộng điểm thành viên khi thanh toán thành công, chỉ 1 lần ---
-                        if (payment.status === 'success' && !payment.loyaltyAdded) {
-                            const paymentRef = paymentSnapshot.ref;
-                            paymentRef.transaction(function(currentPayment) {
-                                if (currentPayment && currentPayment.status === 'success' && !currentPayment.loyaltyAdded) {
-                                    currentPayment.loyaltyAdded = true;
-                                    return currentPayment;
-                                }
-                                return; // Không thay đổi nếu đã cộng điểm
-                            }, function(error, committed, snap) {
-                                if (error) {
-                                    console.error('Transaction failed:', error);
-                                } else if (committed) {
-                                    // Chỉ khi loyaltyAdded vừa được set thành công mới cộng điểm
-                                    const points = Math.floor((payment.amount || 0) / 1000);
-                                    if (points > 0) {
-                                        const userRef = firebase.database().ref('users/' + user.uid + '/loyaltyPoints');
-                                        userRef.transaction(function(currentPoints) {
-                                            return (currentPoints || 0) + points;
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                        // --- End cộng điểm ---
-                    });
-                } else {
-                    table.innerHTML = '<tr><td colspan="6" class="text-center py-4">Chưa có giao dịch nào</td></tr>';
-                }
-            });
+        if (payment.status === 'success' && !payment.loyaltyAdded) {
+    const paymentRef = paymentSnapshot.ref;
+    paymentRef.transaction(function(currentPayment) {
+        if (currentPayment && currentPayment.status === 'success' && !currentPayment.loyaltyAdded) {
+            currentPayment.loyaltyAdded = true;
+            return currentPayment;
         }
-
+        return;
+    }, function(error, committed, snap) {
+        if (error) {
+            console.error('Transaction failed:', error);
+        } else if (committed) {
+            // Chỉ khi loyaltyAdded vừa được set thành công mới cộng điểm
+            const points = Math.floor((payment.amount || 0) / 1000);
+            if (points > 0) {
+                const userRef = firebase.database().ref('users/' + user.uid + '/loyaltyPoints');
+                userRef.transaction(function(currentPoints) {
+                    return (currentPoints || 0) + points;
+                }, function(err, committed2, snap2) {
+                    if (committed2) {
+                        // Sau khi cộng điểm thành công, cập nhật note
+                        paymentRef.update({
+                            note: `Đã cộng điểm thành viên: +${points} điểm`
+                        });
+                    }
+                });
+            } else {
+                // Nếu không có điểm, vẫn ghi note
+                paymentRef.update({
+                    note: `Thanh toán thành công nhưng số tiền không đủ để cộng điểm thành viên`
+                });
+            }
+        }
+    });
+}
         function viewInvoice(paymentId) {
             const paymentRef = firebase.database().ref('payments/' + paymentId);
             paymentRef.once('value').then(snapshot => {

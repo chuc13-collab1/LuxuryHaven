@@ -161,212 +161,104 @@
             if (vnp_ResponseCode === '00') {
                 paymentStatusDiv.innerHTML = '<i class="fas fa-check-circle status-icon text-success"></i><div class="alert alert-success mb-0">Thanh toán thành công!</div>';
                 
-                // Cập nhật trạng thái và trừ số lượng
-                updateBookingAndQuantity(vnp_TxnRef);
-                // --- GHI LỊCH SỬ THANH TOÁN ---
+                // Kiểm tra xem là booking hay deposit
                 const bookingRef = firebase.database().ref('bookings/' + vnp_TxnRef);
-                bookingRef.once('value').then(snapshot => {
-                    const debugContent = document.getElementById('debug-content');
-                    const currentContent = JSON.parse(debugContent.textContent || '{}');
-                    
-                    console.log('Booking data:', snapshot.val());
-                    if (!snapshot.exists()) {
-                        console.log('Không tìm thấy booking');
-                        debugContent.textContent = JSON.stringify({
-                            ...currentContent,
-                            booking: 'Không tìm thấy',
-                            bookingId: vnp_TxnRef
-                        }, null, 2);
-                        return;
-                    }
-                    const data = snapshot.val();
-                    const paymentData = {
-                        userId: data.userId || firebase.auth().currentUser?.uid || '',
-                        amount: parseInt(vnp_Amount) || 0,
-                        date: Date.now(),
-                        status: 'success',
-                        method: 'VNPAY',
-                        transactionId: vnp_TxnRef,
-                        detail: 'Thanh toán đặt phòng/đặt tour qua VNPAY'
-                    };
-                    
-                    debugContent.textContent = JSON.stringify({
-                        ...currentContent,
-                        booking: data,
-                        payment: paymentData,
-                        amount: {
-                            original: vnp_Amount,
-                            parsed: parseInt(vnp_Amount),
-                            actual: parseInt(vnp_Amount) / 100
-                        },
-                        points: Math.floor((parseInt(vnp_Amount) / 100) / 100000)
-                    }, null, 2);
-
-                    firebase.database().ref('payments').push(paymentData)
-                        .then(() => {
-                            console.log('Đã lưu payment thành công');
-                            // Sau khi ghi payment thành công, tạo thông báo cho user
-                            if (paymentData.userId) {
-                                firebase.database().ref('notifications/' + paymentData.userId).push({
-                                    title: 'Thanh toán thành công',
-                                    message: `Bạn đã thanh toán thành công đơn hàng ${vnp_TxnRef}.`,
-                                    createdAt: Date.now(),
-                                    type: 'booking',
-                                    read: false
-                                });
-                            }
-                            // --- TỰ ĐỘNG CỘNG ĐIỂM THÀNH VIÊN ---
-                            if (paymentData.userId && paymentData.amount) {
-                                // Chia 100 vì VNPay trả về số tiền đã nhân 100
-                                const actualAmount = paymentData.amount / 100;
-                                const points = Math.floor(actualAmount / 100000);
-                                
-                                // Lấy reference đến user
-                                const userRef = firebase.database().ref('users/' + paymentData.userId);
-                                
-                                // Đọc dữ liệu user hiện tại
-                                userRef.once('value')
-                                    .then(snapshot => {
-                                        const userData = snapshot.val();
-                                        console.log('User data before update:', userData);
-                                        
-                                        if (!userData) {
-                                            throw new Error('User not found');
-                                        }
-                                        
-                                        // Tính toán điểm mới
-                                        const currentPoints = userData.loyaltyPoints || 0;
-                                        const newPoints = currentPoints + points;
-                                        
-                                        // Xác định hạng mới
-                                        let newLevel = 'Đồng';
-                                        if (newPoints >= 10000) {
-                                            newLevel = 'Kim cương';
-                                        } else if (newPoints >= 5000) {
-                                            newLevel = 'Vàng';
-                                        } else if (newPoints >= 1000) {
-                                            newLevel = 'Bạc';
-                                        }
-                                        
-                                        // Cập nhật dữ liệu
-                                        const updates = {
-                                            loyaltyPoints: newPoints,
-                                            memberLevel: newLevel,
-                                            lastPointsUpdate: {
-                                                amount: actualAmount,
-                                                points: points,
-                                                date: Date.now(),
-                                                transactionId: vnp_TxnRef
-                                            }
-                                        };
-                                        
-                                        // Log thông tin cập nhật
-                                        console.log('Updating user points:', {
-                                            userId: paymentData.userId,
-                                            currentPoints: currentPoints,
-                                            addedPoints: points,
-                                            newPoints: newPoints,
-                                            currentLevel: userData.memberLevel,
-                                            newLevel: newLevel
-                                        });
-                                        
-                                        // Thực hiện cập nhật
-                                        return userRef.update(updates);
-                                    })
-                                    .then(() => {
-                                        console.log('Points updated successfully');
-                                        
-                                        // Đọc lại dữ liệu sau khi cập nhật
-                                        return userRef.once('value');
-                                    })
-                                    .then(snapshot => {
-                                        const updatedUser = snapshot.val();
-                                        console.log('Updated user data:', updatedUser);
-                                        
-                                        // Hiển thị thông báo thành công
-                                        const successMessage = document.createElement('div');
-                                        successMessage.className = 'alert alert-success mt-3';
-                                        successMessage.innerHTML = `
-                                            <strong>Cập nhật điểm thành công!</strong><br>
-                                            + ${points} điểm<br>
-                                            Tổng điểm: ${updatedUser.loyaltyPoints}<br>
-                                            Hạng thành viên: ${updatedUser.memberLevel}
-                                        `;
-                                        document.getElementById('payment-status').appendChild(successMessage);
-                                        
-                                        // Cập nhật debug info
-                                        const debugContent = document.getElementById('debug-content');
-                                        const currentContent = JSON.parse(debugContent.textContent || '{}');
-                                        debugContent.textContent = JSON.stringify({
-                                            ...currentContent,
-                                            pointsUpdate: {
-                                                success: true,
-                                                oldPoints: currentPoints,
-                                                addedPoints: points,
-                                                newPoints: updatedUser.loyaltyPoints,
-                                                oldLevel: userData.memberLevel,
-                                                newLevel: updatedUser.memberLevel,
-                                                updateTime: new Date().toISOString()
-                                            }
-                                        }, null, 2);
-                                    })
-                                    .catch(error => {
-                                        console.error('Error updating points:', error);
-                                        
-                                        // Hiển thị lỗi
-                                        const errorMessage = document.createElement('div');
-                                        errorMessage.className = 'alert alert-danger mt-3';
-                                        errorMessage.innerHTML = `
-                                            <strong>Lỗi khi cập nhật điểm!</strong><br>
-                                            ${error.message}
-                                        `;
-                                        document.getElementById('payment-status').appendChild(errorMessage);
-                                        
-                                        // Cập nhật debug info với lỗi
-                                        const debugContent = document.getElementById('debug-content');
-                                        const currentContent = JSON.parse(debugContent.textContent || '{}');
-                                        debugContent.textContent = JSON.stringify({
-                                            ...currentContent,
-                                            pointsUpdateError: {
-                                                message: error.message,
-                                                stack: error.stack,
-                                                time: new Date().toISOString()
-                                            }
-                                        }, null, 2);
-                                    });
+                const depositRef = firebase.database().ref('deposits/' + vnp_TxnRef);
+                
+                // Thử tìm trong bookings trước
+                bookingRef.once('value').then(bookingSnapshot => {
+                    if (bookingSnapshot.exists()) {
+                        // Đây là booking
+                        const data = bookingSnapshot.val();
+                        updateBookingAndQuantity(vnp_TxnRef);
+                        processPaymentHistory(data, vnp_TxnRef, data.bookingType === 'deposit' ? true : false); // Xử lý cho cả hotel và tour
+                    } else {
+                        // Thử tìm trong deposits
+                        depositRef.once('value').then(depositSnapshot => {
+                            if (depositSnapshot.exists()) {
+                                // Đây là deposit
+                                updateDepositStatus(vnp_TxnRef);
+                                processPaymentHistory(depositSnapshot.val(), vnp_TxnRef, true);
                             } else {
-                                console.log('Không có userId hoặc amount:', {
-                                    userId: paymentData.userId,
-                                    amount: paymentData.amount
-                                });
+                                console.error("Không tìm thấy booking hoặc deposit");
                             }
-                        })
-                        .catch((error) => {
-                            console.error('Lỗi khi ghi lịch sử thanh toán:', error);
                         });
+                    }
                 });
-            } else {
+            }
+            else {
                 paymentStatusDiv.innerHTML = '<i class="fas fa-exclamation-triangle status-icon text-warning"></i><div class="alert alert-warning mb-0">Thanh toán chưa thành công. Mã lỗi: ' + (vnp_ResponseCode || 'Không xác định') + '</div>';
             }
+            // Kiểm tra xem là booking hay deposit để hiển thị thông tin
             const bookingRef = firebase.database().ref('bookings/' + vnp_TxnRef);
-            bookingRef.once('value').then(snapshot => {
-                if (!snapshot.exists()) {
-                    document.getElementById('booking-info').innerHTML = '<div class="alert alert-danger">Không tìm thấy thông tin đơn hàng.</div>';
-                    return;
+            const depositRef = firebase.database().ref('deposits/' + vnp_TxnRef);
+            
+            bookingRef.once('value').then(bookingSnapshot => {
+                if (bookingSnapshot.exists()) {
+                    // Đây là booking
+                    const data = bookingSnapshot.val();
+                    renderOrderInfo(data, false);
+                } else {
+                    // Thử tìm trong deposits
+                    depositRef.once('value').then(depositSnapshot => {
+                        if (depositSnapshot.exists()) {
+                            // Đây là deposit
+                            const data = depositSnapshot.val();
+                            renderOrderInfo(data, true);
+                        } else {
+                            document.getElementById('booking-info').innerHTML = '<div class="alert alert-danger">Không tìm thấy thông tin đơn hàng.</div>';
+                        }
+                    });
                 }
-                const data = snapshot.val();
-                
-                let bookingDetailsHtml = '';
+            }).catch(error => {
+                document.getElementById('booking-info').innerHTML = '<div class="alert alert-danger">Lỗi tải dữ liệu: ' + error.message + '</div>';
+            });
 
-                // Check booking type and render appropriate details
-                if (data.bookingType === 'tour') {
+        function renderOrderInfo(data, isDeposit) {
+                let orderDetailsHtml = '';
+
+                if (isDeposit) {
+                    // Hiển thị thông tin deposit
+                    const checkIn = new Date(data.checkIn).toLocaleDateString('vi-VN');
+                    const checkOut = new Date(data.checkOut).toLocaleDateString('vi-VN');
+                    const timeDiff = new Date(data.checkOut).getTime() - new Date(data.checkIn).getTime();
+                    const nights = Math.max(1, Math.ceil(timeDiff / (1000 * 3600 * 24)));
+                    
+                    orderDetailsHtml = `
+                        <div class="card mb-3">
+                            <div class="card-header"><i class="fas fa-hand-holding-usd me-2"></i>Thông tin đặt cọc</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6 info-label">Khách sạn:</div>
+                                    <div class="col-6 info-value">${data.hotelName || ''}</div>
+                                    <div class="col-6 info-label">Phòng:</div>
+                                    <div class="col-6 info-value">${data.roomId || ''}</div>
+                                    <div class="col-6 info-label">Ngày nhận phòng:</div>
+                                    <div class="col-6 info-value">${checkIn}</div>
+                                    <div class="col-6 info-label">Ngày trả phòng:</div>
+                                    <div class="col-6 info-value">${checkOut}</div>
+                                    <div class="col-6 info-label">Số đêm:</div>
+                                    <div class="col-6 info-value">${nights}</div>
+                                    <div class="col-6 info-label">Số khách:</div>
+                                    <div class="col-6 info-value">${data.guests || ''}</div>
+                                    <div class="col-6 info-label">Tổng giá phòng:</div>
+                                    <div class="col-6 info-value">${(data.totalPrice || 0).toLocaleString()} VNĐ</div>
+                                    <div class="col-6 info-label">Số tiền đặt cọc:</div>
+                                    <div class="col-6 info-value fw-bold text-primary">${(data.depositAmount || 0).toLocaleString()} VNĐ</div>
+                                    <div class="col-6 info-label">Số tiền còn lại:</div>
+                                    <div class="col-6 info-value">${(data.remainingAmount || 0).toLocaleString()} VNĐ</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (data.bookingType === 'tour') {
                     const tourName = data.tourName || data.hotelName || 'N/A';
                     const tourLocation = data.tourLocation || 'Không xác định';
                     const tourDuration = data.tourDuration || 'Không xác định';
                     const departureDate = new Date(data.checkIn).toLocaleDateString('vi-VN');
                     const numberOfGuests = data.numberOfGuests || data.guests || 1;
 
-                    bookingDetailsHtml = `
+                    orderDetailsHtml = `
                         <div class="card mb-3">
                             <div class="card-header"><i class="fas fa-route me-2"></i>Thông tin đặt tour</div>
                             <div class="card-body">
@@ -390,7 +282,7 @@
                 } else {
                     const checkIn = new Date(data.checkIn).toLocaleDateString('vi-VN');
                     const checkOut = new Date(data.checkOut).toLocaleDateString('vi-VN');
-                    bookingDetailsHtml = `
+                    orderDetailsHtml = `
                         <div class="card mb-3">
                             <div class="card-header"><i class="fas fa-hotel me-2"></i>Thông tin đặt phòng</div>
                             <div class="card-body">
@@ -433,10 +325,179 @@
                     </div>
                 `;
 
-                document.getElementById('booking-info').innerHTML = bookingDetailsHtml + customerInfoHtml;
-            }).catch(error => {
-                document.getElementById('booking-info').innerHTML = '<div class="alert alert-danger">Lỗi tải dữ liệu: ' + error.message + '</div>';
-            });
+                document.getElementById('booking-info').innerHTML = orderDetailsHtml + customerInfoHtml;
+            }
+        }
+
+        function processPaymentHistory(data, orderId, isDeposit) {
+            const debugContent = document.getElementById('debug-content');
+            const currentContent = JSON.parse(debugContent.textContent || '{}');
+            
+            console.log('Payment data:', data);
+            if (!data) {
+                console.log('Không tìm thấy dữ liệu');
+                debugContent.textContent = JSON.stringify({
+                    ...currentContent,
+                    data: 'Không tìm thấy',
+                    orderId: orderId
+                }, null, 2);
+                return;
+            }
+            
+            const paymentData = {
+                userId: data.userId || firebase.auth().currentUser?.uid || '',
+                amount: parseInt(vnp_Amount) || 0,
+                date: Date.now(),
+                status: 'success',
+                method: 'VNPAY',
+                transactionId: orderId,
+                detail: isDeposit ? 'Thanh toán đặt cọc qua VNPAY' : 'Thanh toán đặt phòng/đặt tour qua VNPAY'
+            };
+            
+            debugContent.textContent = JSON.stringify({
+                ...currentContent,
+                data: data,
+                payment: paymentData,
+                amount: {
+                    original: vnp_Amount,
+                    parsed: parseInt(vnp_Amount),
+                    actual: parseInt(vnp_Amount) / 100
+                },
+                points: Math.floor((parseInt(vnp_Amount) / 100) / 100000)
+            }, null, 2);
+
+            firebase.database().ref('payments').push(paymentData)
+                .then((ref) => { // ref là reference tới payment vừa tạo
+                    console.log('Đã lưu payment thành công');
+                    // Sau khi ghi payment thành công, tạo thông báo cho user
+                    if (paymentData.userId) {
+                        firebase.database().ref('notifications/' + paymentData.userId).push({
+                            title: 'Thanh toán thành công',
+                            message: `Bạn đã thanh toán thành công ${isDeposit ? 'đặt cọc' : 'đơn hàng'} ${orderId}.`,
+                            createdAt: Date.now(),
+                            type: isDeposit ? 'deposit' : 'booking',
+                            read: false
+                        });
+                    }
+                    // --- TỰ ĐỘNG CỘNG ĐIỂM THÀNH VIÊN ---
+                    if (paymentData.userId && paymentData.amount) {
+                        // Chia 100 vì VNPay trả về số tiền đã nhân 100
+                        const actualAmount = paymentData.amount / 100;
+                        const points = Math.floor(actualAmount / 100000);
+                        const userRef = firebase.database().ref('users/' + paymentData.userId);
+                        userRef.once('value')
+                            .then(snapshot => {
+                                const userData = snapshot.val();
+                                if (!userData) throw new Error('User not found');
+                                const currentPoints = userData.loyaltyPoints || 0;
+                                const newPoints = currentPoints + points;
+                                let newLevel = 'Đồng';
+                                if (newPoints >= 10000) newLevel = 'Kim cương';
+                                else if (newPoints >= 5000) newLevel = 'Vàng';
+                                else if (newPoints >= 1000) newLevel = 'Bạc';
+                                const updates = {
+                                    loyaltyPoints: newPoints,
+                                    memberLevel: newLevel,
+                                    lastPointsUpdate: {
+                                        amount: actualAmount,
+                                        points: points,
+                                        date: Date.now(),
+                                        transactionId: orderId
+                                    }
+                                };
+                                return userRef.update(updates);
+                            })
+                            .then(() => {
+                                // Sau khi cộng điểm thành công, cập nhật note vào payment
+                                if (points > 0) {
+                                    return ref.update({
+                                        note: `Đã cộng điểm thành viên: +${points} điểm`
+                                    });
+                                } else {
+                                    return ref.update({
+                                        note: 'Thanh toán thành công nhưng số tiền không đủ để cộng điểm thành viên'
+                                    });
+                                }
+                            })
+                            .then(() => {
+                                // Đọc lại dữ liệu sau khi cập nhật
+                                return userRef.once('value');
+                            })
+                            .then(snapshot => {
+                                const updatedUser = snapshot.val();
+                                const successMessage = document.createElement('div');
+                                successMessage.className = 'alert alert-success mt-3';
+                                successMessage.innerHTML = `
+                                    <strong>Cập nhật điểm thành công!</strong><br>
+                                    + ${Math.floor((paymentData.amount / 100) / 100000)} điểm<br>
+                                    Tổng điểm: ${updatedUser.loyaltyPoints}<br>
+                                    Hạng thành viên: ${updatedUser.memberLevel}
+                                `;
+                                document.getElementById('payment-status').appendChild(successMessage);
+                                // Cập nhật debug info
+                                const debugContent = document.getElementById('debug-content');
+                                const currentContent = JSON.parse(debugContent.textContent || '{}');
+                                debugContent.textContent = JSON.stringify({
+                                    ...currentContent,
+                                    pointsUpdate: {
+                                        success: true,
+                                        newPoints: updatedUser.loyaltyPoints,
+                                        newLevel: updatedUser.memberLevel,
+                                        updateTime: new Date().toISOString()
+                                    }
+                                }, null, 2);
+                            })
+                            .catch(error => {
+                                console.error('Error updating points:', error);
+                                const errorMessage = document.createElement('div');
+                                errorMessage.className = 'alert alert-danger mt-3';
+                                errorMessage.innerHTML = `
+                                    <strong>Lỗi khi cập nhật điểm!</strong><br>
+                                    ${error.message}
+                                `;
+                                document.getElementById('payment-status').appendChild(errorMessage);
+                                const debugContent = document.getElementById('debug-content');
+                                const currentContent = JSON.parse(debugContent.textContent || '{}');
+                                debugContent.textContent = JSON.stringify({
+                                    ...currentContent,
+                                    pointsUpdateError: {
+                                        message: error.message,
+                                        stack: error.stack,
+                                        time: new Date().toISOString()
+                                    }
+                                }, null, 2);
+                            });
+                    } else {
+                        console.log('Không có userId hoặc amount:', {
+                            userId: paymentData.userId,
+                            amount: paymentData.amount
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('Lỗi khi ghi lịch sử thanh toán:', error);
+                });
+        }
+
+        function updateDepositStatus(depositId) {
+            const depositRef = firebase.database().ref('deposits/' + depositId);
+
+            depositRef.once('value').then(snapshot => {
+                if (!snapshot.exists()) {
+                    console.error("Không tìm thấy deposit để cập nhật.");
+                    return;
+                }
+
+                const depositData = snapshot.val();
+                const updates = {};
+                updates.status = 'confirmed';
+                updates.paymentStatus = 'paid';
+                updates.paymentMethod = 'vnpay';
+                updates.updatedAt = firebase.database.ServerValue.TIMESTAMP;
+                
+                // Cập nhật trạng thái deposit
+                depositRef.update(updates);
+            }).catch(err => console.error("Lỗi khi cập nhật deposit: ", err));
         }
 
         function updateBookingAndQuantity(bookingId) {
@@ -491,4 +552,5 @@
 
     </script>
 </body>
+</html> 
 </html> 

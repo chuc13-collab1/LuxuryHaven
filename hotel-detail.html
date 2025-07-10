@@ -33,6 +33,139 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/hotel.css"> <!-- Sử dụng lại CSS chung -->
     <link rel="stylesheet" href="css/hotel-detail.css"> <!-- CSS riêng cho trang chi tiết -->
+    <style>
+        /* Similar Hotels Styles */
+        .similar-hotels {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .similar-hotels h2 {
+            color: #1a237e;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .similar-hotel-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+            margin-bottom: 20px;
+        }
+
+        .similar-hotel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .similar-hotel-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .similar-hotel-card:hover .similar-hotel-image {
+            transform: scale(1.05);
+        }
+
+        .similar-hotel-content {
+            padding: 20px;
+        }
+
+        .similar-hotel-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a237e;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .similar-hotel-location {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .similar-hotel-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .similar-hotel-stars {
+            color: #ffc107;
+            margin-right: 8px;
+        }
+
+        .similar-hotel-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e67e22;
+            margin-bottom: 15px;
+        }
+
+        .similar-hotel-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .similar-hotel-feature {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .similar-hotel-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #1a237e, #0d47a1);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .similar-hotel-btn:hover {
+            background: linear-gradient(45deg, #0d47a1, #1a237e);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26,35,126,0.3);
+        }
+
+        .similar-hotel-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e67e22;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .similar-hotels {
+                padding: 20px;
+            }
+            
+            .similar-hotel-card {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
 
 </head>
 
@@ -133,14 +266,23 @@
                             <!-- Danh sách phòng sẽ được render ở đây -->
                         </div>
                     </section>
+
+                    <!-- Gợi ý khách sạn cùng loại -->
+                    <section class="similar-hotels mb-4">
+                        <h2 class="mb-3">Khách sạn tương tự</h2>
+                        <div class="row" id="similar-hotels-list">
+                            <!-- Danh sách khách sạn tương tự sẽ được render ở đây -->
+                        </div>
+                    </section>
                 </div>
 
                 <!-- Cột phải: Form đặt phòng -->
                 <div class="col-lg-4">
-                    <aside class="booking-form-wrapper sticky-top">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="fs-5 mb-0">Đặt phòng ngay</h3>
+                    <aside class="booking-form-wrapper">
+                        <!-- Form đặt phòng ngay -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-warning text-dark">
+                                <h3 class="fs-5 mb-0"><i class="fas fa-calendar-check me-2"></i>Đặt phòng ngay</h3>
                             </div>
                             <div class="card-body">
                                 <form id="booking-form">
@@ -163,6 +305,55 @@
                                         <p class="mb-0">Tổng cộng: <strong id="summary-total-price" class="fs-5"></strong></p>
                                     </div>
                                     <button type="submit" class="btn btn-warning w-100 fw-bold" id="btn-book-now" disabled>Vui lòng chọn phòng</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Form đặt cọc phòng -->
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h3 class="fs-5 mb-0"><i class="fas fa-hand-holding-usd me-2"></i>Đặt cọc giữ chỗ</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-info mb-3">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Lưu ý:</strong> Đặt cọc 30% giá phòng để giữ chỗ. Số tiền còn lại thanh toán khi nhận phòng. Vui lòng nhấn vào đây để xem chi tiết <a href="clause.html">điều khoản đặt cọc</a>
+                                </div>
+                                <form id="deposit-form">
+                                    <div class="mb-3">
+                                        <label for="deposit-check-in-date" class="form-label">Ngày dự kiến nhận phòng</label>
+                                        <input type="date" id="deposit-check-in-date" class="form-control" required>
+                                        <!-- <small class="text-muted">Ngày mặc định: Hôm nay. Bạn có thể chọn ngày khác nếu muốn.</small> -->
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="deposit-check-out-date" class="form-label">Ngày dự kiến trả phòng</label>
+                                        <input type="date" id="deposit-check-out-date" class="form-control" required>
+                                        <!-- <small class="text-muted">Ngày mặc định: Ngày mai. Bạn có thể chọn ngày khác nếu muốn.</small> -->
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="deposit-guests-number" class="form-label">Số lượng khách</label>
+                                        <input type="number" id="deposit-guests-number" class="form-control" value="2" min="1" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="deposit-amount" class="form-label">Số tiền đặt cọc</label>
+                                        <div class="input-group">
+                                            <input type="number" id="deposit-amount" class="form-control" placeholder="Tự động tính 30% giá phòng" required readonly>
+                                            <span class="input-group-text">VNĐ</span>
+                                        </div>
+                                        <small class="text-muted">Tự động tính 30% giá phòng dựa trên loại phòng đã chọn</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="deposit-note" class="form-label">Ghi chú</label>
+                                        <textarea id="deposit-note" class="form-control" rows="3" placeholder="Ghi chú thêm về yêu cầu đặt cọc..."></textarea>
+                                    </div>
+                                    <div class="alert alert-warning d-none" id="deposit-summary">
+                                        <h6>Tóm tắt đặt cọc</h6>
+                                        <p class="mb-1">Loại phòng: <strong id="deposit-room-name"></strong></p>
+                                        <p class="mb-1">Số đêm: <strong id="deposit-nights"></strong></p>
+                                        <p class="mb-1">Tổng giá phòng: <strong id="deposit-total-price"></strong></p>
+                                        <p class="mb-0">Số tiền đặt cọc: <strong id="deposit-amount-display" class="text-primary"></strong></p>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100 fw-bold" id="btn-deposit" disabled>Đặt cọc giữ chỗ</button>
                                 </form>
                             </div>
                         </div>
@@ -445,6 +636,9 @@
             
             // Gắn sự kiện cho form
             attachFormEvents();
+            
+            // Load khách sạn tương tự
+            loadSimilarHotels(hotel);
         }
 
         function selectRoom(index) {
@@ -455,8 +649,10 @@
             document.getElementById(`room-card-${index}`).classList.add('selected');
             document.getElementById(`room-radio-${index}`).checked = true;
 
-            // Cập nhật giá và kích hoạt nút
+            // Cập nhật giá và kích hoạt nút cho cả 2 form
             updatePrice();
+            updateDepositSummary();
+            
             const btnBook = document.getElementById('btn-book-now');
             btnBook.disabled = false;
             btnBook.textContent = 'Tiến hành đặt phòng';
@@ -488,16 +684,39 @@
         function attachFormEvents() {
             // Set min date for date pickers
             const today = new Date().toISOString().split('T')[0];
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowStr = tomorrow.toISOString().split('T')[0];
+            
+            // Set default dates for booking form
             document.getElementById('check-in-date').setAttribute('min', today);
             document.getElementById('check-out-date').setAttribute('min', today);
+            document.getElementById('check-in-date').value = today;
+            document.getElementById('check-out-date').value = tomorrowStr;
             
-            // Add listeners
+            // Set default dates for deposit form
+            document.getElementById('deposit-check-in-date').setAttribute('min', today);
+            document.getElementById('deposit-check-out-date').setAttribute('min', today);
+            document.getElementById('deposit-check-in-date').value = today;
+            document.getElementById('deposit-check-out-date').value = tomorrowStr;
+            
+            // Add listeners for booking form
             document.getElementById('check-in-date').addEventListener('change', updatePrice);
             document.getElementById('check-out-date').addEventListener('change', updatePrice);
             
             document.getElementById('booking-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 handleBooking();
+            });
+
+            // Add listeners for deposit form
+            document.getElementById('deposit-check-in-date').addEventListener('change', updateDepositSummary);
+            document.getElementById('deposit-check-out-date').addEventListener('change', updateDepositSummary);
+            document.getElementById('deposit-amount').addEventListener('input', updateDepositSummary);
+            
+            document.getElementById('deposit-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleDeposit();
             });
         }
         
@@ -545,6 +764,274 @@
                 })
                 .catch((error) => {
                     Swal.fire('Lỗi', `Đã có lỗi xảy ra khi tạo đơn đặt phòng: ${error.message}`, 'error');
+                });
+        }
+
+        function updateDepositSummary() {
+            const checkInDate = new Date(document.getElementById('deposit-check-in-date').value);
+            const checkOutDate = new Date(document.getElementById('deposit-check-out-date').value);
+
+            if (checkInDate && checkOutDate && checkOutDate > checkInDate && selectedRoom) {
+                const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
+                const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                const totalPrice = nights * (selectedRoom.price || 0);
+                const depositAmount = totalPrice * 0.3; // Tự động tính 30% giá phòng
+
+                if (totalPrice > 0) {
+                    // Tự động điền số tiền đặt cọc
+                    document.getElementById('deposit-amount').value = Math.round(depositAmount);
+                    
+                    const summary = document.getElementById('deposit-summary');
+                    summary.classList.remove('d-none');
+                    document.getElementById('deposit-room-name').textContent = selectedRoom.name;
+                    document.getElementById('deposit-nights').textContent = nights;
+                    document.getElementById('deposit-total-price').textContent = totalPrice.toLocaleString() + ' VNĐ';
+                    document.getElementById('deposit-amount-display').textContent = depositAmount.toLocaleString() + ' VNĐ';
+
+                    // Kích hoạt nút đặt cọc
+                    const btnDeposit = document.getElementById('btn-deposit');
+                    btnDeposit.disabled = false;
+                    btnDeposit.textContent = 'Đặt cọc giữ chỗ';
+                    summary.classList.remove('alert-danger');
+                    summary.classList.add('alert-warning');
+                }
+            } else {
+                document.getElementById('deposit-summary').classList.add('d-none');
+                document.getElementById('btn-deposit').disabled = true;
+                document.getElementById('deposit-amount').value = '';
+            }
+        }
+
+        async function loadSimilarHotels(currentHotel) {
+            try {
+                // Lấy danh sách khách sạn từ Firebase
+                const snapshot = await firebase.database().ref('location').once('value');
+                const locations = snapshot.val();
+                
+                if (!locations) return;
+
+                const similarHotels = [];
+                
+                // Tìm khách sạn tương tự dựa trên:
+                // 1. Cùng khu vực/địa điểm
+                // 2. Cùng mức giá (chênh lệch ±20%)
+                // 3. Cùng xếp hạng sao
+                Object.keys(locations).forEach(cityKey => {
+                    const city = locations[cityKey];
+                    if (city.hotels) {
+                        Object.keys(city.hotels).forEach(hotelKey => {
+                            const hotel = city.hotels[hotelKey];
+                            const hotelId = `${cityKey}_${hotelKey}`;
+                            
+                            // Bỏ qua khách sạn hiện tại
+                            if (hotelId === currentHotel.id) return;
+                            
+                            // Kiểm tra điều kiện tương tự
+                            const isSimilar = checkSimilarity(currentHotel, hotel);
+                            if (isSimilar) {
+                                similarHotels.push({
+                                    id: hotelId,
+                                    ...hotel,
+                                    cityKey: cityKey
+                                });
+                            }
+                        });
+                    }
+                });
+                
+                // Sắp xếp theo độ tương tự và giới hạn 6 khách sạn
+                similarHotels.sort((a, b) => b.similarityScore - a.similarityScore);
+                const topSimilarHotels = similarHotels.slice(0, 2);
+                
+                renderSimilarHotels(topSimilarHotels);
+                
+            } catch (error) {
+                console.error("Lỗi load khách sạn tương tự:", error);
+            }
+        }
+
+        function checkSimilarity(currentHotel, otherHotel) {
+            let similarityScore = 0;
+            
+            // So sánh xếp hạng sao
+            if (currentHotel.xepHangSao && otherHotel.xepHangSao) {
+                const starDiff = Math.abs(currentHotel.xepHangSao - otherHotel.xepHangSao);
+                if (starDiff <= 1) similarityScore += 3;
+                else if (starDiff <= 2) similarityScore += 1;
+            }
+            
+            // So sánh giá phòng (nếu có)
+            if (currentHotel.chiTiet?.rooms && otherHotel.chiTiet?.rooms) {
+                const currentAvgPrice = getAveragePrice(currentHotel.chiTiet.rooms);
+                const otherAvgPrice = getAveragePrice(otherHotel.chiTiet.rooms);
+                
+                if (currentAvgPrice && otherAvgPrice) {
+                    const priceDiff = Math.abs(currentAvgPrice - otherAvgPrice) / currentAvgPrice;
+                    if (priceDiff <= 0.2) similarityScore += 2; // Chênh lệch ≤20%
+                    else if (priceDiff <= 0.5) similarityScore += 1; // Chênh lệch ≤50%
+                }
+            }
+            
+            // So sánh địa điểm
+            if (currentHotel.diaChi && otherHotel.diaChi) {
+                const currentLocation = currentHotel.diaChi.toLowerCase();
+                const otherLocation = otherHotel.diaChi.toLowerCase();
+                
+                if (currentLocation.includes('hà nội') && otherLocation.includes('hà nội')) similarityScore += 2;
+                else if (currentLocation.includes('hồ chí minh') && otherLocation.includes('hồ chí minh')) similarityScore += 2;
+                else if (currentLocation.includes('đà nẵng') && otherLocation.includes('đà nẵng')) similarityScore += 2;
+                else if (currentLocation.includes('nha trang') && otherLocation.includes('nha trang')) similarityScore += 2;
+            }
+            
+            otherHotel.similarityScore = similarityScore;
+            return similarityScore >= 2; // Chỉ hiển thị nếu có độ tương tự từ 2 điểm trở lên
+        }
+
+        function getAveragePrice(rooms) {
+            if (!rooms || rooms.length === 0) return null;
+            
+            const prices = rooms.map(room => room.price).filter(price => price > 0);
+            if (prices.length === 0) return null;
+            
+            return prices.reduce((sum, price) => sum + price, 0) / prices.length;
+        }
+
+        function renderSimilarHotels(hotels) {
+            const container = document.getElementById('similar-hotels-list');
+            if (!container || hotels.length === 0) {
+                // Ẩn section nếu không có khách sạn tương tự
+                document.querySelector('.similar-hotels').style.display = 'none';
+                return;
+            }
+            
+            container.innerHTML = hotels.map(hotel => {
+                const defaultImage = 'images/LuxuryHavenTravel.png';
+                const avgPrice = getAveragePrice(hotel.chiTiet?.rooms);
+                const features = getHotelFeatures(hotel);
+                
+                return `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="similar-hotel-card">
+                            <div style="position: relative;">
+                                <img src="${hotel.chiTiet?.image || defaultImage}" 
+                                     alt="${hotel.tenKhachSan}" 
+                                     class="similar-hotel-image"
+                                     onerror="this.src='${defaultImage}'">
+                                ${hotel.xepHangSao ? `<div class="similar-hotel-badge">${hotel.xepHangSao}★</div>` : ''}
+                            </div>
+                            <div class="similar-hotel-content">
+                                <h3 class="similar-hotel-name">${hotel.tenKhachSan}</h3>
+                                <p class="similar-hotel-location">
+                                    <i class="fas fa-map-marker-alt me-1"></i>${hotel.diaChi}
+                                </p>
+                                <div class="similar-hotel-rating">
+                                    <div class="similar-hotel-stars">
+                                        ${hotel.xepHangSao ? Array(Math.floor(hotel.xepHangSao)).fill('<i class="fas fa-star"></i>').join('') : ''}
+                                    </div>
+                                    ${hotel.rating ? `<span class="text-muted">${hotel.rating}/5</span>` : ''}
+                                </div>
+                                ${avgPrice ? `<div class="similar-hotel-price">Từ ${avgPrice.toLocaleString()} VNĐ/đêm</div>` : ''}
+                                <div class="similar-hotel-features">
+                                    ${features.slice(0, 3).map(feature => `<span class="similar-hotel-feature">${feature}</span>`).join('')}
+                                </div>
+                                <a href="hotel-detail.html?id=${hotel.id}" class="btn similar-hotel-btn">
+                                    Xem chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getHotelFeatures(hotel) {
+            const features = [];
+            
+            if (hotel.chiTiet?.facilities) {
+                features.push(...hotel.chiTiet.facilities.slice(0, 3));
+            }
+            
+            if (hotel.xepHangSao) {
+                features.push(`${hotel.xepHangSao} sao`);
+            }
+            
+            if (hotel.chiTiet?.rooms) {
+                const roomTypes = hotel.chiTiet.rooms.map(room => room.name).filter(Boolean);
+                if (roomTypes.length > 0) {
+                    features.push(roomTypes[0]);
+                }
+            }
+            
+            return features;
+        }
+
+        function handleDeposit() {
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                Swal.fire('Yêu cầu đăng nhập', 'Vui lòng đăng nhập để tiếp tục đặt cọc.', 'info');
+                document.getElementById('open-login-modal').click();
+                return;
+            }
+
+            const checkIn = document.getElementById('deposit-check-in-date').value;
+            const checkOut = document.getElementById('deposit-check-out-date').value;
+            const guests = document.getElementById('deposit-guests-number').value;
+            const depositAmount = parseFloat(document.getElementById('deposit-amount').value);
+            const note = document.getElementById('deposit-note').value;
+
+            if (!selectedRoom) {
+                Swal.fire('Chưa chọn phòng', 'Vui lòng chọn một loại phòng.', 'warning');
+                return;
+            }
+            if (!checkIn || !checkOut || new Date(checkOut) <= new Date(checkIn)) {
+                Swal.fire('Ngày không hợp lệ', 'Vui lòng chọn ngày nhận và trả phòng hợp lệ.', 'warning');
+                return;
+            }
+            if (!depositAmount || depositAmount <= 0) {
+                Swal.fire('Số tiền không hợp lệ', 'Số tiền đặt cọc chưa được tính toán.', 'warning');
+                return;
+            }
+
+            // Tính toán tổng giá
+            const timeDiff = new Date(checkOut).getTime() - new Date(checkIn).getTime();
+            const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            const totalPrice = nights * (selectedRoom.price || 0);
+            const expectedDeposit = totalPrice * 0.3;
+
+            // Kiểm tra số tiền đặt cọc có đúng 30% không
+            if (Math.abs(depositAmount - expectedDeposit) > 1000) { // Cho phép sai số 1000 VNĐ
+                Swal.fire('Số tiền đặt cọc không chính xác', `Số tiền đặt cọc phải là ${expectedDeposit.toLocaleString()} VNĐ (30% giá phòng).`, 'warning');
+                return;
+            }
+
+            const depositData = {
+                bookingType: 'deposit',
+                userId: user.uid,
+                email: user.email,
+                hotelId: hotelData.id,
+                hotelName: hotelData.tenKhachSan,
+                roomId: selectedRoom.name,
+                roomPrice: selectedRoom.price,
+                checkIn: checkIn,
+                checkOut: checkOut,
+                guests: guests,
+                depositAmount: depositAmount,
+                totalPrice: totalPrice,
+                remainingAmount: totalPrice - depositAmount,
+                note: note,
+                status: 'pending',
+                createdAt: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            const newDepositRef = firebase.database().ref('deposits').push();
+            newDepositRef.set(depositData)
+                .then(() => {
+                    const depositId = newDepositRef.key;
+                    // Chuyển hướng đến trang check-out với ID đặt cọc và chọn sẵn VNPAY
+                    window.location.href = `check-out.html?depositId=${depositId}&paymentMethod=vnpay`;
+                })
+                .catch((error) => {
+                    Swal.fire('Lỗi', `Đã có lỗi xảy ra khi tạo yêu cầu đặt cọc: ${error.message}`, 'error');
                 });
         }
 
