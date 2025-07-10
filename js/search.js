@@ -241,7 +241,7 @@ async function showSuggestions(value) {
 
     let suggestions = [
         ...citySuggestions.map(city => ({ type: 'Thành phố', value: city, url: `hotel.html?city=${encodeURIComponent(city)}` })),
-        ...hotelSuggestions.map(hotel => ({ type: 'Khách sạn', value: hotel, url: `hotel-detail.html?name=${encodeURIComponent(hotel)}` })),
+        // ...hotelSuggestions.map(hotel => ({ type: 'Khách sạn', value: hotel, url: `hotel-detail.html?name=${encodeURIComponent(hotel)}` })),
         ...(firebaseResults.hotels || []).slice(0, 5).map(hotel => ({
             type: 'Khách sạn',
             value: hotel.name,
