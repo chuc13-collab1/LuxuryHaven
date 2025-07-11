@@ -671,5 +671,27 @@
         s0.parentNode.insertBefore(s1,s0);
         })();
     </script>
+    <script>
+        // --- AUTH & UI SCRIPT (ĐỒNG BỘ VỚI hotel-detail.html) ---
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const forgotForm = document.getElementById('forgot-form');
+            const closeAuthModal = document.getElementById('close-auth-modal');
+            const openLoginModal = document.getElementById('open-login-modal');
+            const userDropdown = document.getElementById('user-dropdown');
+            const userName = document.getElementById('user-name');
+            const logoutBtn = document.getElementById('logout-btn');
+            if(loginForm){loginForm.addEventListener('submit',function(e){e.preventDefault();const t=document.getElementById("login-email").value,n=document.getElementById("login-password").value;firebase.auth().signInWithEmailAndPassword(t,n).then(e=>{const t=e.user;document.getElementById("auth-modal").style.display="none",Swal.fire({title:"Đăng nhập thành công!",icon:"success",confirmButtonColor:"#e67e22"})}).catch(e=>{Swal.fire({title:"Lỗi đăng nhập!",text:e.message,icon:"error",confirmButtonColor:"#e67e22"})})});}
+            if(registerForm){registerForm.addEventListener('submit',function(e){e.preventDefault();const t=document.getElementById("register-email").value,n=document.getElementById("register-password").value,o=document.getElementById("register-confirm-password").value,i=document.getElementById("register-username").value;if(n.length<6)return void Swal.fire({title:"Lỗi đăng ký!",text:"Mật khẩu phải có ít nhất 6 ký tự.",icon:"error",confirmButtonColor:"#e67e22"});if(n!==o)return void Swal.fire({title:"Lỗi đăng ký!",text:"Mật khẩu nhập lại không khớp.",icon:"error",confirmButtonColor:"#e67e22"});firebase.auth().createUserWithEmailAndPassword(t,n).then(e=>e.user.updateProfile({displayName:i})).then(()=>{document.getElementById("auth-modal").style.display="none",Swal.fire({title:"Đăng ký thành công!",icon:"success",confirmButtonColor:"#e67e22"})}).catch(e=>{Swal.fire({title:"Lỗi đăng ký!",text:e.message,icon:"error",confirmButtonColor:"#e67e22"})})});}
+            if(forgotForm){forgotForm.addEventListener('submit',function(e){e.preventDefault();const t=document.getElementById("forgot-email").value;firebase.auth().sendPasswordResetEmail(t).then(()=>{Swal.fire({title:"Email đã được gửi!",text:"Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.",icon:"success",confirmButtonColor:"#e67e22"})}).catch(e=>{Swal.fire({title:"Lỗi!",text:e.message,icon:"error",confirmButtonColor:"#e67e22"})})});}
+            document.getElementById("to-register").addEventListener("click",function(e){e.preventDefault(),loginForm.style.display="none",registerForm.style.display="block",forgotForm.style.display="none"}),document.getElementById("to-login").addEventListener("click",function(e){e.preventDefault(),loginForm.style.display="block",registerForm.style.display="none",forgotForm.style.display="none"}),document.getElementById("to-forgot").addEventListener("click",function(e){e.preventDefault(),loginForm.style.display="none",registerForm.style.display="none",forgotForm.style.display="block"}),document.getElementById("back-to-login").addEventListener("click",function(e){e.preventDefault(),loginForm.style.display="block",registerForm.style.display="none",forgotForm.style.display="none"});
+            if(closeAuthModal){closeAuthModal.addEventListener("click",()=>{document.getElementById("auth-modal").style.display="none"});}
+            if(openLoginModal){openLoginModal.addEventListener("click",e=>{e.preventDefault(),document.getElementById("auth-modal").style.display="block"});}
+            window.onclick=function(e){const t=document.getElementById("auth-modal");e.target==t&&(t.style.display="none")};
+            firebase.auth().onAuthStateChanged(function(user){const loginBtn=document.getElementById("open-login-modal");if(user){if(loginBtn)loginBtn.style.display="none";if(userDropdown)userDropdown.style.display="block";if(userName)userName.textContent=user.displayName||user.email}else{if(loginBtn)loginBtn.style.display="block";if(userDropdown)userDropdown.style.display="none"}});
+            if(logoutBtn){logoutBtn.addEventListener("click",function(e){e.preventDefault(),firebase.auth().signOut().then(()=>{Swal.fire({title:"Đăng xuất thành công!",icon:"success",confirmButtonColor:"#e67e22"})}).catch(e=>{Swal.fire({title:"Lỗi đăng xuất!",text:e.message,icon:"error",confirmButtonColor:"#e67e22"})})});}
+        });
+    </script>
 </body>
 </html> 

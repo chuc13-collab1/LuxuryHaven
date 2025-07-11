@@ -44,27 +44,61 @@ async function searchAll(query) {
 
     try {
         // Tìm trong khách sạn
-        const hotelsSnapshot = await get(ref(database, 'hotels'));
-        if (hotelsSnapshot.exists()) {
-            const hotels = hotelsSnapshot.val();
-            results.hotels = Object.entries(hotels).map(([id, hotel]) => ({ ...hotel, id }))
-                .filter(hotel =>
-                    searchCategories.hotels.some(field =>
-                        hotel[field] && hotel[field].toLowerCase().includes(query)
-                    )
-                );
+        // const hotelsSnapshot = await get(ref(database, 'hotels'));
+        // if (hotelsSnapshot.exists()) {
+        //     const hotels = hotelsSnapshot.val();
+        //     results.hotels = Object.entries(hotels).map(([id, hotel]) => ({ ...hotel, id }))
+        //         .filter(hotel =>
+        //             searchCategories.hotels.some(field =>
+        //                 hotel[field] && hotel[field].toLowerCase().includes(query)
+        //             )
+        //         );
+        // }
+        // Sửa lại để lấy từ location/cityKey/hotels/hotelKey
+        const locationsSnapshot = await get(ref(database, 'location'));
+        if (locationsSnapshot.exists()) {
+            const locations = locationsSnapshot.val();
+            let allHotels = [];
+            Object.entries(locations).forEach(([cityKey, cityData]) => {
+                if (cityData.hotels) {
+                    Object.entries(cityData.hotels).forEach(([hotelKey, hotel]) => {
+                        allHotels.push({ ...hotel, id: `${cityKey}_${hotelKey}` });
+                    });
+                }
+            });
+            results.hotels = allHotels.filter(hotel =>
+                searchCategories.hotels.some(field =>
+                    typeof hotel[field] === 'string' && hotel[field].toLowerCase().includes(query)
+                )
+            );
         }
 
         // Tìm trong tours
-        const toursSnapshot = await get(ref(database, 'tours'));
-        if (toursSnapshot.exists()) {
-            const tours = toursSnapshot.val();
-            results.tours = Object.entries(tours).map(([id, tour]) => ({ ...tour, id }))
-                .filter(tour =>
-                    searchCategories.tours.some(field =>
-                        tour[field] && tour[field].toLowerCase().includes(query)
-                    )
-                );
+        // const toursSnapshot = await get(ref(database, 'tours'));
+        // if (toursSnapshot.exists()) {
+        //     const tours = toursSnapshot.val();
+        //     results.tours = Object.entries(tours).map(([id, tour]) => ({ ...tour, id }))
+        //         .filter(tour =>
+        //             searchCategories.tours.some(field =>
+        //                 tour[field] && tour[field].toLowerCase().includes(query)
+        //             )
+        //         );
+        // }
+        // Sửa lại để lấy từ specialTours/categoryKey/tourKey
+        const specialToursSnapshot = await get(ref(database, 'specialTours'));
+        if (specialToursSnapshot.exists()) {
+            const specialTours = specialToursSnapshot.val();
+            let allTours = [];
+            Object.entries(specialTours).forEach(([categoryKey, toursObj]) => {
+                Object.entries(toursObj).forEach(([tourKey, tour]) => {
+                    allTours.push({ ...tour, id: tourKey, category: categoryKey });
+                });
+            });
+            results.tours = allTours.filter(tour =>
+                searchCategories.tours.some(field =>
+                    typeof tour[field] === 'string' && tour[field].toLowerCase().includes(query)
+                )
+            );
         }
 
         // Tìm trong điểm đến
@@ -74,7 +108,7 @@ async function searchAll(query) {
             results.destinations = Object.entries(destinations).map(([id, destination]) => ({ ...destination, id }))
                 .filter(destination =>
                     searchCategories.destinations.some(field =>
-                        destination[field] && destination[field].toLowerCase().includes(query)
+                        typeof destination[field] === 'string' && destination[field].toLowerCase().includes(query)
                     )
                 );
         }
@@ -281,7 +315,15 @@ async function showSuggestions(value) {
         ...citySuggestions.map(city => ({ type: 'Thành phố', value: city, url: `hotel.html?city=${encodeURIComponent(city)}` })),
 
         // Gợi ý từ danh sách tour tĩnh
-        ...tourStaticSuggestions.map(tour => ({ type: 'Tour', value: tour, url: `tour-list.html?name=${encodeURIComponent(tour)}` })),
+        // ...tourStaticSuggestions.map(tour => ({ type: 'Tour', value: tour, url: `tour-detail.html?id=${encodeURIComponent(tour)}&category=default` })),
+
+        // Gợi ý tour từ Firebase (kết quả tìm kiếm)
+        // Giới hạn 5 kết quả
+        ...(firebaseResults.tours || []).slice(0, 5).map(tour => ({
+            type: 'Tour',
+            value: tour.name,
+            url: `tour-detail.html?id=${tour.id}${tour.category ? `&category=${tour.category}` : ''}`
+        })),
 
         // Gợi ý địa chỉ (region) từ Firebase destinations
         ...regionSuggestions,
@@ -292,14 +334,6 @@ async function showSuggestions(value) {
             type: 'Khách sạn',
             value: hotel.name,
             url: `hotel-detail.html?id=${hotel.id}`
-        })),
-
-        // Gợi ý tour từ Firebase (kết quả tìm kiếm)
-        // Giới hạn 5 kết quả
-        ...(firebaseResults.tours || []).slice(0, 5).map(tour => ({
-            type: 'Tour',
-            value: tour.name,
-            url: `tour-list.html?id=${tour.id}`
         })),
 
         // Gợi ý điểm đến từ Firebase (kết quả tìm kiếm)
