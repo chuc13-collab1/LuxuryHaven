@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuxuryHavenTravel - Đặt Phòng Khách Sạn Trực Tuyến</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Trang cá nhân - Luxury Haven Travel</title>
+    <link rel="icon" type="image/x-icon" href="images/LuxuryHavenTravel.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Thêm SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
@@ -301,9 +301,11 @@
                                 <div class="card-body">
                                     <h4 class="card-title mb-4">Lịch sử đặt phòng khách sạn</h4>
                                     <div class="table-responsive">
+                                        <button id="delete-selected-hotel" class="btn btn-danger btn-sm my-2" style="display:none;">Xóa đã chọn</button>
                                         <table class="table align-middle">
                                             <thead>
                                                 <tr>
+                                                    <th><input type="checkbox" id="select-all-hotel"></th>
                                                     <th>Khách sạn</th>
                                                     <th>Thông tin phòng</th>
                                                     <th>Thời gian</th>
@@ -323,9 +325,11 @@
                                 <div class="card-body">
                                     <h4 class="card-title mb-4">Lịch sử đặt tour</h4>
                                     <div class="table-responsive">
+                                        <button id="delete-selected-tour" class="btn btn-danger btn-sm my-2" style="display:none;">Xóa đã chọn</button>
                                         <table class="table align-middle">
                                             <thead>
                                                 <tr>
+                                                    <th><input type="checkbox" id="select-all-tour"></th>
                                                     <th>Tên tour</th>
                                                     <th>Ngày khởi hành</th>
                                                     <th>Số người</th>
@@ -573,17 +577,29 @@
                 return;
             }
 
-            // Cập nhật UI đăng nhập
-            updateUserUI(user);
+            // Kiểm tra và refresh token nếu cần
+            user.getIdToken(true).then(() => {
+                console.log('User authenticated:', user.uid);
+                
+                // Cập nhật UI đăng nhập
+                updateUserUI(user);
 
-            // Lấy và hiển thị dữ liệu
-            loadUserData(user);
-            loadBookings(user);
-            loadFavorites(user);
-            loadReviews(user);
-            loadPayments(user);
-            loadNotifications(user);
-            updateUserBarcode(user); // Gọi updateUserBarcode khi user đăng nhập
+                // Lấy và hiển thị dữ liệu
+                loadUserData(user);
+                loadBookings(user);
+                loadFavorites(user);
+                loadReviews(user);
+                loadPayments(user);
+                loadNotifications(user);
+                updateUserBarcode(user); // Gọi updateUserBarcode khi user đăng nhập
+            }).catch(error => {
+                console.error('Authentication error:', error);
+                Swal.fire('Lỗi xác thực', 'Vui lòng đăng nhập lại.', 'error').then(() => {
+                    firebase.auth().signOut().then(() => {
+                        window.location.href = 'index.html';
+                    });
+                });
+            });
         });
 
         // Hàm cập nhật UI người dùng
@@ -698,7 +714,8 @@
         // Hàm lấy lịch sử đặt phòng
         function loadBookings(user) {
             const bookingsRef = firebase.database().ref('bookings');
-            bookingsRef.orderByChild('customerEmail').equalTo(user.email).on('value', (snapshot) => {
+            // Tìm kiếm theo userId thay vì customerEmail để đảm bảo quyền truy cập
+            bookingsRef.orderByChild('userId').equalTo(user.uid).on('value', (snapshot) => {
                 const hotelTable = document.getElementById('bookings-table-hotel');
                 const tourTable = document.getElementById('bookings-table-tour');
                 if (!hotelTable || !tourTable) return;
@@ -743,7 +760,29 @@
             // Xác định trạng thái đặt phòng
             let status = '';
             let statusClass = '';
-            if (checkInDate < today) {
+            let refundInfo = '';
+            
+            if (booking.status === 'cancelled') {
+                status = 'Đã hủy';
+                statusClass = 'secondary';
+                
+                // Thêm thông tin hoàn tiền nếu có
+                if (booking.refundStatus) {
+                    const refundAmount = booking.refundAmount || 0;
+                    const totalPrice = booking.totalPrice || booking.roomPrice || 0;
+                    const refundStatus = getRefundStatusText(booking.refundStatus);
+                    
+                    refundInfo = `
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-money-bill-wave me-1"></i>
+                                Hoàn tiền: ${refundAmount.toLocaleString()} VNĐ 
+                                <span class="badge bg-${getRefundStatusClass(booking.refundStatus)} ms-1">${refundStatus}</span>
+                            </small>
+                        </div>
+                    `;
+                }
+            } else if (checkInDate < today) {
                 status = 'Đã hoàn thành';
                 statusClass = 'success';
             } else if (checkInDate > today) {
@@ -754,38 +793,107 @@
                 statusClass = 'primary';
             }
 
-            row.innerHTML = `
-            <td>
-                <div class="fw-semibold">${booking.hotelName || booking.hotelId}</div>
-            </td>
-            <td>
-                <div class="mb-1">${booking.roomId}</div>
-            </td>
-            <td>
-                <div class="mb-1">Check-in: ${formatDate(booking.checkIn)}</div>
-                <div>Check-out: ${formatDate(booking.checkOut)}</div>
-                <small class="text-muted">Đặt ngày: ${formatDateTime(booking.createdAt)}</small>
-            </td>
-            <td>
-                <div class="mb-1">Khách: ${booking.guests} người</div>
-                <div class="mb-1">Tên: ${booking.customerName}</div>
-                <div>SĐT: ${booking.customerPhone}</div>
-            </td>
-            <td>
-                <span class="badge bg-${statusClass}">${status}</span>
-            </td>
-            <td>
+            let actionButtons = `
                 <button class="btn btn-sm btn-outline-primary" onclick="viewBookingDetails('${booking.id}')">
                     <i class="fas fa-info-circle me-1"></i> Chi tiết
                 </button>
                 <button class="btn btn-sm btn-outline-warning ms-1" onclick="editBooking('${booking.id}', 'hotel')">
                     <i class="fas fa-edit me-1"></i> Sửa
                 </button>
-                <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteBooking('${booking.id}')">
-                    <i class="fas fa-trash-alt me-1"></i> Xóa
+            `;
+            // Nút Hủy: chỉ hiển thị nếu chưa bị hủy và chưa hoàn thành
+            if (booking.status !== 'cancelled' && checkInDate > today) {
+                actionButtons += `
+                    <button class="btn btn-sm btn-outline-danger cancel-btn ms-1" onclick="cancelBooking('${booking.id}', 'hotel')">
+                        <i class="fas fa-times-circle me-1"></i> Hủy
+                    </button>
+                `;
+            }
+
+            row.innerHTML = `
+                <td><input type="checkbox" class="select-booking-hotel" value="${booking.id}"></td>
+                <td><div class="fw-semibold">${booking.hotelName || booking.hotelId}</div></td>
+                <td><div class="mb-1">${booking.roomId}</div></td>
+                <td><div class="mb-1">Check-in: ${formatDate(booking.checkIn)}</div><div>Check-out: ${formatDate(booking.checkOut)}</div><small class="text-muted">Đặt ngày: ${formatDateTime(booking.createdAt)}</small></td>
+                <td><div class="mb-1">Khách: ${booking.guests} người</div><div class="mb-1">Tên: ${booking.customerName}</div><div>SĐT: ${booking.customerPhone}</div></td>
+                <td>
+                    <span class="badge bg-${statusClass}">${status}</span>
+                    ${refundInfo}
+                </td>
+                <td>${actionButtons}</td>
+            `;
+            table.appendChild(row);
+        }
+
+        // Hàm thêm hàng đặt tour vào bảng
+        function addTourBookingRow(booking, table) {
+            const row = document.createElement('tr');
+            const departureDate = new Date(booking.checkIn);
+            const today = new Date();
+            let status = '';
+            let statusClass = '';
+            let refundInfo = '';
+            
+            if (booking.status === 'cancelled') {
+                status = 'Đã hủy';
+                statusClass = 'secondary';
+                
+                // Thêm thông tin hoàn tiền nếu có
+                if (booking.refundStatus) {
+                    const refundAmount = booking.refundAmount || 0;
+                    const totalPrice = booking.totalPrice || booking.tourPrice || 0;
+                    const refundStatus = getRefundStatusText(booking.refundStatus);
+                    
+                    refundInfo = `
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-money-bill-wave me-1"></i>
+                                Hoàn tiền: ${refundAmount.toLocaleString()} VNĐ 
+                                <span class="badge bg-${getRefundStatusClass(booking.refundStatus)} ms-1">${refundStatus}</span>
+                            </small>
+                        </div>
+                    `;
+                }
+            } else if (departureDate < today) {
+                status = 'Đã hoàn thành';
+                statusClass = 'success';
+            } else if (departureDate.toDateString() === today.toDateString()) {
+                status = 'Đang diễn ra';
+                statusClass = 'primary';
+            } else {
+                status = 'Sắp tới';
+                statusClass = 'warning';
+            }
+
+            let actionButtons = `
+                <button class="btn btn-sm btn-outline-primary" onclick="viewBookingDetails('${booking.id}')">
+                    <i class="fas fa-info-circle me-1"></i> Chi tiết
                 </button>
-            </td>
-        `;
+                <button class="btn btn-sm btn-outline-warning ms-1" onclick="editBooking('${booking.id}', 'tour')">
+                    <i class="fas fa-edit me-1"></i> Sửa
+                </button>
+            `;
+            // Nút Hủy: chỉ hiển thị nếu chưa bị hủy và chưa hoàn thành
+            if (booking.status !== 'cancelled' && departureDate > today) {
+                actionButtons += `
+                    <button class="btn btn-sm btn-outline-danger cancel-btn ms-1" onclick="cancelBooking('${booking.id}', 'tour')">
+                        <i class="fas fa-times-circle me-1"></i> Hủy
+                    </button>
+                `;
+            }
+
+            row.innerHTML = `
+                <td><input type="checkbox" class="select-booking-tour" value="${booking.id}"></td>
+                <td><div class="fw-semibold">${booking.tourName || booking.hotelName || 'N/A'}</div><small class="text-muted">${booking.tourLocation || ''}</small></td>
+                <td><div>${formatDate(booking.checkIn)}</div><small class="text-muted">Đặt ngày: ${formatDateTime(booking.createdAt)}</small></td>
+                <td>${booking.numberOfGuests || booking.guests || 1}</td>
+                <td>${booking.customerName || 'N/A'}</td>
+                <td>
+                    <span class="badge bg-${statusClass}">${status}</span>
+                    ${refundInfo}
+                </td>
+                <td>${actionButtons}</td>
+            `;
             table.appendChild(row);
         }
 
@@ -808,6 +916,27 @@
                 minute: '2-digit'
             };
             return new Date(timestamp).toLocaleDateString('vi-VN', options);
+        }
+
+        // Hàm helper cho trạng thái hoàn tiền
+        function getRefundStatusText(status) {
+            const statusMap = {
+                'pending': 'Chờ xử lý',
+                'processing': 'Đang xử lý',
+                'completed': 'Đã hoàn tiền',
+                'failed': 'Thất bại'
+            };
+            return statusMap[status] || 'Không xác định';
+        }
+
+        function getRefundStatusClass(status) {
+            const classMap = {
+                'pending': 'warning',
+                'processing': 'info',
+                'completed': 'success',
+                'failed': 'danger'
+            };
+            return classMap[status] || 'secondary';
         }
 
         // Hàm lấy danh sách yêu thích
@@ -1079,6 +1208,43 @@
                         </div>
                     `;
 
+                    // Thêm thông tin hủy đặt phòng và hoàn tiền nếu có
+                    if (booking.status === 'cancelled') {
+                        const cancelledDate = booking.cancelledAt ? new Date(booking.cancelledAt).toLocaleString('vi-VN') : 'Không xác định';
+                        const totalPrice = booking.totalPrice || booking.roomPrice || booking.tourPrice || 0;
+                        
+                        detailsHtml += `
+                            <div class="mb-3">
+                                <h5 class="mb-2 text-danger">Thông tin hủy đặt phòng</h5>
+                                <p class="mb-1"><strong>Trạng thái:</strong> <span class="badge bg-secondary">Đã hủy</span></p>
+                                <p class="mb-1"><strong>Ngày hủy:</strong> ${cancelledDate}</p>
+                                <p class="mb-1"><strong>Người hủy:</strong> ${booking.cancelledBy === 'customer' ? 'Khách hàng' : 'Hệ thống'}</p>
+                        `;
+                        
+                        // Thêm thông tin hoàn tiền nếu có
+                        if (booking.refundStatus) {
+                            const refundAmount = booking.refundAmount || 0;
+                            const refundPercentage = booking.refundPercentage || 0;
+                            const refundStatus = getRefundStatusText(booking.refundStatus);
+                            const refundStatusClass = getRefundStatusClass(booking.refundStatus);
+                            const completedDate = booking.refundCompletedAt ? new Date(booking.refundCompletedAt).toLocaleString('vi-VN') : 'Chưa hoàn tiền';
+                            
+                            detailsHtml += `
+                                <hr>
+                                <h5 class="mb-2 text-primary">Thông tin hoàn tiền</h5>
+                                <p class="mb-1"><strong>Tổng tiền:</strong> ${totalPrice.toLocaleString()} VNĐ</p>
+                                <p class="mb-1"><strong>Số tiền hoàn:</strong> ${refundAmount.toLocaleString()} VNĐ</p>
+                                <p class="mb-1"><strong>Phần trăm hoàn:</strong> ${refundPercentage}%</p>
+                                <p class="mb-1"><strong>Trạng thái hoàn tiền:</strong> <span class="badge bg-${refundStatusClass}">${refundStatus}</span></p>
+                                <p class="mb-1"><strong>Phương thức hoàn:</strong> ${booking.refundMethod || 'Chuyển khoản'}</p>
+                                <p class="mb-1"><strong>Ngày hoàn tiền:</strong> ${completedDate}</p>
+                                <p class="mb-1"><strong>Ghi chú:</strong> ${booking.refundNote || 'Không có'}</p>
+                            `;
+                        }
+                        
+                        detailsHtml += `</div>`;
+                    }
+
                     Swal.fire({
                         title: title,
                         html: `<div class="text-start">${detailsHtml}</div>`,
@@ -1107,53 +1273,6 @@
                 });
             });
         });
-
-        function addTourBookingRow(booking, table) {
-            const row = document.createElement('tr');
-            const departureDate = new Date(booking.checkIn);
-            const today = new Date();
-            let status = '';
-            let statusClass = '';
-
-            if (departureDate < today) {
-                status = 'Đã hoàn thành';
-                statusClass = 'success';
-            } else if (departureDate.toDateString() === today.toDateString()) {
-                status = 'Đang diễn ra';
-                statusClass = 'primary';
-            } else {
-                status = 'Sắp tới';
-                statusClass = 'warning';
-            }
-
-            row.innerHTML = `
-                <td>
-                    <div class="fw-semibold">${booking.tourName || booking.hotelName || 'N/A'}</div>
-                    <small class="text-muted">${booking.tourLocation || ''}</small>
-                </td>
-                <td>
-                    <div>${formatDate(booking.checkIn)}</div>
-                    <small class="text-muted">Đặt ngày: ${formatDateTime(booking.createdAt)}</small>
-                </td>
-                <td>${booking.numberOfGuests || booking.guests || 1}</td>
-                <td>${booking.customerName || 'N/A'}</td>
-                <td>
-                    <span class="badge bg-${statusClass}">${status}</span>
-                </td>
-                <td>
-                    <button class="btn btn-sm btn-outline-primary" onclick="viewBookingDetails('${booking.id}')">
-                        <i class="fas fa-info-circle me-1"></i> Chi tiết
-                    </button>
-                    <button class="btn btn-sm btn-outline-warning ms-1" onclick="editBooking('${booking.id}', 'tour')">
-                        <i class="fas fa-edit me-1"></i> Sửa
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteBooking('${booking.id}')">
-                        <i class="fas fa-trash-alt me-1"></i> Xóa
-                    </button>
-                </td>
-            `;
-            table.appendChild(row);
-        }
 
         function viewTourBookingDetails(bookingId) {
             // This function is now merged into viewBookingDetails
@@ -1399,20 +1518,249 @@
             });
         }
 
-        function deleteBooking(bookingId) {
-            Swal.fire({
-                title: 'Xóa đặt phòng?',
-                text: 'Bạn chắc chắn muốn xóa lịch sử này? Hành động này không thể hoàn tác!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Xóa',
-                cancelButtonText: 'Hủy'
-            }).then(result => {
-                if (result.isConfirmed) {
-                    firebase.database().ref('bookings/' + bookingId).remove().then(() => {
-                        Swal.fire('Đã xóa!', 'Lịch sử đã được xóa.', 'success');
-                    });
+        function cancelBooking(bookingId, type) {
+            // Kiểm tra xác thực trước
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                Swal.fire('Lỗi!', 'Vui lòng đăng nhập để thực hiện thao tác này.', 'error');
+                return;
+            }
+
+            console.log('User UID:', user.uid);
+            console.log('Booking ID:', bookingId);
+
+            const bookingRef = firebase.database().ref('bookings/' + bookingId);
+            bookingRef.once('value').then((snapshot) => {
+                const booking = snapshot.val();
+                if (!booking) {
+                    Swal.fire('Lỗi!', 'Không tìm thấy thông tin đặt phòng.', 'error');
+                    return;
                 }
+
+                console.log('Booking data:', booking);
+                console.log('Booking userId:', booking.userId);
+                console.log('Current user UID:', user.uid);
+                console.log('Booking status:', booking.status || 'undefined');
+                console.log('Booking has status field:', booking.hasOwnProperty('status'));
+
+                // Kiểm tra xem booking có thuộc về người dùng hiện tại không
+                if (booking.userId !== user.uid) {
+                    Swal.fire('Lỗi!', 'Bạn không có quyền hủy đặt phòng này.', 'error');
+                    return;
+                }
+
+                // Kiểm tra xem booking đã bị hủy chưa
+                if (booking.status === 'cancelled') {
+                    Swal.fire('Đã hủy!', 'Đặt phòng này đã được hủy trước đó.', 'info');
+                    return;
+                }
+
+                // Nếu booking không có trạng thái, đặt mặc định là 'pending'
+                if (!booking.status) {
+                    console.log('Booking không có trạng thái, đặt mặc định là pending');
+                }
+
+                const checkInDate = new Date(booking.checkIn);
+                const today = new Date();
+                const timeDiff = checkInDate.getTime() - today.getTime();
+                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+                // Kiểm tra xem có thể hủy không
+                if (checkInDate < today) {
+                    Swal.fire('Không thể hủy!', 'Đặt phòng đã hoàn thành, không thể hủy.', 'warning');
+                    return;
+                }
+
+                // Tính toán thông tin hoàn tiền
+                const totalPrice = booking.totalPrice || booking.roomPrice || 0;
+                let cancelMessage = '';
+                let refundInfo = '';
+                let refundPercentage = 100;
+                let refundAmount = totalPrice;
+
+                if (type === 'hotel') {
+                    if (daysDiff <= 1) {
+                        cancelMessage = 'Hủy trong vòng 24h trước check-in: Phí hủy 50% giá phòng';
+                        refundInfo = 'Bạn sẽ được hoàn lại 50% số tiền đã thanh toán.';
+                        refundPercentage = 50;
+                    } else if (daysDiff <= 3) {
+                        cancelMessage = 'Hủy trong vòng 3 ngày trước check-in: Phí hủy 30% giá phòng';
+                        refundInfo = 'Bạn sẽ được hoàn lại 70% số tiền đã thanh toán.';
+                        refundPercentage = 70;
+                    } else {
+                        cancelMessage = 'Hủy trước 3 ngày: Hoàn tiền 100%';
+                        refundInfo = 'Bạn sẽ được hoàn lại toàn bộ số tiền đã thanh toán.';
+                        refundPercentage = 100;
+                    }
+                } else {
+                    if (daysDiff <= 1) {
+                        cancelMessage = 'Hủy trong vòng 24h trước khởi hành: Phí hủy 50% giá tour';
+                        refundInfo = 'Bạn sẽ được hoàn lại 50% số tiền đã thanh toán.';
+                        refundPercentage = 50;
+                    } else if (daysDiff <= 7) {
+                        cancelMessage = 'Hủy trong vòng 7 ngày trước khởi hành: Phí hủy 30% giá tour';
+                        refundInfo = 'Bạn sẽ được hoàn lại 70% số tiền đã thanh toán.';
+                        refundPercentage = 70;
+                    } else {
+                        cancelMessage = 'Hủy trước 7 ngày: Hoàn tiền 100%';
+                        refundInfo = 'Bạn sẽ được hoàn lại toàn bộ số tiền đã thanh toán.';
+                        refundPercentage = 100;
+                    }
+                }
+
+                // Tính số tiền hoàn lại
+                refundAmount = Math.round(totalPrice * refundPercentage / 100);
+
+                Swal.fire({
+                    title: 'Xác nhận hủy đặt phòng',
+                    html: `
+                        <div class="text-start">
+                            <p><strong>Thông tin đặt phòng:</strong></p>
+                            <p>• ${type === 'hotel' ? 'Khách sạn' : 'Tour'}: ${booking.hotelName || booking.tourName || 'N/A'}</p>
+                            <p>• Ngày ${type === 'hotel' ? 'check-in' : 'khởi hành'}: ${formatDate(booking.checkIn)}</p>
+                            <p>• Còn lại: ${daysDiff} ngày</p>
+                            <p>• Tổng tiền: ${totalPrice.toLocaleString()} VNĐ</p>
+                            <hr>
+                            <p><strong>Chính sách hủy:</strong></p>
+                            <p>${cancelMessage}</p>
+                            <p><strong>${refundInfo}</strong></p>
+                            <p><strong>Số tiền hoàn lại: ${refundAmount.toLocaleString()} VNĐ</strong></p>
+                        </div>
+                    `,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác nhận hủy',
+                    cancelButtonText: 'Không hủy',
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        // Cập nhật trạng thái đặt phòng thành "Đã hủy" và thông tin hoàn tiền
+                        const updateData = {
+                            status: 'cancelled',
+                            cancelledAt: Date.now(),
+                            cancelledBy: 'customer',
+                            updatedAt: Date.now(),
+                            refundAmount: refundAmount,
+                            refundPercentage: refundPercentage,
+                            refundStatus: 'pending', // pending, processing, completed, failed
+                            refundMethod: 'bank_transfer', // bank_transfer, vnpay_refund, etc.
+                            refundNote: refundInfo
+                        };
+                        
+                        // Trừ điểm thành viên nếu đã được cộng điểm khi thanh toán
+                        const userRef = firebase.database().ref('users/' + user.uid);
+                        userRef.once('value').then((userSnapshot) => {
+                            const userData = userSnapshot.val();
+                            const currentPoints = userData.loyaltyPoints || 0;
+                            
+                            // Tính điểm cần trừ (dựa trên tổng tiền booking)
+                            const pointsToDeduct = Math.floor(totalPrice / 1000); // 1 điểm cho mỗi 1000 VNĐ
+                            const newPoints = Math.max(0, currentPoints - pointsToDeduct);
+                            
+                            // Cập nhật điểm thành viên
+                            userRef.update({
+                                loyaltyPoints: newPoints
+                            }).then(() => {
+                                // Sau đó cập nhật trạng thái booking
+                                return bookingRef.update(updateData);
+                            }).then(() => {
+                                Swal.fire({
+                                    title: 'Đã hủy thành công!',
+                                    html: `
+                                        <div class="text-start">
+                                            <p>Đặt phòng đã được hủy thành công.</p>
+                                            <p><strong>Thông tin hoàn tiền:</strong></p>
+                                            <p>${refundInfo}</p>
+                                            <p><strong>Số tiền hoàn lại: ${refundAmount.toLocaleString()} VNĐ</strong></p>
+                                            <p><small>Chúng tôi sẽ xử lý hoàn tiền trong vòng 3-5 ngày làm việc.</small></p>
+                                            <p><small>Trạng thái: Đang chờ xử lý</small></p>
+                                            <hr>
+                                            <p><strong>Điểm thành viên:</strong></p>
+                                            <p>• Điểm đã trừ: ${pointsToDeduct} điểm</p>
+                                            <p>• Điểm hiện tại: ${newPoints} điểm</p>
+                                        </div>
+                                    `,
+                                    icon: 'success',
+                                    confirmButtonText: 'Đóng'
+                                });
+                                
+                                // Cập nhật hiển thị điểm thành viên trên giao diện
+                                updateLoyaltyDisplay(newPoints);
+                            });
+                        }).catch(error => {
+                            console.error('Lỗi khi hủy đặt phòng:', error);
+                            let errorMessage = 'Không thể hủy đặt phòng. Vui lòng thử lại sau.';
+                            
+                            if (error.code === 'PERMISSION_DENIED') {
+                                errorMessage = 'Bạn không có quyền thực hiện thao tác này. Vui lòng đăng nhập lại.';
+                            } else if (error.message) {
+                                errorMessage = `Lỗi: ${error.message}`;
+                            }
+                            
+                            Swal.fire('Lỗi!', errorMessage, 'error');
+                        });
+                    }
+                });
+            });
+        }
+
+        // Hàm cập nhật hiển thị điểm thành viên
+        function updateLoyaltyDisplay(newPoints) {
+            // Cập nhật điểm trong sidebar
+            const sidebarPoints = document.getElementById('sidebar-loyaltyPoints');
+            if (sidebarPoints) {
+                sidebarPoints.textContent = `Điểm: ${newPoints}`;
+            }
+            
+            // Cập nhật điểm trong tab loyalty
+            const profilePoints = document.getElementById('profile-loyaltyPoints');
+            if (profilePoints) {
+                profilePoints.textContent = newPoints;
+            }
+        }
+
+        function deleteBooking(bookingId) {
+            // Kiểm tra xác thực trước
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                Swal.fire('Lỗi!', 'Vui lòng đăng nhập để thực hiện thao tác này.', 'error');
+                return;
+            }
+
+            // Kiểm tra quyền sở hữu trước khi xóa
+            firebase.database().ref('bookings/' + bookingId).once('value').then((snapshot) => {
+                const booking = snapshot.val();
+                if (!booking) {
+                    Swal.fire('Lỗi!', 'Không tìm thấy thông tin đặt phòng.', 'error');
+                    return;
+                }
+
+                if (booking.userId !== user.uid) {
+                    Swal.fire('Lỗi!', 'Bạn không có quyền xóa đặt phòng này.', 'error');
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Xóa đặt phòng?',
+                    text: 'Bạn chắc chắn muốn xóa lịch sử này? Hành động này không thể hoàn tác!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        firebase.database().ref('bookings/' + bookingId).remove().then(() => {
+                            Swal.fire('Đã xóa!', 'Lịch sử đã được xóa.', 'success');
+                        }).catch(error => {
+                            console.error('Lỗi khi xóa đặt phòng:', error);
+                            Swal.fire('Lỗi!', 'Không thể xóa đặt phòng. Vui lòng thử lại sau.', 'error');
+                        });
+                    }
+                });
+            }).catch(error => {
+                console.error('Lỗi khi kiểm tra quyền:', error);
+                Swal.fire('Lỗi!', 'Không thể kiểm tra quyền. Vui lòng thử lại sau.', 'error');
             });
         }
 
@@ -1651,6 +1999,78 @@ End of Tawk.to Script -->
           });
         });
         </script>
+
+    <script>
+        // Thêm script xử lý chọn/xóa nhiều booking
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hotel
+            const hotelTable = document.getElementById('bookings-table-hotel');
+            const selectAllHotel = document.getElementById('select-all-hotel');
+            const deleteSelectedHotel = document.getElementById('delete-selected-hotel');
+            hotelTable && hotelTable.addEventListener('change', function() {
+                const checked = document.querySelectorAll('.select-booking-hotel:checked');
+                if (deleteSelectedHotel) deleteSelectedHotel.style.display = checked.length > 0 ? 'inline-block' : 'none';
+            });
+            selectAllHotel && selectAllHotel.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.select-booking-hotel');
+                checkboxes.forEach(cb => cb.checked = selectAllHotel.checked);
+                const checked = document.querySelectorAll('.select-booking-hotel:checked');
+                if (deleteSelectedHotel) deleteSelectedHotel.style.display = checked.length > 0 ? 'inline-block' : 'none';
+            });
+            deleteSelectedHotel && deleteSelectedHotel.addEventListener('click', function() {
+                const checked = document.querySelectorAll('.select-booking-hotel:checked');
+                if (checked.length === 0) return;
+                Swal.fire({
+                    title: 'Xóa các đặt phòng đã chọn?',
+                    text: `Bạn chắc chắn muốn xóa ${checked.length} đặt phòng đã chọn?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        checked.forEach(cb => {
+                            firebase.database().ref('bookings/' + cb.value).remove();
+                        });
+                        Swal.fire('Đã xóa!', 'Các đặt phòng đã được xóa.', 'success');
+                    }
+                });
+            });
+            // Tour
+            const tourTable = document.getElementById('bookings-table-tour');
+            const selectAllTour = document.getElementById('select-all-tour');
+            const deleteSelectedTour = document.getElementById('delete-selected-tour');
+            tourTable && tourTable.addEventListener('change', function() {
+                const checked = document.querySelectorAll('.select-booking-tour:checked');
+                if (deleteSelectedTour) deleteSelectedTour.style.display = checked.length > 0 ? 'inline-block' : 'none';
+            });
+            selectAllTour && selectAllTour.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.select-booking-tour');
+                checkboxes.forEach(cb => cb.checked = selectAllTour.checked);
+                const checked = document.querySelectorAll('.select-booking-tour:checked');
+                if (deleteSelectedTour) deleteSelectedTour.style.display = checked.length > 0 ? 'inline-block' : 'none';
+            });
+            deleteSelectedTour && deleteSelectedTour.addEventListener('click', function() {
+                const checked = document.querySelectorAll('.select-booking-tour:checked');
+                if (checked.length === 0) return;
+                Swal.fire({
+                    title: 'Xóa các đặt tour đã chọn?',
+                    text: `Bạn chắc chắn muốn xóa ${checked.length} đặt tour đã chọn?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        checked.forEach(cb => {
+                            firebase.database().ref('bookings/' + cb.value).remove();
+                        });
+                        Swal.fire('Đã xóa!', 'Các đặt tour đã được xóa.', 'success');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

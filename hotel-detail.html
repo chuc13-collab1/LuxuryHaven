@@ -757,15 +757,48 @@
                 checkIn: checkIn,
                 checkOut: checkOut,
                 guests: guests,
-                createdAt: firebase.database.ServerValue.TIMESTAMP
+                createdAt: Date.now()
             };
-
+            console.log('Booking gửi lên:', bookingData);
             const newBookingRef = firebase.database().ref('bookings').push();
             newBookingRef.set(bookingData)
                 .then(() => {
                     const bookingId = newBookingRef.key;
-                    // Chuyển hướng đến trang check-out với ID đơn hàng và chọn sẵn VNPAY
-                    window.location.href = `check-out.html?bookingId=${bookingId}&paymentMethod=vnpay`;
+                    // CẬP NHẬT SỐ PHÒNG TRỐNG VÀ CHỜ XONG MỚI CHUYỂN TRANG
+                    updateAvailableRoomsAfterBooking().then(() => {
+                        // --- CẬP NHẬT SỐ PHÒNG TRỐNG TRÊN GIAO DIỆN ---
+                        const roomCards = document.querySelectorAll('.room-card');
+                        roomCards.forEach((card, idx) => {
+                            if (hotelData.chiTiet.rooms[idx].name === selectedRoom.name) {
+                                // Tìm span hiển thị số phòng trống
+                                const detailsGrid = card.querySelector('.room-details-grid');
+                                if (detailsGrid) {
+                                    const spans = detailsGrid.querySelectorAll('span');
+                                    spans.forEach(span => {
+                                        if (span.innerText.includes('phòng trống')) {
+                                            let text = span.textContent;
+                                            let match = text.match(/(\d+)/);
+                                            if (match) {
+                                                let current = parseInt(match[1]);
+                                                let newVal = Math.max(0, current - 1);
+                                                span.innerHTML = `<i class="fas fa-users me-1"></i> ${newVal} phòng trống`;
+                                                // Cập nhật biến dữ liệu
+                                                hotelData.chiTiet.rooms[idx].availableRooms = newVal;
+                                                // Nếu về 0 thì disable chọn phòng này
+                                                const radio = card.querySelector('input[type="radio"]');
+                                                if (newVal <= 0 && radio) {
+                                                    radio.disabled = true;
+                                                    card.classList.add('disabled');
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                        // --- END cập nhật giao diện ---
+                        window.location.href = `check-out.html?bookingId=${bookingId}&paymentMethod=vnpay`;
+                    });
                 })
                 .catch((error) => {
                     Swal.fire('Lỗi', `Đã có lỗi xảy ra khi tạo đơn đặt phòng: ${error.message}`, 'error');
@@ -1040,6 +1073,56 @@
                 });
         }
 
+    </script>
+    <script>
+        function updateAvailableRoomsAfterBooking() {
+            return new Promise((resolve) => {
+                if (!hotelData || !selectedRoom) return resolve();
+                const cityKey = hotelData.id.split('_')[0];
+                const hotelKey = hotelData.id.split('_')[1];
+                const roomsRef = firebase.database().ref(`location/${cityKey}/hotels/${hotelKey}/chiTiet/rooms`);
+                roomsRef.once('value').then(snapshot => {
+                    const rooms = snapshot.val();
+                    let roomIdx = -1;
+                    let isArray = false;
+                    if (Array.isArray(rooms)) {
+                        isArray = true;
+                        roomIdx = rooms.findIndex(r => r && r.name === selectedRoom.name);
+                    } else if (typeof rooms === 'object' && rooms !== null) {
+                        roomIdx = Object.keys(rooms).find(key => rooms[key] && rooms[key].name === selectedRoom.name);
+                    }
+                    console.log('DEBUG (Firebase) roomIdx:', roomIdx, 'selectedRoom.name:', selectedRoom.name, 'isArray:', isArray);
+                    if (roomIdx === -1 || roomIdx === undefined) {
+                        console.error('Không tìm thấy loại phòng trên Firebase!');
+                        return resolve();
+                    }
+                    let path;
+                    if (isArray) {
+                        path = `location/${cityKey}/hotels/${hotelKey}/chiTiet/rooms/${roomIdx}/availableRooms`;
+                    } else {
+                        path = `location/${cityKey}/hotels/${hotelKey}/chiTiet/rooms/${roomIdx}/availableRooms`;
+                    }
+                    console.log('Đường dẫn cập nhật:', path);
+
+                    const roomRef = firebase.database().ref(path);
+                    roomRef.transaction(current => {
+                        console.log('Giá trị hiện tại:', current);
+                        if (typeof current !== 'number') return 0;
+                        if (current > 0) return current - 1;
+                        return 0;
+                    }, (error, committed, snapshot) => {
+                        if (error) {
+                            console.error('Lỗi transaction:', error);
+                        } else if (!committed) {
+                            console.warn('Transaction không được commit!');
+                        } else {
+                            console.log('Transaction thành công! Giá trị mới:', snapshot.val());
+                        }
+                        resolve();
+                    });
+                });
+            });
+        }
     </script>
 </body>
 

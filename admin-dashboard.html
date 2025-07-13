@@ -53,6 +53,9 @@
             <a href="#tours" class="nav-item">
                     <i class="fas fa-map-marked-alt"></i> <span>Tours</span>
             </a>
+            <a href="#refunds" class="nav-item">
+                    <i class="fas fa-money-bill-wave"></i> <span>Quản lý hoàn tiền</span>
+            </a>
             <a href="#deals" class="nav-item">
                     <i class="fas fa-tags"></i> <span>Ưu đãi</span>
                 </a>
@@ -124,6 +127,84 @@
         <main class="content-wrapper">
             <!-- Dashboard Section -->
             <div id="dashboard" class="content-section">
+            <!-- Thêm vào sau header, trước phần thống kê cards -->
+            <div class="row mb-4">
+              <div class="col-md-3">
+                <label for="stat-month" class="form-label">Chọn tháng</label>
+                <select id="stat-month" class="form-select">
+                  <option value="1">Tháng 1</option>
+                  <option value="2">Tháng 2</option>
+                  <option value="3">Tháng 3</option>
+                  <option value="4">Tháng 4</option>
+                  <option value="5">Tháng 5</option>
+                  <option value="6">Tháng 6</option>
+                  <option value="7">Tháng 7</option>
+                  <option value="8">Tháng 8</option>
+                  <option value="9">Tháng 9</option>
+                  <option value="10">Tháng 10</option>
+                  <option value="11">Tháng 11</option>
+                  <option value="12">Tháng 12</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="stat-year" class="form-label">Chọn năm</label>
+                <input type="number" id="stat-year" class="form-control" min="2020" max="2100" value="2025">
+              </div>
+              <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-success w-100" id="export-excel-btn"><i class="fas fa-file-excel"></i> Xuất Excel</button>
+              </div>
+            </div>
+            <div class="dashboard-greeting mb-4">
+              <h2 style="font-weight:700; font-size:2rem; margin-bottom:0.2em;">Xin chào, <span id="admin-greeting-name">Admin</span>!</h2>
+              <div style="color:#1976d2; font-size:1.1rem; font-weight:500;">Chúc bạn một ngày làm việc hiệu quả và doanh thu bứt phá 🚀</div>
+            </div>
+            <div class="stats-summary-cards">
+              <div class="stats-summary-card">
+                <div class="stats-summary-icon" style="background:linear-gradient(135deg,#1976d2 0%,#64b5f6 100%)"><i class="fas fa-user-plus"></i></div>
+                <div>
+                  <div class="stats-summary-label">Khách mới <i class="fas fa-info-circle text-info ms-1" data-bs-toggle="tooltip" title="Số người dùng mới đăng ký trong tháng này."></i></div>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="stats-summary-value" id="stat-new-users">0</div>
+                    <span id="stat-new-users-change" class="stats-summary-change"></span>
+                  </div>
+                  <div class="stats-summary-sub">trong tháng <span id="stat-month-label"></span>/<span id="stat-year-label"></span></div>
+                </div>
+              </div>
+              <div class="stats-summary-card">
+                <div class="stats-summary-icon" style="background:linear-gradient(135deg,#ff9800 0%,#ffc107 100%)"><i class="fas fa-bed"></i></div>
+                <div>
+                  <div class="stats-summary-label">Phòng có người <i class="fas fa-info-circle text-info ms-1" data-bs-toggle="tooltip" title="Số phòng đã có booking xác nhận hoặc hoàn thành trong tháng này."></i></div>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="stats-summary-value" id="stat-rooms-booked">0</div>
+                    <span id="stat-rooms-booked-change" class="stats-summary-change"></span>
+                  </div>
+                  <div class="stats-summary-sub">đã đặt trong tháng</div>
+                </div>
+              </div>
+              <div class="stats-summary-card">
+                <div class="stats-summary-icon" style="background:linear-gradient(135deg,#e91e63 0%,#f48fb1 100%)"><i class="fas fa-venus-mars"></i></div>
+                <div>
+                  <div class="stats-summary-label">Giới tính <i class="fas fa-info-circle text-info ms-1" data-bs-toggle="tooltip" title="Tổng số khách có booking trong tháng này, phân theo Nam/Nữ/Khác."></i></div>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="stats-summary-value" id="stat-gender">0/0/0</div>
+                    <span id="stat-gender-male-change" class="stats-summary-change"></span>
+                  </div>
+                  <div class="stats-summary-sub">Nam / Nữ / Khác</div>
+                </div>
+              </div>
+              <div class="stats-summary-card revenue">
+                <div class="stats-summary-icon"><i class="fas fa-coins"></i></div>
+                <div>
+                  <div class="stats-summary-label">Doanh thu <i class="fas fa-info-circle text-info ms-1" data-bs-toggle="tooltip" title="Tổng doanh thu từ các booking đã xác nhận/hoàn thành trong tháng này."></i></div>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="stats-summary-value" id="stat-revenue">0</div>
+                    <span id="stat-revenue-change" class="stats-summary-change"></span>
+                  </div>
+                  <div class="stats-summary-sub">VNĐ trong tháng</div>
+                  <canvas id="mini-revenue-chart" height="36" style="margin-top:8px;max-width:180px;"></canvas>
+                </div>
+              </div>
+            </div>
             <!-- Statistics Cards -->
             <div class="row">
                 <div class="col-md-3">
@@ -360,6 +441,39 @@
             </div>
         </div>
 
+        <!-- Refunds Management Section -->
+        <div id="refunds" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Quản lý hoàn tiền</h5>
+                    <button class="btn btn-success btn-sm" onclick="loadRefunds()">
+                        <i class="fas fa-sync-alt"></i> Làm mới
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Khách hàng</th>
+                                    <th>Email</th>
+                                    <th>Dịch vụ</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Số tiền hoàn</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="refundsTable">
+                                <!-- Dữ liệu sẽ được render bằng JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Deals Management Section -->
         <div id="deals" class="content-section" style="display: none;">
             <div class="card">
@@ -458,6 +572,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <script>
         // Firebase config
@@ -481,6 +596,7 @@
         let revenueChartInstance, bookingTypeChartInstance, newUsersChartInstance, locationChartInstance;
         // Biến lưu trữ dữ liệu gốc
         let allBookings = [], allUsers = [], allHotels = [], allTours = [], allDeals = [], allTravelGuides = [];
+        let miniRevenueChartInstance;
 
         // Kiểm tra đăng nhập và quyền admin/nhân viên
         function checkAuth() {
@@ -571,11 +687,15 @@
                 document.getElementById('activeDeals').textContent = snapshot.numChildren();
             });
 
-            // Load chart data
-            loadRevenueChart();
-            loadBookingTypeChart();
-            loadNewUsersChart();
-            loadLocationChart();
+            // Load chart data với delay để tránh conflict
+            try {
+                setTimeout(() => loadRevenueChart(), 100);
+                setTimeout(() => loadBookingTypeChart(), 200);
+                setTimeout(() => loadNewUsersChart(), 300);
+                setTimeout(() => loadLocationChart(), 400);
+            } catch (error) {
+                console.error('Lỗi khi load charts:', error);
+            }
         }
 
         // Load bookings data
@@ -1246,236 +1366,325 @@
 
         // Revenue Chart
         function loadRevenueChart() {
-            if (revenueChartInstance) {
-                revenueChartInstance.destroy();
-            }
-            const ctx = document.getElementById('revenueChart').getContext('2d');
-
-            db.ref('bookings').once('value').then(snapshot => {
-                const monthlyRevenue = Array(12).fill(0);
-                const monthLabels = [];
-                const now = new Date();
-
-                for (let i = 11; i >= 0; i--) {
-                    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-                    monthLabels.push(`T${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`);
+            try {
+                // Destroy chart cũ nếu tồn tại
+                if (revenueChartInstance) {
+                    revenueChartInstance.destroy();
+                    revenueChartInstance = null;
                 }
 
-                if (snapshot.exists()) {
-                    snapshot.forEach(bookingSnapshot => {
-                        const booking = bookingSnapshot.val();
-                        // Sửa logic: Tính doanh thu cho cả đơn "confirmed" và "completed"
-                        if ((booking.status === 'completed' || booking.status === 'confirmed') && typeof booking.totalPrice === 'number' && booking.createdAt) {
-                            const date = new Date(booking.createdAt);
-                            const monthDiff = (now.getFullYear() - date.getFullYear()) * 12 + (now.getMonth() - date.getMonth());
-                            if (monthDiff >= 0 && monthDiff < 12) {
-                                monthlyRevenue[11 - monthDiff] += booking.totalPrice;
+                const canvas = document.getElementById('revenueChart');
+                if (!canvas) {
+                    console.warn('Canvas revenueChart không tồn tại');
+                    return;
+                }
+
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.warn('Không thể lấy context từ canvas revenueChart');
+                    return;
+                }
+
+                db.ref('bookings').once('value').then(snapshot => {
+                    const monthlyRevenue = Array(12).fill(0);
+                    const monthLabels = [];
+                    const now = new Date();
+
+                    for (let i = 11; i >= 0; i--) {
+                        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                        monthLabels.push(`T${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`);
+                    }
+
+                    if (snapshot.exists()) {
+                        snapshot.forEach(bookingSnapshot => {
+                            const booking = bookingSnapshot.val();
+                            // Sửa logic: Tính doanh thu cho cả đơn "confirmed" và "completed"
+                            if ((booking.status === 'completed' || booking.status === 'confirmed') && typeof booking.totalPrice === 'number' && booking.createdAt) {
+                                const date = new Date(booking.createdAt);
+                                const monthDiff = (now.getFullYear() - date.getFullYear()) * 12 + (now.getMonth() - date.getMonth());
+                                if (monthDiff >= 0 && monthDiff < 12) {
+                                    monthlyRevenue[11 - monthDiff] += booking.totalPrice;
+                                }
                             }
-                        }
-                    });
-                }
-                const revenueInMillions = monthlyRevenue.map(r => (r / 1000000).toFixed(2));
+                        });
+                    }
+                    const revenueInMillions = monthlyRevenue.map(r => (r / 1000000).toFixed(2));
 
-            revenueChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                        labels: monthLabels,
-                    datasets: [{
-                        label: 'Doanh thu (triệu VNĐ)',
-                            data: revenueInMillions,
-                        borderColor: '#1a237e',
-                        backgroundColor: 'rgba(26, 35, 126, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                                text: 'Doanh thu theo tháng (12 tháng gần nhất)'
-                        }
-                    },
-                    scales: {
-                        y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: function (value) {
-                                        return value + 'tr';
+                    // Kiểm tra lại canvas trước khi tạo chart mới
+                    if (canvas && !revenueChartInstance) {
+                        revenueChartInstance = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: monthLabels,
+                                datasets: [{
+                                    label: 'Doanh thu (triệu VNĐ)',
+                                    data: revenueInMillions,
+                                    borderColor: '#1a237e',
+                                    backgroundColor: 'rgba(26, 35, 126, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Doanh thu theo tháng (12 tháng gần nhất)'
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            callback: function (value) {
+                                                return value + 'tr';
+                                            }
+                                        }
                                     }
                                 }
                             }
-                        }
+                        });
                     }
+                }).catch(error => {
+                    console.error('Lỗi khi load revenue chart:', error);
                 });
-            });
+            } catch (error) {
+                console.error('Lỗi trong loadRevenueChart:', error);
+            }
         }
 
         // Booking Type Chart
         function loadBookingTypeChart() {
-            if (bookingTypeChartInstance) {
-                bookingTypeChartInstance.destroy();
-            }
-            const ctx = document.getElementById('bookingTypeChart').getContext('2d');
-
-            db.ref('bookings').once('value').then(snapshot => {
-                let hotelCount = 0;
-                let tourCount = 0;
-                if (snapshot.exists()) {
-                    snapshot.forEach(bookingSnapshot => {
-                        const booking = bookingSnapshot.val();
-                        if (booking.bookingType === 'hotel') {
-                            hotelCount++;
-                        } else if (booking.bookingType === 'tour') {
-                            tourCount++;
-                        }
-                    });
+            try {
+                // Destroy chart cũ nếu tồn tại
+                if (bookingTypeChartInstance) {
+                    bookingTypeChartInstance.destroy();
+                    bookingTypeChartInstance = null;
                 }
 
-            bookingTypeChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                        labels: ['Đặt phòng khách sạn', 'Đặt tour'],
-                    datasets: [{
-                            data: [hotelCount, tourCount],
-                        backgroundColor: [
-                            '#1a237e',
-                                '#1976d2'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                                text: 'Tỷ lệ loại hình đặt phòng'
-                        }
+                const canvas = document.getElementById('bookingTypeChart');
+                if (!canvas) {
+                    console.warn('Canvas bookingTypeChart không tồn tại');
+                    return;
+                }
+
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.warn('Không thể lấy context từ canvas bookingTypeChart');
+                    return;
+                }
+
+                db.ref('bookings').once('value').then(snapshot => {
+                    let hotelCount = 0;
+                    let tourCount = 0;
+                    if (snapshot.exists()) {
+                        snapshot.forEach(bookingSnapshot => {
+                            const booking = bookingSnapshot.val();
+                            if (booking.bookingType === 'hotel') {
+                                hotelCount++;
+                            } else if (booking.bookingType === 'tour') {
+                                tourCount++;
+                            }
+                        });
                     }
-                }
+
+                    // Kiểm tra lại canvas trước khi tạo chart mới
+                    if (canvas && !bookingTypeChartInstance) {
+                        bookingTypeChartInstance = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['Đặt phòng khách sạn', 'Đặt tour'],
+                                datasets: [{
+                                    data: [hotelCount, tourCount],
+                                    backgroundColor: [
+                                        '#1a237e',
+                                        '#1976d2'
+                                    ]
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Tỷ lệ loại hình đặt phòng'
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }).catch(error => {
+                    console.error('Lỗi khi load booking type chart:', error);
                 });
-            });
+            } catch (error) {
+                console.error('Lỗi trong loadBookingTypeChart:', error);
+            }
         }
 
         // New Users Chart
         function loadNewUsersChart() {
-            if (newUsersChartInstance) {
-                newUsersChartInstance.destroy();
-            }
-            const ctx = document.getElementById('newUsersChart').getContext('2d');
-            const weekLabels = ['6 tuần trước', '5 tuần trước', '4 tuần trước', '3 tuần trước', '2 tuần trước', 'Tuần trước', 'Tuần này'];
-            const weeklyNewUsers = Array(7).fill(0);
-            const now = new Date();
-            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-
-            db.ref('users').orderByChild('createdAt').startAt(todayStart - 6 * 7 * 24 * 3600 * 1000).once('value').then(snapshot => {
-                if (snapshot.exists()) {
-                    snapshot.forEach(userSnapshot => {
-                        const user = userSnapshot.val();
-                        if (user.createdAt) {
-                            const joinDate = new Date(user.createdAt);
-                            const weeksAgo = Math.floor((todayStart - joinDate.getTime()) / (7 * 24 * 3600 * 1000));
-                            if (weeksAgo >= 0 && weeksAgo < 7) {
-                                weeklyNewUsers[6 - weeksAgo]++;
-                            }
-                        }
-                    });
+            try {
+                // Destroy chart cũ nếu tồn tại
+                if (newUsersChartInstance) {
+                    newUsersChartInstance.destroy();
+                    newUsersChartInstance = null;
                 }
 
-            newUsersChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                        labels: weekLabels,
-                    datasets: [{
-                        label: 'Người dùng mới',
-                            data: weeklyNewUsers,
-                        backgroundColor: '#2e7d32'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                                display: false,
-                        },
-                        title: {
-                            display: true,
-                                text: 'Người dùng mới (7 tuần gần nhất)'
-                        }
-                    },
-                    scales: {
-                        y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 1
+                const canvas = document.getElementById('newUsersChart');
+                if (!canvas) {
+                    console.warn('Canvas newUsersChart không tồn tại');
+                    return;
+                }
+
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.warn('Không thể lấy context từ canvas newUsersChart');
+                    return;
+                }
+
+                const weekLabels = ['6 tuần trước', '5 tuần trước', '4 tuần trước', '3 tuần trước', '2 tuần trước', 'Tuần trước', 'Tuần này'];
+                const weeklyNewUsers = Array(7).fill(0);
+                const now = new Date();
+                const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+                db.ref('users').orderByChild('createdAt').startAt(todayStart - 6 * 7 * 24 * 3600 * 1000).once('value').then(snapshot => {
+                    if (snapshot.exists()) {
+                        snapshot.forEach(userSnapshot => {
+                            const user = userSnapshot.val();
+                            if (user.createdAt) {
+                                const joinDate = new Date(user.createdAt);
+                                const weeksAgo = Math.floor((todayStart - joinDate.getTime()) / (7 * 24 * 3600 * 1000));
+                                if (weeksAgo >= 0 && weeksAgo < 7) {
+                                    weeklyNewUsers[6 - weeksAgo]++;
                                 }
-                        }
+                            }
+                        });
                     }
-                }
+
+                    // Kiểm tra lại canvas trước khi tạo chart mới
+                    if (canvas && !newUsersChartInstance) {
+                        newUsersChartInstance = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: weekLabels,
+                                datasets: [{
+                                    label: 'Người dùng mới',
+                                    data: weeklyNewUsers,
+                                    backgroundColor: '#2e7d32'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Người dùng mới (7 tuần gần nhất)'
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            stepSize: 1
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }).catch(error => {
+                    console.error('Lỗi khi load new users chart:', error);
                 });
-            });
+            } catch (error) {
+                console.error('Lỗi trong loadNewUsersChart:', error);
+            }
         }
 
         // Location Chart (Number of hotels per location)
         function loadLocationChart() {
-            if (locationChartInstance) {
-                locationChartInstance.destroy();
-            }
-            const ctx = document.getElementById('locationChart').getContext('2d');
-
-            db.ref('location').once('value').then(snapshot => {
-                const locationLabels = [];
-                const hotelCounts = [];
-                // Bảng màu mới, có độ tương phản cao để dễ phân biệt
-                const backgroundColors = [
-                    '#3366CC', '#DC3912', '#FF9900', '#109618', '#990099',
-                    '#0099C6', '#DD4477', '#66AA00', '#B82E2E', '#316395'
-                ];
-                let colorIndex = 0;
-
-                if (snapshot.exists()) {
-                    snapshot.forEach(locationSnapshot => {
-                        const locationKey = locationSnapshot.key;
-                        const locationName = locationKey.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-                        const hotels = locationSnapshot.child('hotels').val();
-                        const count = hotels ? Object.keys(hotels).length : 0;
-                        if (count > 0) {
-                            locationLabels.push(locationName);
-                            hotelCounts.push(count);
-                        }
-                    });
+            try {
+                // Destroy chart cũ nếu tồn tại
+                if (locationChartInstance) {
+                    locationChartInstance.destroy();
+                    locationChartInstance = null;
                 }
 
-            locationChartInstance = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                        labels: locationLabels,
-                    datasets: [{
-                            data: hotelCounts,
-                            backgroundColor: locationLabels.map(() => backgroundColors[colorIndex++ % backgroundColors.length])
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                                text: 'Phân bổ khách sạn theo khu vực'
-                        }
+                const canvas = document.getElementById('locationChart');
+                if (!canvas) {
+                    console.warn('Canvas locationChart không tồn tại');
+                    return;
+                }
+
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.warn('Không thể lấy context từ canvas');
+                    return;
+                }
+
+                db.ref('location').once('value').then(snapshot => {
+                    const locationLabels = [];
+                    const hotelCounts = [];
+                    // Bảng màu mới, có độ tương phản cao để dễ phân biệt
+                    const backgroundColors = [
+                        '#3366CC', '#DC3912', '#FF9900', '#109618', '#990099',
+                        '#0099C6', '#DD4477', '#66AA00', '#B82E2E', '#316395'
+                    ];
+                    let colorIndex = 0;
+
+                    if (snapshot.exists()) {
+                        snapshot.forEach(locationSnapshot => {
+                            const locationKey = locationSnapshot.key;
+                            const locationName = locationKey.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                            const hotels = locationSnapshot.child('hotels').val();
+                            const count = hotels ? Object.keys(hotels).length : 0;
+                            if (count > 0) {
+                                locationLabels.push(locationName);
+                                hotelCounts.push(count);
+                            }
+                        });
                     }
-                }
+
+                    // Kiểm tra lại canvas trước khi tạo chart mới
+                    if (canvas && !locationChartInstance) {
+                        locationChartInstance = new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: locationLabels,
+                                datasets: [{
+                                    data: hotelCounts,
+                                    backgroundColor: locationLabels.map(() => backgroundColors[colorIndex++ % backgroundColors.length])
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Phân bổ khách sạn theo khu vực'
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }).catch(error => {
+                    console.error('Lỗi khi load location chart:', error);
                 });
-            });
+            } catch (error) {
+                console.error('Lỗi trong loadLocationChart:', error);
+            }
         }
 
         // Thêm đặt phòng mới
@@ -1552,6 +1761,7 @@
                         const [locationId, hotelKey] = hotelValue.split('__');
                         const hotel = hotelsData.find(h => h.id === hotelKey && h.locationId === locationId);
                         return {
+                            userId: 'admin-created', // Admin tạo booking cho khách
                             customerName: document.getElementById('add-customerName').value,
                             customerEmail: document.getElementById('add-customerEmail').value,
                             customerPhone: document.getElementById('add-customerPhone').value,
@@ -1563,6 +1773,7 @@
                             guests: parseInt(document.getElementById('add-guests').value),
                             status: document.getElementById('add-status').value,
                             type: 'hotel',
+                            bookingType: 'hotel',
                             createdAt: new Date().toISOString()
                         };
                     }
@@ -1684,8 +1895,35 @@
             }
         }
 
+        // Destroy all charts
+        function destroyAllCharts() {
+            try {
+                if (revenueChartInstance) {
+                    revenueChartInstance.destroy();
+                    revenueChartInstance = null;
+                }
+                if (bookingTypeChartInstance) {
+                    bookingTypeChartInstance.destroy();
+                    bookingTypeChartInstance = null;
+                }
+                if (newUsersChartInstance) {
+                    newUsersChartInstance.destroy();
+                    newUsersChartInstance = null;
+                }
+                if (locationChartInstance) {
+                    locationChartInstance.destroy();
+                    locationChartInstance = null;
+                }
+            } catch (error) {
+                console.error('Lỗi khi destroy charts:', error);
+            }
+        }
+
         // Update showContent function to load data when switching sections
         function showContent(contentId) {
+            // Destroy all charts before switching sections
+            destroyAllCharts();
+            
             // Hide all content sections
             document.querySelectorAll('.content-section').forEach(section => {
                 section.style.display = 'none';
@@ -1755,6 +1993,9 @@
                     break;
                 case 'travel-guides':
                     loadTravelGuides();
+                    break;
+                case 'refunds':
+                    loadRefunds();
                     break;
                 case 'settings':
                     loadSettings();
@@ -1839,6 +2080,12 @@
             }
             
             loadNotifications();
+
+            // Set tháng/năm mặc định là hiện tại
+            const now = new Date();
+            document.getElementById('stat-month').value = (now.getMonth() + 1).toString();
+            document.getElementById('stat-year').value = now.getFullYear();
+            updateMonthlyStatsUI();
         });
 
         // Xem chi tiết khách sạn
@@ -3413,7 +3660,593 @@
                 }
             });
         }
+
+        // ===== QUẢN LÝ HOÀN TIỀN =====
+        function loadRefunds() {
+            const refundsTable = document.getElementById('refundsTable');
+            if (!refundsTable) return;
+
+            refundsTable.innerHTML = '<tr><td colspan="8" class="text-center py-4"><i class="fas fa-spinner fa-spin"></i> Đang tải...</td></tr>';
+
+            db.ref('bookings').orderByChild('status').equalTo('cancelled').once('value').then(snapshot => {
+                const refunds = [];
+                snapshot.forEach(child => {
+                    const booking = child.val();
+                    if (booking.refundStatus) { // Chỉ hiển thị booking có thông tin hoàn tiền
+                        refunds.push({
+                            id: child.key,
+                            ...booking
+                        });
+                    }
+                });
+
+                // Sắp xếp theo thời gian hủy mới nhất
+                refunds.sort((a, b) => b.cancelledAt - a.cancelledAt);
+
+                if (refunds.length === 0) {
+                    refundsTable.innerHTML = '<tr><td colspan="8" class="text-center py-4">Không có yêu cầu hoàn tiền nào.</td></tr>';
+                    return;
+                }
+
+                refundsTable.innerHTML = '';
+                                    refunds.forEach(refund => {
+                        const row = document.createElement('tr');
+                        const statusBadge = getRefundStatusBadge(refund.refundStatus);
+                        const refundAmount = refund.refundAmount || 0;
+                        const totalPrice = refund.totalPrice || refund.roomPrice || 0;
+                        
+                        // Tạo nút thao tác phù hợp với trạng thái
+                        let actionButtons = '';
+                        if (refund.refundStatus === 'pending') {
+                            actionButtons = `
+                                <button class="btn btn-sm btn-success" onclick="processRefund('${refund.id}')" title="Xử lý hoàn tiền">
+                                    <i class="fas fa-money-bill-wave"></i> Xử lý
+                                </button>
+                            `;
+                        } else if (refund.refundStatus === 'processing') {
+                            actionButtons = `
+                                <button class="btn btn-sm btn-warning" disabled title="Đang xử lý">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang xử lý
+                                </button>
+                            `;
+                        } else if (refund.refundStatus === 'failed') {
+                            actionButtons = `
+                                <button class="btn btn-sm btn-success" onclick="processRefund('${refund.id}')" title="Thử lại">
+                                    <i class="fas fa-redo"></i> Thử lại
+                                </button>
+                            `;
+                        } else if (refund.refundStatus === 'completed') {
+                            actionButtons = `
+                                <button class="btn btn-sm btn-secondary" disabled title="Đã hoàn tiền">
+                                    <i class="fas fa-check-circle"></i> Đã hoàn
+                                </button>
+                            `;
+                        }
+                        
+                        row.innerHTML = `
+                            <td>${refund.id}</td>
+                            <td>${refund.customerName || refund.userName || 'N/A'}</td>
+                            <td>${refund.customerEmail || refund.email || 'N/A'}</td>
+                            <td>${refund.hotelName || refund.tourName || 'N/A'}</td>
+                            <td>${totalPrice.toLocaleString()} VNĐ</td>
+                            <td>${refundAmount.toLocaleString()} VNĐ</td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                ${actionButtons}
+                                <button class="btn btn-sm btn-info" onclick="viewRefundDetails('${refund.id}')" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i> Chi tiết
+                                </button>
+                            </td>
+                        `;
+                        refundsTable.appendChild(row);
+                    });
+            });
+        }
+
+        function getRefundStatusBadge(status) {
+            const statusMap = {
+                'pending': '<span class="badge bg-warning">Chờ xử lý</span>',
+                'processing': '<span class="badge bg-info">Đang xử lý</span>',
+                'completed': '<span class="badge bg-success">Đã hoàn tiền</span>',
+                'failed': '<span class="badge bg-danger">Thất bại</span>'
+            };
+            return statusMap[status] || '<span class="badge bg-secondary">Không xác định</span>';
+        }
+
+        function getRefundStatusText(status) {
+            const statusMap = {
+                'pending': 'Chờ xử lý',
+                'processing': 'Đang xử lý',
+                'completed': 'Đã hoàn tiền',
+                'failed': 'Thất bại'
+            };
+            return statusMap[status] || 'Không xác định';
+        }
+
+        function processRefund(bookingId) {
+            Swal.fire({
+                title: 'Chọn phương thức hoàn tiền',
+                text: 'Bạn muốn hoàn tiền bằng phương thức nào?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Hoàn tiền tự động (VNPay)',
+                cancelButtonText: 'Hoàn tiền thủ công',
+                showDenyButton: true,
+                denyButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Hoàn tiền tự động qua VNPay
+                    processAutomaticRefund(bookingId);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Hoàn tiền thủ công
+                    processManualRefund(bookingId);
+                }
+            });
+        }
+
+        // Hoàn tiền tự động qua VNPay
+        async function processAutomaticRefund(bookingId) {
+            try {
+                Swal.fire({
+                    title: 'Đang xử lý hoàn tiền...',
+                    text: 'Vui lòng chờ trong giây lát',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Lấy thông tin booking
+                const snapshot = await db.ref('bookings/' + bookingId).once('value');
+                const booking = snapshot.val();
+
+                if (!booking) {
+                    throw new Error('Không tìm thấy thông tin booking');
+                }
+
+                // Cập nhật trạng thái thành processing
+                await db.ref('bookings/' + bookingId).update({
+                    refundStatus: 'processing',
+                    refundProcessingAt: Date.now()
+                });
+
+                // Giả lập hoàn tiền VNPay (trong thực tế sẽ gọi API VNPay)
+                await new Promise(resolve => setTimeout(resolve, 2000)); // Giả lập delay
+
+                // Giả lập kết quả thành công (luôn thành công cho demo)
+                const success = true; // Luôn thành công cho demo
+
+                if (success) {
+                    await db.ref('bookings/' + bookingId).update({
+                        refundStatus: 'completed',
+                        refundCompletedAt: Date.now(),
+                        refundTransactionId: `VNPAY_${Date.now()}`,
+                        refundMethod: 'vnpay_automatic'
+                    });
+
+                    Swal.fire('Thành công', 'Đã hoàn tiền tự động qua VNPay!', 'success');
+                } else {
+                    await db.ref('bookings/' + bookingId).update({
+                        refundStatus: 'failed',
+                        refundFailedAt: Date.now(),
+                        refundErrorMessage: 'Hoàn tiền thất bại - Vui lòng thử lại'
+                    });
+
+                    Swal.fire('Thất bại', 'Hoàn tiền tự động thất bại. Vui lòng thử hoàn tiền thủ công.', 'error');
+                }
+
+                loadRefunds();
+            } catch (error) {
+                console.error('Lỗi khi hoàn tiền tự động:', error);
+                Swal.fire('Lỗi', 'Không thể xử lý hoàn tiền tự động: ' + error.message, 'error');
+            }
+        }
+
+        // Hoàn tiền thủ công
+        async function processManualRefund(bookingId) {
+            try {
+                Swal.fire({
+                    title: 'Xác nhận hoàn tiền thủ công?',
+                    text: 'Bạn có chắc đã hoàn tiền cho khách hàng?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác nhận',
+                    cancelButtonText: 'Hủy'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        await db.ref('bookings/' + bookingId).update({
+                            refundStatus: 'completed',
+                            refundCompletedAt: Date.now(),
+                            refundMethod: 'manual_bank_transfer',
+                            refundNote: 'Admin xác nhận đã hoàn tiền thủ công'
+                        });
+
+                        Swal.fire('Thành công', 'Đã xác nhận hoàn tiền thủ công!', 'success');
+                        loadRefunds();
+                    }
+                });
+            } catch (error) {
+                console.error('Lỗi khi hoàn tiền thủ công:', error);
+                Swal.fire('Lỗi', 'Không thể cập nhật trạng thái hoàn tiền.', 'error');
+            }
+        }
+
+        function viewRefundDetails(bookingId) {
+            db.ref('bookings/' + bookingId).once('value').then(snapshot => {
+                const booking = snapshot.val();
+                if (!booking) {
+                    Swal.fire('Lỗi', 'Không tìm thấy thông tin booking.', 'error');
+                    return;
+                }
+
+                const refundAmount = booking.refundAmount || 0;
+                const totalPrice = booking.totalPrice || booking.roomPrice || 0;
+                const refundPercentage = totalPrice > 0 ? ((refundAmount / totalPrice) * 100).toFixed(1) : 0;
+                
+                // Thông tin thời gian
+                const cancelledDate = booking.cancelledAt ? new Date(booking.cancelledAt).toLocaleString('vi-VN') : 'N/A';
+                const processingDate = booking.refundProcessingAt ? new Date(booking.refundProcessingAt).toLocaleString('vi-VN') : 'N/A';
+                const completedDate = booking.refundCompletedAt ? new Date(booking.refundCompletedAt).toLocaleString('vi-VN') : 'N/A';
+                const failedDate = booking.refundFailedAt ? new Date(booking.refundFailedAt).toLocaleString('vi-VN') : 'N/A';
+                
+                // Thông tin phương thức hoàn tiền
+                const refundMethod = booking.refundMethod || 'Chưa xác định';
+                const transactionId = booking.refundTransactionId || 'N/A';
+                const errorMessage = booking.refundErrorMessage || '';
+                const refundNote = booking.refundNote || 'N/A';
+
+                Swal.fire({
+                    title: 'Chi tiết hoàn tiền',
+                    html: `
+                        <div class="text-left">
+                            <h6 class="mb-3">Thông tin booking</h6>
+                            <p><strong>Booking ID:</strong> ${bookingId}</p>
+                            <p><strong>Khách hàng:</strong> ${booking.customerName || booking.userName || 'N/A'}</p>
+                            <p><strong>Email:</strong> ${booking.customerEmail || booking.email || 'N/A'}</p>
+                            <p><strong>Dịch vụ:</strong> ${booking.hotelName || booking.tourName || 'N/A'}</p>
+                            <p><strong>Tổng tiền:</strong> ${totalPrice.toLocaleString()} VNĐ</p>
+                            
+                            <hr>
+                            <h6 class="mb-3">Thông tin hoàn tiền</h6>
+                            <p><strong>Số tiền hoàn:</strong> ${refundAmount.toLocaleString()} VNĐ (${refundPercentage}%)</p>
+                            <p><strong>Trạng thái:</strong> ${getRefundStatusText(booking.refundStatus)}</p>
+                            <p><strong>Phương thức:</strong> ${refundMethod}</p>
+                            <p><strong>Mã giao dịch:</strong> ${transactionId}</p>
+                            
+                            <hr>
+                            <h6 class="mb-3">Thời gian</h6>
+                            <p><strong>Ngày hủy:</strong> ${cancelledDate}</p>
+                            <p><strong>Bắt đầu xử lý:</strong> ${processingDate}</p>
+                            <p><strong>Hoàn thành:</strong> ${completedDate}</p>
+                            <p><strong>Thất bại:</strong> ${failedDate}</p>
+                            
+                            ${errorMessage ? `
+                                <hr>
+                                <h6 class="mb-3">Lỗi</h6>
+                                <p class="text-danger"><strong>Lỗi:</strong> ${errorMessage}</p>
+                            ` : ''}
+                            
+                            ${refundNote !== 'N/A' ? `
+                                <hr>
+                                <h6 class="mb-3">Ghi chú</h6>
+                                <p><strong>Ghi chú:</strong> ${refundNote}</p>
+                            ` : ''}
+                        </div>
+                    `,
+                    width: '600px',
+                    icon: 'info',
+                    confirmButtonText: 'Đóng'
+                });
+            });
+        }
+
+        // Hàm tổng hợp số liệu theo tháng (trả về object)
+        async function getMonthlyStats(month, year) {
+          const start = new Date(year, month - 1, 1).getTime();
+          const end = new Date(year, month, 0, 23, 59, 59, 999).getTime();
+          // 1. Lấy users
+          const usersSnap = await db.ref('users').once('value');
+          let newUsers = 0;
+          usersSnap.forEach(userSnap => {
+            const user = userSnap.val();
+            if (user.createdAt && user.createdAt >= start && user.createdAt <= end) newUsers++;
+          });
+          // 2. Lấy bookings
+          const bookingsSnap = await db.ref('bookings').once('value');
+          const roomSet = new Set();
+          const userIds = new Set();
+          let revenue = 0;
+          bookingsSnap.forEach(bookingSnap => {
+            const booking = bookingSnap.val();
+            if (booking.createdAt >= start && booking.createdAt <= end) {
+              userIds.add(booking.userId);
+              if ((booking.status === 'confirmed' || booking.status === 'completed')) {
+                roomSet.add(`${booking.hotelId}_${booking.roomId}`);
+                revenue += booking.totalPrice || 0;
+              }
+            }
+          });
+          // 3. Thống kê giới tính
+          let male = 0, female = 0, other = 0;
+          userIds.forEach(uid => {
+            const user = usersSnap.child(uid).val();
+            if (user && user.gender) {
+              if (user.gender === 'Nam') male++;
+              else if (user.gender === 'Nữ') female++;
+              else other++;
+            } else {
+              other++;
+            }
+          });
+          return {
+            newUsers,
+            roomsBooked: roomSet.size,
+            gender: { male, female, other },
+            revenue
+          };
+        }
+
+        // Hàm tính % thay đổi so với tháng trước
+        function calcChange(current, prev) {
+          if (prev === 0 && current === 0) return {percent: 0, up: false};
+          if (prev === 0) return {percent: 100, up: true};
+          const percent = Math.round(((current - prev) / prev) * 100);
+          return {percent: Math.abs(percent), up: current >= prev};
+        }
+
+        // Cập nhật giao diện thống kê và so sánh tháng trước
+        async function updateMonthlyStatsUI() {
+          const month = parseInt(document.getElementById('stat-month').value);
+          const year = parseInt(document.getElementById('stat-year').value);
+          document.getElementById('stat-month-label').textContent = month;
+          document.getElementById('stat-year-label').textContent = year;
+          const stats = await getMonthlyStats(month, year);
+          // Tháng trước
+          let prevMonth = month - 1, prevYear = year;
+          if (prevMonth === 0) { prevMonth = 12; prevYear = year - 1; }
+          const prevStats = await getMonthlyStats(prevMonth, prevYear);
+          // Hiển thị số liệu hiện tại
+          document.getElementById('stat-new-users').textContent = stats.newUsers;
+          document.getElementById('stat-rooms-booked').textContent = stats.roomsBooked;
+          document.getElementById('stat-gender').textContent = `${stats.gender.male}/${stats.gender.female}/${stats.gender.other}`;
+          document.getElementById('stat-revenue').textContent = stats.revenue.toLocaleString('vi-VN');
+          // Hiển thị % thay đổi
+          function renderChange(el, change) {
+            if (!el) return;
+            if (change.percent === 0) {
+              el.innerHTML = '<span style="color:#888">0%</span>';
+            } else {
+              el.innerHTML = `<span style="color:${change.up ? '#43a047' : '#e53935'};font-weight:600"><i class="fas fa-arrow-${change.up ? 'up' : 'down'}"></i> ${change.percent}%</span>`;
+            }
+          }
+          renderChange(document.getElementById('stat-new-users-change'), calcChange(stats.newUsers, prevStats.newUsers));
+          renderChange(document.getElementById('stat-rooms-booked-change'), calcChange(stats.roomsBooked, prevStats.roomsBooked));
+          renderChange(document.getElementById('stat-gender-male-change'), calcChange(stats.gender.male, prevStats.gender.male));
+          renderChange(document.getElementById('stat-revenue-change'), calcChange(stats.revenue, prevStats.revenue));
+          // Lưu lại để xuất Excel
+          window._lastMonthlyStats = { month, year, ...stats };
+          // Kích hoạt tooltip Bootstrap
+          if (window.bootstrap && window.bootstrap.Tooltip) {
+            document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+              new bootstrap.Tooltip(el);
+            });
+          }
+          // Vẽ mini chart doanh thu 12 tháng gần nhất
+          await renderMiniRevenueChart(month, year);
+        }
+
+        document.getElementById('stat-month').addEventListener('change', updateMonthlyStatsUI);
+        document.getElementById('stat-year').addEventListener('change', updateMonthlyStatsUI);
+        window.addEventListener('DOMContentLoaded', updateMonthlyStatsUI);
+
+        // Xuất Excel
+        function exportStatsToExcel() {
+          const stats = window._lastMonthlyStats;
+          if (!stats) return;
+          const wsData = [
+            ['Thống kê tháng', `${stats.month}/${stats.year}`],
+            ['Số khách mới', stats.newUsers],
+            ['Số phòng có người đặt', stats.roomsBooked],
+            ['Giới tính (Nam/Nữ/Khác)', `${stats.gender.male}/${stats.gender.female}/${stats.gender.other}`],
+            ['Doanh thu (VNĐ)', stats.revenue]
+          ];
+          const ws = XLSX.utils.aoa_to_sheet(wsData);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, 'Thống kê');
+          XLSX.writeFile(wb, `ThongKe_${stats.month}_${stats.year}.xlsx`);
+        }
+        document.getElementById('export-excel-btn').addEventListener('click', exportStatsToExcel);
+
+        // Vẽ mini chart doanh thu 12 tháng gần nhất
+        async function renderMiniRevenueChart(selectedMonth, selectedYear) {
+          const canvas = document.getElementById('mini-revenue-chart');
+          if (!canvas) return;
+          if (miniRevenueChartInstance) { miniRevenueChartInstance.destroy(); miniRevenueChartInstance = null; }
+          // Lấy dữ liệu 12 tháng gần nhất
+          const now = new Date(selectedYear, selectedMonth - 1);
+          const labels = [];
+          const data = [];
+          for (let i = 11; i >= 0; i--) {
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            labels.push(`${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`);
+            const stats = await getMonthlyStats(d.getMonth() + 1, d.getFullYear());
+            data.push(Math.round(stats.revenue / 1000000)); // Triệu VNĐ
+          }
+          const ctx = canvas.getContext('2d');
+          miniRevenueChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels,
+              datasets: [{
+                data,
+                borderColor: '#43e97b',
+                backgroundColor: 'rgba(67,233,123,0.08)',
+                tension: 0.4,
+                pointRadius: 0,
+                fill: true,
+                borderWidth: 2
+              }]
+            },
+            options: {
+              plugins: { legend: { display: false } },
+              scales: { x: { display: false }, y: { display: false } },
+              elements: { line: { borderJoinStyle: 'round' } },
+              responsive: false,
+              maintainAspectRatio: false
+            }
+          });
+        }
+
+        // Popup chi tiết doanh thu từng ngày khi click vào card doanh thu
+        const revenueCard = document.querySelector('.stats-summary-card.revenue');
+        if (revenueCard) {
+          revenueCard.style.cursor = 'pointer';
+          revenueCard.addEventListener('click', async () => {
+            const month = parseInt(document.getElementById('stat-month').value);
+            const year = parseInt(document.getElementById('stat-year').value);
+            // Lấy doanh thu từng ngày trong tháng
+            const start = new Date(year, month - 1, 1).getTime();
+            const end = new Date(year, month, 0, 23, 59, 59, 999).getTime();
+            const bookingsSnap = await db.ref('bookings').once('value');
+            const dailyRevenue = {};
+            for (let d = 1; d <= new Date(year, month, 0).getDate(); d++) dailyRevenue[d] = 0;
+            bookingsSnap.forEach(bookingSnap => {
+              const booking = bookingSnap.val();
+              if (
+                booking.createdAt >= start && booking.createdAt <= end &&
+                (booking.status === 'confirmed' || booking.status === 'completed')
+              ) {
+                const date = new Date(booking.createdAt);
+                const day = date.getDate();
+                dailyRevenue[day] += booking.totalPrice || 0;
+              }
+            });
+            // Hiển thị popup với biểu đồ cột
+            const days = Object.keys(dailyRevenue);
+            const values = Object.values(dailyRevenue).map(v => Math.round(v / 1000)); // Nghìn VNĐ
+            const popupId = 'popup-daily-revenue-chart';
+            Swal.fire({
+              title: `Chi tiết doanh thu từng ngày tháng ${month}/${year}`,
+              html: `<canvas id="${popupId}" height="220"></canvas>`,
+              width: 700,
+              showCloseButton: true,
+              didOpen: () => {
+                const ctx = document.getElementById(popupId).getContext('2d');
+                new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: days,
+                    datasets: [{
+                      label: 'Doanh thu (nghìn VNĐ)',
+                      data: values,
+                      backgroundColor: '#43e97b',
+                      borderRadius: 6
+                    }]
+                  },
+                  options: {
+                    plugins: { legend: { display: false } },
+                    scales: { x: { title: { display: true, text: 'Ngày' } }, y: { title: { display: true, text: 'Nghìn VNĐ' } } },
+                    responsive: true,
+                    maintainAspectRatio: false
+                  }
+                });
+              }
+            });
+          });
+        }
+
+        // Sự kiện click card 'Phòng có người'
+        document.querySelector('.stats-summary-card .fa-bed').closest('.stats-summary-card').addEventListener('click', async function() {
+          const month = parseInt(document.getElementById('stat-month').value);
+          const year = parseInt(document.getElementById('stat-year').value);
+          // Tính ngày đầu và cuối tháng dạng YYYY-MM-DD
+          const startDate = new Date(year, month - 1, 1);
+          const endDate = new Date(year, month, 0);
+          function parseDate(str) {
+            // str: YYYY-MM-DD
+            const [y, m, d] = str.split('-').map(Number);
+            return new Date(y, m - 1, d);
+          }
+          // Lấy bookings hợp lệ (chỉ loại trừ cancelled/rejected)
+          const bookingsSnap = await db.ref('bookings').once('value');
+          const bookings = [];
+          bookingsSnap.forEach(snap => {
+            const b = snap.val();
+            const status = (b.status || '').toLowerCase();
+            if (status !== 'cancelled' && status !== 'rejected' && b.checkIn) {
+              let checkInDate;
+              if (typeof b.checkIn === 'string' && b.checkIn.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                checkInDate = parseDate(b.checkIn);
+              } else if (typeof b.checkIn === 'number') {
+                checkInDate = new Date(b.checkIn);
+              }
+              if (checkInDate && checkInDate >= startDate && checkInDate <= endDate) {
+                bookings.push({...b, id: snap.key});
+              }
+            }
+          });
+          // Lấy thông tin khách sạn/phòng
+          const hotelNames = {};
+          const roomNames = {};
+          for (const b of bookings) {
+            if (b.hotelId && !hotelNames[b.hotelId]) {
+              const hSnap = await db.ref('hotels/' + b.hotelId).once('value');
+              hotelNames[b.hotelId] = hSnap.exists() ? hSnap.val().name : (b.hotelName || b.hotelId);
+            }
+            if (b.roomId && !roomNames[b.roomId]) {
+              roomNames[b.roomId] = b.roomId;
+            }
+          }
+          // Render bảng
+          const tbody = document.getElementById('occupiedRoomsTableBody');
+          tbody.innerHTML = bookings.map(b => `
+            <tr>
+              <td>${b.hotelId ? (hotelNames[b.hotelId] || b.hotelName || b.hotelId) : '<span class="text-danger">Thiếu dữ liệu</span>'}</td>
+              <td>${b.roomId ? (roomNames[b.roomId] || b.roomId) : '<span class="text-danger">Thiếu dữ liệu</span>'}</td>
+              <td>${b.customerName || b.guestName || ''}</td>
+              <td>${b.checkIn ? (typeof b.checkIn === 'string' ? b.checkIn : (new Date(b.checkIn)).toLocaleDateString()) : '<span class="text-danger">Thiếu dữ liệu</span>'}</td>
+              <td>${b.checkOut ? (typeof b.checkOut === 'string' ? b.checkOut : (new Date(b.checkOut)).toLocaleDateString()) : ''}</td>
+              <td>${b.status || ''}</td>
+            </tr>
+          `).join('');
+          // Mở modal
+          const modal = new bootstrap.Modal(document.getElementById('occupiedRoomsModal'));
+          modal.show();
+        });
     </script>
+    <!-- Modal chi tiết phòng có người -->
+    <div class="modal fade" id="occupiedRoomsModal" tabindex="-1" aria-labelledby="occupiedRoomsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="occupiedRoomsModalLabel">Danh sách phòng có người đặt trong tháng</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body">
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Tên khách sạn</th>
+                    <th>Số phòng</th>
+                    <th>Tên khách</th>
+                    <th>Ngày nhận</th>
+                    <th>Ngày trả</th>
+                    <th>Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody id="occupiedRoomsTableBody">
+                  <!-- Dữ liệu sẽ được render bằng JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
 
 </html>

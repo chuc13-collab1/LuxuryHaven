@@ -510,7 +510,116 @@
                 // 1. Cập nhật trạng thái booking
                 bookingRef.update(updates);
 
-                // 2. Trừ số lượng ưu đãi nếu là booking từ trang ưu đãi
+                // 2. Trừ số phòng trống nếu là booking khách sạn
+                if (bookingData.bookingType === 'hotel' && bookingData.hotelId) {
+                    // Kiểm tra user đã đăng nhập
+                    const currentUser = firebase.auth().currentUser;
+                    if (!currentUser) {
+                        console.error('User chưa đăng nhập, không thể trừ số phòng trống');
+                        return;
+                    }
+                    
+                    // Tách hotelId để lấy cityKey và hotelKey
+                    const hotelIdParts = bookingData.hotelId.split('_');
+                    if (hotelIdParts.length === 2) {
+                        const cityKey = hotelIdParts[0];
+                        const hotelKey = hotelIdParts[1];
+                        const roomName = bookingData.roomId;
+                        
+                        console.log('Bắt đầu trừ số phòng trống:', {
+                            cityKey: cityKey,
+                            hotelKey: hotelKey,
+                            roomName: roomName,
+                            userId: currentUser.uid
+                        });
+                        
+                        // Tìm và cập nhật số phòng trống
+                        const hotelRef = firebase.database().ref(`location/${cityKey}/hotels/${hotelKey}/chiTiet/rooms`);
+                        hotelRef.once('value').then(roomsSnapshot => {
+                            if (roomsSnapshot.exists()) {
+                                const rooms = roomsSnapshot.val();
+                                let roomIndex = -1;
+                                let isArray = false;
+                                
+                                // Xác định loại dữ liệu (array hay object)
+                                if (Array.isArray(rooms)) {
+                                    isArray = true;
+                                    roomIndex = rooms.findIndex(room => room && room.name === roomName);
+                                } else if (typeof rooms === 'object' && rooms !== null) {
+                                    roomIndex = Object.keys(rooms).find(key => 
+                                        rooms[key] && rooms[key].name === roomName
+                                    );
+                                }
+                                
+                                console.log('Tìm phòng:', {
+                                    roomIndex: roomIndex,
+                                    isArray: isArray,
+                                    totalRooms: Array.isArray(rooms) ? rooms.length : Object.keys(rooms).length
+                                });
+                                
+                                if (roomIndex !== -1 && roomIndex !== undefined) {
+                                    // Đường dẫn đến availableRooms
+                                    let availableRoomsPath;
+                                    if (isArray) {
+                                        availableRoomsPath = `location/${cityKey}/hotels/${hotelKey}/chiTiet/rooms/${roomIndex}/availableRooms`;
+                                    } else {
+                                        availableRoomsPath = `location/${cityKey}/hotels/${hotelKey}/chiTiet/rooms/${roomIndex}/availableRooms`;
+                                    }
+                                    
+                                    console.log('Đường dẫn availableRooms:', availableRoomsPath);
+                                    
+                                    // Sử dụng transaction để trừ số phòng trống an toàn
+                                    const availableRoomsRef = firebase.database().ref(availableRoomsPath);
+                                    availableRoomsRef.transaction(currentValue => {
+                                        console.log('Transaction - Giá trị hiện tại:', currentValue);
+                                        
+                                        if (typeof currentValue === 'number' && currentValue > 0) {
+                                            const newValue = currentValue - 1;
+                                            console.log('Trừ số phòng trống:', currentValue, '->', newValue);
+                                            return newValue;
+                                        }
+                                        console.log('Không thể trừ số phòng trống - giá trị không hợp lệ:', currentValue);
+                                        return currentValue; // Không thay đổi nếu đã hết hoặc không hợp lệ
+                                    }).then((result) => {
+                                        if (result.committed) {
+                                            console.log('Đã trừ số phòng trống thành công:', {
+                                                roomName: roomName,
+                                                oldValue: result.snapshot.val() + 1,
+                                                newValue: result.snapshot.val()
+                                            });
+                                        } else {
+                                            console.warn('Transaction không được commit khi trừ số phòng trống');
+                                        }
+                                    }).catch(error => {
+                                        console.error('Lỗi khi trừ số phòng trống:', error);
+                                        // Hiển thị lỗi cho user
+                                        const errorDiv = document.createElement('div');
+                                        errorDiv.className = 'alert alert-warning mt-3';
+                                        errorDiv.innerHTML = `
+                                            <strong>Lưu ý:</strong> Đặt phòng thành công nhưng có lỗi khi cập nhật số phòng trống. 
+                                            Vui lòng liên hệ admin để kiểm tra.
+                                        `;
+                                        document.getElementById('payment-status').appendChild(errorDiv);
+                                    });
+                                } else {
+                                    console.warn('Không tìm thấy phòng để trừ số lượng:', {
+                                        roomName: roomName,
+                                        hotelId: bookingData.hotelId,
+                                        availableRooms: Object.keys(rooms).map(key => rooms[key]?.name)
+                                    });
+                                }
+                            } else {
+                                console.error('Không tìm thấy dữ liệu phòng cho khách sạn:', bookingData.hotelId);
+                            }
+                        }).catch(error => {
+                            console.error('Lỗi khi truy cập dữ liệu phòng:', error);
+                        });
+                    } else {
+                        console.error('HotelId không đúng định dạng:', bookingData.hotelId);
+                    }
+                }
+
+                // 3. Trừ số lượng ưu đãi nếu là booking từ trang ưu đãi
                 // Ta dùng hotelId để lưu deal.id
                 const dealId = bookingData.hotelId;
                 if (bookingData.bookingType === 'hotel' && dealId) {

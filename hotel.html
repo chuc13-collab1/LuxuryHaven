@@ -122,6 +122,33 @@
                 max-width: 100%;
             }
         }
+
+        /* CSS cho phần gợi ý khách sạn */
+        #suggested-hotels {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+        }
+
+        #suggested-hotels h4 {
+            color: white !important;
+        }
+
+        #suggested-hotels .text-muted {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        #suggested-hotels .hotel-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        #suggested-hotels .hotel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
     </style>
 
 <body> <!-- Navbar -->
@@ -985,7 +1012,7 @@
                 paymentStatus: 'unpaid',
                 totalPrice: Number(room.price) || 0
             };
-
+            console.log('Booking gửi lên:', bookingData);
             firebase.database().ref('bookings').push(bookingData)
                 .then((ref) => {
                     const bookingId = ref.key;
@@ -1710,8 +1737,12 @@
 
         // GỢI Ý KHÁCH SẠN THEO ĐỊA CHỈ NGƯỜI DÙNG
 function suggestHotelsByUserAddress() {
+    console.log('🔍 Bắt đầu tìm gợi ý khách sạn...');
     const user = firebase.auth().currentUser;
-    if (!user) return;
+    if (!user) {
+        console.log('❌ User chưa đăng nhập');
+        return;
+    }
     firebase.database().ref('users/' + user.uid).once('value').then(userSnap => {
         const userData = userSnap.val();
         if (!userData || !userData.address) return;
@@ -1767,39 +1798,64 @@ function suggestHotelsByUserAddress() {
                     }
                 });
             }
+            console.log(`✅ Tìm thấy ${suggestedHotels.length} khách sạn phù hợp`);
             renderSuggestedHotels(suggestedHotels);
         });
     });
 }
 
-//  function renderSuggestedHotels(hotels) {
-//     let container = document.getElementById('suggested-hotels');
-//     if (!container) {
-//         container = document.createElement('div');
-//         container.id = 'suggested-hotels';
-//         container.className = 'card shadow mb-4 p-3';
-//         const main = document.querySelector('main .container') || document.body;
-//         main.insertBefore(container, main.firstChild);
-//     }
-//     if (!hotels || hotels.length === 0) {
-//         container.innerHTML = `<div class="text-muted">Không tìm thấy khách sạn phù hợp với địa chỉ của bạn.</div>`;
-//         return;
-//     }
-//     container.innerHTML = `<h4 class='mb-3 text-primary'><i class='fas fa-map-marker-alt'></i> Gợi ý khách sạn gần bạn</h4>` +
-//         `<div class='row'>` +
-//         hotels.slice(0, 4).map(hotel =>
-//             `<div class='col-md-3 mb-3'>${createHotelCardWithSuggest(hotel, hotels)}</div>`
-//         ).join('') +
-//         `</div>`;
-// }
+function renderSuggestedHotels(hotels) {
+    let container = document.getElementById('suggested-hotels');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'suggested-hotels';
+        container.className = 'card shadow mb-4 p-3';
+        const mainContainer = document.querySelector('main .container');
+        if (mainContainer) {
+            // Chèn vào đầu container, trước phần "✨ KHÁCH SẠN"
+            const firstChild = mainContainer.firstChild;
+            mainContainer.insertBefore(container, firstChild);
+        } else {
+            // Fallback nếu không tìm thấy main container
+            const main = document.querySelector('main');
+            if (main) {
+                main.insertBefore(container, main.firstChild);
+            }
+        }
+    }
+    if (!hotels || hotels.length === 0) {
+        container.innerHTML = `<div class="text-muted">Không tìm thấy khách sạn phù hợp với địa chỉ của bạn.</div>`;
+        return;
+    }
+    container.innerHTML = `<h4 class='mb-3 text-primary'><i class='fas fa-map-marker-alt'></i> Gợi ý khách sạn gần bạn</h4>` +
+        `<div class='row'>` +
+        hotels.slice(0, 4).map(hotel =>
+            `<div class='col-md-3 mb-3'>${createHotelCardWithSuggest ? createHotelCardWithSuggest(hotel, hotels) : hotel.tenKhachSan}</div>`
+        ).join('') +
+        `</div>`;
+}
 
 // Gọi hàm này sau khi đăng nhập thành công hoặc khi trang load nếu đã đăng nhập
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-        suggestHotelsByUserAddress();
+        // Delay một chút để đảm bảo trang đã load xong
+        setTimeout(() => {
+            suggestHotelsByUserAddress();
+        }, 1000);
     } else {
         const container = document.getElementById('suggested-hotels');
         if (container) container.innerHTML = '';
+    }
+});
+
+// Thêm event listener để gọi lại khi user đăng nhập
+document.addEventListener('DOMContentLoaded', function() {
+    // Kiểm tra nếu user đã đăng nhập
+    const user = firebase.auth().currentUser;
+    if (user) {
+        setTimeout(() => {
+            suggestHotelsByUserAddress();
+        }, 1500);
     }
 });
     </script>

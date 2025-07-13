@@ -664,10 +664,10 @@
                             checkIn: checkInDate.toISOString(),
                             checkOut: checkOutDate.toISOString(),
                             numberOfGuests: 1, // Changed from guests to numberOfGuests
-                            createdAt: firebase.database.ServerValue.TIMESTAMP,
+                            createdAt: Date.now(),
                             status: 'pending',
                         };
-
+                        console.log('Booking gửi lên:', bookingDetails);
                         newBookingRef.set(bookingDetails)
                             .then(() => {
                                 // Tắt loading và chuyển hướng

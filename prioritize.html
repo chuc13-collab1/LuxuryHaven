@@ -927,18 +927,15 @@ firebase.database().ref('vouchers').on('value', function (snapshot) {
                 userId: user.uid,
                 bookingType: 'hotel',
                 createdAt: Date.now(),
-                
                 // Thông tin lấy từ deal
                 hotelId: deal.id || deal.title,
                 hotelName: deal.title,
                 roomId: deal.label,
                 totalPrice: parseInt(String(deal.newPrice).replace(/[^0-9]/g, ''), 10),
-
                 // Thông tin lấy từ người dùng đã đăng nhập
                 customerName: user.displayName || user.email.split('@')[0],
                 customerEmail: user.email,
                 customerPhone: user.phoneNumber || '',
-
                 // Lấy thông tin từ lựa chọn của người dùng hoặc mặc định
                 checkIn: checkInDate,
                 checkOut: checkOutDate,
@@ -949,7 +946,7 @@ firebase.database().ref('vouchers').on('value', function (snapshot) {
                 nights: deal.nights || 1,
                 updatedAt: Date.now()
             };
-
+            console.log('Booking gửi lên:', bookingData);
             firebase.database().ref('bookings').push(bookingData)
                 .then((ref) => {
                     const bookingId = ref.key;

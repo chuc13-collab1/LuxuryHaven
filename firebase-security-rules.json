@@ -11,17 +11,20 @@
         "createdAt"
       ],
       "$bookingId": {
-        ".write": "auth != null",
+        ".write": "auth != null && ((!data.exists() && newData.child('userId').val() === auth.uid) || (data.exists() && data.child('userId').val() === auth.uid) || auth.token.email === 'quantrikhachsan@gmail.com')",
         ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || data.child('userId').val() === auth.uid)",
-        ".validate": "newData.hasChildren(['userId', 'bookingType']) && (newData.child('bookingType').val() === 'hotel' || newData.child('bookingType').val() === 'tour')",
+        ".validate": "(!data.exists() && newData.hasChildren(['userId'])) || (data.exists() && (newData.child('userId').val() === data.child('userId').val() || auth.token.email === 'quantrikhachsan@gmail.com'))",
         "userId": {
-          ".validate": "newData.isString() && ((!data.exists() && newData.val() === auth.uid) || (data.exists() && newData.val() === data.val()))"
+          ".validate": "newData.isString() && ((!data.exists() && newData.val() === auth.uid) || (data.exists() && newData.val() === data.val()) || newData.val() === 'admin-created' || auth.token.email === 'quantrikhachsan@gmail.com')"
         },
         "bookingType": {
-          ".validate": "newData.isString() && (newData.val() === 'hotel' || newData.val() === 'tour')"
+          ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'hotel' || newData.val() === 'tour' || newData.val() === 'deposit'))"
+        },
+        "type": {
+          ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'hotel' || newData.val() === 'tour' || newData.val() === 'deposit'))"
         },
         "createdAt": {
-          ".validate": "newData.isNumber()"
+          ".validate": "!newData.exists() || newData.isNumber()"
         },
         "email": {
           ".validate": "!newData.exists() || newData.isString()"
@@ -39,10 +42,10 @@
           ".validate": "!newData.exists() || newData.isNumber()"
         },
         "checkIn": {
-          ".validate": "newData.isString()"
+          ".validate": "!newData.exists() || newData.isString()"
         },
         "checkOut": {
-          ".validate": "newData.isString()"
+          ".validate": "!newData.exists() || newData.isString()"
         },
         "guests": {
           ".validate": "!newData.exists() || newData.isString() || newData.isNumber()"
@@ -123,6 +126,42 @@
           ".validate": "!newData.exists() || newData.val() === 'unpaid' || newData.val() === 'paid' || newData.val() === 'refunded'"
         },
         "updatedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "cancelledAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "cancelledBy": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "refundAmount": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "refundPercentage": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "refundStatus": {
+          ".validate": "!newData.exists() || newData.val() === 'pending' || newData.val() === 'processing' || newData.val() === 'completed' || newData.val() === 'failed'"
+        },
+        "refundMethod": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "refundNote": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "refundCompletedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "refundProcessingAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "refundTransactionId": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "refundErrorMessage": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "refundFailedAt": {
           ".validate": "!newData.exists() || newData.isNumber()"
         },
         "$other": {
@@ -206,6 +245,9 @@
         },
         "paymentStatus": {
           ".validate": "!newData.exists() || newData.val() === 'unpaid' || newData.val() === 'paid' || newData.val() === 'refunded'"
+        },
+        "type": {
+          ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'hotel' || newData.val() === 'tour' || newData.val() === 'deposit'))"
         },
         "$other": {
           ".validate": false
@@ -352,6 +394,12 @@
       }
     },
     "notifications": {
+      ".indexOn": [
+        "userId",
+        "timestamp",
+        "type",
+        "read"
+      ],
       "$userId": {
         ".read": "auth != null && auth.uid === $userId",
         ".write": "auth != null && auth.uid === $userId"
@@ -437,6 +485,10 @@
                   },
                   "img": {
                     ".validate": "newData.isString()"
+                  },
+                  "availableRooms": {
+                    ".write": "auth != null",
+                    ".validate": "newData.isNumber() && newData.val() >= 0"
                   },
                   "$other": {
                     ".validate": false
@@ -554,6 +606,15 @@
     "settings": {
       ".read": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
       ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'"
+    },
+    "roomInventory": {
+      ".read": true,
+      ".write": "auth != null",
+      "$hotelId": {
+        "$roomId": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
     }
   }
 } 
