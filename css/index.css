@@ -1,5 +1,5 @@
     body {
-        background: #f5f6fa;
+        background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.5)), url('data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="29" stroke="%23ededed" stroke-width="2" fill="none"/><circle cx="30" cy="30" r="20" stroke="%23ededed" stroke-width="1.5" fill="none"/><circle cx="30" cy="30" r="10" stroke="%23ededed" stroke-width="1" fill="none"/></svg>') repeat !important;
         font-family: 'Segoe UI', Arial, sans-serif;
         overflow-x: hidden; /* Prevent horizontal scroll on mobile */
     }
@@ -852,6 +852,7 @@
 
     /* Bố cục section và card chuyên nghiệp, đồng nhất */
     .container {
+        /* background: #f5f6fa; */
         max-width: 1200px;
         margin: 0 auto;
         padding-left: 16px;
@@ -1842,7 +1843,7 @@
     }    /* Favorite Destinations */
     .favorite-destinations {
         padding: 48px 0;
-        background: linear-gradient(120deg, #fdf6e3 0%, #fff8e1 100%);
+        /* background: linear-gradient(120deg, #fdf6e3 0%, #fff8e1 100%); */
     }
     
     .favorite-destinations .section-title {
@@ -2678,7 +2679,7 @@
 
     /* Featured Hotels Section */
     .featured-hotels {
-        background: #fffbe7;
+        background: #f5f6fa;
         padding: 48px 0 32px 0;
     }
     .featured-hotels .section-title {
@@ -2862,4 +2863,94 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+    }
+
+    /* Ảnh trong Ưu Đãi Mùa Hè Rực Rỡ: cùng chiều cao, bo góc, không méo */
+    #summer-sale-list .tour-card .card-img-top {
+        height: 180px;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 12px 12px 0 0;
+        background: #f5f5f5;
+        width: 100%;
+        display: block;
+    }
+
+    .vision-mission-section {
+      background: #f7f9fc;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(44,62,80,0.10);
+      max-width: 1100px;
+      margin: 48px auto 0 auto;
+      padding: 48px 32px 40px 32px;
+      text-align: center;
+    }
+    .vision-mission-section h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0d2b56;
+      margin-bottom: 32px;
+    }
+    .vision-mission-section h4 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin: 24px 0 8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .vision-mission-section h4 i {
+      font-size: 1.3em;
+      color: #1a237e;
+    }
+    .vision-mission-section p {
+      font-size: 1.1rem;
+      color: #222;
+      margin-bottom: 18px;
+    }
+
+    /* Nền cho section ưu đãi đặc biệt */
+    #special-tours-list {
+        background: #f5f6fa;
+        border-radius: 18px;
+        padding: 32px 18px 18px 18px;
+        margin-bottom: 32px;
+    }
+
+    /* Nền cho section Ưu đãi mùa hè rực rỡ */
+    #summer-sale-list {
+        background: #f5f6fa;
+        border-radius: 18px;
+        padding: 32px 18px 18px 18px;
+        margin-bottom: 32px;
+    }
+    /* Nền cho section Điểm đến yêu thích */
+    #favorite-destinations-list {
+        background: #f5f6fa;
+        border-radius: 18px;
+        padding: 32px 18px 18px 18px;
+        margin-bottom: 32px;
+    }
+    /* Nền cho section Tin tức mới nhất */
+    #latest-news-list {
+        background: #f5f6fa;
+        border-radius: 18px;
+        padding: 32px 18px 18px 18px;
+        margin-bottom: 32px;
+    }
+
+    /* Full-width cho các section nổi bật */
+    #summer-sale-list,
+    #favorite-destinations-list,
+    #latest-news-list {
+        padding-left: 48px;
+        padding-right: 48px;
+        border-radius: 18px;
+        width: auto;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        position: static;
     }

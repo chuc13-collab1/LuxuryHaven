@@ -214,15 +214,27 @@
     </nav>
 
     <!-- Hero Section with Search -->
-    <section class="hero-section">
-        <p class="nautica-script">LuxuryHavenTravel</p>
-        <div class="hero-content"><br><br><br><br><br><br><br><br><br><br><br>
-
-            <h1>Nơi nghỉ dưỡng hoàn hảo cho bạn</h1>
-            <p>Khám phá khách sạn phù hợp mọi hành trình</p>
-            <!-- Bộ lọc tìm kiếm khách sạn kiểu Traveloka đặt ở đây -->
-            
-        </div><br><br><br><br><br><br><br><br>
+    <section class="hero-section hero-slider">
+        <div class="hero-slide hero-slide-1 active">
+            <div class="hero-overlay"></div>
+            <div class="hero-content-wrapper">
+                <p class="nautica-script" style="color:#e0e6ed; font-size:4.2rem; opacity:0.85; margin-bottom:0.2em;">LuxuryHavenTravel</p><br><br><br><br><br><br><br><br>
+                <div class="hero-content">
+                    <h1 style="font-size:3.2rem; font-weight:800; margin-bottom:0.2em;">Khám phá những kỳ nghỉ tuyệt vời</h1>
+                    <p style="font-size:1.3rem; font-weight:400; margin-top:0;">Đặt phòng khách sạn, tour du lịch, ưu đãi với giá tốt nhất</p>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide hero-slide-2">
+            <div class="hero-overlay"></div>
+            <div class="hero-content-wrapper">
+                <p class="nautica-script" style="color:#e0e6ed; font-size:4.2rem; opacity:0.85; margin-bottom:0.2em;">LuxuryHavenTravel</p><br><br><br><br><br><br><br><br>
+                <div class="hero-content">
+                    <h1 style="font-size:3.2rem; font-weight:800; margin-bottom:0.2em;">Khám phá những kỳ nghỉ tuyệt vời</h1>
+                    <p style="font-size:1.3rem; font-weight:400; margin-top:0;">Đặt phòng khách sạn, tour du lịch, ưu đãi với giá tốt nhất</p>
+                </div>
+            </div>
+        </div>
     </section>
     <div class="hotel-filter card shadow-lg p-4 mb-4 modern-hotel-filter">
               <form id="hotel-filter-form" class="hotel-filter-form">
@@ -2407,6 +2419,24 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('city-nav').innerHTML = '';
         loadAllHotels();
     }
+});
+</script>
+
+<script>
+let heroCurrent = 0;
+const heroSlides = document.querySelectorAll('.hero-slide');
+function showHeroSlide(idx) {
+    heroSlides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === idx);
+    });
+}
+function nextHeroSlide() {
+    heroCurrent = (heroCurrent + 1) % heroSlides.length;
+    showHeroSlide(heroCurrent);
+}
+document.addEventListener('DOMContentLoaded', function() {
+    showHeroSlide(0);
+    setInterval(nextHeroSlide, 5000);
 });
 </script>
 
