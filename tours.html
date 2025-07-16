@@ -23,7 +23,7 @@
 
         .nautica-script {
             font-family: 'Nautica Script Bold', cursive;
-            font-size: 3em;
+            font-size: 4.2em;
             font-weight: bold;
             color: #cddae6;
             text-align: center;
@@ -93,13 +93,27 @@
     </nav>
 
     <!-- Hero Section with Search -->
-    <section class="hero-section">
-        <p class="nautica-script">LuxuryHavenTravel</p>
-        <div class="hero-content"><br><br><br><br><br><br><br><br>
-
-            <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
-            <p>Đặt phòng khách sạn, tour du lịch, ưu đãi với giá tốt nhất</p>
-        </div><br><br><br><br><br><br><br><br>
+    <section class="hero-section hero-slider">
+        <div class="hero-slide hero-slide-1 active">
+            <div class="hero-overlay"></div><p class="nautica-script">LuxuryHavenTravel</p><br><br>
+            <div class="hero-content-wrapper">
+                
+                <div class="hero-content">
+                    <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
+                    <p>Đặt phòng khách sạn, tour du lịch, ưu đãi với giá tốt nhất</p>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide hero-slide-2">
+            <div class="hero-overlay"></div><p class="nautica-script">LuxuryHavenTravel</p>
+            <div class="hero-content-wrapper">
+                
+                <div class="hero-content">
+                    <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
+                    <p>Đặt phòng khách sạn, tour du lịch, ưu đãi với giá tốt nhất</p>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="experiential-intro-section">
@@ -1059,6 +1073,26 @@ function generateNotification(icon, color, text, link = '#') {
     firebase.database().ref('notifications').push(newNotif);
 }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const totalSlides = slides.length;
+    
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+        }
+    
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        }
+    
+        setInterval(nextSlide, 5000); // Chuyển slide mỗi 5 giây
+    });
+    </script>
 </body>
 
 </html>

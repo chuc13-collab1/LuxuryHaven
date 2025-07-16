@@ -338,7 +338,7 @@ body {
     text-align: center;
     position: absolute;
     width: 100%;
-    top: 45%;
+    top: 30%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
@@ -2200,4 +2200,76 @@ margin-bottom: 32px;
 
 .btn-booking:hover {
     background-color: #e67e22;
+}
+.hero-slider {
+    position: relative;
+    width: 100%;
+    height: 520px;
+    overflow: hidden;
+    margin-top: 80px;
+}
+.hero-slide {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s cubic-bezier(0.4,0,0.2,1);
+    z-index: 1;
+}
+.hero-slide.active {
+    opacity: 1;
+    z-index: 2;
+}
+.hero-slide-1 {
+    background-image: url('https://cdn.pixabay.com/photo/2019/02/19/21/02/architecture-4007755_1280.jpg');
+}
+.hero-slide-2 {
+    background-image: url('https://cdn.pixabay.com/photo/2019/07/30/11/39/landscape-4372752_1280.jpg');
+}
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(26,35,126,0.18), rgba(13,71,161,0.10));
+    z-index: 2;
+}
+.hero-content-wrapper {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.hero-content {
+    color: #fff;
+    text-align: center;
+    margin-top: 20px;
+}
+.hero-content h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.25);
+}
+.hero-content p {
+    font-size: 1.3rem;
+    font-weight: 400;
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.18);
+}
+@media (max-width: 900px) {
+    .hero-slider {height: 380px;}
+    .hero-content h1 {font-size: 2.1rem;}
+    .hero-content p {font-size: 1rem;}
+}
+@media (max-width: 600px) {
+    .hero-slider {height: 260px;}
+    .hero-content h1 {font-size: 1.2rem;}
+    .hero-content p {font-size: 0.9rem;}
 }

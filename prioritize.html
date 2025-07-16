@@ -76,16 +76,29 @@
             </div>
         </div>
     </nav>
-
-    <!-- Hero Section with Search -->
-    <section class="hero-section">
-        <p class="nautica-script">LuxuryHavenTravel</p>
-        <div class="hero-content"><br><br><br><br><br><br><br><br>
-
-            <h1>Ưu đãi đặc biệt dành riêng cho bạn</h1>
-            <p>Trải nghiệm kỳ nghỉ đẳng cấp với giá ưu đãi đến bất ngờ chỉ có tại LuxuryHavenTravel.</p>
-        </div><br><br><br><br><br><br><br><br>
-    </section>
+<!-- Hero Section with Search -->
+<section class="hero-section hero-slider">
+    <div class="hero-slide hero-slide-1 active">
+        <div class="hero-overlay"></div><p class="nautica-script">LuxuryHavenTravel</p><br><br>
+        <div class="hero-content-wrapper">
+            
+            <div class="hero-content">
+                <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
+                <p>Đặt phòng khách sạn, tour du lịch, ưu đãi với giá tốt nhất</p>
+            </div>
+        </div>
+    </div>
+    <div class="hero-slide hero-slide-2">
+        <div class="hero-overlay"></div><p class="nautica-script">LuxuryHavenTravel</p><br><br>
+        <div class="hero-content-wrapper">
+            
+            <div class="hero-content">
+                <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
+                <p>Đặt phòng khách sạn, tour du lịch, ưu đãi với giá tốt nhất</p>
+            </div>
+        </div>
+    </div>
+</section>
 
     <main>
         
@@ -1189,6 +1202,26 @@ s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const totalSlides = slides.length;
+    
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+        }
+    
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        }
+    
+        setInterval(nextSlide, 5000); // Chuyển slide mỗi 5 giây
+    });
+    </script>
 </body>
 
 </html>

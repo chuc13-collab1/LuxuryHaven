@@ -2595,3 +2595,16 @@ html {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+.highlighted-location-section h1 {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.highlighted-location-section img {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+@media (max-width: 900px) {
+  .highlighted-location-section .container {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+}
