@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="css\index.css">
+    <link rel="stylesheet" href="css\mobile.css">
     <link rel="stylesheet" href="css\chatbox.css">
     <script type="module" src="js/search.js"></script>
     <style>
@@ -152,10 +153,9 @@
     </section><br>
 
     <!-- Khách sạn nổi bật -->
-     <h2 class="section-title">Khách sạn nổi bật</h2>
     <section class="featured-hotels">
         <div class="container">
-            
+            <h2 class="section-title text-center">Khách sạn nổi bật</h2>
             <div class="row g-4" id="featured-hotels-list">
                 <!-- Khách sạn sẽ được load động từ Firebase -->
             </div>
@@ -693,6 +693,7 @@ loadLatestNews();
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="module" src="js/search.js"></script>
+    <script src="js/mobile.js"></script>
     <script>
         // Firebase config và xử lý xác thực
         const firebaseConfig = {
@@ -1088,6 +1089,36 @@ loadLatestNews();
             };
             firebase.database().ref('notifications').push(newNotif);
         }
+
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const navLinks = document.getElementById('nav-links');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenuBtn.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                });
+
+                // Close mobile menu when clicking on a link
+                const navLinksItems = navLinks.querySelectorAll('a');
+                navLinksItems.forEach(link => {
+                    link.addEventListener('click', function() {
+                        mobileMenuBtn.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    });
+                });
+
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!mobileMenuBtn.contains(event.target) && !navLinks.contains(event.target)) {
+                        mobileMenuBtn.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    }
+                });
+            }
+        });
 
         // Banner Slider Functions
         let currentBannerSlideIndex = 0;
@@ -1509,6 +1540,38 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 
+    <!-- Bottom Navigation Bar for Mobile -->
+    <nav class="bottom-nav d-md-none d-lg-none">
+        <a href="index.html" class="bottom-nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Trang chủ</span>
+        </a>
+        <a href="hotel.html" class="bottom-nav-item">
+            <i class="fas fa-hotel"></i>
+            <span>Khách sạn</span>
+        </a>
+        <a href="tours.html" class="bottom-nav-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Tours</span>
+        </a>
+        <a href="prioritize.html" class="bottom-nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Ưu đãi</span>
+        </a>
+        <a href="travel_guide.html" class="bottom-nav-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Cẩm nang</span>
+        <a href="about_us.html" class="bottom-nav-item">
+            <i class="fas fa-phone"></i>
+            <span>Liên hệ</span>
+        </a>
+        <a href="member.html" class="bottom-nav-item">
+            <i class="fas fa-user"></i>
+            <span>Tài khoản</span>
+        </a>
+        
+        </a>
+    </nav>
 </body>
 
 </html>

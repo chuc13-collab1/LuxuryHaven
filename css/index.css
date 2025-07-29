@@ -7,24 +7,34 @@
     /* Smooth scrolling for all anchor links */
     html {
         scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%; /* Prevent font scaling on iOS */
     }
 
     /* Better text rendering on mobile */
     * {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    }
+
+    /* Better touch interaction */
+    button, a, input[type="submit"], input[type="button"] {
+        touch-action: manipulation; /* Fast tap response */
+    }
+
+    /* Section title styles */
+    .section-title {
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        color: #333;
     }
 
     /* Prevent zoom on input focus for iOS */
-    @media screen and (-webkit-min-device-pixel-ratio: 0) {
-        select, textarea, input[type="text"], input[type="password"], 
-        input[type="datetime"], input[type="datetime-local"], 
-        input[type="date"], input[type="month"], input[type="time"], 
-        input[type="week"], input[type="number"], input[type="email"], 
-        input[type="url"], input[type="search"], input[type="tel"] {
-            font-size: 16px;
-        }
+    input[type="text"], input[type="email"], input[type="password"], textarea, select {
+        font-size: 16px; /* Prevents zoom on iOS */
     }
+   
 
     /* Navbar Styles */
     .navbar {
@@ -189,75 +199,8 @@
         transform: rotate(45deg) translate(-5px, -6px);
     }
 
-    @media (max-width: 1200px) {
-        .nav-links {
-            gap: 15px;
-        }
-        
-        .nav-search {
-            flex: 0 1 250px;
-        }
-    }
 
-    @media (max-width: 992px) {
-        .nav-search {
-            display: none;
-        }
-        
-        .nav-links li a {
-            font-size: 0.9rem;
-        }
-    }    @media (max-width: 768px) {
-        .mobile-menu-btn {
-            display: flex;
-        }
-        
-        .nav-search {
-            display: none;
-        }
-        
-        .nav-links {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            flex-direction: column;
-            padding: 20px 0;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-            z-index: 999;
-        }
-        
-        .nav-links.active {
-            display: flex;
-        }
-        
-        .nav-links li {
-            margin: 0;
-            text-align: center;
-        }
-        
-        .nav-links li a {
-            display: block;
-            padding: 15px 20px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .navbar-brand img {
-            height: 50px;
-        }
-        
-        .nav-flex {
-            padding: 0 15px;
-        }
-        
-        .btn-outline-primary {
-            padding: 10px 16px;
-            font-size: 0.9rem;
-        }
-    }
+   
 
     /* Dropdown Styles */
     .dropdown {
@@ -395,49 +338,8 @@
     }
 
     /* Hero Section Mobile Optimization */
-    @media (max-width: 768px) {
-        .hero-section {
-            height: 60vh;
-            min-height: 500px;
-        }
-        
-        .hero-content-wrapper .nautica-script {
-            font-size: 3.5em;
-            top: 30%;
-            line-height: 0.9;
-        }
-        
-        .hero-content {
-            padding: 0 15px;
-            margin-top: 10px;
-        }
-        
-        .hero-content h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            line-height: 1.1;
-        }
-        
-        .hero-content p {
-            font-size: 1.1rem;
-            padding: 0 10px;
-        }
-    }
 
-    @media (max-width: 480px) {
-        .hero-content-wrapper .nautica-script {
-            font-size: 2.8em;
-            top: 40%;
-        }
-        
-        .hero-content h1 {
-            font-size: 2rem;
-        }
-        
-        .hero-content p {
-            font-size: 1rem;
-        }
-    }
+  
     .search-container {
         background: #fff;
         border-radius: 18px;
@@ -512,124 +414,10 @@
         color: #1976d2;
     }
 
-    /* Search Container Mobile Optimization */
-    @media (max-width: 768px) {
-        .search-container {
-            margin: 20px 15px;
-            padding: 20px 15px;
-            border-radius: 12px;
-        }
-        
-        .search-tabs {
-            gap: 15px;
-            margin-bottom: 15px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-        }
-        
-        .search-tab {
-            font-size: 1rem;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        
-        .search-form {
-            flex-direction: column;
-            gap: 10px;
-            align-items: stretch;
-        }
-        
-        .search-input-group {
-            min-width: 100%;
-            flex: 1;
-            padding: 12px 15px;
-            font-size: 1rem;
-        }
-        
-        .btn-search {
-            width: 100%;
-            padding: 12px;
-            font-size: 1.1rem;
-            margin-top: 5px;
-        }
-        
-        #show-filters {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-        }
-    }
 
-    @media (max-width: 480px) {
-        .search-container {
-            margin: 15px 10px;
-            padding: 15px 12px;
-        }
-        
-        .search-tabs {
-            gap: 10px;
-        }
-        
-        .search-tab {
-            font-size: 0.9rem;
-            padding-bottom: 8px;
-        }
-    }    .section-title {
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: #003366;
-        margin: 48px 0 32px 0;
-        text-align: center;
-        letter-spacing: -1px;
-    }
 
     /* General Mobile Typography and Spacing */
-    @media (max-width: 768px) {
-        body {
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        
-        .section-title {
-            font-size: 1.8rem;
-            margin: 30px 0 20px 0;
-            padding: 0 15px;
-        }
-        
-        .popular-destinations, .special-offers, .hotel-categories, .why-choose-us {
-            padding: 20px 0 15px 0;
-        }
-        
-        .container {
-            padding: 0 15px;
-        }
-        
-        .row {
-            margin: 0 -10px;
-        }
-        
-        .col-lg-3, .col-lg-4, .col-lg-6, .col-lg-8, .col-lg-12,
-        .col-md-3, .col-md-4, .col-md-6, .col-md-8, .col-md-12 {
-            padding: 0 10px;
-            margin-bottom: 20px;
-        }
-    }
 
-    @media (max-width: 480px) {
-        .section-title {
-            font-size: 1.5rem;
-            padding: 0 10px;
-            margin: 25px 0 15px 0;
-        }
-        
-        .container {
-            padding: 0 10px;
-        }
-        
-        .popular-destinations, .special-offers, .hotel-categories, .why-choose-us {
-            padding: 15px 0 10px 0;
-        }
-    }
 
     .popular-destinations, .special-offers, .hotel-categories, .why-choose-us {
         background: #f5f6fa;
@@ -647,51 +435,7 @@
     }
 
     /* Cards Mobile Optimization */
-    @media (max-width: 768px) {
-        .destination-card, .offer-card, .category-card, .feature-card {
-            border-radius: 12px;
-            margin-bottom: 20px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .destination-card:active, .offer-card:active, .category-card:active, .feature-card:active {
-            transform: scale(0.98);
-        }
-        
-        .destination-card img, .offer-card img, .category-card img {
-            height: 160px;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-        }
-        
-        .destination-info, .category-content, .offer-content-overlay {
-            padding: 15px 12px 10px 12px;
-        }
-        
-        .destination-info h3, .category-content h3, .offer-content-overlay h3, .offer-content-overlay h4 {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-        
-        .destination-info p, .category-content p, .offer-content-overlay p {
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .destination-card img, .offer-card img, .category-card img {
-            height: 140px;
-        }
-        
-        .destination-info h3, .category-content h3, .offer-content-overlay h3, .offer-content-overlay h4 {
-            font-size: 1rem;
-        }
-        
-        .destination-info p, .category-content p, .offer-content-overlay p {
-            font-size: 0.85rem;
-        }
-    }
+   
     .destination-card img, .offer-card img, .category-card img {
         width: 100%;
         height: 180px;
@@ -789,66 +533,7 @@
         color: #ffe066;
     }
 
-    /* Footer Mobile Optimization */
-    @media (max-width: 768px) {
-        .footer {
-            padding: 30px 0 0 0;
-            margin-top: 30px;
-        }
-        
-        .footer h4 {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .footer ul {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        
-        .footer ul li {
-            margin-bottom: 8px;
-        }
-        
-        .footer ul li a {
-            font-size: 1.1rem;
-            padding: 8px 0;
-            display: block;
-            touch-action: manipulation;
-        }
-        
-        .footer-bottom {
-            padding: 20px 0;
-            margin-top: 20px;
-        }
-        
-        .social-links {
-            text-align: center;
-            margin-top: 15px;
-        }
-        
-        .social-links a {
-            font-size: 1.5rem;
-            margin: 0 15px;
-            padding: 10px;
-            display: inline-block;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .footer {
-            padding: 25px 0 0 0;
-        }
-        
-        .footer ul li a {
-            font-size: 1rem;
-        }
-        
-        .social-links a {
-            margin: 0 10px;
-        }
-    }
+ 
 
     /* Bố cục section và card chuyên nghiệp, đồng nhất */
     .container {
@@ -983,27 +668,7 @@
         font-weight: 700;
         text-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
-    @media (max-width: 991px) {
-        .special-offers .row {
-            flex-direction: column;
-            height: auto;
-            min-height: 0;
-        }
-        .special-offers .col-offer-big,
-        .special-offers .col-offer-small {
-            width: 100%;
-            height: auto;
-        }
-        .special-offers .col-offer-small {
-            flex-direction: row;
-            gap: 8px;
-        }
-        .special-offers .offer-card.big,
-        .special-offers .offer-card.small {
-            height: 180px;
-            min-height: 0;
-        }
-    }
+ 
 
     /* Why choose us: 4 cột đều nhau */
     .why-choose-us .row {
@@ -1037,28 +702,7 @@
         margin-bottom: 24px;
     }
 
-    /* Responsive */
-    @media (max-width: 991px) {
-        .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
-            width: 50%;
-        }
-        .col-md-6 {
-            width: 100%;
-        }
-    }
-    @media (max-width: 767px) {
-        .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
-            width: 100%;
-        }
-        .container {
-            padding-left: 6px;
-            padding-right: 6px;
-        }
-        .section-title {
-            font-size: 1.3rem;
-            margin: 32px 0 18px 0;
-        }
-    }
+
 
     /* --- HOTEL CATEGORIES LAYOUT --- */
     .hotel-categories {
@@ -1117,17 +761,7 @@
         line-height: 1.5;
     }
 
-    @media (max-width: 991px) {
-        .hotel-categories .category-card img {
-            height: 180px;
-        }
-    }
 
-    @media (max-width: 767px) {
-        .hotel-categories .category-card img {
-            height: 160px;
-        }
-    }
 
     /* Nền mờ với hình ảnh lớn */
     .modal {
@@ -1151,61 +785,7 @@
     }
 
     /* Modal Mobile Optimization */
-    @media (max-width: 768px) {
-        .modal-content {
-            width: 90%;
-            margin: 10% auto;
-            padding: 20px 15px;
-            border-radius: 12px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        
-        .close {
-            font-size: 32px;
-            right: 15px;
-            top: 8px;
-            padding: 5px;
-        }
-        
-        .auth-tab {
-            padding: 12px 16px;
-            font-size: 1.1rem;
-            min-height: 44px;
-        }
-        
-        .auth-form input {
-            padding: 14px 12px;
-            margin: 12px 0;
-            font-size: 1rem;
-            border-radius: 8px;
-            min-height: 44px;
-        }
-        
-        .auth-form button {
-            padding: 14px;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            min-height: 48px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .modal-content {
-            width: 95%;
-            margin: 5% auto;
-            padding: 15px 12px;
-        }
-        
-        .auth-form input {
-            padding: 16px 12px;
-        }
-        
-        .auth-form button {
-            padding: 16px;
-            font-size: 1.2rem;
-        }
-    }
+ 
     .close {
         color: #aaa;
         float: right;
@@ -1424,60 +1004,6 @@
         box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
     }
 
-    /* Button Mobile Optimization */
-    @media (max-width: 768px) {
-        .btn-primary, .btn-outline-primary, .btn-search {
-            min-height: 44px;
-            padding: 12px 20px;
-            font-size: 1rem;
-            border-radius: 8px;
-            touch-action: manipulation;
-        }
-        
-        .btn-primary:active, .btn-outline-primary:active, .btn-search:active {
-            transform: scale(0.95);
-        }
-        
-        /* Larger touch targets for mobile */
-        .nav-links li a {
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            touch-action: manipulation;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .btn-primary, .btn-outline-primary, .btn-search {
-            padding: 14px 18px;
-            font-size: 1.1rem;
-        }
-    }
-
-    @media (max-width: 1200px) {
-        .summer-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @media (max-width: 768px) {
-        .summer-grid {
-            grid-template-columns: 1fr;
-        }
-        .summer-card {
-            height: 280px;
-        }
-        .combo-info {
-            padding: 16px;
-        }
-        .combo-info h3 {
-            font-size: 1.3rem;
-        }
-        .combo-features span {
-            font-size: 0.85rem;
-        }
-    }
 
     /* Combo tốt nhất */
     .best-combo {
@@ -1636,51 +1162,7 @@
     .dot.active {
         background: #fff;
     }
-    @media (max-width: 900px) {
-        .slider-container {
-            height: 400px;
-        }
-        .combo-info h3 {
-            font-size: 1.8rem;
-        }
-        .combo-info p {
-            font-size: 1.1rem;
-        }
-        .combo-features span {
-            font-size: 1rem;
-        }
-        .new-price {
-            font-size: 1.6rem;
-        }
-        .combo-btn {
-            padding: 12px 32px;
-            font-size: 1.1rem;
-        }
-    }
-    @media (max-width: 600px) {
-        .slider-container {
-            height: 300px;
-        }
-        .combo-info h3 {
-            font-size: 1.5rem;
-        }
-        .combo-info p {
-            font-size: 1rem;
-        }
-        .combo-features {
-            gap: 16px;
-        }
-        .combo-features span {
-            font-size: 0.9rem;
-        }
-        .new-price {
-            font-size: 1.4rem;
-        }
-        .combo-btn {
-            padding: 10px 28px;
-            font-size: 1rem;
-        }
-    }
+ 
 
     /* Banner giảm giá */
     .banner-sale {
@@ -1785,16 +1267,7 @@
         gap: 28px;
         margin-bottom: 18px;
     }
-    @media (max-width: 1000px) {
-        .summer-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-    @media (max-width: 600px) {
-        .summer-grid {
-            grid-template-columns: 1fr;
-        }
-    }
+   
     .summer-card {
         background: #fff;
         border-radius: 16px;
@@ -1937,148 +1410,10 @@
     .destination-card.small:nth-of-type(5) {
         grid-column: 4 / 9;
         grid-row: 6 / 9;
-    }    @media (max-width: 768px) {
-        .favorite-destinations {
-            padding: 30px 0;
-        }
-        
-        .favorite-destinations .section-title {
-            font-size: 2rem;
-            margin-bottom: 8px;
-            padding: 0 20px;
-        }
-        
-        .combo-center-text {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            padding: 0 20px;
-        }
-        
-        .golden-spiral-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            height: auto;
-            padding: 0 15px;
-        }
-        
-        .destination-card {
-            border-radius: 20px;
-            height: 300px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .destination-card.large,
-        .destination-card.medium,
-        .destination-card.small {
-            grid-column: unset;
-            grid-row: unset;
-            width: 100%;
-            height: 300px;
-        }
-        
-        .destination-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .destination-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 25px 20px;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
-            color: white;
-        }
-        
-        .destination-info h3 {
-            margin: 0 0 8px 0;
-            font-size: 1.4rem;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        .destination-info p {
-            margin: 0;
-            font-size: 1rem;
-            opacity: 0.95;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        }
-        
-        /* Create staggered layout effect */
-        .destination-card:nth-child(1) {
-            margin-bottom: 10px;
-        }
-        
-        .destination-card:nth-child(2) {
-            margin-left: 20px;
-            margin-right: -20px;
-            margin-bottom: 10px;
-        }
-        
-        .destination-card:nth-child(3) {
-            margin-bottom: 10px;
-        }
-        
-        .destination-card:nth-child(4) {
-            margin-left: 20px;
-            margin-right: -20px;
-            margin-bottom: 10px;
-        }
-        
-        .destination-card:nth-child(5) {
-            margin-bottom: 0;
-        }
-    }
+    }   
+    
 
-    @media (max-width: 480px) {
-        .favorite-destinations {
-            padding: 25px 0;
-        }
-        
-        .favorite-destinations .section-title {
-            font-size: 1.7rem;
-            padding: 0 15px;
-        }
-        
-        .combo-center-text {
-            font-size: 1rem;
-            margin-bottom: 25px;
-            padding: 0 15px;
-        }
-        
-        .golden-spiral-grid {
-            padding: 0 10px;
-            gap: 15px;
-        }
-        
-        .destination-card {
-            height: 250px;
-            border-radius: 16px;
-        }
-        
-        .destination-card:nth-child(2),
-        .destination-card:nth-child(4) {
-            margin-left: 15px;
-            margin-right: -15px;
-        }
-        
-        .destination-info {
-            padding: 20px 15px;
-        }
-        
-        .destination-info h3 {
-            font-size: 1.2rem;
-        }
-        
-        .destination-info p {
-            font-size: 0.9rem;
-        }
-    }
+    
 
     /* Banner Sale */
     .banner-sale {
@@ -2171,10 +1506,7 @@
         color: #fffbe7;
         opacity: 0.85;
     }
-    @media (max-width: 700px) {
-        .banner-sale-content {padding: 18px 6px;}
-        .banner-sale {min-height: 220px;}
-    }
+  
 
     .combo-center-text {
         text-align: center;
@@ -2275,27 +1607,7 @@
         font-size: 1.1rem;
     }
 
-    @media (max-width: 768px) {
-        #search-results {
-            position: fixed;
-            top: 80px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: 0;
-            border-radius: 0;
-            max-height: none;
-        }
-
-        .search-items {
-            grid-template-columns: 1fr;
-        }
-
-        .search-item img {
-            width: 100px;
-            height: 100px;
-        }
-    }
+  
 
     /* Banner Slider Styles */
     .banner-slider {
@@ -2487,75 +1799,7 @@
     }
 
     /* Responsive Design */
-    @media (max-width: 768px) {
-        .banner-slider-container {
-            height: 350px;
-        }
 
-        .banner-slide-content {
-            padding: 30px 20px;
-        }
-
-        .banner-slide-content h2 {
-            font-size: 2rem;
-        }
-
-        .banner-slide-desc {
-            font-size: 1rem;
-        }
-
-        .banner-slide-list {
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .banner-slide-list li {
-            font-size: 0.85rem;
-            padding: 6px 12px;
-        }
-
-        .banner-slide-price {
-            font-size: 1.3rem;
-        }
-
-        .banner-slider-btn {
-            width: 40px;
-            height: 40px;
-            font-size: 1rem;
-        }
-
-        .banner-slider-prev {
-            left: 10px;
-        }
-
-        .banner-slider-next {
-            right: 10px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .banner-slider-container {
-            height: 300px;
-        }
-
-        .banner-slide-content h2 {
-            font-size: 1.5rem;
-        }
-
-        .banner-slide-desc {
-            font-size: 0.9rem;
-        }
-
-        .banner-slide-price {
-            font-size: 1.1rem;
-        }
-
-        .banner-slider-btn {
-            width: 35px;
-            height: 35px;
-            font-size: 0.9rem;
-        }
-    }
 
     /* Hero Slider Styles */
     .hero-slider {
@@ -2620,16 +1864,7 @@
         font-weight: 400;
         text-shadow: 1px 1px 6px rgba(0,0,0,0.18);
     }
-    @media (max-width: 900px) {
-        .hero-slider {height: 380px;}
-        .hero-content h1 {font-size: 2.1rem;}
-        .hero-content p {font-size: 1rem;}
-    }
-    @media (max-width: 600px) {
-        .hero-slider {height: 260px;}
-        .hero-content h1 {font-size: 1.2rem;}
-        .hero-content p {font-size: 0.9rem;}
-    }
+   
 
     /* Popular Destinations - 2 column layout with video */
     .popular-destinations .row {
@@ -2652,16 +1887,7 @@
         background: #eee;
         display: block;
     }
-    @media (max-width: 991px) {
-        .popular-destinations .row {
-            flex-direction: column-reverse;
-            gap: 18px;
-        }
-        .popular-destinations video {
-            max-width: 100%;
-            min-height: 200px;
-        }
-    }
+   
     .popular-destinations .btn-outline-primary {
         border: 2px solid #a67c52;
         color: #a67c52;
@@ -2742,22 +1968,7 @@
         background: #a67c52;
         color: #fff;
     }
-    @media (max-width: 991px) {
-        .featured-hotels .row {
-            gap: 18px;
-        }
-        .hotel-card {
-            min-height: 380px;
-        }
-    }
-    @media (max-width: 767px) {
-        .featured-hotels .row {
-            flex-direction: column;
-        }
-        .hotel-card {
-            min-height: 320px;
-        }
-    }
+   
 
     /* Đảm bảo các nút 'Xem chi tiết' trong featured-hotels ngang bằng nhau */
     .featured-hotels .hotel-card .btn-outline-primary {

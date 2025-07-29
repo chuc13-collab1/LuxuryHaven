@@ -37,6 +37,8 @@
     <link rel="stylesheet" href="css/hotel.css">
     <link rel="stylesheet" href="css\chatbox.css">
     <script type="module" src="js/search.js"></script>
+    <script src="js/mobile.js"></script>
+    <link rel="stylesheet" href="css/mobile.css">
     <style>
         @font-face {
             font-family: 'Nautica Script Bold';
@@ -236,8 +238,19 @@
             </div>
         </div>
     </section>
-    <div class="hotel-filter card shadow-lg p-4 mb-4 modern-hotel-filter">
-              <form id="hotel-filter-form" class="hotel-filter-form">
+    
+    <!-- Mobile Filter Toggle Button -->
+    <button class="filter-toggle-mobile" id="filter-toggle-mobile" style="display: none;">
+        <i class="fas fa-filter"></i> Bộ lọc tìm kiếm
+    </button>
+    
+    <div class="hotel-filter search-container card shadow-lg p-4 mb-4 modern-hotel-filter" id="hotel-filter">
+        <!-- Mobile Filter Close Button -->
+        <button class="filter-close-mobile" id="filter-close-mobile" style="display: none;">
+            <i class="fas fa-times"></i>
+        </button>
+        
+              <form id="hotel-filter-form" class="hotel-filter-form search-filters">
                 <!-- Địa điểm -->
                 <div class="filter-group">
                   <label class="form-label mb-1"><i class="fas fa-map-marker-alt me-1 text-primary"></i> Địa điểm</label>
@@ -685,6 +698,10 @@
 
         const cityFromUrlRaw = getQueryParam('city');
         const cityFromUrl = normalizeCityName(cityFromUrlRaw);
+        
+        // Declare global variables early to avoid ReferenceError
+        let currentRegion;
+        let currentCity;
         if (cityFromUrlRaw) {
             // Nếu có city trên URL, chỉ set giao diện tab 'Tất cả' active, KHÔNG gán currentRegion để không khóa các tab miền
             document.querySelectorAll('.region-tab').forEach(b=>b.classList.remove('active'));
@@ -726,13 +743,36 @@
                     "Hà Nội", "Hạ Long", "Sapa"
                 ]
             };
-            // Mặc định miền Nam
-            let currentRegion = 'nam';
-            let currentCity = regionCities[currentRegion][0];
+            // Initialize current region and city if not already set
+            if (typeof currentRegion === 'undefined') {
+                currentRegion = 'nam';
+            }
+            if (typeof currentCity === 'undefined') {
+                // Ensure the region exists in regionCities before accessing
+                if (regionCities[currentRegion] && regionCities[currentRegion].length > 0) {
+                    currentCity = regionCities[currentRegion][0];
+                } else {
+                    // Fallback to first available region and city
+                    const firstRegion = Object.keys(regionCities)[0];
+                    currentRegion = firstRegion;
+                    currentCity = regionCities[firstRegion][0];
+                }
+            }
 
             // Render city-nav theo miền
             function renderCityNav(region) {
                 const cityNav = document.getElementById('city-nav');
+                if (!cityNav) {
+                    console.error('City nav element not found');
+                    return;
+                }
+                
+                // Check if region exists in regionCities
+                if (!regionCities[region] || !Array.isArray(regionCities[region])) {
+                    console.error('Invalid region:', region);
+                    return;
+                }
+                
                 cityNav.innerHTML = regionCities[region].map((city, idx) =>
                     `<a href="#" class="btn btn-outline-primary me-3${idx===0?' active':''}" data-city="${city}">${city}</a>`
                 ).join('');
@@ -749,9 +789,14 @@
                         document.getElementById('city-nav').innerHTML = '';
                         loadAllHotels();
                     } else {
-                        currentCity = regionCities[currentRegion][0];
-                        renderCityNav(currentRegion);
-                        loadHotels(currentCity);
+                        // Ensure region exists before accessing
+                        if (regionCities[currentRegion] && regionCities[currentRegion].length > 0) {
+                            currentCity = regionCities[currentRegion][0];
+                            renderCityNav(currentRegion);
+                            loadHotels(currentCity);
+                        } else {
+                            console.error('Invalid region selected:', currentRegion);
+                        }
                     }
                 });
             });
@@ -1721,28 +1766,100 @@
         });
 
         // Mobile menu toggle function        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const navLinks = document.getElementById('nav-links');
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const navLinks = document.getElementById('nav-links');
 
-        if (mobileMenuBtn && navLinks) {
-            mobileMenuBtn.addEventListener('click', function () {
-                this.classList.toggle('active');
-                navLinks.classList.toggle('active');
+            console.log('Mobile menu elements:', { mobileMenuBtn, navLinks }); // Debug log
+
+            if (mobileMenuBtn && navLinks) {
+                // Initialize mobile menu to closed state
+                mobileMenuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+                
+                mobileMenuBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Mobile menu clicked'); // Debug log
+                    
+                    // Check current state before toggle
+                    const wasBtnActive = this.classList.contains('active');
+                    const wasNavActive = navLinks.classList.contains('active');
+                    
+                    // Toggle classes
+                    this.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                    
+                    // Log new states
+                    console.log('Menu states:', {
+                        wasBtnActive,
+                        wasNavActive,
+                        nowBtnActive: this.classList.contains('active'),
+                        nowNavActive: navLinks.classList.contains('active')
+                    }); // Debug log
+                });
+
+                // Close mobile menu when clicking on links
+                navLinks.addEventListener('click', function (e) {
+                    if (e.target.tagName === 'A') {
+                        console.log('Menu link clicked, closing menu'); // Debug log
+                        mobileMenuBtn.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    }
+                });
+
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+                        if (mobileMenuBtn.classList.contains('active')) {
+                            console.log('Clicked outside, closing menu'); // Debug log
+                            mobileMenuBtn.classList.remove('active');
+                            navLinks.classList.remove('active');
+                        }
+                    }
+                });
+            } else {
+                console.error('Mobile menu elements not found:', { mobileMenuBtn, navLinks });
+            }
+        });
+
+        // Mobile Filter Toggle
+        const filterToggleBtn = document.getElementById('filter-toggle-mobile');
+        const filterCloseBtn = document.getElementById('filter-close-mobile');
+        const hotelFilter = document.getElementById('hotel-filter');
+
+        if (filterToggleBtn && filterCloseBtn && hotelFilter) {
+            // Show filter
+            filterToggleBtn.addEventListener('click', function() {
+                hotelFilter.classList.add('mobile-visible');
+                hotelFilter.classList.remove('mobile-hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scroll
             });
 
-            // Close mobile menu when clicking on links
-            navLinks.addEventListener('click', function (e) {
-                if (e.target.tagName === 'A') {
-                    mobileMenuBtn.classList.remove('active');
-                    navLinks.classList.remove('active');
+            // Hide filter
+            filterCloseBtn.addEventListener('click', function() {
+                hotelFilter.classList.remove('mobile-visible');
+                hotelFilter.classList.add('mobile-hidden');
+                document.body.style.overflow = ''; // Restore scroll
+            });
+
+            // Close filter when clicking outside (mobile only)
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && 
+                    hotelFilter.classList.contains('mobile-visible') &&
+                    !hotelFilter.contains(e.target) && 
+                    !filterToggleBtn.contains(e.target)) {
+                    hotelFilter.classList.remove('mobile-visible');
+                    hotelFilter.classList.add('mobile-hidden');
+                    document.body.style.overflow = '';
                 }
             });
 
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', function (e) {
-                if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
-                    mobileMenuBtn.classList.remove('active');
-                    navLinks.classList.remove('active');
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    hotelFilter.classList.remove('mobile-visible', 'mobile-hidden');
+                    document.body.style.overflow = '';
                 }
             });
         }
@@ -2439,6 +2556,37 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(nextHeroSlide, 5000);
 });
 </script>
-
+<!-- Bottom Navigation Bar for Mobile -->
+<nav class="bottom-nav d-md-none d-lg-none">
+    <a href="index.html" class="bottom-nav-item">
+        <i class="fas fa-home"></i>
+        <span>Trang chủ</span>
+    </a>
+    <a href="hotel.html" class="bottom-nav-item active">
+        <i class="fas fa-hotel"></i>
+        <span>Khách sạn</span>
+    </a>
+    <a href="tours.html" class="bottom-nav-item">
+        <i class="fas fa-map-marked-alt"></i>
+        <span>Tours</span>
+    </a>
+    <a href="prioritize.html" class="bottom-nav-item">
+        <i class="fas fa-gift"></i>
+        <span>Ưu đãi</span>
+    </a>
+    <a href="travel_guide.html" class="bottom-nav-item">
+        <i class="fas fa-map-marked-alt"></i>
+        <span>Cẩm nang</span>
+    <a href="about_us.html" class="bottom-nav-item">
+        <i class="fas fa-phone"></i>
+        <span>Liên hệ</span>
+    </a>
+    <a href="member.html" class="bottom-nav-item">
+        <i class="fas fa-user"></i>
+        <span>Tài khoản</span>
+    </a>
+    
+    </a>
+</nav>
   
   

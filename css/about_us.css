@@ -168,54 +168,11 @@ body {
     white-space: nowrap;
 }
 
-@media (max-width: 1200px) {
-    .nav-links {
-        gap: 15px;
-    }
-    
-    .nav-search {
-        flex: 0 1 250px;
-    }
-}
 
-@media (max-width: 992px) {
-    .nav-search {
-        display: none;
-    }
-    
-    .nav-links li a {
-        font-size: 0.9rem;
-    }
-}
 
-@media (max-width: 768px) {
-    .mobile-menu-btn {
-        display: flex;
-    }
-    
-    .nav-search {
-        display: none;
-    }
-    
-    .nav-links {
-        display: none;
-        position: fixed;
-        top: 80px;
-        left: 0;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.98);
-        flex-direction: column;
-        padding: 20px 0;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        z-index: 999;
-    }
-    
-    .nav-links.active {
-        display: flex;
-    }.navbar-brand img {
-        height: 50px;
-    }
-}
+
+
+
 
 /* Dropdown Styles */
 .dropdown {
@@ -685,27 +642,7 @@ body {
     font-weight: 700;
     text-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
-@media (max-width: 991px) {
-    .special-offers .row {
-        flex-direction: column;
-        height: auto;
-        min-height: 0;
-    }
-    .special-offers .col-offer-big,
-    .special-offers .col-offer-small {
-        width: 100%;
-        height: auto;
-    }
-    .special-offers .col-offer-small {
-        flex-direction: row;
-        gap: 8px;
-    }
-    .special-offers .offer-card.big,
-    .special-offers .offer-card.small {
-        height: 180px;
-        min-height: 0;
-    }
-}
+
 
 /* Why choose us: 4 cột đều nhau */
 .why-choose-us .row {
@@ -740,27 +677,8 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 991px) {
-    .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
-        width: 50%;
-    }
-    .col-md-6 {
-        width: 100%;
-    }
-}
-@media (max-width: 767px) {
-    .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
-        width: 100%;
-    }
-    .container {
-        padding-left: 6px;
-        padding-right: 6px;
-    }
-    .section-title {
-        font-size: 1.3rem;
-        margin: 32px 0 18px 0;
-    }
-}
+
+
 
 /* --- HOTEL CATEGORIES LAYOUT --- */
 .hotel-categories {
@@ -819,17 +737,9 @@ body {
     line-height: 1.5;
 }
 
-@media (max-width: 991px) {
-    .hotel-categories .category-card img {
-        height: 180px;
-    }
-}
 
-@media (max-width: 767px) {
-    .hotel-categories .category-card img {
-        height: 160px;
-    }
-}
+
+
 
 /* Nền mờ với hình ảnh lớn */
 .modal {
@@ -1072,29 +982,9 @@ body {
     box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
 }
 
-@media (max-width: 1200px) {
-    .summer-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 
-@media (max-width: 768px) {
-    .summer-grid {
-        grid-template-columns: 1fr;
-    }
-    .summer-card {
-        height: 280px;
-    }
-    .combo-info {
-        padding: 16px;
-    }
-    .combo-info h3 {
-        font-size: 1.3rem;
-    }
-    .combo-features span {
-        font-size: 0.85rem;
-    }
-}
+
+
 
 /* Combo tốt nhất */
 .best-combo {
@@ -1253,51 +1143,8 @@ body {
 .dot.active {
     background: #fff;
 }
-@media (max-width: 900px) {
-    .slider-container {
-        height: 400px;
-    }
-    .combo-info h3 {
-        font-size: 1.8rem;
-    }
-    .combo-info p {
-        font-size: 1.1rem;
-    }
-    .combo-features span {
-        font-size: 1rem;
-    }
-    .new-price {
-        font-size: 1.6rem;
-    }
-    .combo-btn {
-        padding: 12px 32px;
-        font-size: 1.1rem;
-    }
-}
-@media (max-width: 600px) {
-    .slider-container {
-        height: 300px;
-    }
-    .combo-info h3 {
-        font-size: 1.5rem;
-    }
-    .combo-info p {
-        font-size: 1rem;
-    }
-    .combo-features {
-        gap: 16px;
-    }
-    .combo-features span {
-        font-size: 0.9rem;
-    }
-    .new-price {
-        font-size: 1.4rem;
-    }
-    .combo-btn {
-        padding: 10px 28px;
-        font-size: 1rem;
-    }
-}
+
+
 
 /* Banner giảm giá */
 .banner-sale {
@@ -1431,17 +1278,7 @@ body {
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(44,62,80,0.10);
 }
-@media (max-width: 700px) {
-    #about-introduction section {
-        padding: 18px 6vw;
-    }
-    #about-introduction h2 {
-        font-size: 1.5rem;
-    }
-    #about-introduction p {
-        font-size: 1rem;
-    }
-}
+
 
 /* CSS cho Sứ mệnh & Tầm nhìn (Mission & Vision) */
 #about-mission-vision section {
@@ -1489,17 +1326,7 @@ body {
     margin-bottom: 0;
     line-height: 1.6;
 }
-@media (max-width: 900px) {
-    #about-mission-vision section {
-        flex-direction: column;
-        gap: 24px;
-        padding: 24px 8px;
-    }
-    .mission-card, .vision-card {
-        max-width: 100%;
-        margin: 0 auto 18px auto;
-    }
-}
+
 
 /* CSS cho Giá trị cốt lõi (Core Values) */
 #about-core-values {
@@ -1571,37 +1398,8 @@ body {
     margin-bottom: 0;
     line-height: 1.6;
 }
-@media (max-width: 991px) {
-    .core-values-list {
-        flex-direction: column;
-        gap: 24px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-    .core-value-card {
-        max-width: 100%;
-        min-width: 0;
-        width: 100%;
-        margin: 0 auto 18px auto;
-    }
-    .core-values-title {
-        font-size: 1.7rem;
-    }
-}
-@media (max-width: 600px) {
-    #about-core-values {
-        padding: 32px 0 32px 0;
-    }
-    .core-value-card {
-        padding: 28px 10px 22px 10px;
-    }
-    .core-value-title {
-        font-size: 1.3rem;
-    }
-    .core-value-desc {
-        font-size: 1rem;
-    }
-}
+
+
 
 .timeline-section {
     max-width: 1100px;
@@ -1703,28 +1501,7 @@ body {
 .timeline-item.right .timeline-content {
     margin-left: 32px;
 }
-@media (max-width: 900px) {
-    .timeline:before {
-        left: 24px;
-        transform: none;
-    }
-    .timeline-item {
-        flex-direction: column !important;
-        align-items: flex-start;
-        margin-bottom: 40px;
-    }
-    .timeline-content {
-        margin: 0 0 0 0 !important;
-        max-width: 100%;
-        min-width: 0;
-    }
-    .timeline-year {
-        margin: 18px 0;
-        width: 54px;
-        height: 54px;
-        font-size: 1.1rem;
-    }
-}
+
 
 .about-intro-section {
     max-width: 900px;
@@ -2052,18 +1829,7 @@ body {
     font-size: 1.3rem;
 }
 
-@media (max-width: 900px) {
-    .about-numbers-list, .about-team-list, .about-testimonials-list, .about-press-list, .about-partners-list {
-        flex-direction: column;
-        gap: 18px;
-        align-items: center;
-    }
-    .about-number-card, .about-team-card, .about-testimonial-card, .about-press-card, .about-partner-card {
-        width: 90%;
-        min-width: 0;
-        max-width: 400px;
-    }
-}
+
 
 .section-spacing {
     margin-top: 64px;
@@ -2086,7 +1852,19 @@ body {
     color: #222;
     font-weight: 500;
 }
-@media (max-width: 600px) {
-    .about-slogan-title { font-size: 1.2rem; }
-    .about-slogan-desc { font-size: 1rem; }
+
+@media (max-width: 768px) {
+    .hero-section {
+        display: none !important;
+    }
+    .about-hero-title, .about-hero-title *, .about-hero-main-title, .about-hero-main-title * {
+        font-size: 1.35rem !important;
+        line-height: 1.3 !important;
+        word-break: break-word;
+        white-space: normal;
+    }
+    .about-hero, #about-hero, .about-hero-section {
+        padding-top: 80px !important;
+    }
 }
+

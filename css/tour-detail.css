@@ -55,14 +55,6 @@ body {
     top: 100px; /* Adjust based on navbar height */
 }
 
-/* Responsive adjustments */
-@media (max-width: 991.98px) {
-    .sticky-top {
-        position: static;
-        margin-top: 2rem;
-    }
-}
-
 /* Ảnh lớn bo góc và shadow */
 #tour-main-image {
     border-radius: 12px;
@@ -138,15 +130,4 @@ body {
 }
 .list-group-item:last-child {
     border-bottom: none;
-}
-
-/* Responsive */
-@media (max-width: 991.98px) {
-    .more-info-wrapper.sticky-top {
-        position: static !important;
-        top: auto;
-    }
-    #tour-main-image {
-        height: auto;
-    }
 } 

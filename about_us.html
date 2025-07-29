@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="css/about_us.css">
     <link rel="stylesheet" href="css\chatbox.css">
     <script type="module" src="js/search.js"></script>
+    <script src="js/mobile.js"></script>
+    <link rel="stylesheet" href="css\mobile.css">
     <style>
         @font-face {
             font-family: 'Nautica Script Bold';
@@ -837,7 +839,7 @@ document.getElementById('about-contact').innerHTML = `
             document.getElementById('about-hero').innerHTML = '<div style="text-align:center;color:red;">Lỗi kết nối dữ liệu: ' + error.message + '</div>';
         });
         </script>
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -847,7 +849,39 @@ s1.charset='UTF-8';
 s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
-</script>
+</script> -->
+<!-- Bottom Navigation Bar for Mobile -->
+<nav class="bottom-nav d-md-none d-lg-none">
+    <a href="index.html" class="bottom-nav-item ">
+        <i class="fas fa-home"></i>
+        <span>Trang chủ</span>
+    </a>
+    <a href="hotel.html" class="bottom-nav-item">
+        <i class="fas fa-hotel"></i>
+        <span>Khách sạn</span>
+    </a>
+    <a href="tours.html" class="bottom-nav-item">
+        <i class="fas fa-map-marked-alt"></i>
+        <span>Tours</span>
+    </a>
+    <a href="prioritize.html" class="bottom-nav-item">
+        <i class="fas fa-gift"></i>
+        <span>Ưu đãi</span>
+    </a>
+    <a href="travel_guide.html" class="bottom-nav-item">
+        <i class="fas fa-map-marked-alt"></i>
+        <span>Cẩm nang</span>
+    <a href="about_us.html" class="bottom-nav-item active">
+        <i class="fas fa-phone"></i>
+        <span>Liên hệ</span>
+    </a>
+    <a href="member.html" class="bottom-nav-item">
+        <i class="fas fa-user"></i>
+        <span>Tài khoản</span>
+    </a>
+    
+    </a>
+</nav>
 </body>
 
 </html>

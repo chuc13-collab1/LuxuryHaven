@@ -136,36 +136,6 @@ body {
         white-space: nowrap;
     }
 
-    @media (max-width: 1200px) {
-        .nav-links {
-            gap: 15px;
-        }
-        
-        .nav-search {
-            flex: 0 1 250px;
-        }
-    }
-
-    @media (max-width: 992px) {
-        .nav-search {
-            display: none;
-        }
-        
-        .nav-links li a {
-            font-size: 0.9rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .nav-links {
-            display: none;
-        }
-        
-        .navbar-brand img {
-            height: 50px;
-        }
-    }
-
     /* Dropdown Styles */
     .dropdown {
         position: relative;
@@ -304,51 +274,6 @@ body {
         color: #f5f6fa;
         margin: 0;
         text-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
-
-    /* Hero Section Mobile Optimization */
-    @media (max-width: 768px) {
-        .hero-section {
-            height: 60vh;
-            min-height: 500px;
-        }
-        
-        .nautica-script {
-            font-size: 3.5em;
-            top: 30%;
-            line-height: 0.9;
-        }
-        
-        .hero-content {
-            padding: 0 15px;
-            margin-top: 10px;
-        }
-        
-        .hero-content h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            line-height: 1.1;
-        }
-        
-        .hero-content p {
-            font-size: 1.1rem;
-            padding: 0 10px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .nautica-script {
-            font-size: 2.8em;
-            top: 40%;
-        }
-        
-        .hero-content h1 {
-            font-size: 2rem;
-        }
-        
-        .hero-content p {
-            font-size: 1rem;
-        }
     }
 
     /* --- SEARCH SECTION --- */
@@ -681,27 +606,6 @@ body {
         font-weight: 700;
         text-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
-    @media (max-width: 991px) {
-        .special-offers .row {
-            flex-direction: column;
-            height: auto;
-            min-height: 0;
-        }
-        .special-offers .col-offer-big,
-        .special-offers .col-offer-small {
-            width: 100%;
-            height: auto;
-        }
-        .special-offers .col-offer-small {
-            flex-direction: row;
-            gap: 8px;
-        }
-        .special-offers .offer-card.big,
-        .special-offers .offer-card.small {
-            height: 180px;
-            min-height: 0;
-        }
-    }
 
     /* Why choose us: 4 cột đều nhau */
     .why-choose-us .row {
@@ -735,29 +639,6 @@ body {
         margin-bottom: 24px;
     }
 
-    /* Responsive */
-    @media (max-width: 991px) {
-        .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
-            width: 50%;
-        }
-        .col-md-6 {
-            width: 100%;
-        }
-    }
-    @media (max-width: 767px) {
-        .col-md-3, .why-choose-us .col-md-3, .footer .col-md-3 {
-            width: 100%;
-        }
-        .container {
-            padding-left: 6px;
-            padding-right: 6px;
-        }
-        .section-title {
-            font-size: 1.3rem;
-            margin: 32px 0 18px 0;
-        }
-    }
-
     /* --- TOUR CARD LAYOUT REDESIGN --- */
     .tour-grid {
         display: grid;
@@ -777,19 +658,9 @@ body {
         height: 100%;
         display: flex;
         flex-direction: column;
-        width: 280px;   /* <-- Thêm dòng này */
+        width: 280px;
         justify-content: space-between;
         height: 100%;
-    }
-    @media (max-width: 1300px) {
-        .tour-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-    @media (max-width: 700px) {
-        .tour-grid {
-            grid-template-columns: 1fr;
-        }
     }
     .tour-card:hover {
         transform: translateY(-5px);
@@ -857,7 +728,7 @@ body {
         line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        min-height: 72px; /* Tùy chỉnh độ cao đồng đều */
+        min-height: 72px;
     }
 
     .tour-features > div {
@@ -884,36 +755,6 @@ body {
     .tour-btn:hover {
         background: linear-gradient(90deg, #0066cc 60%, #1a237e 100%);
         transform: translateY(-2px) scale(1.02);
-    }
-
-    @media (max-width: 1200px) {
-        .tour-card {
-            width: 45vw;
-            min-width: 260px;
-            max-width: 360px;
-        }
-        .tour-grid {
-            gap: 24px;
-        }
-    }
-    @media (max-width: 768px) {
-        .tour-grid {
-            flex-direction: column;
-            align-items: center;
-            gap: 18px;
-        }
-        .tour-card {
-            width: 100%;
-            min-width: 0;
-            margin: o auto;
-            max-width: 370px;
-        }
-        .tour-image {
-            height: 180px;
-        }
-        .tour-content {
-            padding: 18px 10px 16px 10px;
-        }
     }
 
     /* Mobile Menu Button */
@@ -948,147 +789,6 @@ body {
         transform: rotate(45deg) translate(-5px, -6px);
     }
 
-    @media (max-width: 768px) {
-        .mobile-menu-btn {
-            display: flex;
-        }
-        
-        .nav-search {
-            display: none;
-        }
-        
-        .nav-links {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            flex-direction: column;
-            padding: 20px 0;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-            z-index: 999;
-        }
-        
-        .nav-links.active {
-            display: flex;
-        }
-        
-        .nav-links li {
-            margin: 0;
-            text-align: center;
-        }
-        
-        .nav-links li a {
-            display: block;
-            padding: 15px 20px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #f0f0f0;
-        }
-    }
-
-    /* Mobile Menu Button Positioning */
-    @media (max-width: 768px) {
-        .nav-flex {
-            justify-content: flex-start;
-            gap: 10px;
-        }
-
-        .navbar-brand {
-            margin-right: auto;
-        }
-
-        .mobile-menu-btn {
-            order: 2;
-            margin-left: 10px;
-        }
-
-        .nav-right {
-            margin-left: auto;
-        }
-    }
-
-    /* Footer Mobile Styles */
-    @media (max-width: 768px) {
-        .footer {
-            padding: 40px 20px;
-        }
-
-        .footer .col-md-3 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .footer h4 {
-            margin-bottom: 15px;
-        }
-
-        .footer ul {
-            padding-left: 0;
-        }
-
-        .footer ul li {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .social-links {
-            justify-content: center;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 20px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .footer {
-            padding: 30px 15px;
-        }
-
-        .footer .col-md-3 {
-            margin-bottom: 25px;
-        }
-
-        .social-links a {
-            margin: 0 10px;
-        }
-    }
-
-    @font-face {
-        font-family: 'Nautica Script Bold';
-        src: url('../fonts/nautica-bold.otf') format('opentype');
-        font-weight: bold;
-        font-style: normal;
-    }
-    .nautica-script {
-        font-family: 'Nautica Script Bold', cursive;
-        font-size: 4.2em;
-        font-weight: bold;
-        color: #cddae6;
-        text-align: center;
-        position: absolute;
-        width: 100%;
-        top: 30%;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 2;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        margin-bottom: 0;
-        line-height: 0.8;
-    }
-    @media (max-width: 1200px) {
-        .tour-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-    @media (max-width: 768px) {
-        .tour-grid {
-            grid-template-columns: 1fr;
-        }
-    }
     .tour-nav {
         display: flex;
         justify-content: center;
@@ -1131,18 +831,6 @@ body {
         display: flex;
         flex-direction: column;
         justify-content: center;
-    }
-    @media (max-width: 900px) {
-        .content-wrapper {
-            flex-direction: column;
-        }
-        .image-section, .text-section {
-            flex: unset;
-            width: 100%;
-        }
-        .text-section {
-            padding: 0px 16px;
-        }
     }
     .section-photo-memories {
         margin-top: 16px;
@@ -1211,16 +899,6 @@ body {
         margin-right: 10px;
         font-size: 1.2rem;
         margin-top: 4px;
-    }
-
-    @media (max-width: 767px) {
-        .feature-item .feature-text {
-            padding-top: 2rem;
-            text-align: center;
-        }
-        .feature-item {
-            margin-bottom: 3rem;
-        }
     }
 
     .memories-section {
@@ -1295,15 +973,6 @@ body {
         transform: translateY(-2px);
     }
 
-    @media (max-width: 991px) {
-        .memories-container {
-            flex-direction: column;
-        }
-        .memories-content {
-            margin-bottom: 3rem;
-        }
-    }
-
     .offers-section {
         padding: 80px 0;
         background-color: #fff;
@@ -1357,16 +1026,6 @@ body {
     .offer-item p {
         font-weight: 600;
         color: #343a40;
-    }
-    @media (max-width: 991px) {
-        .offers-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-    @media (max-width: 575px) {
-        .offers-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
     }
 
     /* Experiential Intro Section */
@@ -1430,14 +1089,6 @@ body {
         line-height: 1.6;
         margin-bottom: 0;
     }
-    @media (max-width: 991px) {
-        .experiential-intro-content .section-title {
-            font-size: 2.4rem;
-        }
-        .experiential-intro-section {
-            padding: 60px 0;
-        }
-    }
     .hero-slider {
         position: relative;
         width: 100%;
@@ -1500,13 +1151,26 @@ body {
         font-weight: 400;
         text-shadow: 1px 1px 6px rgba(0,0,0,0.18);
     }
-    @media (max-width: 900px) {
-        .hero-slider {height: 380px;}
-        .hero-content h1 {font-size: 2.1rem;}
-        .hero-content p {font-size: 1rem;}
+
+    @font-face {
+        font-family: 'Nautica Script Bold';
+        src: url('../fonts/nautica-bold.otf') format('opentype');
+        font-weight: bold;
+        font-style: normal;
     }
-    @media (max-width: 600px) {
-        .hero-slider {height: 260px;}
-        .hero-content h1 {font-size: 1.2rem;}
-        .hero-content p {font-size: 0.9rem;}
+    .nautica-script {
+        font-family: 'Nautica Script Bold', cursive;
+        font-size: 4.2em;
+        font-weight: bold;
+        color: #cddae6;
+        text-align: center;
+        position: absolute;
+        width: 100%;
+        top: 30%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        margin-bottom: 0;
+        line-height: 0.8;
     }

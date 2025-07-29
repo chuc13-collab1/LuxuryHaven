@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="css/member.css">
     <link rel="stylesheet" href="css\chatbox.css">
     <script type="module" src="js/search.js"></script>
+    <script src="js/mobile.js"></script>
+    <link rel="stylesheet" href="css\mobile.css">
     <style>
     
     .loyalty-container {
@@ -98,6 +100,46 @@
       .barcode-card {
         padding: 16px 2px 10px 2px;
       }
+    }
+    @media (max-width: 768px) {
+      #mobile-tab-menu {
+        display: flex !important;
+        gap: 2px;
+        padding: 0 2px;
+        height: 54px;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      }
+      .mobile-tab-link {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-width: 64px;
+        padding: 0 10px;
+        height: 54px;
+        color: #1a237e;
+        font-size: 0.92em;
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        background: none;
+        transition: color 0.2s, border 0.2s;
+      }
+      .mobile-tab-link.active, .mobile-tab-link:active, .mobile-tab-link:focus {
+        color: #e67e22;
+        border-bottom: 2px solid #e67e22;
+        background: #f9f9f9;
+      }
+      .mobile-tab-link i {
+        font-size: 1.2em;
+        margin-bottom: 2px;
+      }
+      .mobile-tab-link span {
+        font-size: 0.85em;
+        line-height: 1;
+      }
+      /* Ẩn menu dọc sidebar trên mobile */
+      .col-md-3 .list-group { display: none !important; }
     }
     </style>
 </head>
@@ -1900,7 +1942,7 @@ End of Tawk.to Script -->
             }
         });
     </script>
-    <!-- Modal Bootstrap cho đánh giá (ngay trước </body>) -->
+   
     <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" style="max-width:700px; min-width:500px;">
         <div class="modal-content">
@@ -2070,6 +2112,164 @@ End of Tawk.to Script -->
                 });
             });
         });
+    </script>
+    <!-- Bottom Navigation Bar for Mobile -->
+    <nav class="bottom-nav d-md-none d-lg-none">
+        <a href="index.html" class="bottom-nav-item ">
+            <i class="fas fa-home"></i>
+            <span>Trang chủ</span>
+        </a>
+        <a href="hotel.html" class="bottom-nav-item">
+            <i class="fas fa-hotel"></i>
+            <span>Khách sạn</span>
+        </a>
+        <a href="tours.html" class="bottom-nav-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Tours</span>
+        </a>
+        <a href="prioritize.html" class="bottom-nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Ưu đãi</span>
+        </a>
+        <a href="travel_guide.html" class="bottom-nav-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Cẩm nang</span>
+        <a href="about_us.html" class="bottom-nav-item">
+            <i class="fas fa-phone"></i>
+            <span>Liên hệ</span>
+        </a>
+        <a href="member.html" class="bottom-nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Tài khoản</span>
+        </a>
+        
+        </a>
+    </nav>
+
+    <!-- Avatar button for mobile (hiện ở góc trên bên trái trên mobile) -->
+    <div id="mobile-avatar-btn" style="display:none; position:fixed; top:18px; left:12px; z-index:1201;">
+      <img id="mobile-avatar-img" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" alt="Avatar" style="width:48px; height:48px; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,0.12); border:2px solid #fff; cursor:pointer;">
+    </div>
+    <!-- Off-canvas sidebar cho mobile -->
+    <div id="mobile-sidebar-offcanvas" style="display:none; position:fixed; top:0; left:0; width:80vw; max-width:320px; height:100vh; background:#fff; z-index:1300; box-shadow:2px 0 16px rgba(0,0,0,0.18); overflow-y:auto; transition:transform 0.3s; transform:translateX(-100%);">
+      <div style="padding:24px 16px 12px 16px; text-align:center; border-bottom:1px solid #eee;">
+        <img id="mobile-sidebar-avatar" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" alt="Avatar" style="width:72px; height:72px; border-radius:50%; margin-bottom:8px;">
+        <h5 id="mobile-sidebar-user-name" style="margin-bottom:4px; font-size:1.1em;"></h5>
+        <div id="mobile-sidebar-user-email" style="font-size:0.95em; color:#888; margin-bottom:6px;"></div>
+        <div id="mobile-sidebar-memberLevel" style="font-weight:600; color:#1a237e; margin-bottom:2px;"></div>
+        <div id="mobile-sidebar-loyaltyPoints" style="color:#e67e22; font-size:0.98em;"></div>
+        <button id="mobile-sidebar-close" style="position:absolute; top:12px; right:12px; background:none; border:none; font-size:1.8em; color:#888;">&times;</button>
+      </div>
+      <div style="padding:12px 0;">
+        <a href="#profile" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-user me-2"></i> Thông tin cá nhân</a>
+        <a href="#bookings" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-calendar-alt me-2"></i> Lịch sử</a>
+        <a href="#loyalty" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-star me-2"></i> Điểm thành viên</a>
+        <a href="#favorites" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-heart me-2"></i> Yêu thích</a>
+        <a href="#reviews" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-star me-2"></i> Đánh giá</a>
+        <a href="#settings" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-cog me-2"></i> Cài đặt</a>
+        <a href="#payments" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-file-invoice-dollar me-2"></i> Thanh toán</a>
+      </div>
+    </div>
+    <div id="mobile-sidebar-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.25); z-index:1299;"></div>
+
+    <script>
+    // ... existing code ...
+    // Mobile sidebar logic
+    function showMobileSidebar() {
+      document.getElementById('mobile-sidebar-offcanvas').style.display = 'block';
+      document.getElementById('mobile-sidebar-overlay').style.display = 'block';
+      setTimeout(()=>{
+        document.getElementById('mobile-sidebar-offcanvas').style.transform = 'translateX(0)';
+      }, 10);
+    }
+    function hideMobileSidebar() {
+      document.getElementById('mobile-sidebar-offcanvas').style.transform = 'translateX(-100%)';
+      setTimeout(()=>{
+        document.getElementById('mobile-sidebar-offcanvas').style.display = 'none';
+        document.getElementById('mobile-sidebar-overlay').style.display = 'none';
+      }, 300);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Hiện nút avatar trên mobile, ẩn sidebar gốc
+      function handleMobileSidebarDisplay() {
+        if(window.innerWidth <= 768) {
+          document.getElementById('mobile-avatar-btn').style.display = 'block';
+          var sidebar = document.querySelector('.col-md-3');
+          if(sidebar) sidebar.style.display = 'none';
+        } else {
+          document.getElementById('mobile-avatar-btn').style.display = 'none';
+          var sidebar = document.querySelector('.col-md-3');
+          if(sidebar) sidebar.style.display = '';
+          hideMobileSidebar();
+        }
+      }
+      handleMobileSidebarDisplay();
+      window.addEventListener('resize', handleMobileSidebarDisplay);
+      // Gắn sự kiện mở/đóng
+      document.getElementById('mobile-avatar-btn').onclick = showMobileSidebar;
+      document.getElementById('mobile-sidebar-close').onclick = hideMobileSidebar;
+      document.getElementById('mobile-sidebar-overlay').onclick = hideMobileSidebar;
+      // Đồng bộ thông tin user vào mobile sidebar
+      function syncMobileSidebar(user) {
+        document.getElementById('mobile-avatar-img').src = user.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+        document.getElementById('mobile-sidebar-avatar').src = user.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+        document.getElementById('mobile-sidebar-user-name').textContent = user.name || user.displayName || '';
+        document.getElementById('mobile-sidebar-user-email').textContent = user.email || '';
+        document.getElementById('mobile-sidebar-memberLevel').innerHTML = user.memberLevel ? getMemberLevelIcon(user.memberLevel) : '';
+        document.getElementById('mobile-sidebar-loyaltyPoints').textContent = user.loyaltyPoints ? `Điểm: ${user.loyaltyPoints}` : '';
+      }
+      // Gọi hàm này sau khi loadUserData
+      // Ví dụ: trong loadUserData(user) => syncMobileSidebar(userData)
+      // ...
+    });
+    // ... existing code ...
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      function handleMobileTabMenu() {
+        if(window.innerWidth <= 768) {
+          document.getElementById('mobile-tab-menu').style.display = 'flex';
+        } else {
+          document.getElementById('mobile-tab-menu').style.display = 'none';
+        }
+      }
+      handleMobileTabMenu();
+      window.addEventListener('resize', handleMobileTabMenu);
+      // Active tab highlight
+      document.querySelectorAll('.mobile-tab-link').forEach(link => {
+        link.addEventListener('click', function() {
+          document.querySelectorAll('.mobile-tab-link').forEach(l=>l.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+    </script>
+
+    <script>
+    // ... existing code ...
+    document.addEventListener('DOMContentLoaded', function() {
+      // ... existing code ...
+      // Xử lý click menu trong mobile sidebar để chuyển tab (dùng Bootstrap Tab API)
+      document.querySelectorAll('#mobile-sidebar-offcanvas [data-bs-toggle="list"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          var target = this.getAttribute('href');
+          var tabTrigger = document.querySelector('.list-group-item-action[data-bs-toggle="list"][href="' + target + '"]')
+            || document.querySelector('.mobile-tab-link[href="' + target + '"]');
+          if(tabTrigger) {
+            if (typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+              var tab = new bootstrap.Tab(tabTrigger);
+              tab.show();
+            } else {
+              tabTrigger.click();
+            }
+          }
+          hideMobileSidebar();
+        });
+      });
+    });
+    // ... existing code ...
     </script>
 </body>
 
