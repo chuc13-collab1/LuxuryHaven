@@ -1786,3 +1786,1200 @@ margin-bottom: 32px;
     font-weight: 400;
     text-shadow: 1px 1px 6px rgba(0,0,0,0.18);
 }
+
+/* ===== MOBILE RESPONSIVE STYLES ===== */
+
+/* ===== MAIN MOBILE STYLES (max-width: 768px) ===== */
+@media (max-width: 768px) {
+    /* Mobile Navigation */
+    .mobile-menu-btn {
+        display: flex !important;
+    }
+
+    .nav-search {
+        display: none;
+    }
+
+    .nav-flex {
+        padding: 0 15px;
+        height: 70px;
+    }
+
+    .navbar-brand img {
+        height: 50px;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        transition: left 0.3s ease;
+        padding-top: 2rem;
+        z-index: 999;
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+
+    .nav-links li {
+        margin: 1rem 0;
+        width: 90%;
+        text-align: center;
+    }
+
+    .nav-links li a {
+        display: block;
+        padding: 1rem;
+        font-size: 1.1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links li a:hover,
+    .nav-links li a.active {
+        background: #1a237e;
+        color: #fff;
+    }
+
+    /* Hero Section Mobile */
+    .hero-slider {
+        height: 60vh;
+        margin-top: 70px;
+        min-height: 400px;
+    }
+
+    .nautica-script {
+        font-size: 2.2em !important;
+        top: 20% !important;
+        line-height: 1;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        line-height: 1.2;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+        line-height: 1.4;
+        padding: 0 20px;
+    }
+
+    /* Main Content Mobile */
+    .main-sections-wrapper {
+        margin: 20px 10px 0 10px !important;
+        padding: 0 !important;
+    }
+
+    .main-section-card {
+        padding: 20px 15px !important;
+        margin-bottom: 20px !important;
+        border-radius: 12px !important;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    /* Filter Buttons Mobile */
+    .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .filter-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        border-radius: 20px;
+        border: 2px solid #1a237e;
+        background: transparent;
+        color: #1a237e;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+        background: #1a237e;
+        color: #fff;
+    }
+
+    /* Offer Cards Mobile */
+    .offer-card-new {
+        margin-bottom: 1.5rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        overflow: hidden;
+        background: #fff;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .offer-card-new:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .offer-card-new img {
+        height: 220px;
+        object-fit: cover;
+        width: 100%;
+        transition: transform 0.3s ease;
+    }
+
+    .offer-card-new:hover img {
+        transform: scale(1.02);
+    }
+
+    .offer-card-content {
+        padding: 20px 18px;
+        position: relative;
+    }
+
+    .offer-card-content h3 {
+        font-size: 1.35rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.3;
+        font-weight: 700;
+        color: #1a1a1a;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .offer-label-new {
+        position: absolute;
+        top: -10px;
+        left: 18px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        border-radius: 20px;
+        font-weight: 700;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .offer-label-new.flash-sale {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+    }
+
+    .offer-label-new.hot {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+    }
+
+    .offer-label-new.chỉ-hôm-nay {
+        background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    }
+
+    .offer-label-new.độc-quyền {
+        background: linear-gradient(135deg, #1abc9c, #16a085);
+    }
+
+    .offer-label-new.genius {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+    }
+
+    .offer-card-content .price {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .offer-card-content .price .new-price {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #e74c3c;
+        line-height: 1;
+    }
+
+    .offer-card-content .price .old-price {
+        font-size: 1rem;
+        text-decoration: line-through;
+        color: #999;
+        font-weight: 500;
+    }
+
+    .offer-card-content .price-per-night {
+        display: block;
+        font-size: 0.85rem;
+        color: #666;
+        margin: -8px 0 12px 0;
+        font-weight: 500;
+        background: rgba(106, 90, 205, 0.1);
+        padding: 4px 8px;
+        border-radius: 12px;
+        display: inline-block;
+    }
+
+    .offer-card-content .desc {
+        font-size: 0.95rem;
+        color: #555;
+        margin-bottom: 15px;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .offer-card-content ul {
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        color: #444;
+        padding-left: 16px;
+    }
+
+    .offer-card-content ul li {
+        margin-bottom: 6px;
+        line-height: 1.4;
+        position: relative;
+    }
+
+    .offer-card-content ul li::before {
+        content: "✓";
+        color: #27ae60;
+        font-weight: bold;
+        position: absolute;
+        left: -16px;
+    }
+
+    .offer-card-content .availability {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #e74c3c;
+        margin-bottom: 8px;
+        background: rgba(231, 76, 60, 0.1);
+        padding: 4px 8px;
+        border-radius: 8px;
+        display: inline-block;
+    }
+
+    .offer-card-content .note {
+        font-size: 0.8rem;
+        color: #666;
+        margin-bottom: 18px;
+        font-style: italic;
+        padding: 8px 12px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 3px solid #6c757d;
+    }
+
+    .btn-booking {
+        background: linear-gradient(135deg, #f5a623, #e67e22);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 20px;
+        width: 100%;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: auto;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(245, 166, 35, 0.3);
+    }
+
+    .btn-booking:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(245, 166, 35, 0.4);
+        background: linear-gradient(135deg, #e67e22, #d68910);
+    }
+
+    .btn-booking:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(245, 166, 35, 0.3);
+    }
+
+    .btn-booking:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Voucher Cards Mobile */
+    .voucher-card {
+        margin-bottom: 1.5rem;
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .voucher-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+
+    .voucher-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .voucher-card:hover img {
+        transform: scale(1.05);
+    }
+
+    .offer-content-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.6), transparent);
+        color: white;
+        padding: 20px 16px 16px 16px;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    .offer-content-overlay .offer-label {
+        position: absolute;
+        top: -45px;
+        left: 16px;
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .offer-content-overlay h4 {
+        font-size: 1.15rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-clamp: 2;
+        overflow: hidden;
+    }
+
+    .offer-content-overlay p {
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.4;
+        opacity: 0.9;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-clamp: 2;
+        overflow: hidden;
+    }
+
+    .offer-content-overlay .price {
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+    }
+
+    .offer-content-overlay .price .new-price {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #ffe066;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        line-height: 1;
+    }
+
+    .offer-content-overlay .price .old-price {
+        font-size: 0.85rem;
+        text-decoration: line-through;
+        color: rgba(255,255,255,0.7);
+        font-weight: 500;
+    }
+
+    .voucher-code {
+        font-size: 0.85rem;
+        background: rgba(255,255,255,0.25);
+        backdrop-filter: blur(10px);
+        padding: 6px 12px;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: 600;
+        border: 1px solid rgba(255,255,255,0.3);
+        text-shadow: none;
+    }
+
+    .voucher-code b {
+        color: #ffe066;
+        font-weight: 800;
+    }
+
+    /* Featured Offer Mobile */
+    .featured-offer-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        padding: 25px 20px;
+        background: linear-gradient(135deg, #1a237e, #0d47a1);
+        border-radius: 20px;
+        margin: 25px 15px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(26, 35, 126, 0.3);
+    }
+
+    .featured-offer-grid::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="1" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+        pointer-events: none;
+    }
+
+    .featured-text-section {
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .special-label {
+        background: rgba(255,255,255,0.25);
+        backdrop-filter: blur(10px);
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: inline-block;
+        margin-bottom: 1.2rem;
+        border: 1px solid rgba(255,255,255,0.3);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .featured-text-section h1 {
+        font-size: 2rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.2;
+        font-weight: 800;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .featured-text-section h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1.2rem;
+        opacity: 0.9;
+        font-weight: 400;
+        line-height: 1.3;
+    }
+
+    .featured-text-section .description {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .featured-price-section {
+        margin-bottom: 2rem;
+        padding: 20px;
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .price-label {
+        font-size: 1rem;
+        opacity: 0.8;
+        display: block;
+        margin-bottom: 0.8rem;
+        font-weight: 500;
+    }
+
+    .featured-price-section .price {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #ffe066;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        line-height: 1;
+    }
+
+    .featured-price-section .price-unit {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-left: 0.5rem;
+        font-weight: 500;
+    }
+
+    .featured-book-now-btn {
+        background: linear-gradient(135deg, #ffe066, #ffd700);
+        color: #1a237e;
+        padding: 16px 32px;
+        border-radius: 30px;
+        font-weight: 800;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 6px 20px rgba(255, 224, 102, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .featured-book-now-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .featured-book-now-btn:hover::before {
+        left: 100%;
+    }
+
+    .featured-book-now-btn:hover {
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 224, 102, 0.5);
+        color: #1a237e;
+    }
+
+    .featured-book-now-btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(255, 224, 102, 0.4);
+    }
+
+    .featured-image-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .featured-image-grid img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .featured-image-grid img:hover {
+        transform: scale(1.05);
+    }
+
+    /* Container and spacing */
+    .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .col-md-6, .col-md-3 {
+        padding-left: 5px;
+        padding-right: 5px;
+        margin-bottom: 1rem;
+    }
+
+    /* Bottom Navigation Spacing */
+    body {
+        padding-bottom: 85px;
+    }
+
+    /* Modal adjustments for mobile */
+    .modal-content {
+        margin: 10px;
+        border-radius: 15px;
+        max-width: 90%;
+    }
+
+    #auth-modal .modal-content {
+        padding: 20px;
+    }
+
+    .modal h2 {
+        font-size: 1.2rem;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    .form-control,
+    .swal2-input {
+        font-size: 0.9rem;
+        padding: 10px 12px;
+    }
+
+    .btn-gradient {
+        font-size: 0.95rem;
+        padding: 12px 20px;
+        border-radius: 20px;
+        min-height: 44px;
+    }
+}
+
+/* ===== EXTRA SMALL MOBILE RESPONSIVE (max-width: 480px) ===== */
+@media (max-width: 480px) {
+    /* Hero Section Extra Small */
+    .hero-slider {
+        height: 50vh;
+        min-height: 350px;
+    }
+
+    .nautica-script {
+        font-size: 1.8em !important;
+        top: 18% !important;
+    }
+
+    .hero-content h1 {
+        font-size: 1.6rem;
+        margin-bottom: 8px;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+        padding: 0 15px;
+    }
+
+    /* Content adjustments */
+    .main-sections-wrapper {
+        margin: 15px 8px 0 8px !important;
+    }
+
+    .main-section-card {
+        padding: 16px 12px !important;
+        margin-bottom: 15px !important;
+        border-radius: 12px !important;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .filter-buttons {
+        gap: 6px;
+        margin-bottom: 1.2rem;
+    }
+
+    .filter-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        border-radius: 16px;
+    }
+
+    /* Offer cards extra small */
+    .offer-card-new {
+        margin-bottom: 1.2rem;
+        border-radius: 12px;
+    }
+
+    .offer-card-new img {
+        height: 180px;
+    }
+
+    .offer-card-content {
+        padding: 16px 14px;
+    }
+
+    .offer-card-content h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .offer-label-new {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+        top: -8px;
+        left: 14px;
+    }
+
+    .offer-card-content .price .new-price {
+        font-size: 1.3rem;
+    }
+
+    .offer-card-content .price .old-price {
+        font-size: 0.9rem;
+    }
+
+    .offer-card-content .price-per-night {
+        font-size: 0.8rem;
+        padding: 3px 6px;
+    }
+
+    .offer-card-content .desc {
+        font-size: 0.88rem;
+        margin-bottom: 12px;
+    }
+
+    .offer-card-content ul {
+        font-size: 0.85rem;
+        margin-bottom: 12px;
+    }
+
+    .offer-card-content .availability {
+        font-size: 0.8rem;
+        padding: 3px 6px;
+    }
+
+    .offer-card-content .note {
+        font-size: 0.75rem;
+        padding: 6px 8px;
+        margin-bottom: 15px;
+    }
+
+    .btn-booking {
+        padding: 12px 16px;
+        font-size: 0.95rem;
+        border-radius: 10px;
+    }
+
+    /* Voucher cards extra small */
+    .voucher-card {
+        margin-bottom: 1.2rem;
+        border-radius: 12px;
+    }
+
+    .voucher-card img {
+        height: 170px;
+    }
+
+    .offer-content-overlay {
+        padding: 16px 12px 12px 12px;
+        min-height: 100px;
+    }
+
+    .offer-content-overlay .offer-label {
+        top: -35px;
+        left: 12px;
+        font-size: 0.7rem;
+        padding: 4px 8px;
+    }
+
+    .offer-content-overlay h4 {
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .offer-content-overlay p {
+        font-size: 0.8rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .offer-content-overlay .price .new-price {
+        font-size: 1.1rem;
+    }
+
+    .offer-content-overlay .price .old-price {
+        font-size: 0.8rem;
+    }
+
+    .voucher-code {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+    }
+
+    /* Featured offer extra small */
+    .featured-offer-grid {
+        margin: 15px 8px;
+        padding: 20px 15px;
+        gap: 1.5rem;
+        border-radius: 16px;
+    }
+
+    .special-label {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+        margin-bottom: 1rem;
+    }
+
+    .featured-text-section h1 {
+        font-size: 1.6rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .featured-text-section h2 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .featured-text-section .description {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .featured-price-section {
+        padding: 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .featured-price-section .price {
+        font-size: 2.2rem;
+    }
+
+    .featured-price-section .price-unit {
+        font-size: 1rem;
+    }
+
+    .featured-book-now-btn {
+        padding: 14px 24px;
+        font-size: 1rem;
+        border-radius: 25px;
+    }
+
+    .featured-image-grid {
+        gap: 8px;
+        border-radius: 12px;
+    }
+
+    .featured-image-grid img {
+        height: 110px;
+    }
+
+    /* Container adjustments */
+    .container {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    .col-md-6, .col-md-3 {
+        padding-left: 4px;
+        padding-right: 4px;
+        margin-bottom: 0.8rem;
+    }
+}
+
+/* ===== LANDSCAPE ORIENTATION MOBILE ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero-slider {
+        height: 85vh;
+    }
+
+    .nautica-script {
+        font-size: 2.2em !important;
+        top: 15% !important;
+    }
+
+    .hero-content h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .main-sections-wrapper {
+        margin-top: 15px !important;
+    }
+
+    .main-section-card {
+        padding: 15px !important;
+        margin-bottom: 15px !important;
+    }
+}
+
+/* ===== MOBILE-SPECIFIC IMPROVEMENTS ===== */
+@media (max-width: 768px) {
+    /* Smooth scrolling for mobile */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Prevent zoom on input focus */
+    input[type="text"], 
+    input[type="email"], 
+    input[type="password"], 
+    input[type="date"],
+    textarea, 
+    select {
+        font-size: 16px;
+    }
+
+    /* Better text readability */
+    body {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    /* Improved button accessibility */
+    .btn, button {
+        min-height: 44px;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+    /* Better image loading */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Improved typography hierarchy */
+    h1 { font-size: 1.8rem; line-height: 1.2; }
+    h2 { font-size: 1.5rem; line-height: 1.3; }
+    h3 { font-size: 1.3rem; line-height: 1.3; }
+    h4 { font-size: 1.1rem; line-height: 1.3; }
+    
+    p, li { 
+        font-size: 0.9rem; 
+        line-height: 1.5; 
+        margin-bottom: 0.8rem;
+    }
+}
+
+/* ===== TOUCH DEVICE OPTIMIZATIONS ===== */
+@media (hover: none) and (pointer: coarse) {
+    /* Increase touch targets for mobile */
+    .btn {
+        min-height: 48px;
+        min-width: 48px;
+        padding: 12px 20px;
+    }
+
+    .filter-btn {
+        min-height: 44px;
+        padding: 10px 16px;
+    }
+
+    .btn-booking {
+        min-height: 48px;
+        font-size: 1rem;
+        padding: 14px 20px;
+    }
+
+    .offer-card-new {
+        transition: transform 0.2s ease;
+    }
+
+    .offer-card-new:active {
+        transform: scale(0.98);
+    }
+
+    .voucher-card:active {
+        transform: scale(0.98);
+    }
+
+    /* Better tap feedback */
+    .btn:active,
+    .filter-btn:active {
+        transform: scale(0.96);
+        transition: transform 0.1s ease;
+    }
+
+    /* Improved form inputs for touch */
+    .form-control,
+    .swal2-input {
+        min-height: 44px;
+        font-size: 16px;
+        border-radius: 8px;
+        padding: 12px 16px;
+    }
+
+    /* Better modal interaction */
+    .modal-content {
+        border-radius: 16px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+@media (max-width: 768px) {
+    /* GPU acceleration for smooth animations */
+    .hero-slide,
+    .nav-links,
+    .mobile-menu-btn span {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+    }
+
+    /* Optimize images for mobile */
+    .hero-slide {
+        background-attachment: scroll;
+    }
+
+    /* Footer mobile adjustments */
+    .footer {
+        background: #003366;
+        color: #fff;
+        padding: 30px 0 20px;
+        margin-top: 30px;
+    }
+
+    .footer .row {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: -12px;
+        margin-right: -12px;
+    }
+
+    .footer .col-md-3 {
+        width: 100%;
+        padding-left: 12px;
+        padding-right: 12px;
+        margin-bottom: 1.5rem;
+    }
+
+    .footer .col-md-3 h4 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 0.8rem;
+        color: #fff;
+    }
+
+    .footer .col-md-3 ul {
+        padding: 0;
+        list-style: none;
+    }
+
+    .footer .col-md-3 ul li {
+        margin-bottom: 0.4rem;
+    }
+
+    .footer .col-md-3 ul li a {
+        font-size: 0.9rem;
+        color: #e0e0e0;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .footer .col-md-3 ul li a:hover {
+        color: #ffe066;
+    }
+
+    .social-links {
+        justify-content: center;
+        gap: 15px;
+        display: flex;
+    }
+
+    .social-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: #1a237e;
+        color: white;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+        transform: translateY(-2px);
+        background: #ffe066;
+        color: #003366;
+    }
+
+    .footer-bottom {
+        padding-top: 15px;
+        border-top: 1px solid #1a237e;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .footer-bottom p {
+        font-size: 0.8rem;
+        color: #e0e0e0;
+        margin: 0;
+    }
+
+    /* Reduce motion for users who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* Bottom navigation spacing */
+    body {
+        padding-bottom: 85px;
+    }
+}
+
+/* ===== EXTRA SMALL FOOTER ADJUSTMENTS ===== */
+@media (max-width: 480px) {
+    .footer .col-md-3 h4 {
+        font-size: 1rem;
+        color: #fff;
+    }
+
+    .footer .col-md-3 ul li a {
+        font-size: 0.85rem;
+        color: #e0e0e0;
+    }
+
+    .footer .col-md-3 ul li a:hover {
+        color: #ffe066;
+    }
+
+    .footer-bottom p {
+        font-size: 0.75rem;
+        color: #e0e0e0;
+    }
+
+    .social-links a {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+    }
+}

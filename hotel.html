@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-
+    
     <!-- Firebase Config -->
     <script>
         var firebaseConfig = {
@@ -39,6 +39,9 @@
     <script type="module" src="js/search.js"></script>
     <script src="js/mobile.js"></script>
     <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/loading.css">
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+    <script src="js/loading.js"></script>
     <style>
         @font-face {
             font-family: 'Nautica Script Bold';
@@ -126,34 +129,206 @@
         }
 
         /* CSS cho phần gợi ý khách sạn */
-        #suggested-hotels {
+        #suggested-hotels,
+        #knn-suggested-hotels {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
             color: white;
         }
 
-        #suggested-hotels h4 {
+        #suggested-hotels h4,
+        #knn-suggested-hotels h4 {
             color: white !important;
         }
 
-        #suggested-hotels .text-muted {
+        #suggested-hotels .text-muted,
+        #knn-suggested-hotels .text-muted {
             color: rgba(255, 255, 255, 0.8) !important;
         }
 
-        #suggested-hotels .hotel-card {
+        #suggested-hotels .hotel-card,
+        #knn-suggested-hotels .hotel-card {
             background: white;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         }
 
-        #suggested-hotels .hotel-card:hover {
+        #suggested-hotels .hotel-card:hover,
+        #knn-suggested-hotels .hotel-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
+
+        /* CSS tối ưu cho mobile - hiển thị card theo chiều dọc: ảnh trên, thông tin giữa, nút dưới */
+        @media (max-width: 768px) {
+            #suggested-hotels .row,
+            #knn-suggested-hotels .row {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            #suggested-hotels .col-12,
+            #knn-suggested-hotels .col-12 {
+                width: 100%;
+                padding: 0;
+            }
+            
+            #suggested-hotels .hotel-card,
+            #knn-suggested-hotels .hotel-card {
+                display: flex;
+                flex-direction: column;
+                background: white;
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                height: auto;
+                margin-bottom: 0;
+            }
+            
+            #suggested-hotels .hotel-card .hotel-image,
+            #knn-suggested-hotels .hotel-card .hotel-image {
+                width: 100%;
+                height: 180px;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            #suggested-hotels .hotel-card .hotel-image img,
+            #knn-suggested-hotels .hotel-card .hotel-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            
+            #suggested-hotels .hotel-card .hotel-info,
+            #knn-suggested-hotels .hotel-card .hotel-info {
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            #suggested-hotels .hotel-card .hotel-name,
+            #knn-suggested-hotels .hotel-card .hotel-name {
+                font-size: 1.1rem;
+                font-weight: 600;
+                line-height: 1.3;
+                margin-bottom: 8px;
+                color: #333;
+                text-align: center;
+            }
+            
+            #suggested-hotels .hotel-card .hotel-rating,
+            #knn-suggested-hotels .hotel-card .hotel-rating {
+                margin-bottom: 8px;
+                text-align: center;
+            }
+            
+            #suggested-hotels .hotel-card .hotel-address,
+            #knn-suggested-hotels .hotel-card .hotel-address {
+                font-size: 0.9rem;
+                color: #666;
+                line-height: 1.2;
+                margin-bottom: 12px;
+                text-align: center;
+            }
+            
+            #suggested-hotels .hotel-card .hotel-facilities,
+            #knn-suggested-hotels .hotel-card .hotel-facilities {
+                margin-bottom: 15px;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                justify-content: center;
+            }
+            
+            #suggested-hotels .hotel-card .hotel-facilities .badge,
+            #knn-suggested-hotels .hotel-card .hotel-facilities .badge {
+                font-size: 0.75rem;
+                padding: 4px 8px;
+                border-radius: 12px;
+                background-color: #f8f9fa;
+                color: #6c757d;
+                border: none;
+            }
+            
+            #suggested-hotels .hotel-card .btn-view-detail,
+            #knn-suggested-hotels .hotel-card .btn-view-detail {
+                background: #3b4fb8;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+                font-weight: 500;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                align-self: center;
+                width: 100%;
+                transition: background-color 0.3s ease;
+            }
+            
+            #suggested-hotels .hotel-card .btn-view-detail:hover,
+            #knn-suggested-hotels .hotel-card .btn-view-detail:hover {
+                background: #2d3a8c;
+                color: white;
+            }
+            
+            #suggested-hotels .hotel-card .favorite-btn,
+            #knn-suggested-hotels .hotel-card .favorite-btn {
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                width: 36px;
+                height: 36px;
+                background: rgba(255,255,255,0.9);
+                border: none;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            }
+            
+            #suggested-hotels .hotel-card .favorite-btn i,
+            #knn-suggested-hotels .hotel-card .favorite-btn i {
+                font-size: 18px;
+                color: #e74c3c;
+            }
+        }
+        
+        /* Desktop layout vẫn giữ nguyên */
+        @media (min-width: 769px) {
+            #suggested-hotels .hotel-card,
+            #knn-suggested-hotels .hotel-card {
+                display: flex;
+                flex-direction: column;
+            }
+        }
     </style>
 
-<body> <!-- Navbar -->
+<body>
+    <div id="loading-overlay">
+        <dotlottie-wc 
+            src="https://lottie.host/22866d75-292a-42dc-ae8a-72f6f903386d/dwhv5hvZ72.lottie" 
+            style="width: 300px; height: 300px" 
+            speed="1" 
+            autoplay 
+            loop>
+        </dotlottie-wc>
+        <div class="loading-text">LuxuryHavenTravel</div>
+        <div class="loading-subtext">Đang tải nội dung...</div>
+    </div>
+
+
+
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-flex">
@@ -204,7 +379,7 @@
                                                     class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
                                     </ul>
                                 </div>
-                                <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
+                                <a href="auth.html" class="btn btn-outline-primary me-2">
                                     <i class="fas fa-user"></i> Đăng nhập
                                 </a>
                             </div>
@@ -698,10 +873,6 @@
 
         const cityFromUrlRaw = getQueryParam('city');
         const cityFromUrl = normalizeCityName(cityFromUrlRaw);
-        
-        // Declare global variables early to avoid ReferenceError
-        let currentRegion;
-        let currentCity;
         if (cityFromUrlRaw) {
             // Nếu có city trên URL, chỉ set giao diện tab 'Tất cả' active, KHÔNG gán currentRegion để không khóa các tab miền
             document.querySelectorAll('.region-tab').forEach(b=>b.classList.remove('active'));
@@ -743,36 +914,13 @@
                     "Hà Nội", "Hạ Long", "Sapa"
                 ]
             };
-            // Initialize current region and city if not already set
-            if (typeof currentRegion === 'undefined') {
-                currentRegion = 'nam';
-            }
-            if (typeof currentCity === 'undefined') {
-                // Ensure the region exists in regionCities before accessing
-                if (regionCities[currentRegion] && regionCities[currentRegion].length > 0) {
-                    currentCity = regionCities[currentRegion][0];
-                } else {
-                    // Fallback to first available region and city
-                    const firstRegion = Object.keys(regionCities)[0];
-                    currentRegion = firstRegion;
-                    currentCity = regionCities[firstRegion][0];
-                }
-            }
+            // Mặc định miền Nam
+            let currentRegion = 'nam';
+            let currentCity = regionCities[currentRegion][0];
 
             // Render city-nav theo miền
             function renderCityNav(region) {
                 const cityNav = document.getElementById('city-nav');
-                if (!cityNav) {
-                    console.error('City nav element not found');
-                    return;
-                }
-                
-                // Check if region exists in regionCities
-                if (!regionCities[region] || !Array.isArray(regionCities[region])) {
-                    console.error('Invalid region:', region);
-                    return;
-                }
-                
                 cityNav.innerHTML = regionCities[region].map((city, idx) =>
                     `<a href="#" class="btn btn-outline-primary me-3${idx===0?' active':''}" data-city="${city}">${city}</a>`
                 ).join('');
@@ -789,14 +937,9 @@
                         document.getElementById('city-nav').innerHTML = '';
                         loadAllHotels();
                     } else {
-                        // Ensure region exists before accessing
-                        if (regionCities[currentRegion] && regionCities[currentRegion].length > 0) {
-                            currentCity = regionCities[currentRegion][0];
-                            renderCityNav(currentRegion);
-                            loadHotels(currentCity);
-                        } else {
-                            console.error('Invalid region selected:', currentRegion);
-                        }
+                        currentCity = regionCities[currentRegion][0];
+                        renderCityNav(currentRegion);
+                        loadHotels(currentCity);
                     }
                 });
             });
@@ -1766,62 +1909,31 @@
         });
 
         // Mobile menu toggle function        // Mobile Menu Toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const navLinks = document.getElementById('nav-links');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
 
-            console.log('Mobile menu elements:', { mobileMenuBtn, navLinks }); // Debug log
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function () {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
 
-            if (mobileMenuBtn && navLinks) {
-                // Initialize mobile menu to closed state
-                mobileMenuBtn.classList.remove('active');
-                navLinks.classList.remove('active');
-                
-                mobileMenuBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Mobile menu clicked'); // Debug log
-                    
-                    // Check current state before toggle
-                    const wasBtnActive = this.classList.contains('active');
-                    const wasNavActive = navLinks.classList.contains('active');
-                    
-                    // Toggle classes
-                    this.classList.toggle('active');
-                    navLinks.classList.toggle('active');
-                    
-                    // Log new states
-                    console.log('Menu states:', {
-                        wasBtnActive,
-                        wasNavActive,
-                        nowBtnActive: this.classList.contains('active'),
-                        nowNavActive: navLinks.classList.contains('active')
-                    }); // Debug log
-                });
+            // Close mobile menu when clicking on links
+            navLinks.addEventListener('click', function (e) {
+                if (e.target.tagName === 'A') {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
 
-                // Close mobile menu when clicking on links
-                navLinks.addEventListener('click', function (e) {
-                    if (e.target.tagName === 'A') {
-                        console.log('Menu link clicked, closing menu'); // Debug log
-                        mobileMenuBtn.classList.remove('active');
-                        navLinks.classList.remove('active');
-                    }
-                });
-
-                // Close mobile menu when clicking outside
-                document.addEventListener('click', function (e) {
-                    if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
-                        if (mobileMenuBtn.classList.contains('active')) {
-                            console.log('Clicked outside, closing menu'); // Debug log
-                            mobileMenuBtn.classList.remove('active');
-                            navLinks.classList.remove('active');
-                        }
-                    }
-                });
-            } else {
-                console.error('Mobile menu elements not found:', { mobileMenuBtn, navLinks });
-            }
-        });
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
 
         // Mobile Filter Toggle
         const filterToggleBtn = document.getElementById('filter-toggle-mobile');
@@ -1959,7 +2071,7 @@ function renderSuggestedHotels(hotels) {
     container.innerHTML = `<h4 class='mb-3 text-primary'><i class='fas fa-map-marker-alt'></i> Gợi ý khách sạn gần bạn</h4>` +
         `<div class='row'>` +
         hotels.slice(0, 4).map(hotel =>
-            `<div class='col-md-3 mb-3'>${createHotelCardWithSuggest ? createHotelCardWithSuggest(hotel, hotels) : hotel.tenKhachSan}</div>`
+            `<div class='col-12 mb-3'>${createHotelCardWithSuggest ? createHotelCardWithSuggest(hotel, hotels) : hotel.tenKhachSan}</div>`
         ).join('') +
         `</div>`;
 }
@@ -2417,7 +2529,7 @@ function renderKnnSuggestedHotels(hotels) {
     container.innerHTML = `<h4 class='mb-3 text-primary'><i class='fas fa-map-marker-alt'></i> Gợi ý khách sạn gần bạn</h4>` +
         `<div class='row'>` +
         hotels.map(hotel =>
-            `<div class='col-md-3 mb-3'>${createHotelCardWithSuggest ? createHotelCardWithSuggest(hotel, hotels, undefined, {suggested:true}) : hotel.tenKhachSan}</div>`
+            `<div class='col-12 mb-3'>${createHotelCardWithSuggest ? createHotelCardWithSuggest(hotel, hotels, undefined, {suggested:true}) : hotel.tenKhachSan}</div>`
         ).join('') +
         `</div>`;
 }
@@ -2442,15 +2554,46 @@ function renderSuggestedHotels(hotels) {
         container.innerHTML = '<p>Không tìm thấy khách sạn phù hợp.</p>';
         return;
     }
-    container.innerHTML = hotels.map(hotel => `
-        <div class="hotel-item" style="border:1px solid #eee; border-radius:8px; padding:12px; margin-bottom:12px; display:flex; align-items:center; gap:16px;">
-            <img src="${hotel.image || 'images/default-hotel.jpg'}" alt="${hotel.name}" style="width:80px; height:60px; object-fit:cover; border-radius:6px;">
-            <div>
-                <h5 style="margin:0 0 4px 0;">${hotel.name}</h5>
-                <div style="color:#666;">${hotel.location || ''}</div>
-            </div>
+    container.innerHTML = `
+        <h4 class='mb-3 text-primary'><i class='fas fa-map-marker-alt'></i> Gợi ý khách sạn gần bạn</h4>
+        <div class='row'>
+            ${hotels.slice(0, 4).map((hotel, index) => `
+                <div class='col-12 mb-3'>
+                    <div class="hotel-card" style="display: flex; flex-direction: column; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); height: auto;">
+                        <div class="hotel-image" style="position: relative; width: 100%; height: 180px; overflow: hidden;">
+                            <img src="${hotel.image || 'images/default-hotel.jpg'}" alt="${hotel.name || 'Khách sạn'}" 
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                            <button class="favorite-btn" style="position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                                <i class="far fa-heart" style="color: #e74c3c; font-size: 18px;"></i>
+                            </button>
+                        </div>
+                        <div class="hotel-info" style="padding: 15px; display: flex; flex-direction: column; text-align: center;">
+                            <h5 style="margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 600; line-height: 1.3; color: #333; text-align: center;">${hotel.name || 'Khách sạn'}</h5>
+                            <div style="margin-bottom: 8px; text-align: center;">
+                                <i class="fas fa-star" style="color: #ffd700; font-size: 1rem; margin-right: 2px;"></i>
+                                <i class="fas fa-star" style="color: #ffd700; font-size: 1rem; margin-right: 2px;"></i>
+                                <i class="fas fa-star" style="color: #ffd700; font-size: 1rem; margin-right: 2px;"></i>
+                                <i class="fas fa-star" style="color: #ffd700; font-size: 1rem; margin-right: 2px;"></i>
+                                <i class="fas fa-star" style="color: #ffd700; font-size: 1rem; margin-right: 2px;"></i>
+                            </div>
+                            <div style="color: #666; font-size: 0.9rem; margin-bottom: 12px; text-align: center;">
+                                <i class="fas fa-map-marker-alt" style="color: #e67e22; margin-right: 4px;"></i>
+                                ${hotel.location || 'Chưa cập nhật'}
+                            </div>
+                            <div style="margin-bottom: 15px; display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;">
+                                <span style="font-size: 0.75rem; padding: 4px 8px; border-radius: 12px; background-color: #f8f9fa; color: #6c757d;">Hồ bơi ngoài trời</span>
+                                <span style="font-size: 0.75rem; padding: 4px 8px; border-radius: 12px; background-color: #f8f9fa; color: #6c757d;">Spa</span>
+                                <span style="font-size: 0.75rem; padding: 4px 8px; border-radius: 12px; background-color: #f8f9fa; color: #6c757d;">Nhà hàng</span>
+                            </div>
+                            <a href="hotel-detail.html?id=${hotel.id || ''}" style="background: #3b4fb8; color: white; border: none; border-radius: 8px; padding: 12px 20px; font-size: 0.9rem; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; align-self: center; width: 100%; transition: background-color 0.3s ease;">
+                                <i class="fas fa-info-circle"></i> Xem chi tiết
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
         </div>
-    `).join('');
+    `;
 }
 </script>
 
@@ -2557,36 +2700,37 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <!-- Bottom Navigation Bar for Mobile -->
-<nav class="bottom-nav d-md-none d-lg-none">
-    <a href="index.html" class="bottom-nav-item">
-        <i class="fas fa-home"></i>
-        <span>Trang chủ</span>
-    </a>
-    <a href="hotel.html" class="bottom-nav-item active">
-        <i class="fas fa-hotel"></i>
-        <span>Khách sạn</span>
-    </a>
-    <a href="tours.html" class="bottom-nav-item">
-        <i class="fas fa-map-marked-alt"></i>
-        <span>Tours</span>
-    </a>
-    <a href="prioritize.html" class="bottom-nav-item">
-        <i class="fas fa-gift"></i>
-        <span>Ưu đãi</span>
-    </a>
-    <a href="travel_guide.html" class="bottom-nav-item">
-        <i class="fas fa-map-marked-alt"></i>
-        <span>Cẩm nang</span>
-    <a href="about_us.html" class="bottom-nav-item">
-        <i class="fas fa-phone"></i>
-        <span>Liên hệ</span>
-    </a>
-    <a href="member.html" class="bottom-nav-item">
-        <i class="fas fa-user"></i>
-        <span>Tài khoản</span>
-    </a>
-    
-    </a>
-</nav>
+    <nav class="bottom-nav d-md-none d-lg-none">
+        <a href="index.html" class="bottom-nav-item ">
+            <i class="fas fa-home"></i>
+            <span>Trang chủ</span>
+        </a>
+        <a href="hotel.html" class="bottom-nav-item active">
+            <i class="fas fa-hotel"></i>
+            <span>Khách sạn</span>
+        </a>
+        <a href="tours.html" class="bottom-nav-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Tours</span>
+        </a>
+        <a href="prioritize.html" class="bottom-nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Ưu đãi</span>
+        </a>
+        <a href="travel_guide.html" class="bottom-nav-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Cẩm nang</span>
+        <a href="about_us.html" class="bottom-nav-item">
+            <i class="fas fa-phone"></i>
+            <span>Liên hệ</span>
+        </a>
+        <a href="member.html" class="bottom-nav-item">
+            <i class="fas fa-user"></i>
+            <span>Tài khoản</span>
+        </a>
+        
+        </a>
+    </nav>
+
   
   

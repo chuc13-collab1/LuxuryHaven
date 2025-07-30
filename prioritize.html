@@ -15,10 +15,26 @@
     <script type="module" src="js/search.js"></script>
     <script src="js/mobile.js"></script>
     <link rel="stylesheet" href="css\mobile.css">
+    <link rel="stylesheet" href="css/loading.css">
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+    <script src="js/loading.js"></script>
 
 </head>
 
 <body> <!-- Navbar -->
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <dotlottie-wc 
+            src="https://lottie.host/22866d75-292a-42dc-ae8a-72f6f903386d/dwhv5hvZ72.lottie" 
+            style="width: 300px; height: 300px" 
+            speed="1" 
+            autoplay 
+            loop>
+        </dotlottie-wc>
+        <div class="loading-text">LuxuryHavenTravel</div>
+        <div class="loading-subtext">Đang tải nội dung...</div>
+    </div>
+    
     <nav class="navbar">
         <div class="container">
             <div class="nav-flex">
@@ -68,7 +84,7 @@
                                                     class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
                                     </ul>
                                 </div>
-                                <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
+                                <a href="auth.html" class="btn btn-outline-primary me-2">
                                     <i class="fas fa-user"></i> Đăng nhập
                                 </a>
                             </div>

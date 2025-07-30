@@ -15,6 +15,9 @@
     <script type="module" src="js/search.js"></script>
     <script src="js/mobile.js"></script>
     <link rel="stylesheet" href="css\mobile.css">
+    <link rel="stylesheet" href="css/loading.css">
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+    <script src="js/loading.js"></script>
     <style>
     
     .loyalty-container {
@@ -145,6 +148,18 @@
 </head>
 
 <body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <dotlottie-wc 
+            src="https://lottie.host/22866d75-292a-42dc-ae8a-72f6f903386d/dwhv5hvZ72.lottie" 
+            style="width: 300px; height: 300px" 
+            speed="1" 
+            autoplay 
+            loop>
+        </dotlottie-wc>
+        <div class="loading-text">LuxuryHavenTravel</div>
+        <div class="loading-subtext">Đang tải nội dung...</div>
+    </div>
     <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
@@ -193,7 +208,7 @@
                                                     class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
                                     </ul>
                                 </div>
-                                <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
+                                <a href="auth.html" class="btn btn-outline-primary me-2">
                                     <i class="fas fa-user"></i> Đăng nhập
                                 </a>
                             </div>
@@ -662,6 +677,23 @@
             if (sidebarEmail) sidebarEmail.textContent = user.email;
         }
 
+        // Hàm đồng bộ avatar cho tất cả phần tử
+        function syncAllAvatars(avatarUrl) {
+            const defaultAvatar = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+            const src = avatarUrl || defaultAvatar;
+            
+            // Desktop avatar
+            const sidebarAvatar = document.getElementById('sidebar-avatar');
+            if (sidebarAvatar) sidebarAvatar.src = src;
+            
+            // Mobile avatars
+            const mobileAvatarImg = document.getElementById('mobile-avatar-img');
+            if (mobileAvatarImg) mobileAvatarImg.src = src;
+            
+            const mobileSidebarAvatar = document.getElementById('mobile-sidebar-avatar');
+            if (mobileSidebarAvatar) mobileSidebarAvatar.src = src;
+        }
+
         // Hàm lấy thông tin người dùng
         function loadUserData(user) {
             const userRef = firebase.database().ref('users/' + user.uid);
@@ -685,12 +717,16 @@
                 // Thay đổi dòng này để có icon:
                 document.getElementById('sidebar-memberLevel').innerHTML = userData.memberLevel ? getMemberLevelIcon(userData.memberLevel) : '';
                 document.getElementById('sidebar-loyaltyPoints').textContent = userData.loyaltyPoints ? `Điểm: ${userData.loyaltyPoints}` : '';
-                const avatarImg = document.getElementById('sidebar-avatar');
-                if (avatarImg) avatarImg.src = userData.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+                
+                // Đồng bộ avatar cho tất cả phần tử (desktop và mobile)
+                syncAllAvatars(userData.avatar);
 
                 // Gọi phân hạng tự động
                 updateMemberLevel(user);
                 syncLoyaltyToBarcodeBox(userData); // Đồng bộ điểm và hạng thành viên vào barcode box
+                
+                // Đồng bộ avatar cho mobile sidebar
+                syncMobileSidebar(userData);
             });
 
             // Xử lý form cập nhật thông tin
@@ -1184,7 +1220,15 @@
 
                 document.getElementById('sidebar-user-name').textContent = updates.name;
                 document.getElementById('user-name').textContent = updates.name;
-                document.getElementById('sidebar-avatar').src = updates.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+                
+                // Cập nhật mobile sidebar với tên mới  
+                document.getElementById('mobile-sidebar-user-name').textContent = updates.name;
+                
+                // Đồng bộ avatar nếu có
+                if (updates.avatar) {
+                    syncAllAvatars(updates.avatar);
+                }
+                
                 updateUserBarcode(user); // Cập nhật barcode khi cập nhật thông tin
             }).catch((error) => {
                 console.error('Lỗi cập nhật:', error);
@@ -1416,7 +1460,9 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.secure_url) {
-                        document.getElementById('sidebar-avatar').src = data.secure_url;
+                        // Đồng bộ avatar cho tất cả phần tử
+                        syncAllAvatars(data.secure_url);
+                        
                         return firebase.database().ref('users/' + user.uid).update({
                             avatar: data.secure_url,
                             updatedAt: firebase.database.ServerValue.TIMESTAMP
@@ -2146,9 +2192,9 @@ End of Tawk.to Script -->
         </a>
     </nav>
 
-    <!-- Avatar button for mobile (hiện ở góc trên bên trái trên mobile) -->
-    <div id="mobile-avatar-btn" style="display:none; position:fixed; top:18px; left:12px; z-index:1201;">
-      <img id="mobile-avatar-img" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" alt="Avatar" style="width:48px; height:48px; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,0.12); border:2px solid #fff; cursor:pointer;">
+    <!-- Avatar button for mobile (hiện ở góc trên bên phải trên mobile) -->
+    <div id="mobile-avatar-btn" style="display:none; position:fixed; top:16px; right:16px; z-index:1201;">
+      <img id="mobile-avatar-img" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" alt="Avatar" style="width:42px; height:42px; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,0.15); border:2px solid #fff; cursor:pointer; transition: transform 0.2s ease;">
     </div>
     <!-- Off-canvas sidebar cho mobile -->
     <div id="mobile-sidebar-offcanvas" style="display:none; position:fixed; top:0; left:0; width:80vw; max-width:320px; height:100vh; background:#fff; z-index:1300; box-shadow:2px 0 16px rgba(0,0,0,0.18); overflow-y:auto; transition:transform 0.3s; transform:translateX(-100%);">
@@ -2209,14 +2255,29 @@ End of Tawk.to Script -->
       document.getElementById('mobile-avatar-btn').onclick = showMobileSidebar;
       document.getElementById('mobile-sidebar-close').onclick = hideMobileSidebar;
       document.getElementById('mobile-sidebar-overlay').onclick = hideMobileSidebar;
+      
+      // Thêm hiệu ứng hover cho mobile avatar button
+      const mobileAvatarBtn = document.getElementById('mobile-avatar-btn');
+      const mobileAvatarImg = document.getElementById('mobile-avatar-img');
+      
+      mobileAvatarBtn.addEventListener('touchstart', function() {
+        mobileAvatarImg.style.transform = 'scale(0.95)';
+      });
+      
+      mobileAvatarBtn.addEventListener('touchend', function() {
+        mobileAvatarImg.style.transform = 'scale(1)';
+      });
+      
       // Đồng bộ thông tin user vào mobile sidebar
-      function syncMobileSidebar(user) {
-        document.getElementById('mobile-avatar-img').src = user.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
-        document.getElementById('mobile-sidebar-avatar').src = user.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
-        document.getElementById('mobile-sidebar-user-name').textContent = user.name || user.displayName || '';
-        document.getElementById('mobile-sidebar-user-email').textContent = user.email || '';
-        document.getElementById('mobile-sidebar-memberLevel').innerHTML = user.memberLevel ? getMemberLevelIcon(user.memberLevel) : '';
-        document.getElementById('mobile-sidebar-loyaltyPoints').textContent = user.loyaltyPoints ? `Điểm: ${user.loyaltyPoints}` : '';
+      function syncMobileSidebar(userData) {
+        // Đồng bộ avatar cho tất cả phần tử
+        syncAllAvatars(userData.avatar);
+        
+        // Cập nhật thông tin user khác
+        document.getElementById('mobile-sidebar-user-name').textContent = userData.name || userData.displayName || '';
+        document.getElementById('mobile-sidebar-user-email').textContent = userData.email || firebase.auth().currentUser?.email || '';
+        document.getElementById('mobile-sidebar-memberLevel').innerHTML = userData.memberLevel ? getMemberLevelIcon(userData.memberLevel) : '';
+        document.getElementById('mobile-sidebar-loyaltyPoints').textContent = userData.loyaltyPoints ? `Điểm: ${userData.loyaltyPoints}` : '';
       }
       // Gọi hàm này sau khi loadUserData
       // Ví dụ: trong loadUserData(user) => syncMobileSidebar(userData)

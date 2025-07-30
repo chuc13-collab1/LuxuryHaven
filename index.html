@@ -9,10 +9,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
     <link rel="stylesheet" href="css\index.css">
     <link rel="stylesheet" href="css\mobile.css">
     <link rel="stylesheet" href="css\chatbox.css">
     <script type="module" src="js/search.js"></script>
+    <link rel="stylesheet" href="css\loading.css">
     <style>
         @font-face {
             font-family: 'Nautica Script Bold';
@@ -32,6 +34,19 @@
 </head>
 
 <body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <dotlottie-wc 
+            src="https://lottie.host/22866d75-292a-42dc-ae8a-72f6f903386d/dwhv5hvZ72.lottie" 
+            style="width: 300px; height: 300px" 
+            speed="1" 
+            autoplay 
+            loop>
+        </dotlottie-wc>
+        <div class="loading-text">LuxuryHavenTravel</div>
+        <div class="loading-subtext">Đang tải nội dung...</div>
+    </div>
+
     <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
@@ -81,9 +96,10 @@
                                                     class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
                                     </ul>
                                 </div>
-                                <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
-                                    <i class="fas fa-user"></i> Đăng nhập
-                                </a>
+                                <a href="auth.html" class="btn btn-outline-primary me-2" id="open-login-modal">
+  <i class="fas fa-user"></i> Đăng nhập
+</a>
+
                             </div>
                         </li>
                     </ul>
@@ -604,7 +620,7 @@ loadLatestNews();
     </footer>
 
     <!-- Auth Modal -->
-    <div id="auth-modal" class="modal">
+    <!-- <div id="auth-modal" class="modal">
         <div class="modal-content"
             style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
             <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
@@ -683,7 +699,7 @@ loadLatestNews();
                 </form>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -713,212 +729,9 @@ loadLatestNews();
         // Đợi DOM load xong
         document.addEventListener('DOMContentLoaded', function () {
             // Lấy các elements
-            const loginForm = document.getElementById('login-form');
-            const registerForm = document.getElementById('register-form');
-            const forgotForm = document.getElementById('forgot-form');
-            const closeAuthModal = document.getElementById('close-auth-modal');
-            const openLoginModal = document.getElementById('open-login-modal');
             const userDropdown = document.getElementById('user-dropdown');
             const userName = document.getElementById('user-name');
             const logoutBtn = document.getElementById('logout-btn');
-
-            // Xử lý đăng nhập
-            if (loginForm) {
-                loginForm.addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    const email = document.getElementById('login-email').value;
-                    const password = document.getElementById('login-password').value;
-
-                    firebase.auth().signInWithEmailAndPassword(email, password)
-                        .then((userCredential) => {
-                            const user = userCredential.user;
-                            document.getElementById('auth-modal').style.display = 'none';
-
-                            // Kiểm tra nếu là admin
-                            if (email === 'quantrikhachsan@gmail.com') {
-                                Swal.fire({
-                                    title: 'Đăng nhập thành công!',
-                                    text: 'Chào mừng Admin!',
-                                    icon: 'success',
-                                    confirmButtonColor: '#e67e22'
-                                }).then(() => {
-                                    window.location.href = 'admin-dashboard.html';
-                                });
-                            } else if (email === 'nhanvien2@luxuryhaven.com') {
-                                Swal.fire({
-                                    title: 'Đăng nhập thành công!',
-                                    text: 'Chào mừng Nhân viên!',
-                                    icon: 'success',
-                                    confirmButtonColor: '#e67e22'
-                                }).then(() => {
-                                    window.location.href = 'admin-dashboard.html';
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: 'Đăng nhập thành công!',
-                                    icon: 'success',
-                                    confirmButtonColor: '#e67e22'
-                                });
-                            }
-                        })
-                        .catch((error) => {
-                            Swal.fire({
-                                title: 'Lỗi đăng nhập!',
-                                text: error.message,
-                                icon: 'error',
-                                confirmButtonColor: '#e67e22'
-                            });
-                        });
-                });
-            }
-
-            // Xử lý đăng ký
-            if (registerForm) {
-                registerForm.addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    const email = document.getElementById('register-email').value;
-                    const password = document.getElementById('register-password').value;
-                    const confirmPassword = document.getElementById('register-confirm-password').value;
-                    const username = document.getElementById('register-username').value;
-
-                    if (password.length < 6) {
-                        Swal.fire({
-                            title: 'Lỗi đăng ký!',
-                            text: 'Mật khẩu phải có ít nhất 6 ký tự.',
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                        return;
-                    }
-
-                    if (password !== confirmPassword) {
-                        Swal.fire({
-                            title: 'Lỗi đăng ký!',
-                            text: 'Mật khẩu nhập lại không khớp.',
-                            icon: 'error',
-                            confirmButtonColor: '#e67e22'
-                        });
-                        return;
-                    }
-
-                    firebase.auth().createUserWithEmailAndPassword(email, password)
-                        .then((userCredential) => {
-                            const user = userCredential.user;
-                            // Cập nhật displayName
-                            return Promise.all([
-                                user.updateProfile({
-                                    displayName: username
-                                }),
-                                // Thêm thông tin user vào Realtime Database
-                                firebase.database().ref('users/' + user.uid).set({
-                                    name: username,
-                                    email: user.email,
-                                    loyaltyPoints: 0, // Điểm thành viên mặc định
-                                    memberLevel: 'Đồng', // Hạng thành viên mặc định
-                                    createdAt: firebase.database.ServerValue.TIMESTAMP,
-                                    updatedAt: firebase.database.ServerValue.TIMESTAMP
-                                })
-                            ]);
-                        })
-                        .then(() => {
-                            // Gửi thông báo cho admin khi có member mới đăng ký
-                            generateNotification('fas fa-user-plus', 'bg-success', `Thành viên mới: ${username} (${email}) đã đăng ký tài khoản.`);
-                            
-                            document.getElementById('auth-modal').style.display = 'none';
-                            Swal.fire({
-                                title: 'Đăng ký thành công!',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            });
-                        })
-                        .catch((error) => {
-                            Swal.fire({
-                                title: 'Lỗi đăng ký!',
-                                text: error.message,
-                                icon: 'error',
-                                confirmButtonColor: '#e67e22'
-                            });
-                        });
-                });
-            }
-
-            // Xử lý quên mật khẩu
-            if (forgotForm) {
-                forgotForm.addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    const email = document.getElementById('forgot-email').value;
-
-                    firebase.auth().sendPasswordResetEmail(email)
-                        .then(() => {
-                            Swal.fire({
-                                title: 'Email đã được gửi!',
-                                text: 'Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.',
-                                icon: 'success',
-                                confirmButtonColor: '#e67e22'
-                            });
-                        })
-                        .catch((error) => {
-                            Swal.fire({
-                                title: 'Lỗi!',
-                                text: error.message,
-                                icon: 'error',
-                                confirmButtonColor: '#e67e22'
-                            });
-                        });
-                });
-            }
-
-            // Xử lý chuyển đổi giữa các form
-            document.getElementById('to-register').addEventListener('click', function (e) {
-                e.preventDefault();
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
-                forgotForm.style.display = 'none';
-            });
-
-            document.getElementById('to-login').addEventListener('click', function (e) {
-                e.preventDefault();
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-                forgotForm.style.display = 'none';
-            });
-
-            document.getElementById('to-forgot').addEventListener('click', function (e) {
-                e.preventDefault();
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'none';
-                forgotForm.style.display = 'block';
-            });
-
-            document.getElementById('back-to-login').addEventListener('click', function (e) {
-                e.preventDefault();
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-                forgotForm.style.display = 'none';
-            });
-
-            // Xử lý đóng modal
-            if (closeAuthModal) {
-                closeAuthModal.addEventListener('click', () => {
-                    document.getElementById('auth-modal').style.display = 'none';
-                });
-            }
-
-            // Xử lý mở modal đăng nhập
-            if (openLoginModal) {
-                openLoginModal.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    document.getElementById('auth-modal').style.display = 'block';
-                });
-            }
-
-            // Đóng modal khi click ra ngoài
-            window.onclick = function (event) {
-                const modal = document.getElementById('auth-modal');
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            };
 
             // Theo dõi trạng thái đăng nhập
             firebase.auth().onAuthStateChanged(function (user) {
@@ -1203,6 +1016,72 @@ loadLatestNews();
             showHeroSlide(0);
             setInterval(nextHeroSlide, 5000);
         });
+
+        // Loading Overlay Management
+        window.addEventListener('load', function() {
+            // Đảm bảo loading hiển thị ít nhất 2 giây
+            setTimeout(function() {
+                const loadingOverlay = document.getElementById('loading-overlay');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('hidden');
+                    // Xóa element sau khi animation hoàn tất
+                    setTimeout(function() {
+                        loadingOverlay.remove();
+                    }, 500);
+                }
+            }, 2000);
+        });
+
+        // Hiển thị loading khi chuyển trang
+        document.addEventListener('DOMContentLoaded', function() {
+            // Thêm loading cho các link navigation
+            const navLinks = document.querySelectorAll('a[href]:not([href^="#"]):not([href^="javascript:"]):not([target="_blank"])');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Chỉ hiển thị loading nếu không phải là link trong trang hiện tại
+                    if (this.hostname === window.location.hostname && this.pathname !== window.location.pathname) {
+                        showPageLoading();
+                    }
+                });
+            });
+        });
+
+        function showPageLoading() {
+            // Tạo loading overlay mới cho chuyển trang
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.id = 'page-loading-overlay';
+            loadingOverlay.innerHTML = `
+                <dotlottie-wc 
+                    src="https://lottie.host/22866d75-292a-42dc-ae8a-72f6f903386d/dwhv5hvZ72.lottie" 
+                    style="width: 200px; height: 200px" 
+                    speed="1.5" 
+                    autoplay 
+                    loop>
+                </dotlottie-wc>
+                <div class="loading-text" style="font-size: 1.5rem;">Đang chuyển trang...</div>
+            `;
+            loadingOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            `;
+            document.body.appendChild(loadingOverlay);
+            
+            // Hiển thị loading
+            setTimeout(() => {
+                loadingOverlay.style.opacity = '1';
+            }, 10);
+        }
     </script>
 
     <!-- Nút mở modal đánh giá -->
@@ -1335,8 +1214,8 @@ loadLatestNews();
                         cancelButtonColor: '#d33'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Mở modal đăng nhập
-                            document.getElementById('login-modal').style.display = 'block';
+                            // Chuyển hướng đến trang đăng nhập
+                            window.location.href = 'auth.html';
                         }
                     });
                     return;

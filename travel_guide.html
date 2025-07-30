@@ -14,6 +14,9 @@
     <script type="module" src="js/search.js"></script>
     <script src="js/mobile.js"></script>
     <link rel="stylesheet" href="css\mobile.css">
+    <link rel="stylesheet" href="css/loading.css">
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+    <script src="js/loading.js"></script>
     <style>
         @font-face {
             font-family: 'Nautica Script Bold';
@@ -33,6 +36,19 @@
 </head>
 
 <body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <dotlottie-wc 
+            src="https://lottie.host/22866d75-292a-42dc-ae8a-72f6f903386d/dwhv5hvZ72.lottie" 
+            style="width: 300px; height: 300px" 
+            speed="1" 
+            autoplay 
+            loop>
+        </dotlottie-wc>
+        <div class="loading-text">LuxuryHavenTravel</div>
+        <div class="loading-subtext">Đang tải nội dung...</div>
+    </div>
+    
     <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
@@ -82,7 +98,7 @@
                                                     class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
                                     </ul>
                                 </div>
-                                <a href="#" class="btn btn-outline-primary me-2" id="open-login-modal">
+                                <a href="auth.html" class="btn btn-outline-primary me-2" >
                                     <i class="fas fa-user"></i> Đăng nhập
                                 </a>
                             </div>
@@ -426,27 +442,47 @@
     
         // Đợi DOM load xong
         document.addEventListener('DOMContentLoaded', function () {
-            // Lấy các elements
-            const loginForm = document.getElementById('login-form');
-            const registerForm = document.getElementById('register-form');
-            const forgotForm = document.getElementById('forgot-form');
-            const closeAuthModal = document.getElementById('close-auth-modal');
-            const openLoginModal = document.getElementById('open-login-modal');
-            const userDropdown = document.getElementById('user-dropdown');
-            const userName = document.getElementById('user-name');
-            const logoutBtn = document.getElementById('logout-btn');
+            // Helper function để lấy element an toàn
+            function safeGetElement(id) {
+                const element = document.getElementById(id);
+                if (!element) {
+                    console.warn(`Element with ID '${id}' not found`);
+                }
+                return element;
+            }
+
+            // Lấy các elements với kiểm tra an toàn
+            const loginForm = safeGetElement('login-form');
+            const registerForm = safeGetElement('register-form');
+            const forgotForm = safeGetElement('forgot-form');
+            const closeAuthModal = safeGetElement('close-auth-modal');
+            const openLoginModal = safeGetElement('open-login-modal');
+            const userDropdown = safeGetElement('user-dropdown');
+            const userName = safeGetElement('user-name');
+            const logoutBtn = safeGetElement('logout-btn');
 
             // Xử lý đăng nhập
             if (loginForm) {
                 loginForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-                    const email = document.getElementById('login-email').value;
-                    const password = document.getElementById('login-password').value;
+                    const emailInput = safeGetElement('login-email');
+                    const passwordInput = safeGetElement('login-password');
+                    
+                    if (!emailInput || !passwordInput) {
+                        console.error('Login form elements not found');
+                        return;
+                    }
+                    
+                    const email = emailInput.value;
+                    const password = passwordInput.value;
 
                     firebase.auth().signInWithEmailAndPassword(email, password)
                         .then((userCredential) => {
                             const user = userCredential.user;
-                            document.getElementById('auth-modal').style.display = 'none';
+                            const authModal = safeGetElement('auth-modal');
+                            if (authModal) {
+                                authModal.style.display = 'none';
+                            }
 
                             // Kiểm tra nếu là admin
                             if (email === 'quantrikhachsan@gmail.com') {
@@ -490,10 +526,20 @@
             if (registerForm) {
                 registerForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-                    const email = document.getElementById('register-email').value;
-                    const password = document.getElementById('register-password').value;
-                    const confirmPassword = document.getElementById('register-confirm-password').value;
-                    const username = document.getElementById('register-username').value;
+                    const emailInput = safeGetElement('register-email');
+                    const passwordInput = safeGetElement('register-password');
+                    const confirmPasswordInput = safeGetElement('register-confirm-password');
+                    const usernameInput = safeGetElement('register-username');
+                    
+                    if (!emailInput || !passwordInput || !confirmPasswordInput || !usernameInput) {
+                        console.error('Register form elements not found');
+                        return;
+                    }
+                    
+                    const email = emailInput.value;
+                    const password = passwordInput.value;
+                    const confirmPassword = confirmPasswordInput.value;
+                    const username = usernameInput.value;
 
                     if (password.length < 6) {
                         Swal.fire({
@@ -538,7 +584,10 @@
                             // Gửi thông báo cho admin khi có member mới đăng ký
                             generateNotification('fas fa-user-plus', 'bg-success', `Thành viên mới: ${username} (${email}) đã đăng ký tài khoản.`);
                             
-                            document.getElementById('auth-modal').style.display = 'none';
+                            const authModal = safeGetElement('auth-modal');
+                            if (authModal) {
+                                authModal.style.display = 'none';
+                            }
                             Swal.fire({
                                 title: 'Đăng ký thành công!',
                                 icon: 'success',
@@ -560,7 +609,14 @@
             if (forgotForm) {
                 forgotForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-                    const email = document.getElementById('forgot-email').value;
+                    const emailInput = safeGetElement('forgot-email');
+                    
+                    if (!emailInput) {
+                        console.error('Forgot email input not found');
+                        return;
+                    }
+                    
+                    const email = emailInput.value;
 
                     firebase.auth().sendPasswordResetEmail(email)
                         .then(() => {
@@ -582,39 +638,54 @@
                 });
             }
 
-            // Xử lý chuyển đổi giữa các form
-            document.getElementById('to-register').addEventListener('click', function (e) {
-                e.preventDefault();
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
-                forgotForm.style.display = 'none';
-            });
+            // Xử lý chuyển đổi giữa các form với kiểm tra an toàn
+            const toRegisterBtn = safeGetElement('to-register');
+            if (toRegisterBtn) {
+                toRegisterBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (loginForm) loginForm.style.display = 'none';
+                    if (registerForm) registerForm.style.display = 'block';
+                    if (forgotForm) forgotForm.style.display = 'none';
+                });
+            }
 
-            document.getElementById('to-login').addEventListener('click', function (e) {
-                e.preventDefault();
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-                forgotForm.style.display = 'none';
-            });
+            const toLoginBtn = safeGetElement('to-login');
+            if (toLoginBtn) {
+                toLoginBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (loginForm) loginForm.style.display = 'block';
+                    if (registerForm) registerForm.style.display = 'none';
+                    if (forgotForm) forgotForm.style.display = 'none';
+                });
+            }
 
-            document.getElementById('to-forgot').addEventListener('click', function (e) {
-                e.preventDefault();
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'none';
-                forgotForm.style.display = 'block';
-            });
+            const toForgotBtn = safeGetElement('to-forgot');
+            if (toForgotBtn) {
+                toForgotBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (loginForm) loginForm.style.display = 'none';
+                    if (registerForm) registerForm.style.display = 'none';
+                    if (forgotForm) forgotForm.style.display = 'block';
+                });
+            }
 
-            document.getElementById('back-to-login').addEventListener('click', function (e) {
-                e.preventDefault();
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-                forgotForm.style.display = 'none';
-            });
+            const backToLoginBtn = safeGetElement('back-to-login');
+            if (backToLoginBtn) {
+                backToLoginBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (loginForm) loginForm.style.display = 'block';
+                    if (registerForm) registerForm.style.display = 'none';
+                    if (forgotForm) forgotForm.style.display = 'none';
+                });
+            }
 
             // Xử lý đóng modal
             if (closeAuthModal) {
                 closeAuthModal.addEventListener('click', () => {
-                    document.getElementById('auth-modal').style.display = 'none';
+                    const authModal = safeGetElement('auth-modal');
+                    if (authModal) {
+                        authModal.style.display = 'none';
+                    }
                 });
             }
 
@@ -683,8 +754,8 @@
                     container.innerHTML += `
                         <div class="col-md-6">
                             <div class="guide-card">
-                                <a href="destination_detail.html?slug=${guide.slug}" style="display:flex;align-items:center;text-decoration:none;width:100%">
-<img src="${guide.main_image}" alt="" class="guide-item-icon">
+                                <a href="destination_detail.html?slug=${guide.slug}" class="guide-card-link">
+                                    <img src="${guide.main_image}" alt="${guide.title}" class="guide-item-icon">
                                     <span class="guide-item-title">${guide.title}</span>
                                 </a>
                             </div>
@@ -716,54 +787,74 @@
             emailjs.init("yI6xhpzYSnD3AGzbX");
         })();
 
-        // Xử lý form liên hệ
-        document.getElementById('contact-form').addEventListener('submit', function (e) {
-            e.preventDefault();
+        // Xử lý form liên hệ - Kiểm tra element tồn tại trước
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
 
-            // Lấy thông tin từ form
-            const name = document.getElementById('contact-name').value;
-            const email = document.getElementById('contact-email').value;
-            const message = document.getElementById('contact-message').value;
-
-            // Hiển thị loading
-            Swal.fire({
-                title: 'Đang gửi...',
-                text: 'Vui lòng đợi trong giây lát',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            // Gửi email
-            emailjs.send("service_6spwxxw", "template_vcjlg02", {
-                to_email: "quantrikhachsan001@gmail.com",
-                from_name: name,
-                from_email: email,
-                message: message
-            })
-                .then(function () {
-                    // Thành công
-                    Swal.fire({
-                        title: 'Gửi thành công!',
-                        text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
-                        icon: 'success',
-                        confirmButtonColor: '#e67e22'
-                    });
-                    // Reset form
-                    document.getElementById('contact-form').reset();
-                })
-                .catch(function (error) {
-                    // Thất bại
+                // Lấy thông tin từ form với kiểm tra an toàn
+                const nameInput = document.getElementById('contact-name');
+                const emailInput = document.getElementById('contact-email');
+                const messageInput = document.getElementById('contact-message');
+                
+                if (!nameInput || !emailInput || !messageInput) {
+                    console.error('Contact form inputs not found');
                     Swal.fire({
                         title: 'Lỗi!',
-                        text: 'Không thể gửi email. Vui lòng thử lại sau.',
+                        text: 'Không thể tìm thấy các trường trong form. Vui lông thử lại.',
                         icon: 'error',
                         confirmButtonColor: '#e67e22'
                     });
-                    console.error("Error sending email:", error);
+                    return;
+                }
+                
+                const name = nameInput.value;
+                const email = emailInput.value;
+                const message = messageInput.value;
+
+                // Hiển thị loading
+                Swal.fire({
+                    title: 'Đang gửi...',
+                    text: 'Vui lòng đợi trong giây lát',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
                 });
-        });
+
+                // Gửi email
+                emailjs.send("service_6spwxxw", "template_vcjlg02", {
+                    to_email: "quantrikhachsan001@gmail.com",
+                    from_name: name,
+                    from_email: email,
+                    message: message
+                })
+                    .then(function () {
+                        // Thành công
+                        Swal.fire({
+                            title: 'Gửi thành công!',
+                            text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        // Reset form
+                        contactForm.reset();
+                    })
+                    .catch(function (error) {
+                        // Thất bại
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Không thể gửi email. Vui lòng thử lại sau.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        console.error("Error sending email:", error);
+                    });
+            });
+        } else {
+            console.warn("Contact form not found - skipping contact form initialization");
+        }
 
         let autoSlideInterval;
         let currentSlideIndex = 0;

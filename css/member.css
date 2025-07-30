@@ -1371,3 +1371,205 @@ body {
     animation: pulse-cancel 1.5s infinite;
 }
 
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    /* Navbar adjustments for mobile */
+    .nav-flex {
+        height: 70px;
+        padding: 0 16px;
+    }
+    
+    /* Logo styles for mobile - nằm bên trái */
+    .logo {
+        font-size: 28px !important;
+        margin-left: 0;
+        text-align: left;
+        flex: 1;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    
+    /* Container cho logo không cần margin */
+    .nav-flex > div:first-child {
+        margin-left: 0; /* Logo nằm bên trái tự nhiên */
+    }
+    
+    /* Mobile avatar button positioning - di chuyển sang bên phải */
+    #mobile-avatar-btn {
+        top: 14px !important;
+        right: 16px !important; /* Thay đổi từ left sang right */
+        left: auto !important;
+        z-index: 1201 !important;
+    }
+    
+    #mobile-avatar-btn img {
+        width: 42px !important;
+        height: 42px !important;
+        border: 2px solid #fff !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    
+    #mobile-avatar-btn img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    }
+    
+    /* Hide search bar on mobile */
+    .nav-search {
+        display: none;
+    }
+    
+    /* Adjust nav-right for mobile - di chuyển ra xa avatar */
+    .nav-right {
+        gap: 12px;
+        position: absolute;
+        right: 70px; /* Tăng khoảng cách để tránh avatar */
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    /* Hide nav links on mobile - they should be in mobile menu */
+    .nav-links {
+        display: none;
+    }
+    
+    /* Show mobile menu button */
+    .mobile-menu-btn {
+        display: flex;
+        margin-right: 0;
+    }
+    
+    /* Main content margin adjustment for mobile */
+    main .container {
+        margin-top: 90px !important;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    /* Sidebar adjustments for mobile */
+    .col-md-3 {
+        display: none; /* Hide desktop sidebar on mobile */
+    }
+    
+    .col-md-9 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    /* Mobile sidebar offcanvas styles */
+    #mobile-sidebar-offcanvas {
+        width: 85vw !important;
+        max-width: 300px !important;
+        border-radius: 0 8px 8px 0;
+    }
+    
+    #mobile-sidebar-offcanvas.show {
+        transform: translateX(0) !important;
+    }
+    
+    /* Avatar in mobile sidebar */
+    #mobile-sidebar-avatar {
+        width: 64px !important;
+        height: 64px !important;
+        border: 3px solid #fff;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    
+    /* Mobile sidebar menu items */
+    #mobile-sidebar-offcanvas .list-group-item {
+        padding: 14px 20px;
+        font-size: 0.95rem;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    #mobile-sidebar-offcanvas .list-group-item:hover {
+        background-color: #f8f9fa;
+        transform: none;
+    }
+    
+    /* Card adjustments for mobile */
+    .card {
+        margin-bottom: 16px;
+        border-radius: 8px;
+    }
+    
+    .card-body {
+        padding: 16px;
+    }
+    
+    /* Table responsive for mobile */
+    .table-responsive {
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens */
+    .logo {
+        font-size: 24px !important;
+    }
+    
+    /* Container cho logo trên màn hình nhỏ - không cần margin */
+    .nav-flex > div:first-child {
+        margin-left: 0; /* Logo nằm bên trái tự nhiên */
+    }
+    
+    /* Avatar button positioning bên phải */
+    #mobile-avatar-btn {
+        top: 12px !important;
+        right: 12px !important; /* Thay đổi từ left sang right */
+        left: auto !important;
+    }
+    
+    #mobile-avatar-btn img {
+        width: 38px !important;
+        height: 38px !important;
+    }
+    
+    .nav-flex {
+        height: 65px;
+        padding: 0 12px;
+    }
+    
+    /* Nav right cách xa avatar hơn trên màn hình nhỏ */
+    .nav-right {
+        right: 65px; /* Tăng khoảng cách để tránh avatar */
+    }
+    
+    main .container {
+        margin-top: 80px !important;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    
+    /* Mobile sidebar cho màn hình nhỏ */
+    #mobile-sidebar-offcanvas {
+        width: 90vw !important;
+        max-width: 280px !important;
+    }
+    
+    /* User info trong mobile sidebar */
+    #mobile-sidebar-user-name {
+        font-size: 1rem !important;
+    }
+    
+    #mobile-sidebar-user-email {
+        font-size: 0.85rem !important;
+    }
+    
+    /* Card padding cho màn hình nhỏ */
+    .card-body {
+        padding: 12px;
+    }
+    
+    /* Button sizes for mobile */
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}
+

@@ -1868,3 +1868,1210 @@ body {
     }
 }
 
+/* ===== COMPREHENSIVE MOBILE RESPONSIVE STYLES ===== */
+
+/* ===== MAIN MOBILE STYLES (max-width: 768px) ===== */
+@media (max-width: 768px) {
+    /* Body and General */
+    body {
+        padding-top: 70px;
+        padding-bottom: 85px;
+        font-size: 14px;
+    }
+
+    /* Navigation Mobile */
+    .nav-flex {
+        padding: 0 15px;
+        height: 70px;
+    }
+
+    .navbar-brand img {
+        height: 50px;
+    }
+
+    .nav-search {
+        display: none;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        transition: left 0.3s ease;
+        padding-top: 2rem;
+        z-index: 999;
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+
+    .nav-links li {
+        margin: 1rem 0;
+        width: 90%;
+        text-align: center;
+    }
+
+    .nav-links li a {
+        display: block;
+        padding: 1rem;
+        font-size: 1.1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links li a:hover,
+    .nav-links li a.active {
+        background: #1a237e;
+        color: #fff;
+    }
+
+    /* Mobile Menu Button */
+    .mobile-menu-btn {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 30px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    .mobile-menu-btn span {
+        display: block;
+        height: 3px;
+        width: 100%;
+        background: #333;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-menu-btn.active span:nth-child(1) {
+        transform: rotate(45deg) translate(7px, 7px);
+    }
+
+    .mobile-menu-btn.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .mobile-menu-btn.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+
+    /* Hero Section Mobile */
+    .hero-section {
+        padding: 40px 0 !important;
+        text-align: center;
+    }
+
+    .nautica-script {
+        font-size: 3rem !important;
+        margin-bottom: 1rem;
+    }
+
+    .hero-content h1 {
+        font-size: 1.8rem !important;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+        padding: 0 15px;
+    }
+
+    .hero-content p {
+        font-size: 1rem !important;
+        line-height: 1.5;
+        padding: 0 20px;
+        margin-bottom: 2rem;
+    }
+
+    /* About Sections Mobile */
+    .about-slogan-section {
+        padding: 40px 20px !important;
+        text-align: center;
+    }
+
+    .about-slogan-title {
+        font-size: 1.8rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 1rem !important;
+        padding: 0;
+    }
+
+    .about-slogan-desc {
+        font-size: 1rem !important;
+        line-height: 1.5 !important;
+        padding: 0;
+    }
+
+    /* Introduction Section Mobile */
+    .about-intro-section {
+        margin: 40px 20px !important;
+        padding: 40px 20px !important;
+    }
+
+    .about-intro-title {
+        font-size: 1.8rem !important;
+        text-align: center;
+        margin-bottom: 1rem !important;
+    }
+
+    .about-intro-underline {
+        margin: 0 auto 1.5rem auto !important;
+    }
+
+    .about-intro-content p {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+        text-align: center;
+        padding: 0;
+    }
+
+    /* Mission Vision Mobile */
+    #about-mission-vision section {
+        padding: 40px 20px !important;
+        flex-direction: column !important;
+        gap: 2rem !important;
+        margin: 40px 0 !important;
+    }
+
+    .mission-card,
+    .vision-card {
+        padding: 30px 20px !important;
+        text-align: center !important;
+        border-radius: 16px !important;
+        margin: 0 !important;
+        max-width: none !important;
+    }
+
+    .mission-card h3,
+    .vision-card h3 {
+        font-size: 1.4rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .mission-card p,
+    .vision-card p {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+    }
+
+    .mission-icon,
+    .vision-icon {
+        font-size: 2.5rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    /* Core Values Mobile - Single Column Layout */
+    .core-values-section {
+        padding: 40px 20px !important;
+    }
+
+    .core-values-title {
+        font-size: 2.2rem !important;
+        text-align: center;
+        margin-bottom: 1.5rem !important;
+        font-weight: 800 !important;
+        color: #1a237e !important;
+    }
+
+    .core-values-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+        margin-top: 2rem !important;
+        max-width: 100% !important;
+    }
+
+    .core-value-card {
+        padding: 25px 20px !important;
+        text-align: center !important;
+        border-radius: 18px !important;
+        background: #fff !important;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1) !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
+        max-width: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border: 2px solid transparent !important;
+        margin: 0 !important;
+    }
+
+    .core-value-card:hover {
+        transform: translateY(-6px) !important;
+        box-shadow: 0 12px 32px rgba(26, 35, 126, 0.15) !important;
+        border: 2px solid #1a237e !important;
+    }
+
+    .core-value-icon {
+        font-size: 2.8rem !important;
+        margin-bottom: 1.2rem !important;
+        color: #1a237e !important;
+        display: block !important;
+        width: 65px !important;
+        height: 65px !important;
+        background: rgba(26, 35, 126, 0.12) !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 auto 1.2rem auto !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 12px rgba(26, 35, 126, 0.1) !important;
+    }
+
+    .core-value-card:hover .core-value-icon {
+        background: #1a237e !important;
+        color: #fff !important;
+        transform: scale(1.1) !important;
+    }
+
+    .core-value-title {
+        font-size: 1.25rem !important;
+        margin-bottom: 0.8rem !important;
+        font-weight: 800 !important;
+        color: #1a237e !important;
+        line-height: 1.3 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .core-value-desc {
+        font-size: 0.95rem !important;
+        line-height: 1.5 !important;
+        color: #555 !important;
+        text-align: center !important;
+        margin: 0 !important;
+        font-weight: 500 !important;
+    }
+
+    /* Timeline Mobile */
+    .timeline-section {
+        padding: 40px 20px !important;
+    }
+
+    .timeline-title {
+        font-size: 1.8rem !important;
+        text-align: center;
+        margin-bottom: 2rem !important;
+    }
+
+    .timeline {
+        position: relative;
+        padding: 0 !important;
+        margin-left: 0 !important;
+    }
+
+    .timeline::before {
+        display: none !important;
+    }
+
+    .timeline-item {
+        position: relative !important;
+        width: 100% !important;
+        margin-bottom: 2rem !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: flex-start !important;
+        gap: 15px !important;
+    }
+
+    .timeline-item.left,
+    .timeline-item.right {
+        text-align: left !important;
+        flex-direction: row !important;
+        justify-content: flex-start !important;
+    }
+
+    .timeline-year {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        background: #1a237e !important;
+        color: white !important;
+        padding: 8px 12px !important;
+        border-radius: 20px !important;
+        font-size: 0.9rem !important;
+        font-weight: 700 !important;
+        z-index: 2 !important;
+        border: 2px solid #fff !important;
+        box-shadow: 0 2px 6px rgba(26, 35, 126, 0.2) !important;
+        min-width: 60px !important;
+        max-width: 60px !important;
+        text-align: center !important;
+        flex-shrink: 0 !important;
+        height: fit-content !important;
+    }
+
+    .timeline-content {
+        background: #fff !important;
+        padding: 20px !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+        width: 100% !important;
+        max-width: none !important;
+        border-left: 3px solid #1a237e !important;
+        margin: 0 !important;
+        flex: 1 !important;
+    }
+
+    .timeline-content h3 {
+        font-size: 1.1rem !important;
+        line-height: 1.4 !important;
+        margin: 0 0 8px 0 !important;
+        color: #1a237e !important;
+        font-weight: 700 !important;
+    }
+
+    .timeline-content p {
+        font-size: 0.95rem !important;
+        line-height: 1.5 !important;
+        color: #555 !important;
+        margin: 0 !important;
+    }
+
+    /* Numbers Section Mobile */
+    .about-numbers-section {
+        padding: 40px 20px !important;
+    }
+
+    .about-numbers-title {
+        font-size: 1.8rem !important;
+        text-align: center;
+        margin-bottom: 1.5rem !important;
+        font-weight: 800 !important;
+        color: #1a237e !important;
+    }
+
+    .about-numbers-list {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+        margin-top: 2rem !important;
+    }
+
+    .about-number-card {
+        padding: 25px 15px !important;
+        text-align: center !important;
+        border-radius: 16px !important;
+        background: #fff !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+        transition: all 0.3s ease !important;
+        border: 2px solid transparent !important;
+    }
+
+    .about-number-card:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 8px 24px rgba(26, 35, 126, 0.15) !important;
+        border: 2px solid #1a237e !important;
+    }
+
+    .about-number-value {
+        font-size: 1.8rem !important;
+        margin-bottom: 0.5rem !important;
+        font-weight: 800 !important;
+        color: #1a237e !important;
+    }
+
+    .about-number-label {
+        font-size: 0.95rem !important;
+        line-height: 1.3 !important;
+        color: #555 !important;
+        font-weight: 500 !important;
+    }
+
+    /* Team Section Mobile */
+    .about-team-section {
+        padding: 40px 20px !important;
+    }
+
+    .about-team-title {
+        font-size: 1.8rem !important;
+        text-align: center;
+        margin-bottom: 1.5rem !important;
+        font-weight: 800 !important;
+        color: #1a237e !important;
+    }
+
+    .about-team-desc {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+        padding: 0 !important;
+        margin-bottom: 2rem !important;
+        text-align: center;
+    }
+
+    .about-team-list {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+        margin-top: 2rem !important;
+        justify-items: center !important;
+    }
+
+    .about-team-card {
+        width: 100% !important;
+        max-width: 180px !important;
+        padding: 20px 15px !important;
+        text-align: center !important;
+        border-radius: 16px !important;
+        background: #fff !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+        transition: all 0.3s ease !important;
+        border: 2px solid transparent !important;
+    }
+
+    .about-team-card:hover {
+        transform: translateY(-4px) scale(1.02) !important;
+        box-shadow: 0 8px 24px rgba(26, 35, 126, 0.15) !important;
+        border: 2px solid #1a237e !important;
+    }
+
+    .about-team-avatar {
+        width: 80px !important;
+        height: 80px !important;
+        margin-bottom: 1rem !important;
+        border-radius: 50% !important;
+        object-fit: cover !important;
+        border: 3px solid #1a237e !important;
+    }
+
+    .about-team-name {
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 0.5rem !important;
+        color: #1a237e !important;
+    }
+
+    .about-team-role {
+        font-size: 0.9rem !important;
+        color: #f7931e !important;
+        margin-bottom: 0.8rem !important;
+        font-weight: 600 !important;
+    }
+
+    .about-team-bio {
+        font-size: 0.85rem !important;
+        color: #555 !important;
+        line-height: 1.4 !important;
+        text-align: center !important;
+    }
+
+    .about-team-role {
+        font-size: 1.1rem !important;
+    }
+
+    /* Press Section Mobile */
+    .about-press-section {
+        padding: 40px 20px !important;
+    }
+
+    .about-press-title {
+        font-size: 1.8rem !important;
+        text-align: center;
+        margin-bottom: 1.5rem !important;
+        font-weight: 800 !important;
+        color: #1a237e !important;
+    }
+
+    .about-press-list {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+        margin-top: 2rem !important;
+    }
+
+    .about-press-card {
+        padding: 25px 15px !important;
+        text-align: center !important;
+        border-radius: 16px !important;
+        background: #fff !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+        transition: all 0.3s ease !important;
+        border: 2px solid transparent !important;
+        min-height: 120px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .about-press-card:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 8px 24px rgba(26, 35, 126, 0.15) !important;
+        border: 2px solid #1a237e !important;
+    }
+
+    .about-press-card img {
+        max-height: 45px !important;
+        margin-bottom: 1rem !important;
+        object-fit: contain !important;
+        filter: grayscale(100%) !important;
+        transition: filter 0.3s ease !important;
+    }
+
+    .about-press-card:hover img {
+        filter: grayscale(0%) !important;
+    }
+
+    .about-press-name {
+        font-size: 0.95rem !important;
+        color: #555 !important;
+        font-weight: 600 !important;
+        text-align: center !important;
+    }
+
+    /* Partners Section Mobile */
+    .about-partners-section {
+        padding: 40px 20px !important;
+    }
+
+    .about-partners-title {
+        font-size: 1.8rem !important;
+        text-align: center;
+        margin-bottom: 1.5rem !important;
+        font-weight: 800 !important;
+        color: #1a237e !important;
+    }
+
+    .about-partners-list {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+        margin-top: 2rem !important;
+    }
+
+    .about-partner-card {
+        padding: 25px 15px !important;
+        text-align: center !important;
+        border-radius: 16px !important;
+        background: #fff !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+        transition: all 0.3s ease !important;
+        border: 2px solid transparent !important;
+        min-height: 120px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .about-partner-card:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 8px 24px rgba(26, 35, 126, 0.15) !important;
+        border: 2px solid #1a237e !important;
+    }
+
+    .about-partner-card img {
+        max-height: 50px !important;
+        margin-bottom: 1rem !important;
+        object-fit: contain !important;
+        filter: grayscale(100%) !important;
+        transition: filter 0.3s ease !important;
+    }
+
+    .about-partner-card:hover img {
+        filter: grayscale(0%) !important;
+    }
+
+    .about-partner-name {
+        font-size: 0.95rem !important;
+        color: #555 !important;
+        font-weight: 600 !important;
+        text-align: center !important;
+    }
+
+    .about-partner-card img {
+        max-height: 50px !important;
+        margin-bottom: 0.8rem !important;
+    }
+
+    .about-partner-name {
+        font-size: 0.9rem !important;
+    }
+
+    /* Contact Section Mobile */
+    .about-contact-section {
+        margin: 40px 20px !important;
+        padding: 40px 20px !important;
+    }
+
+    .about-contact-title {
+        font-size: 1.8rem !important;
+        text-align: center;
+        margin-bottom: 1rem !important;
+    }
+
+    .about-contact-list {
+        padding: 0 !important;
+        list-style: none !important;
+    }
+
+    .about-contact-list li {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+        margin-bottom: 1rem !important;
+        padding: 15px 20px !important;
+        background: #fff !important;
+        border-radius: 12px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .about-contact-list li i {
+        margin-right: 15px !important;
+        color: #1a237e !important;
+        font-size: 1.2rem !important;
+        width: 20px !important;
+        text-align: center !important;
+    }
+
+    /* Modal Mobile */
+    .modal-content {
+        margin: 10px !important;
+        border-radius: 15px !important;
+        max-width: 90% !important;
+        padding: 25px 20px !important;
+    }
+
+    .modal h2 {
+        font-size: 1.3rem !important;
+    }
+
+    .form-group label {
+        font-size: 0.9rem !important;
+    }
+
+    .form-control,
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        font-size: 16px !important;
+        padding: 12px 15px !important;
+        border-radius: 8px !important;
+        min-height: 44px !important;
+    }
+
+    .btn-gradient {
+        font-size: 1rem !important;
+        padding: 12px 20px !important;
+        border-radius: 20px !important;
+        min-height: 48px !important;
+    }
+
+    /* Footer Mobile */
+    .footer {
+        padding: 30px 0 20px !important;
+        margin-top: 30px !important;
+    }
+
+    .footer .row {
+        text-align: center !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        margin-left: -12px !important;
+        margin-right: -12px !important;
+    }
+
+    .footer .col-md-3 {
+        width: 100% !important;
+        padding: 0 12px !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .footer .col-md-3 h4 {
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 0.8rem !important;
+        color: #fff !important;
+    }
+
+    .footer .col-md-3 ul {
+        padding: 0 !important;
+        list-style: none !important;
+    }
+
+    .footer .col-md-3 ul li {
+        margin-bottom: 0.4rem !important;
+    }
+
+    .footer .col-md-3 ul li a {
+        font-size: 0.9rem !important;
+        color: #e0e0e0 !important;
+        text-decoration: none !important;
+        transition: color 0.3s ease !important;
+    }
+
+    .footer .col-md-3 ul li a:hover {
+        color: #ffe066 !important;
+    }
+
+    .social-links {
+        justify-content: center !important;
+        gap: 15px !important;
+        display: flex !important;
+    }
+
+    .social-links a {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        background: #1a237e !important;
+        color: white !important;
+        border-radius: 50% !important;
+        font-size: 1.2rem !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .social-links a:hover {
+        transform: translateY(-2px) !important;
+        background: #ffe066 !important;
+        color: #003366 !important;
+    }
+
+    .footer-bottom {
+        padding-top: 15px !important;
+        border-top: 1px solid #1a237e !important;
+        margin-top: 20px !important;
+        text-align: center !important;
+    }
+
+    .footer-bottom p {
+        font-size: 0.8rem !important;
+        color: #e0e0e0 !important;
+        margin: 0 !important;
+    }
+
+    /* Container adjustments */
+    .container {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    [class*="col-"] {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+}
+
+/* ===== EXTRA SMALL MOBILE (max-width: 480px) ===== */
+@media (max-width: 480px) {
+    body {
+        font-size: 13px;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    /* All sections consistent padding */
+    .about-slogan-section,
+    .about-intro-section,
+    .core-values-section,
+    .timeline-section,
+    .about-numbers-section,
+    .about-team-section,
+    .about-press-section,
+    .about-partners-section,
+    .about-contact-section {
+        padding: 30px 15px !important;
+        margin: 30px 10px !important;
+    }
+
+    /* Mission Vision Section */
+    #about-mission-vision section {
+        padding: 30px 15px !important;
+        margin: 30px 0 !important;
+    }
+
+    .nautica-script {
+        font-size: 2.5rem !important;
+    }
+
+    .hero-content h1 {
+        font-size: 1.5rem !important;
+        padding: 0 10px;
+    }
+
+    .hero-content p {
+        font-size: 0.95rem !important;
+        padding: 0 15px;
+    }
+
+    /* Section titles smaller */
+    .about-slogan-title,
+    .about-intro-title,
+    .core-values-title,
+    .timeline-title,
+    .about-numbers-title,
+    .about-team-title,
+    .about-press-title,
+    .about-partners-title,
+    .about-contact-title {
+        font-size: 1.5rem !important;
+    }
+
+    /* Keep 2x2 layouts for Press and Partners too */
+    .about-press-list,
+    .about-partners-list {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+
+    /* Press Section Cards */
+    .about-press-card {
+        padding: 20px 10px !important;
+        text-align: center !important;
+        border-radius: 12px !important;
+        background: #fff !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .about-press-card:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+    }
+
+    .about-press-card img {
+        max-height: 35px !important;
+        margin-bottom: 0.6rem !important;
+        object-fit: contain !important;
+    }
+
+    .about-press-name {
+        font-size: 0.8rem !important;
+        color: #555 !important;
+        font-weight: 500 !important;
+    }
+
+    /* Partners Section Cards */
+    .about-partner-card {
+        padding: 20px 10px !important;
+        text-align: center !important;
+        border-radius: 12px !important;
+        background: #fff !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .about-partner-card:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+    }
+
+    .about-partner-card img {
+        max-height: 40px !important;
+        margin-bottom: 0.6rem !important;
+        object-fit: contain !important;
+    }
+
+    .about-partner-name {
+        font-size: 0.8rem !important;
+        color: #555 !important;
+        font-weight: 500 !important;
+    }
+
+    /* Team Section - Keep 2x2 layout */
+    .about-team-list {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+
+    .about-team-card {
+        max-width: 150px !important;
+        padding: 15px 10px !important;
+    }
+
+    .about-team-avatar {
+        width: 60px !important;
+        height: 60px !important;
+        margin-bottom: 0.8rem !important;
+        border-width: 2px !important;
+    }
+
+    .about-team-name {
+        font-size: 0.95rem !important;
+        margin-bottom: 0.4rem !important;
+    }
+
+    .about-team-role {
+        font-size: 0.8rem !important;
+        margin-bottom: 0.6rem !important;
+    }
+
+    .about-team-bio {
+        font-size: 0.75rem !important;
+        line-height: 1.3 !important;
+    }
+
+    /* Numbers Section - Keep 2x2 layout */
+    .about-numbers-list {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+
+    .about-number-card {
+        padding: 20px 10px !important;
+        text-align: center !important;
+        border-radius: 12px !important;
+    }
+
+    .about-number-value {
+        font-size: 1.3rem !important;
+        margin-bottom: 0.4rem !important;
+        font-weight: 800 !important;
+    }
+
+    .about-number-label {
+        font-size: 0.8rem !important;
+        line-height: 1.3 !important;
+        color: #555 !important;
+    }
+
+    /* Core Values Extra Small - Keep single column */
+    .core-values-list {
+        gap: 1rem !important;
+    }
+
+    .core-value-card {
+        padding: 15px 10px !important;
+        min-height: 160px !important;
+    }
+
+    .core-value-icon {
+        font-size: 1.8rem !important;
+        width: 45px !important;
+        height: 45px !important;
+        margin-bottom: 0.6rem !important;
+    }
+
+    .core-value-title {
+        font-size: 0.9rem !important;
+        margin-bottom: 0.5rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .core-value-desc {
+        font-size: 0.8rem !important;
+        line-height: 1.3 !important;
+    }
+
+    /* Timeline Extra Small Mobile */
+    .timeline::before {
+        display: none !important;
+    }
+
+    .timeline-item {
+        margin-bottom: 1.5rem !important;
+        gap: 10px !important;
+    }
+
+    .timeline-year {
+        position: relative !important;
+        left: auto !important;
+        padding: 6px 10px !important;
+        font-size: 0.8rem !important;
+        min-width: 50px !important;
+        max-width: 50px !important;
+        border-radius: 15px !important;
+    }
+
+    .timeline-content {
+        padding: 15px !important;
+        border-radius: 10px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        flex: 1 !important;
+    }
+
+    .timeline-content h3 {
+        font-size: 0.95rem !important;
+        margin-bottom: 6px !important;
+    }
+
+    .timeline-content p {
+        font-size: 0.85rem !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Reduced padding */
+    .about-team-card {
+        width: 250px !important;
+        padding: 25px 15px 20px 15px !important;
+    }
+
+    .about-team-avatar {
+        width: 100px !important;
+        height: 100px !important;
+    }
+
+    .about-team-name {
+        font-size: 1.2rem !important;
+    }
+
+    .about-team-role {
+        font-size: 1rem !important;
+    }
+
+    /* Timeline adjustments */
+    .timeline-year {
+        font-size: 0.8rem !important;
+        padding: 6px 10px !important;
+    }
+
+    .timeline-content {
+        padding: 15px !important;
+    }
+
+    .timeline-content h3 {
+        font-size: 1rem !important;
+    }
+
+    /* Contact list mobile */
+    .about-contact-list li {
+        padding: 12px 15px !important;
+        font-size: 0.95rem !important;
+    }
+
+    .about-contact-list li i {
+        font-size: 1.1rem !important;
+        margin-right: 12px !important;
+    }
+}
+
+/* ===== MOBILE-SPECIFIC IMPROVEMENTS ===== */
+@media (max-width: 768px) {
+    /* Smooth scrolling for mobile */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Prevent zoom on input focus */
+    input[type="text"], 
+    input[type="email"], 
+    input[type="password"], 
+    textarea, 
+    select {
+        font-size: 16px !important;
+    }
+
+    /* Better text readability */
+    body {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    /* Improved button accessibility */
+    .btn, button {
+        min-height: 44px;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+    /* Better image loading */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Improved typography hierarchy */
+    h1 { font-size: 1.8rem; line-height: 1.2; }
+    h2 { font-size: 1.5rem; line-height: 1.3; }
+    h3 { font-size: 1.3rem; line-height: 1.3; }
+    h4 { font-size: 1.1rem; line-height: 1.3; }
+    
+    p, li { 
+        font-size: 0.9rem; 
+        line-height: 1.5; 
+        margin-bottom: 0.8rem;
+    }
+
+    /* Section spacing */
+    section {
+        margin-bottom: 2rem;
+    }
+
+    /* Underline elements */
+    [class*="-underline"] {
+        width: 60px !important;
+        height: 3px !important;
+        background: #1a237e !important;
+        margin: 0 auto 1.5rem auto !important;
+    }
+}
+
+/* ===== TOUCH DEVICE OPTIMIZATIONS ===== */
+@media (hover: none) and (pointer: coarse) {
+    /* Increase touch targets */
+    .btn {
+        min-height: 48px;
+        min-width: 48px;
+        padding: 12px 20px;
+    }
+
+    /* Better tap feedback */
+    .btn:active {
+        transform: scale(0.96);
+        transition: transform 0.1s ease;
+    }
+
+    .about-team-card:active,
+    .core-value-card:active,
+    .about-number-card:active {
+        transform: scale(0.98);
+        transition: transform 0.2s ease;
+    }
+
+    /* Improved form inputs for touch */
+    .form-control,
+    input, textarea {
+        min-height: 44px;
+        font-size: 16px;
+        border-radius: 8px;
+        padding: 12px 16px;
+    }
+}
+
+/* ===== LANDSCAPE ORIENTATION MOBILE ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero-section {
+        padding: 30px 0 !important;
+    }
+
+    .nautica-script {
+        font-size: 2.8rem !important;
+    }
+
+    .hero-content h1 {
+        font-size: 1.6rem !important;
+    }
+
+    /* Reduce section paddings in landscape */
+    [class*="section"] {
+        padding: 30px 15px !important;
+    }
+
+    .about-team-avatar {
+        width: 100px !important;
+        height: 100px !important;
+    }
+}
+
