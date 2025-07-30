@@ -1,12 +1,12 @@
 /* 
 =========================================
-Admin Dashboard Redesign CSS
-Phase 1: Layout & Core Styles
+Admin Dashboard Desktop CSS
+Optimized for desktop screens (1024px+)
 =========================================
 */
 
 /* 1. ROOT VARIABLES & RESET */
-        :root {
+:root {
     --primary-color: #4A55A2;
     --secondary-color: #7895CB;
     --accent-color: #A0BFE0;
@@ -25,11 +25,13 @@ Phase 1: Layout & Core Styles
     --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
     --border-radius: 0.5rem;
     --transition-speed: 0.3s ease;
+}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
 
 /* 2. BASE & LAYOUT STYLES */
 .admin-body {
@@ -39,20 +41,23 @@ Phase 1: Layout & Core Styles
     display: flex;
     height: 100vh;
     overflow: hidden;
+}
 
 .main-container {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     height: 100vh;
+}
 
 .content-wrapper {
     flex-grow: 1;
     overflow-y: auto;
     padding: 1.5rem;
+}
 
 /* 3. SIDEBAR STYLES */
-        .sidebar {
+.sidebar {
     width: 260px;
     background-color: var(--sidebar-bg-color);
     display: flex;
@@ -60,18 +65,18 @@ Phase 1: Layout & Core Styles
     flex-shrink: 0;
     border-right: 1px solid var(--border-color);
     transition: margin-left var(--transition-speed);
-        }
+}
 
-        .sidebar-header {
+.sidebar-header {
     padding: 1.5rem;
     border-bottom: 1px solid var(--border-color);
-        }
+}
 
-        .sidebar-brand {
+.sidebar-brand {
     font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-decoration: none;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
     display: flex;
     align-items: center;
 }
@@ -326,17 +331,10 @@ Phase 1: Layout & Core Styles
 .status-cancelled { background-color: #dc3545; }
 .status-completed { background-color: #0d6efd; }
 
-/* Mobile Toggle */
+/* Mobile Toggle - Hidden on Desktop */
 .mobile-toggle {
     display: none;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: var(--text-secondary);
-    margin-right: 1rem;
-            }
-
-/* 5. NOTIFICATION STYLES */
+}/* 5. NOTIFICATION STYLES */
 .notification-wrapper {
     position: relative;
 }
@@ -427,39 +425,12 @@ Phase 1: Layout & Core Styles
     margin-bottom: 0.5rem;
 }
 
-
-/* 6. RESPONSIVE STYLES */
-
-    .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        height: 100%;
-        z-index: 1020;
-        margin-left: -260px;
-    }
-    .sidebar.active {
-        margin-left: 0;
-    }
-    .main-container {
-        width: 100%;
-    }
-    .mobile-toggle {
-        display: block; /* Show toggle on smaller screens */
-        margin-right: 1rem;
-    }
-    /* .header-search, .header-actions .btn-icon:not(:first-child), .user-profile .user-role {
-        /* display: none; */ /* Simplify header on mobile */
-    /* } */ 
+/* Mobile Toggle - Hidden on Desktop */
+.mobile-toggle {
+    display: none;
 }
 
-    .page-title {
-        font-size: 1.2rem;
-    }
-    .user-profile .user-name {
-        display: none; /* Hide name on very small screens */
-    }
-}
+/* Notification Dropdown Styles */
 #notificationDropdown li {
     padding: 10px 15px;
     border-bottom: 1px solid #f0f0f0;
@@ -575,6 +546,7 @@ Phase 1: Layout & Core Styles
 }
 
 /* Tối ưu bảng danh sách đặt phòng admin */
+/* Tối ưu bảng danh sách đặt phòng admin - Desktop */
 #bookings .table-responsive {
     display: block !important;
     width: 100% !important;
@@ -590,31 +562,7 @@ Phase 1: Layout & Core Styles
     vertical-align: middle;
 }
 
-/* Responsive: Giảm font và padding bảng trên màn hình nhỏ */
-
-  #bookings .data-table th,
-  #bookings .data-table td {
-    font-size: 13px;
-    padding: 6px 8px;
-    max-width: 120px;
-  }
-  #bookings .table.data-table {
-    min-width: 900px;
-  }
-}
-
-  #bookings .data-table th,
-  #bookings .data-table td {
-    font-size: 12px;
-    padding: 4px 6px;
-    max-width: 80px;
-  }
-#bookings .table.data-table {
-    min-width: 600px;
-  }
-}
-
-/* Card tổng hợp doanh thu hiện đại */
+/* Card tổng hợp doanh thu hiện đại - Desktop */
 .stats-summary-cards {
   display: flex;
   gap: 24px;
@@ -667,8 +615,4 @@ Phase 1: Layout & Core Styles
 .stats-summary-card .stats-summary-sub {
   font-size: 0.95rem;
   color: #888;
-}
-
-  .stats-summary-cards { flex-direction: column; gap: 16px; }
-  .stats-summary-card { min-width: unset; }
 }
