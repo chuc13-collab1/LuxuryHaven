@@ -208,7 +208,7 @@
                                                     class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
                                     </ul>
                                 </div>
-                                <a href="auth.html" class="btn btn-outline-primary me-2">
+                                <a href="auth.html" class="btn btn-outline-primary me-2" id="login-btn">
                                     <i class="fas fa-user"></i> Đăng nhập
                                 </a>
                             </div>
@@ -661,7 +661,7 @@
 
         // Hàm cập nhật UI người dùng
         function updateUserUI(user) {
-            const loginBtn = document.getElementById('open-login-modal');
+            const loginBtn = document.getElementById('login-btn');
             const userDropdown = document.getElementById('user-dropdown');
             const userName = document.getElementById('user-name');
             const sidebarName = document.getElementById('sidebar-user-name');

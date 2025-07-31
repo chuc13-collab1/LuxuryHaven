@@ -1160,6 +1160,55 @@
       "tourType": "food_culture",
       "updatedAt": 1752394163500,
       "userId": "QR90qTluHFVbkhgz6HZ6NUcEJDd2"
+    },
+    "-OVuzfOBUfmLyx2FK_Za": {
+      "bookingType": "hotel",
+      "checkIn": "2025-07-24",
+      "checkOut": "2025-07-25",
+      "createdAt": 1753336427725,
+      "email": "bt7897623@gmail.com",
+      "guests": "2",
+      "hotelId": "Buôn Ma Thuột_1",
+      "hotelName": "Sai Gon Ban Me Hotel",
+      "roomId": "Superior Room",
+      "roomPrice": 1000000,
+      "userId": "QR90qTluHFVbkhgz6HZ6NUcEJDd2"
+    },
+    "-OWL_CaeVKdqk0jrDWOK": {
+      "bookingType": "hotel",
+      "checkIn": "2025-07-29",
+      "checkOut": "2025-07-30",
+      "createdAt": 1753799253178,
+      "email": "baokhangml99@gmail.com",
+      "guests": "2",
+      "hotelId": "Buôn Ma Thuột_0",
+      "hotelName": "Mường Thanh Luxury Buôn Ma Thuột",
+      "roomId": "Deluxe Room",
+      "roomPrice": 1200000,
+      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
+    },
+    "-OWL_FWU48iCAWyjF9C_": {
+      "bookingType": "hotel",
+      "checkIn": "2025-07-29",
+      "checkOut": "2025-07-30",
+      "createdAt": 1753799265051,
+      "customerEmail": "baokhangml99@gmail.com",
+      "customerName": "Nguyễn Tiến Chức",
+      "customerPhone": "0365211213",
+      "email": "baokhangml99@gmail.com",
+      "guests": "2",
+      "hotelId": "Buôn Ma Thuột_0",
+      "hotelName": "Mường Thanh Luxury Buôn Ma Thuột",
+      "nights": 1,
+      "note": "",
+      "paymentMethod": "vnpay",
+      "paymentStatus": "paid",
+      "roomId": "Deluxe Room",
+      "roomPrice": 1200000,
+      "status": "confirmed",
+      "totalPrice": 1140000,
+      "updatedAt": 1753799335330,
+      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
     }
   },
   "deposits": {
@@ -1358,7 +1407,7 @@
             "image": "https://cdn1.ivivu.com/iVivu/2021/01/27/18/104949240-1216898478646536-6218887510609060018-o-2-800x450.jpg",
             "rooms": [
               {
-                "availableRooms": 20,
+                "availableRooms": 17,
                 "bed": "1 Giường King hoặc 2 Giường đơn",
                 "moTa": "Phòng Deluxe hiện đại với tầm nhìn thành phố, đầy đủ tiện nghi.",
                 "name": "Deluxe Room",
@@ -1432,7 +1481,7 @@
             "image": "https://pix10.agoda.net/hotelImages/305316/-1/3402e4b2377b0d110b23f21a5a25e248.jpg?s=1024x768",
             "rooms": [
               {
-                "availableRooms": 24,
+                "availableRooms": 23,
                 "bed": "1 Giường King hoặc 2 Giường đơn",
                 "moTa": "Phòng Superior với không gian thoải mái, tầm nhìn thành phố.",
                 "name": "Superior Room",
@@ -10651,6 +10700,13 @@
         "read": false,
         "title": "Thanh toán thành công",
         "type": "booking"
+      },
+      "-OWL_WmhE8pitX2y3tLo": {
+        "createdAt": 1753799335781,
+        "message": "Bạn đã thanh toán thành công đơn hàng -OWL_FWU48iCAWyjF9C_.",
+        "read": false,
+        "title": "Thanh toán thành công",
+        "type": "booking"
       }
     }
   },
@@ -11027,6 +11083,16 @@
       "status": "success",
       "transactionId": "-OV13T8dnQa7_GSuZm2P",
       "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
+    },
+    "-OWL_WijUcjZ445V3rCa": {
+      "amount": 114000000,
+      "date": 1753799335526,
+      "detail": "Thanh toán đặt phòng/đặt tour qua VNPAY",
+      "method": "VNPAY",
+      "note": "Đã cộng điểm thành viên: +11 điểm",
+      "status": "success",
+      "transactionId": "-OWL_FWU48iCAWyjF9C_",
+      "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2"
     }
   },
   "reviews": {
@@ -11064,6 +11130,22 @@
       "rating": 5,
       "userId": "znKsJjausdR0vcdhpUoWUt9BYtM2",
       "userName": "Nguyễn Tiến Chức"
+    },
+    "-OTpVeCNpb_MBOZGF9Ku": {
+      "comment": "rất tốt",
+      "date": 1753334820499,
+      "hotelId": "KienGiang_1",
+      "rating": 4,
+      "userId": "QR90qTluHFVbkhgz6HZ6NUcEJDd2",
+      "userName": "Thạch Văn Bảo"
+    },
+    "-OV1iXPQBlLRKRbn1WXn": {
+      "comment": "haha",
+      "date": 1753516246054,
+      "hotelId": "Buôn Ma Thuột_1",
+      "rating": 4,
+      "userId": "QR90qTluHFVbkhgz6HZ6NUcEJDd2",
+      "userName": "Thạch Văn Bảo"
     }
   },
   "settings": {
@@ -13467,13 +13549,16 @@
     },
     "HazZBKeqSvfclLzTW9LTKG6JF1w2": {
       "address": "ninh kiều cần thơ",
-      "avatar": "https://res.cloudinary.com/dwrc3ig9e/image/upload/v1752067008/dkl0ek1ymabmebrcdpuk.png",
+      "avatar": "https://res.cloudinary.com/dwrc3ig9e/image/upload/v1753859520/tybwoyzmktu7ybqjodpd.jpg",
       "birthday": "2025-06-08",
       "email": "nguyentienchuc2023ct@gmail.com",
       "memberLevel": "Đồng",
       "name": "Nguyễn Văn A",
       "phone": "0826673271",
-      "updatedAt": 1752067009200
+      "updatedAt": 1753859521274
+    },
+    "QR90qTluHFVbkhgz6HZ6NUcEJDd2": {
+      "memberLevel": "Đồng"
     },
     "RQO2JBnf47VYRD9FI9X8gs5d0x23": {
       "address": "123/49 Lê Lợi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
@@ -13650,12 +13735,12 @@
       "gender": "Khác",
       "identityNumber": "098765432122",
       "lastPointsUpdate": {
-        "amount": 3800000,
-        "date": 1752381427166,
-        "points": 38,
-        "transactionId": "-OV13T8dnQa7_GSuZm2P"
+        "amount": 1140000,
+        "date": 1753799336086,
+        "points": 11,
+        "transactionId": "-OWL_FWU48iCAWyjF9C_"
       },
-      "loyaltyPoints": 3523,
+      "loyaltyPoints": 3534,
       "memberLevel": "Bạc",
       "name": "Nguyễn Tiến Chức",
       "nationality": "việt nam",

@@ -227,7 +227,7 @@
                                         <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
                                     </ul>
                                 </div>
-                                <a href="auth.html" class="btn btn-outline-primary me-2"><i class="fas fa-user"></i> Đăng nhập</a>
+                                <a href="auth.html" class="btn btn-outline-primary me-2" id="login-btn"><i class="fas fa-user"></i> Đăng nhập</a>
                             </div>
                         </li>
                     </ul>
@@ -535,7 +535,7 @@
             if(closeAuthModal){closeAuthModal.addEventListener("click",()=>{document.getElementById("auth-modal").style.display="none"});}
             if(openLoginModal){openLoginModal.addEventListener("click",e=>{e.preventDefault(),document.getElementById("auth-modal").style.display="block"});}
             window.onclick=function(e){const t=document.getElementById("auth-modal");e.target==t&&(t.style.display="none")};
-            firebase.auth().onAuthStateChanged(function(user){const loginBtn=document.getElementById("open-login-modal");if(user){if(loginBtn)loginBtn.style.display="none";if(userDropdown)userDropdown.style.display="block";if(userName)userName.textContent=user.displayName||user.email}else{if(loginBtn)loginBtn.style.display="block";if(userDropdown)userDropdown.style.display="none"}});
+            firebase.auth().onAuthStateChanged(function(user){const loginBtn=document.getElementById("login-btn");if(user){if(loginBtn)loginBtn.style.display="none";if(userDropdown)userDropdown.style.display="block";if(userName)userName.textContent=user.displayName||user.email}else{if(loginBtn)loginBtn.style.display="block";if(userDropdown)userDropdown.style.display="none"}});
             if(logoutBtn){logoutBtn.addEventListener("click",function(e){e.preventDefault(),firebase.auth().signOut().then(()=>{Swal.fire({title:"Đăng xuất thành công!",icon:"success",confirmButtonColor:"#e67e22"})}).catch(e=>{Swal.fire({title:"Lỗi đăng xuất!",text:e.message,icon:"error",confirmButtonColor:"#e67e22"})})});}
             const mobileMenuBtn=document.getElementById("mobile-menu-btn"),navLinks=document.getElementById("nav-links");if(mobileMenuBtn&&navLinks){mobileMenuBtn.addEventListener("click",function(){this.classList.toggle("active"),navLinks.classList.toggle("active")}),navLinks.addEventListener("click",function(e){"A"===e.target.tagName&&(mobileMenuBtn.classList.remove("active"),navLinks.classList.remove("active"))}),document.addEventListener("click",function(e){mobileMenuBtn.contains(e.target)||navLinks.contains(e.target)||(mobileMenuBtn.classList.remove("active"),navLinks.classList.remove("active"))});}
         });

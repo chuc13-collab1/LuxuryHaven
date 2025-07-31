@@ -102,7 +102,7 @@
                                                     class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
                                     </ul>
                                 </div>
-                                <a href="auth.html" class="btn btn-outline-primary me-2" >
+                                <a href="auth.html" class="btn btn-outline-primary me-2" id="login-btn">
                                     <i class="fas fa-user"></i> Đăng nhập
                                 </a>
                             </div>
@@ -522,7 +522,7 @@
 
             // Theo dõi trạng thái đăng nhập
             firebase.auth().onAuthStateChanged(function (user) {
-                const loginBtn = document.getElementById('open-login-modal');
+                const loginBtn = document.getElementById('login-btn');
                 if (user) {
                     if (loginBtn) loginBtn.style.display = 'none';
                     if (userDropdown) userDropdown.style.display = 'block';
