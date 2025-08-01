@@ -2524,3 +2524,251 @@ html {
         }
     }
 }
+
+/* === TÍNH NĂNG MỚI CHO CẨM NANG === */
+
+/* Guide Card Enhancements */
+.guide-card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.guide-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.guide-rating-section {
+    margin-top: 8px;
+}
+
+.guide-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.rating-stars i {
+    color: #ffd700;
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.rating-stars i:hover {
+    color: #ffed4e;
+}
+
+.rating-stars i.fas {
+    color: #ffd700;
+}
+
+.rating-count {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.guide-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+}
+
+.guide-actions .btn {
+    flex: 1;
+    font-size: 12px;
+    padding: 6px 12px;
+}
+
+.favorite-btn.active {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.favorite-btn.active i {
+    color: white;
+}
+
+/* Share Modal Styles */
+.share-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.share-modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 400px;
+    position: relative;
+}
+
+.share-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.share-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.share-option:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+}
+
+.share-option i {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.share-option.facebook i { color: #1877f2; }
+.share-option.twitter i { color: #1da1f2; }
+.share-option.email i { color: #ea4335; }
+.share-option.copy i { color: #6c757d; }
+
+.share-option span {
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Rating Modal Styles */
+.rating-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.rating-modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 400px;
+    position: relative;
+}
+
+.rating-stars-large {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.rating-stars-large i {
+    font-size: 32px;
+    color: #ffd700;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.rating-stars-large i:hover {
+    color: #ffed4e;
+}
+
+.rating-stars-large i.fas {
+    color: #ffd700;
+}
+
+/* Mobile Responsive cho tính năng mới */
+@media (max-width: 768px) {
+    .guide-actions {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .guide-actions .btn {
+        font-size: 11px;
+        padding: 8px 10px;
+    }
+    
+    .rating-stars i {
+        font-size: 12px;
+    }
+    
+    .rating-count {
+        font-size: 11px;
+    }
+    
+    .share-options {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .share-option {
+        padding: 12px;
+    }
+    
+    .share-option i {
+        font-size: 20px;
+    }
+    
+    .share-option span {
+        font-size: 11px;
+    }
+    
+    .rating-stars-large i {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .guide-actions {
+        flex-direction: row;
+        gap: 4px;
+    }
+    
+    .guide-actions .btn {
+        font-size: 10px;
+        padding: 6px 8px;
+    }
+    
+    .share-options {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .share-option {
+        padding: 10px;
+    }
+    
+    .share-option i {
+        font-size: 18px;
+    }
+    
+    .share-option span {
+        font-size: 10px;
+    }
+}

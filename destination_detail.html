@@ -197,54 +197,125 @@
 
     // Lấy dữ liệu cẩm nang du lịch từ Firebase
     if (slug) {
-        db.ref(`travelGuides/${slug}`).once('value')
-            .then((snapshot) => {
-                const guide = snapshot.val();
-                if (guide) {
-                    renderGuideDetail(guide);
-                } else {
-                    document.getElementById('destination-detail').innerHTML = 
-                        '<div class="container mt-5"><h2>Không tìm thấy thông tin cẩm nang</h2></div>';
+        loadGuideDetail(slug);
+    }
+
+    // Hàm tải thông tin chi tiết guide từ cả hai nguồn
+    async function loadGuideDetail(slug) {
+        console.log('Loading guide detail for slug:', slug);
+        try {
+            // Tìm trong travelGuides trước
+            console.log('Searching in travelGuides...');
+            const travelGuidesSnapshot = await db.ref(`travelGuides/${slug}`).once('value');
+            let guide = travelGuidesSnapshot.val();
+            console.log('Found in travelGuides:', guide);
+            
+            // Nếu không tìm thấy trong travelGuides, tìm trong userContributions
+            if (!guide) {
+                console.log('Not found in travelGuides, searching in userContributions...');
+                const userContributionsSnapshot = await db.ref('userContributions').once('value');
+                const contributions = userContributionsSnapshot.val();
+                console.log('UserContributions data:', contributions);
+                
+                if (contributions) {
+                    // Tìm contribution có slug khớp hoặc key khớp với slug
+                    const contributionKeys = Object.keys(contributions);
+                    console.log('Searching through keys:', contributionKeys);
+                    for (const key of contributionKeys) {
+                        const contribution = contributions[key];
+                        console.log(`Checking contribution ${key}:`, contribution);
+                        console.log(`Status: ${contribution.status}, Slug: ${contribution.slug}, Key: ${key}`);
+                        if (contribution.status === 'approved' && 
+                            (contribution.slug === slug || key === slug)) {
+                            guide = contribution;
+                            guide.id = key; // Đảm bảo có id để truy vấn
+                            console.log('Found matching guide:', guide);
+                            break;
+                        }
+                    }
                 }
-            })
-            .catch((error) => {
-                console.error("Error loading guide:", error);
+            }
+            
+            if (guide) {
+                console.log('Rendering guide:', guide);
+                renderGuideDetail(guide);
+            } else {
+                console.log('No guide found for slug:', slug);
                 document.getElementById('destination-detail').innerHTML = 
-                    '<div class="container mt-5"><h2>Lỗi khi tải thông tin cẩm nang</h2></div>';
-            });
+                    '<div class="container mt-5"><h2>Không tìm thấy thông tin cẩm nang</h2></div>';
+            }
+        } catch (error) {
+            console.error("Error loading guide:", error);
+            document.getElementById('destination-detail').innerHTML = 
+                '<div class="container mt-5"><h2>Lỗi khi tải thông tin cẩm nang</h2></div>';
+        }
     }
 
     // Hàm render chi tiết cẩm nang du lịch
     function renderGuideDetail(guide) {
+        // Xử lý data từ userContributions có thể có cấu trúc khác
+        const title = guide.title || '';
+        const overview = guide.overview || guide.description || '';
+        const mainImage = guide.main_image || guide.thumbnail_image || guide.image || '';
+        
+        let sectionsHtml = '';
+        
+        // Xử lý sections cho data từ travelGuides
+        if (guide.sections && Array.isArray(guide.sections)) {
+            sectionsHtml = guide.sections.map(section => `
+                <div class="info-card mb-4">
+                    <h3 class="section-title">${section.heading || ''}</h3>
+                    ${section.content ? `<p>${section.content}</p>` : ''}
+                    ${section.items ? `
+                        <${section.list_type === 'ordered' ? 'ol' : 'ul'}>
+                            ${section.items.map(item =>
+                                typeof item === 'string'
+                                ? `<li>${item}</li>`
+                                : `<li>
+                                    ${item.title ? `<b>${item.title}</b><br>` : ''}
+                                    ${item.description ? `<span>${item.description}</span><br>` : ''}
+                                    ${item.image ? `<img src="${item.image}" alt="" style="max-width:180px;margin:8px 0;">` : ''}
+                                    ${item.address ? `<div><i class='fas fa-map-marker-alt'></i> ${item.address}</div>` : ''}
+                                    ${item.recommended_places ? `<div><i class='fas fa-store'></i> Gợi ý: ${item.recommended_places.join(', ')}</div>` : ''}
+                                </li>`
+                            ).join('')}
+                        </${section.list_type === 'ordered' ? 'ol' : 'ul'}>
+                    ` : ''}
+                </div>
+            `).join('');
+        } 
+        // Xử lý content cho data từ userContributions
+        else if (guide.content) {
+            sectionsHtml = `
+                <div class="info-card mb-4">
+                    <div class="guide-content">
+                        ${guide.content.replace(/\n/g, '<br>')}
+                    </div>
+                </div>
+            `;
+        }
+        
         let html = `
-            <div class="destination-header" style="background-image: url('${guide.main_image || guide.thumbnail_image || ''}')">
+            <div class="destination-header" style="background-image: url('${mainImage}')">
                 <div class="destination-header-content">
-                    <h1 class="destination-title">${guide.title}</h1>
-                    <p class="destination-overview">${guide.overview || ''}</p>
+                    <h1 class="destination-title">${title}</h1>
+                    <p class="destination-overview">${overview}</p>
                 </div>
             </div>
             <div class="container">
-                ${(guide.sections || []).map(section => `
+                ${sectionsHtml}
+                ${guide.author ? `
                     <div class="info-card mb-4">
-                        <h3 class="section-title">${section.heading || ''}</h3>
-                        ${section.content ? `<p>${section.content}</p>` : ''}
-                        ${section.items ? `
-                            <${section.list_type === 'ordered' ? 'ol' : 'ul'}>
-                                ${section.items.map(item =>
-                                    typeof item === 'string'
-                                    ? `<li>${item}</li>`
-                                    : `<li>
-                                        ${item.title ? `<b>${item.title}</b><br>` : ''}
-                                        ${item.description ? `<span>${item.description}</span><br>` : ''}
-                                        ${item.image ? `<img src="${item.image}" alt="" style="max-width:180px;margin:8px 0;">` : ''}
-                                        ${item.address ? `<div><i class='fas fa-map-marker-alt'></i> ${item.address}</div>` : ''}
-                                        ${item.recommended_places ? `<div><i class='fas fa-store'></i> Gợi ý: ${item.recommended_places.join(', ')}</div>` : ''}
-                                    </li>`
-                                ).join('')}
-                            </${section.list_type === 'ordered' ? 'ol' : 'ul'}>
-                        ` : ''}
+                        <h4><i class="fas fa-user"></i> Tác giả</h4>
+                        <p>${guide.author}</p>
                     </div>
-                `).join('')}
+                ` : ''}
+                ${guide.location ? `
+                    <div class="info-card mb-4">
+                        <h4><i class="fas fa-map-marker-alt"></i> Địa điểm</h4>
+                        <p>${guide.location}</p>
+                    </div>
+                ` : ''}
             </div>
         `;
         document.getElementById('destination-detail').innerHTML = html;

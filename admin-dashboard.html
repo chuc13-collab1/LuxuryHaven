@@ -65,6 +65,10 @@
                 <a href="#travel-guides" class="nav-item">
                     <i class="fas fa-book-open"></i> <span>Cẩm nang du lịch</span>
                 </a>
+                <a href="#contributions" class="nav-item">
+                    <i class="fas fa-user-edit"></i> <span>Duyệt cẩm nang</span>
+                    <span id="pending-contributions-badge" class="badge bg-danger ms-2" style="display: none;">0</span>
+                </a>
             </div>
              <div class="nav-group">
                 <span class="nav-group-title">HỆ THỐNG</span>
@@ -530,6 +534,50 @@
                                 <!-- Travel guide rows will be loaded here -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contributions Section -->
+        <div id="contributions" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-edit me-2"></i>Cẩm nang chờ duyệt
+                        <span id="contributions-count-badge" class="badge bg-warning ms-2">0</span>
+                    </h5>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-primary btn-sm" onclick="filterContributions('all')">
+                            <i class="fas fa-list"></i> Tất cả
+                        </button>
+                        <button class="btn btn-outline-warning btn-sm" onclick="filterContributions('pending')">
+                            <i class="fas fa-clock"></i> Chờ duyệt
+                        </button>
+                        <button class="btn btn-outline-success btn-sm" onclick="filterContributions('approved')">
+                            <i class="fas fa-check"></i> Đã duyệt
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm" onclick="filterContributions('rejected')">
+                            <i class="fas fa-times"></i> Từ chối
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="contributions-loading" class="text-center py-4" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Đang tải...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Đang tải danh sách cẩm nang...</p>
+                    </div>
+                    
+                    <div id="contributions-empty" class="text-center py-5" style="display: none;">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Không có cẩm nang nào</h5>
+                        <p class="text-muted">Chưa có cẩm nang nào được gửi từ members.</p>
+                    </div>
+                    
+                    <div id="contributions-list">
+                        <!-- Contributions will be loaded here -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -1956,7 +2004,8 @@
                 'hotels': 'Tìm theo tên khách sạn...',
                 'tours': 'Tìm theo tên tour...',
                 'deals': 'Tìm theo tiêu đề ưu đãi...',
-                'travel-guides': 'Tìm theo tiêu đề bài viết...'
+                'travel-guides': 'Tìm theo tiêu đề bài viết...',
+                'contributions': 'Tìm theo tiêu đề, tác giả, địa điểm...'
             };
 
             if (searchableSections[contentId]) {
@@ -1996,6 +2045,9 @@
                     break;
                 case 'travel-guides':
                     loadTravelGuides();
+                    break;
+                case 'contributions':
+                    loadContributions();
                     break;
                 case 'refunds':
                     loadRefunds();
@@ -2048,6 +2100,9 @@
 
             // Show dashboard by default
             showContent('dashboard');
+
+            // Load pending contributions count for sidebar badge
+            loadPendingContributionsCount();
 
              // Initialize global search
             const globalSearchInput = document.getElementById('globalSearchInput');
@@ -3118,6 +3173,583 @@
                 }
             });
         }
+
+        // =================== CONTRIBUTIONS MANAGEMENT ===================
+        
+        let currentContributions = [];
+        let currentFilter = 'all';
+
+        // Load contributions from Firebase
+        function loadContributions() {
+            const loadingElement = document.getElementById('contributions-loading');
+            const emptyElement = document.getElementById('contributions-empty');
+            const listElement = document.getElementById('contributions-list');
+
+            // Show loading
+            loadingElement.style.display = 'block';
+            emptyElement.style.display = 'none';
+            listElement.innerHTML = '';
+
+            db.ref('userContributions').once('value').then((snapshot) => {
+                loadingElement.style.display = 'none';
+
+                if (!snapshot.exists()) {
+                    emptyElement.style.display = 'block';
+                    updateContributionsCount(0);
+                    return;
+                }
+
+                currentContributions = [];
+                snapshot.forEach((contributionSnapshot) => {
+                    const contribution = contributionSnapshot.val();
+                    contribution.id = contributionSnapshot.key;
+                    currentContributions.push(contribution);
+                });
+
+                // Sắp xếp theo thời gian gửi (mới nhất trước)
+                currentContributions.sort((a, b) => (b.submittedAt || 0) - (a.submittedAt || 0));
+
+                updateContributionsCount(currentContributions.length);
+                displayContributions(currentContributions);
+
+                // Update pending count badge
+                const pendingCount = currentContributions.filter(c => c.status === 'pending').length;
+                updatePendingBadge(pendingCount);
+
+            }).catch(error => {
+                loadingElement.style.display = 'none';
+                listElement.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Lỗi khi tải dữ liệu: ${error.message}
+                    </div>
+                `;
+            });
+        }
+
+        // Display contributions with current filter
+        function displayContributions(contributions) {
+            const listElement = document.getElementById('contributions-list');
+            
+            // Filter contributions based on current filter
+            let filteredContributions = contributions;
+            if (currentFilter !== 'all') {
+                filteredContributions = contributions.filter(c => c.status === currentFilter);
+            }
+
+            if (filteredContributions.length === 0) {
+                listElement.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="fas fa-inbox fa-2x text-muted mb-3"></i>
+                        <h6 class="text-muted">Không có cẩm nang nào với trạng thái "${getStatusText(currentFilter)}"</h6>
+                    </div>
+                `;
+                return;
+            }
+
+            listElement.innerHTML = '';
+            filteredContributions.forEach(contribution => {
+                const contributionCard = createContributionCard(contribution);
+                listElement.appendChild(contributionCard);
+            });
+        }
+
+        // Create contribution card element
+        function createContributionCard(contribution) {
+            const div = document.createElement('div');
+            div.className = 'card mb-4 contribution-card';
+
+            const status = contribution.status || 'pending';
+            const statusBadge = getStatusBadge(status);
+            const submittedDate = contribution.submittedAt ? new Date(contribution.submittedAt).toLocaleString('vi-VN') : 'Không rõ';
+            const hotelCount = contribution.hotelRecommendations ? contribution.hotelRecommendations.length : 0;
+
+            div.innerHTML = `
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <img src="${contribution.main_image || '/images/default-guide.jpg'}" 
+                                 alt="Ảnh cẩm nang" class="img-fluid rounded" style="height: 150px; object-fit: cover; width: 100%;">
+                        </div>
+                        <div class="col-md-9">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title mb-1">${contribution.title}</h5>
+                                ${statusBadge}
+                            </div>
+                            
+                            <div class="row text-muted small mb-2">
+                                <div class="col-md-6">
+                                    <i class="fas fa-user"></i> <strong>Tác giả:</strong> ${contribution.authorName}
+                                </div>
+                                <div class="col-md-6">
+                                    <i class="fas fa-envelope"></i> ${contribution.authorEmail}
+                                </div>
+                                <div class="col-md-6">
+                                    <i class="fas fa-map-marker-alt"></i> <strong>Địa điểm:</strong> ${contribution.location}
+                                </div>
+                                <div class="col-md-6">
+                                    <i class="fas fa-tag"></i> <strong>Danh mục:</strong> ${contribution.category}
+                                </div>
+                                <div class="col-md-6">
+                                    <i class="fas fa-clock"></i> <strong>Thời gian:</strong> ${contribution.duration || 'Không rõ'}
+                                </div>
+                                <div class="col-md-6">
+                                    <i class="fas fa-hotel"></i> <strong>Khách sạn gợi ý:</strong> ${hotelCount} khách sạn
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <i class="fas fa-calendar"></i> <strong>Gửi lúc:</strong> ${submittedDate}
+                                </div>
+                            </div>
+                            
+                            <p class="card-text text-muted">${contribution.summary}</p>
+                            
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-primary btn-sm" onclick="viewContribution('${contribution.id}')">
+                                    <i class="fas fa-eye"></i> Xem chi tiết
+                                </button>
+                                ${status === 'pending' ? `
+                                    <button class="btn btn-success btn-sm" onclick="quickApproveContribution('${contribution.id}')">
+                                        <i class="fas fa-check"></i> Duyệt nhanh
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="quickRejectContribution('${contribution.id}')">
+                                        <i class="fas fa-times"></i> Từ chối
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            return div;
+        }
+
+        // Get status badge HTML
+        function getStatusBadge(status) {
+            const badges = {
+                'pending': '<span class="badge bg-warning text-dark"><i class="fas fa-clock"></i> Chờ duyệt</span>',
+                'approved': '<span class="badge bg-success"><i class="fas fa-check"></i> Đã duyệt</span>',
+                'rejected': '<span class="badge bg-danger"><i class="fas fa-times"></i> Từ chối</span>'
+            };
+            return badges[status] || badges['pending'];
+        }
+
+        // Get status text
+        function getStatusText(status) {
+            const texts = {
+                'all': 'tất cả',
+                'pending': 'chờ duyệt',
+                'approved': 'đã duyệt', 
+                'rejected': 'từ chối'
+            };
+            return texts[status] || 'không rõ';
+        }
+
+        // Filter contributions
+        function filterContributions(filter) {
+            currentFilter = filter;
+            
+            // Update filter buttons
+            document.querySelectorAll('[onclick^="filterContributions"]').forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
+            });
+            event.target.classList.remove('btn-outline-primary');
+            event.target.classList.add('btn-primary');
+
+            displayContributions(currentContributions);
+        }
+
+        // Update contributions count
+        function updateContributionsCount(count) {
+            const badge = document.getElementById('contributions-count-badge');
+            if (badge) {
+                badge.textContent = count;
+            }
+        }
+
+        // Update pending badge in sidebar
+        function updatePendingBadge(count) {
+            const badge = document.getElementById('pending-contributions-badge');
+            if (badge) {
+                if (count > 0) {
+                    badge.textContent = count;
+                    badge.style.display = 'inline';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+        }
+
+        // Load pending contributions count for sidebar
+        function loadPendingContributionsCount() {
+            db.ref('userContributions').orderByChild('status').equalTo('pending').once('value').then((snapshot) => {
+                const pendingCount = snapshot.numChildren();
+                updatePendingBadge(pendingCount);
+            }).catch(error => {
+                console.error('Error loading pending contributions count:', error);
+            });
+        }
+
+        // View contribution details
+        function viewContribution(contributionId) {
+            const contribution = currentContributions.find(c => c.id === contributionId);
+            if (!contribution) {
+                Swal.fire('Lỗi!', 'Không tìm thấy cẩm nang này!', 'error');
+                return;
+            }
+
+            // Store current contribution for approval/rejection
+            window.currentContribution = contribution;
+
+            const modalContent = document.getElementById('contribution-detail-content');
+            const submittedDate = contribution.submittedAt ? new Date(contribution.submittedAt).toLocaleString('vi-VN') : 'Không rõ';
+            
+            modalContent.innerHTML = `
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3>${contribution.title}</h3>
+                        <div class="mb-3">
+                            ${getStatusBadge(contribution.status || 'pending')}
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong><i class="fas fa-user"></i> Tác giả:</strong> ${contribution.authorName}<br>
+                                <strong><i class="fas fa-envelope"></i> Email:</strong> ${contribution.authorEmail}<br>
+                                <strong><i class="fas fa-map-marker-alt"></i> Địa điểm:</strong> ${contribution.location}<br>
+                                <strong><i class="fas fa-tag"></i> Danh mục:</strong> ${contribution.category}
+                            </div>
+                            <div class="col-md-6">
+                                <strong><i class="fas fa-clock"></i> Thời gian:</strong> ${contribution.duration || 'Không rõ'}<br>
+                                <strong><i class="fas fa-dollar-sign"></i> Ngân sách:</strong> ${contribution.budget || 'Không rõ'}<br>
+                                <strong><i class="fas fa-calendar"></i> Mùa thích hợp:</strong> ${contribution.season || 'Không rõ'}<br>
+                                <strong><i class="fas fa-calendar-plus"></i> Gửi lúc:</strong> ${submittedDate}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5><i class="fas fa-align-left"></i> Tóm tắt</h5>
+                            <p class="bg-light p-3 rounded">${contribution.summary}</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5><i class="fas fa-file-alt"></i> Nội dung chi tiết</h5>
+                            <div class="bg-light p-3 rounded" style="max-height: 300px; overflow-y: auto;">
+                                ${contribution.content.replace(/\n/g, '<br>')}
+                            </div>
+                        </div>
+
+                        ${contribution.hotelRecommendations && contribution.hotelRecommendations.length > 0 ? `
+                            <div class="mb-4">
+                                <h5><i class="fas fa-hotel"></i> Khách sạn gợi ý (${contribution.hotelRecommendations.length})</h5>
+                                ${contribution.hotelRecommendations.map(hotel => `
+                                    <div class="card mb-2">
+                                        <div class="card-body p-3">
+                                            <h6 class="card-title">${hotel.name}</h6>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <small><strong>Đánh giá:</strong> ${hotel.rating ? '⭐'.repeat(hotel.rating) : 'Chưa đánh giá'}</small><br>
+                                                    <small><strong>Giá:</strong> ${hotel.price || 'Chưa có thông tin'}</small><br>
+                                                    <small><strong>Vị trí:</strong> ${hotel.location || 'Chưa có thông tin'}</small>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <small><strong>Gợi ý:</strong> ${getRecommendationText(hotel.recommendation)}</small>
+                                                </div>
+                                            </div>
+                                            ${hotel.review ? `<p class="mt-2 mb-0"><small><strong>Nhận xét:</strong> ${hotel.review}</small></p>` : ''}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <img src="${contribution.main_image || '/images/default-guide.jpg'}" 
+                                 alt="Ảnh cẩm nang" class="img-fluid rounded" style="max-height: 200px; object-fit: cover;">
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="fas fa-info-circle"></i> Thông tin thêm</h6>
+                            </div>
+                            <div class="card-body">
+                                <small>
+                                    <strong>ID:</strong> ${contribution.id}<br>
+                                    <strong>Slug:</strong> ${contribution.slug || 'Chưa tạo'}<br>
+                                    <strong>Trạng thái:</strong> ${getStatusText(contribution.status || 'pending')}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Show/hide action buttons based on status
+            const approveBtn = document.getElementById('approveContributionBtn');
+            const rejectBtn = document.getElementById('rejectContributionBtn');
+            
+            if (contribution.status === 'pending') {
+                approveBtn.style.display = 'inline-block';
+                rejectBtn.style.display = 'inline-block';
+            } else {
+                approveBtn.style.display = 'none';
+                rejectBtn.style.display = 'none';
+            }
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('contributionDetailModal'));
+            modal.show();
+        }
+
+        // Get recommendation text
+        function getRecommendationText(recommendation) {
+            const texts = {
+                'highly-recommended': '🔥 Rất khuyến khích',
+                'recommended': '👍 Khuyến khích',
+                'okay': '😐 Tạm được',
+                'not-recommended': '👎 Không khuyến khích'
+            };
+            return texts[recommendation] || 'Chưa đánh giá';
+        }
+
+        // Quick approve contribution
+        function quickApproveContribution(contributionId) {
+            Swal.fire({
+                title: 'Duyệt cẩm nang?',
+                text: 'Cẩm nang sẽ được công bố trên website ngay lập tức.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Duyệt',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    approveContribution(contributionId);
+                }
+            });
+        }
+
+        // Quick reject contribution
+        function quickRejectContribution(contributionId) {
+            Swal.fire({
+                title: 'Từ chối cẩm nang',
+                input: 'textarea',
+                inputLabel: 'Lý do từ chối',
+                inputPlaceholder: 'Nhập lý do từ chối để gửi phản hồi cho tác giả...',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Vui lòng nhập lý do từ chối!';
+                    }
+                },
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Từ chối',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    rejectContribution(contributionId, result.value);
+                }
+            });
+        }
+
+        // Approve contribution
+        function approveContribution(contributionId) {
+            const contribution = currentContributions.find(c => c.id === contributionId);
+            if (!contribution) {
+                Swal.fire('Lỗi!', 'Không tìm thấy cẩm nang này!', 'error');
+                return;
+            }
+
+            // Show loading
+            Swal.fire({
+                title: 'Đang xử lý...',
+                text: 'Vui lòng đợi trong giây lát',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Generate guide data for travelGuides collection
+            const slugId = contribution.slug || generateSlug(contribution.title);
+            const guideData = {
+                title: contribution.title,
+                author: contribution.authorName,
+                main_image: contribution.main_image || '/images/default-guide.jpg',
+                overview: contribution.summary,
+                last_updated: new Date().toISOString().split('T')[0],
+                is_featured_on_homepage: false,
+                id: slugId,
+                slug: slugId, // Thêm slug để hiển thị trên travel_guide.html
+                sections: {
+                    "0": {
+                        "heading": "Thông tin chi tiết",
+                        "content": contribution.content
+                    }
+                },
+                related_destinations: { "0": contribution.location },
+                category: contribution.category,
+                location: contribution.location,
+                duration: contribution.duration,
+                budget: contribution.budget,
+                season: contribution.season,
+                hotelRecommendations: contribution.hotelRecommendations || [],
+                originalContributionId: contributionId
+            };
+
+            // Save to travelGuides and update contribution status
+            Promise.all([
+                db.ref('travelGuides/' + slugId).set(guideData),
+                db.ref('userContributions/' + contributionId + '/status').set('approved'),
+                db.ref('userContributions/' + contributionId + '/approvedAt').set(firebase.database.ServerValue.TIMESTAMP),
+                db.ref('userContributions/' + contributionId + '/publishedGuideId').set(slugId)
+            ]).then(() => {
+                // Send approval email
+                return emailjs.send("service_6spwxxw", "template_vcjlg02", {
+                    to_email: contribution.authorEmail,
+                    from_name: "Admin LuxuryHavenTravel",
+                    title: "Cẩm nang đã được duyệt",
+                    message: `Chúc mừng! Cẩm nang "${contribution.title}" của bạn đã được duyệt và công bố trên website. Cảm ơn bạn đã đóng góp nội dung chất lượng cho cộng đồng du lịch.`,
+                    timestamp: new Date().toLocaleString('vi-VN')
+                });
+            }).then(() => {
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: 'Cẩm nang đã được duyệt và công bố trên website.',
+                    icon: 'success',
+                    confirmButtonColor: '#28a745'
+                });
+                
+                // Reload contributions
+                loadContributions();
+                
+                // Close modal if open
+                const modal = bootstrap.Modal.getInstance(document.getElementById('contributionDetailModal'));
+                if (modal) modal.hide();
+                
+            }).catch(error => {
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể duyệt cẩm nang: ' + error.message,
+                    icon: 'error',
+                    confirmButtonColor: '#dc3545'
+                });
+                console.error('Error approving contribution:', error);
+            });
+        }
+
+        // Reject contribution
+        function rejectContribution(contributionId, reason) {
+            const contribution = currentContributions.find(c => c.id === contributionId);
+            if (!contribution) {
+                Swal.fire('Lỗi!', 'Không tìm thấy cẩm nang này!', 'error');
+                return;
+            }
+
+            // Show loading
+            Swal.fire({
+                title: 'Đang xử lý...',
+                text: 'Vui lòng đợi trong giây lát',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Update contribution status and add rejection reason
+            Promise.all([
+                db.ref('userContributions/' + contributionId + '/status').set('rejected'),
+                db.ref('userContributions/' + contributionId + '/rejectedAt').set(firebase.database.ServerValue.TIMESTAMP),
+                db.ref('userContributions/' + contributionId + '/rejectionReason').set(reason)
+            ]).then(() => {
+                // Send rejection email
+                return emailjs.send("service_6spwxxw", "template_vcjlg02", {
+                    to_email: contribution.authorEmail,
+                    from_name: "Admin LuxuryHavenTravel",
+                    title: "Cẩm nang cần chỉnh sửa",
+                    message: `Cẩm nang "${contribution.title}" của bạn cần được chỉnh sửa theo phản hồi sau:\n\n${reason}\n\nVui lòng chỉnh sửa và gửi lại cẩm nang. Cảm ơn bạn đã đóng góp!`,
+                    timestamp: new Date().toLocaleString('vi-VN')
+                });
+            }).then(() => {
+                Swal.fire({
+                    title: 'Đã từ chối!',
+                    text: 'Phản hồi đã được gửi đến tác giả qua email.',
+                    icon: 'success',
+                    confirmButtonColor: '#28a745'
+                });
+                
+                // Reload contributions
+                loadContributions();
+                
+                // Close modal if open
+                const modal = bootstrap.Modal.getInstance(document.getElementById('contributionDetailModal'));
+                if (modal) modal.hide();
+                
+            }).catch(error => {
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể từ chối cẩm nang: ' + error.message,
+                    icon: 'error',
+                    confirmButtonColor: '#dc3545'
+                });
+                console.error('Error rejecting contribution:', error);
+            });
+        }
+
+        // Generate slug from title
+        function generateSlug(title) {
+            return title
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+                .replace(/[đĐ]/g, 'd')
+                .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+                .replace(/\s+/g, '-') // Replace spaces with hyphens
+                .replace(/-+/g, '-') // Remove multiple hyphens
+                .trim('-'); // Remove leading/trailing hyphens
+        }
+
+        // Event listeners for contribution modals
+        document.addEventListener('DOMContentLoaded', function() {
+            // Approve button in detail modal
+            const approveBtn = document.getElementById('approveContributionBtn');
+            if (approveBtn) {
+                approveBtn.addEventListener('click', function() {
+                    if (window.currentContribution) {
+                        approveContribution(window.currentContribution.id);
+                    }
+                });
+            }
+
+            // Reject button in detail modal
+            const rejectBtn = document.getElementById('rejectContributionBtn');
+            if (rejectBtn) {
+                rejectBtn.addEventListener('click', function() {
+                    if (window.currentContribution) {
+                        const modal = new bootstrap.Modal(document.getElementById('rejectContributionModal'));
+                        modal.show();
+                    }
+                });
+            }
+
+            // Confirm reject button in reject modal
+            const confirmRejectBtn = document.getElementById('confirmRejectBtn');
+            if (confirmRejectBtn) {
+                confirmRejectBtn.addEventListener('click', function() {
+                    const reason = document.getElementById('rejectReason').value.trim();
+                    if (reason && window.currentContribution) {
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('rejectContributionModal'));
+                        modal.hide();
+                        rejectContribution(window.currentContribution.id, reason);
+                    }
+                });
+            }
+        });
 
         // --- Settings Management ---
         function loadSettings() {
@@ -4217,6 +4849,62 @@
           modal.show();
         });
     </script>
+
+    <!-- Modal chi tiết cẩm nang -->
+    <div class="modal fade" id="contributionDetailModal" tabindex="-1" aria-labelledby="contributionDetailModalLabel">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="contributionDetailModalLabel">Chi tiết cẩm nang</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="contribution-detail-content">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-danger" id="rejectContributionBtn">
+                        <i class="fas fa-times"></i> Từ chối
+                    </button>
+                    <button type="button" class="btn btn-success" id="approveContributionBtn">
+                        <i class="fas fa-check"></i> Duyệt & Công bố
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal từ chối cẩm nang -->
+    <div class="modal fade" id="rejectContributionModal" tabindex="-1" aria-labelledby="rejectContributionModalLabel">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectContributionModalLabel">Từ chối cẩm nang</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="rejectReason" class="form-label">Lý do từ chối *</label>
+                        <textarea class="form-control" id="rejectReason" rows="4" 
+                            placeholder="Nhập lý do từ chối để gửi phản hồi cho tác giả..."></textarea>
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Lưu ý:</strong> Lý do từ chối sẽ được gửi email cho tác giả để họ có thể chỉnh sửa và gửi lại.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger" id="confirmRejectBtn">
+                        <i class="fas fa-times"></i> Xác nhận từ chối
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal chi tiết phòng có người -->
     <div class="modal fade" id="occupiedRoomsModal" tabindex="-1" aria-labelledby="occupiedRoomsModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered">

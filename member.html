@@ -1019,8 +1019,8 @@
 
         // Hàm lấy danh sách yêu thích
         function loadFavorites(user) {
-            const favoritesRef = firebase.database().ref('favorites/' + user.uid);
-            favoritesRef.on('value', (snapshot) => {
+    const favoritesRef = firebase.database().ref('users/' + user.uid + '/favorites');
+    favoritesRef.on('value', (snapshot) => {
                 const favoritesList = document.getElementById('favorites-list');
                 if (!favoritesList) return;
 
@@ -1031,9 +1031,9 @@
                         const favorite = favoriteSnapshot.val();
                         addFavoriteItem(favorite, favoritesList);
                     });
-                } else {
-                    favoritesList.innerHTML = '<div class="col-12 text-center">Chưa có khách sạn yêu thích</div>';
-                }
+                        } else {
+            favoritesList.innerHTML = '<div class="col-12 text-center">Chưa có khách sạn hoặc cẩm nang yêu thích</div>';
+        }
             });
         }
 
@@ -1041,17 +1041,36 @@
         function addFavoriteItem(favorite, container) {
             const col = document.createElement('div');
             col.className = 'col-md-4';
-            col.innerHTML = `
-            <div class="favorite-item">
-                <img src="${favorite.image || 'https://placehold.co/300x200?text=Hotel+Image'}" 
-     alt="${favorite.name}" 
-     onerror="this.src='https://placehold.co/300x200?text=Hotel+Image'">
-                <div class="overlay">
-                    <h5>${favorite.name || 'Không có tên'}</h5>
-                    <p>${favorite.location || 'Không có địa chỉ'}</p>
-                </div>
-            </div>
-        `;
+            
+            // Kiểm tra xem có phải cẩm nang yêu thích không
+            if (favorite.guideSlug) {
+                // Đây là cẩm nang yêu thích
+                col.innerHTML = `
+                    <div class="favorite-item">
+                        <img src="https://placehold.co/300x200?text=Travel+Guide" 
+                             alt="Cẩm nang du lịch" 
+                             onerror="this.src='https://placehold.co/300x200?text=Travel+Guide'">
+                        <div class="overlay">
+                            <h5>Cẩm nang du lịch</h5>
+                            <p>Đã thêm vào yêu thích</p>
+                            <a href="destination_detail.html?slug=${favorite.guideSlug}" class="btn btn-sm btn-primary">Xem chi tiết</a>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Đây là khách sạn yêu thích (cấu trúc cũ)
+                col.innerHTML = `
+                    <div class="favorite-item">
+                        <img src="${favorite.image || 'https://placehold.co/300x200?text=Hotel+Image'}" 
+                             alt="${favorite.name}" 
+                             onerror="this.src='https://placehold.co/300x200?text=Hotel+Image'">
+                        <div class="overlay">
+                            <h5>${favorite.name || 'Không có tên'}</h5>
+                            <p>${favorite.location || 'Không có địa chỉ'}</p>
+                        </div>
+                    </div>
+                `;
+            }
             container.appendChild(col);
         }
 
