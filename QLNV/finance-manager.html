@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý tài chính (Finance Manager)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <style>
+        :root { --main-bg: #181c2f; --sidebar-bg: #23244a; --card-bg: #23244a; --accent: #7c3aed; --accent2: #00eaff; --text: #f3f6fa; --text-muted: #b0b8d1; --border: #2e325a; --shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.15); }
+        body { background: var(--main-bg); color: var(--text); font-family: 'Poppins', Arial, sans-serif; margin: 0; }
+        .sidebar { width: 240px; background: var(--sidebar-bg); color: var(--text); min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 100; display: flex; flex-direction: column; }
+        .sidebar .logo { padding: 32px 0 24px 0; text-align: center; font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; color: var(--accent); }
+        .sidebar .nav-item { display: flex; align-items: center; padding: 14px 32px; color: var(--text-muted); text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        .sidebar .nav-item.active, .sidebar .nav-item:hover { background: #1a1d36; color: var(--accent2); border-left: 4px solid var(--accent); }
+        .sidebar .nav-item i { margin-right: 14px; font-size: 1.2rem; }
+        .sidebar-footer { margin-top: auto; padding: 24px 32px; }
+        .sidebar-footer .btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 500; }
+        .main-container { margin-left: 240px; min-height: 100vh; background: var(--main-bg); }
+        .main-header { background: #1a1d36; border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+        .main-header .user-info { display: flex; align-items: center; gap: 14px; }
+        .main-header .user-info img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .content-wrapper { padding: 40px 32px 32px 32px; }
+        .card-modern { background: var(--card-bg); border-radius: 18px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 32px; padding: 0; }
+        .card-modern .card-body { padding: 32px 28px; }
+        .card-modern .card-title { color: var(--accent2); font-weight: 600; font-size: 1.2rem; margin-bottom: 18px; }
+        .profile-info { display: flex; align-items: center; gap: 32px; }
+        .profile-info img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .profile-info .info { font-size: 1.1rem; }
+
+        /* New styles for finance management */
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .stat-card { background: var(--card-bg); border-radius: 12px; padding: 24px; border: 1px solid var(--border); text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+        .stat-label { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px; }
+        .trend-up { color: #28a745; font-weight: 600; }
+        .trend-down { color: #dc3545; font-weight: 600; }
+        .trend-stable { color: #ffc107; font-weight: 600; }
+        .finance-card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); padding: 24px; margin-bottom: 24px; }
+        .finance-card h5 { color: var(--accent2); margin-bottom: 20px; font-weight: 600; }
+        .data-table { background: var(--card-bg); border-radius: 12px; overflow: hidden; }
+        .table-dark { --bs-table-bg: var(--card-bg); --bs-table-border-color: var(--border); }
+        .form-control, .form-select { background: var(--main-bg); border: 1px solid var(--border); color: var(--text); }
+        .form-control:focus, .form-select:focus { background: var(--main-bg); border-color: var(--accent); color: var(--text); box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.25); }
+        .btn-primary { background: var(--accent); border-color: var(--accent); }
+        .btn-primary:hover { background: #6d28d9; border-color: #6d28d9; }
+        .btn-success:hover { background: #1e7e34; }
+        .btn-warning:hover { background: #d39e00; }
+        .btn-info:hover { background: #138496; }
+        .btn-danger:hover { background: #c82333; }
+        .progress-custom { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; }
+        .progress-bar-custom { height: 100%; transition: width 0.3s ease; }
+        .modal-content { background: var(--card-bg); border: 1px solid var(--border); }
+        .modal-header { border-bottom: 1px solid var(--border); }
+        .modal-footer { border-top: 1px solid var(--border); }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-bottom: 32px; }
+        .metric-card { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+
+        @media (max-width: 900px) { .sidebar { width: 80px; } .main-container { margin-left: 80px; } .sidebar .nav-item { padding: 12px 10px; font-size: 0.95rem; } .sidebar .logo { font-size: 1.1rem; } .kpi-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 700px) { .sidebar { display: none; } .main-container { margin-left: 0; } .main-header { padding: 12px 10px; } .content-wrapper { padding: 12px 4px; } }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i> LUXSTAFF
+        </div>
+        <a href="#role" class="nav-item active" onclick="showSection('role')"><i class="fas fa-user-tie"></i> Vai trò</a>
+        <a href="#dashboard" class="nav-item" onclick="showSection('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</a>
+        <a href="#revenue" class="nav-item" onclick="showSection('revenue')"><i class="fas fa-dollar-sign"></i> Doanh thu</a>
+        <a href="#commission" class="nav-item" onclick="showSection('commission')"><i class="fas fa-percent"></i> Hoa hồng</a>
+        <a href="#reconciliation" class="nav-item" onclick="showSection('reconciliation')"><i class="fas fa-balance-scale"></i> Đối soát</a>
+        <a href="#reports" class="nav-item" onclick="showSection('reports')"><i class="fas fa-file-alt"></i> Báo cáo</a>
+        <a href="#settings" class="nav-item" onclick="showSection('settings')"><i class="fas fa-cogs"></i> Cài đặt</a>
+        <div class="sidebar-footer">
+            <button class="btn" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</button>
+        </div>
+    </div>
+    <div class="main-container">
+        <header class="main-header">
+            <h1 class="h4 mb-0" style="color:var(--accent2);">Quản lý tài chính</h1>
+            <div class="user-info">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                <span><strong>Finance Manager</strong></span>
+            </div>
+        </header>
+        <main class="content-wrapper">
+            <!-- Section Vai trò (mặc định) -->
+            <div id="roleSection" class="content-section active">
+                <!-- KPI Overview -->
+                <section class="mb-4">
+                    <div class="kpi-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: var(--accent2);">₫12.8B</div>
+                            <div class="stat-label">Tổng doanh thu tháng</div>
+                            <small class="trend-up"><i class="fas fa-arrow-up"></i> +18.5%</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #28a745;">₫890M</div>
+                            <div class="stat-label">Hoa hồng khách sạn</div>
+                            <small class="trend-up"><i class="fas fa-arrow-up"></i> +12.3%</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #ffc107;">₫156M</div>
+                            <div class="stat-label">Phí dịch vụ</div>
+                            <small class="trend-stable"><i class="fas fa-minus"></i> 0.0%</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #17a2b8;">98.2%</div>
+                            <div class="stat-label">Tỷ lệ đối soát</div>
+                            <small class="trend-up"><i class="fas fa-arrow-up"></i> +2.1%</small>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="card-modern mb-4">
+                        <div class="card-body profile-info">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                            <div class="info">
+                                <h4 class="mb-1" style="color:var(--accent2);">Quản lý tài chính (Finance Manager)</h4>
+                                <div><i class="fas fa-briefcase me-2"></i> Đối soát doanh thu, hoa hồng giữa hệ thống và khách sạn</div>
+                                <hr style="border-color: var(--border); margin: 16px 0;">
+                                <div>
+                                    <strong style="color: var(--accent2);">Chức năng chính:</strong>
+                                    <ul style="margin: 8px 0; padding-left: 20px;">
+                                        <li>Theo dõi doanh thu và hoa hồng real-time</li>
+                                        <li>Đối soát số liệu với các khách sạn đối tác</li>
+                                        <li>Quản lý thanh toán và refund</li>
+                                        <li>Báo cáo tài chính định kỳ</li>
+                                        <li>Phân tích xu hướng và dự báo</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Section Dashboard -->
+            <div id="dashboardSection" class="content-section">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="finance-card">
+                            <h5><i class="fas fa-chart-line me-2"></i>Doanh thu hôm nay</h5>
+                            <div class="text-center">
+                                <div class="stat-number text-success">₫450M</div>
+                                <small class="text-muted">So với hôm qua: +15.3%</small>
+                                <div class="progress-custom mt-3">
+                                    <div class="progress-bar-custom" style="width: 75%; background: #28a745;"></div>
+                                </div>
+                                <small class="text-muted">Target: ₫600M</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="finance-card">
+                            <h5><i class="fas fa-coins me-2"></i>Hoa hồng chờ thanh toán</h5>
+                            <div class="text-center">
+                                <div class="stat-number text-warning">₫89M</div>
+                                <small class="text-muted">23 khách sạn</small>
+                                <div class="mt-3">
+                                    <button class="btn btn-warning btn-sm" onclick="processCommissions()">
+                                        <i class="fas fa-credit-card me-1"></i>Xử lý thanh toán
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-md-4">
+                        <div class="finance-card">
+                            <h5>Top khách sạn theo doanh thu</h5>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>Luxury Hotel HN</span>
+                                    <span class="fw-bold">₫120M</span>
+                                </div>
+                                <div class="progress-custom mt-2">
+                                    <div class="progress-bar-custom" style="width: 100%; background: var(--accent);"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>Beach Resort DN</span>
+                                    <span class="fw-bold">₫95M</span>
+                                </div>
+                                <div class="progress-custom mt-2">
+                                    <div class="progress-bar-custom" style="width: 79%; background: var(--accent2);"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>City Hotel HCM</span>
+                                    <span class="fw-bold">₫78M</span>
+                                </div>
+                                <div class="progress-custom mt-2">
+                                    <div class="progress-bar-custom" style="width: 65%; background: #28a745;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="finance-card">
+                            <h5>Giao dịch gần đây</h5>
+                            <div class="data-table">
+                                <table class="table table-dark table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Thời gian</th>
+                                            <th>Khách sạn</th>
+                                            <th>Loại</th>
+                                            <th>Số tiền</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>14:30</td>
+                                            <td>Luxury Hotel HN</td>
+                                            <td>Booking</td>
+                                            <td class="text-success">+₫2.5M</td>
+                                            <td><span class="badge bg-success">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>14:15</td>
+                                            <td>Beach Resort DN</td>
+                                            <td>Commission</td>
+                                            <td class="text-info">+₫350K</td>
+                                            <td><span class="badge bg-info">Pending</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>13:45</td>
+                                            <td>City Hotel HCM</td>
+                                            <td>Refund</td>
+                                            <td class="text-danger">-₫1.2M</td>
+                                            <td><span class="badge bg-warning">Processing</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Doanh thu -->
+            <div id="revenueSection" class="content-section">
+                <div class="finance-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5><i class="fas fa-dollar-sign me-2"></i>Quản lý doanh thu</h5>
+                        <div>
+                            <button class="btn btn-success btn-sm me-2" onclick="exportRevenue()">
+                                <i class="fas fa-download"></i> Xuất Excel
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="refreshRevenue()">
+                                <i class="fas fa-sync"></i> Làm mới
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bộ lọc -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <select class="form-select" id="revenueHotel">
+                                <option value="">Tất cả khách sạn</option>
+                                <option value="luxury-hn">Luxury Hotel HN</option>
+                                <option value="beach-dn">Beach Resort DN</option>
+                                <option value="city-hcm">City Hotel HCM</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" class="form-control" id="revenueFromDate" value="2025-08-01">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" class="form-control" id="revenueToDate" value="2025-08-03">
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-secondary w-100" onclick="filterRevenue()">
+                                <i class="fas fa-filter"></i> Lọc dữ liệu
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bảng doanh thu -->
+                    <div class="data-table">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Ngày</th>
+                                    <th>Khách sạn</th>
+                                    <th>Số booking</th>
+                                    <th>Doanh thu gross</th>
+                                    <th>Hoa hồng (15%)</th>
+                                    <th>Doanh thu net</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="revenueTableBody">
+                                <tr>
+                                    <td>03/08/2025</td>
+                                    <td>Luxury Hotel HN</td>
+                                    <td>48 bookings</td>
+                                    <td class="fw-bold">₫120,000,000</td>
+                                    <td class="text-info">₫18,000,000</td>
+                                    <td class="text-success">₫102,000,000</td>
+                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1" title="Chi tiết"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-warning" title="Đối soát"><i class="fas fa-balance-scale"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>03/08/2025</td>
+                                    <td>Beach Resort DN</td>
+                                    <td>32 bookings</td>
+                                    <td class="fw-bold">₫95,000,000</td>
+                                    <td class="text-info">₫14,250,000</td>
+                                    <td class="text-success">₫80,750,000</td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1" title="Chi tiết"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-warning" title="Đối soát"><i class="fas fa-balance-scale"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>02/08/2025</td>
+                                    <td>City Hotel HCM</td>
+                                    <td>25 bookings</td>
+                                    <td class="fw-bold">₫78,000,000</td>
+                                    <td class="text-info">₫11,700,000</td>
+                                    <td class="text-success">₫66,300,000</td>
+                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1" title="Chi tiết"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-success" title="Đã đối soát"><i class="fas fa-check"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Hoa hồng -->
+            <div id="commissionSection" class="content-section">
+                <div class="finance-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5><i class="fas fa-percent me-2"></i>Quản lý hoa hồng</h5>
+                        <div>
+                            <button class="btn btn-success btn-sm me-2" onclick="processAllCommissions()">
+                                <i class="fas fa-credit-card"></i> Thanh toán tất cả
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="commissionSettings()">
+                                <i class="fas fa-cog"></i> Cài đặt tỷ lệ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Thống kê hoa hồng -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-info">₫89M</div>
+                                <div class="stat-label">Chờ thanh toán</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-success">₫245M</div>
+                                <div class="stat-label">Đã thanh toán tháng này</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-warning">15.2%</div>
+                                <div class="stat-label">Tỷ lệ hoa hồng TB</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-primary">23</div>
+                                <div class="stat-label">Khách sạn đối tác</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bảng hoa hồng -->
+                    <div class="data-table">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Khách sạn</th>
+                                    <th>Tỷ lệ hoa hồng</th>
+                                    <th>Doanh thu gốc</th>
+                                    <th>Hoa hồng tích lũy</th>
+                                    <th>Đã thanh toán</th>
+                                    <th>Còn lại</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Luxury Hotel HN</td>
+                                    <td><span class="badge bg-info">15%</span></td>
+                                    <td>₫800M</td>
+                                    <td class="text-warning">₫120M</td>
+                                    <td class="text-success">₫90M</td>
+                                    <td class="text-danger">₫30M</td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success me-1" onclick="payCommission('luxury-hn')" title="Thanh toán"><i class="fas fa-dollar-sign"></i></button>
+                                        <button class="btn btn-sm btn-info" title="Chi tiết"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Beach Resort DN</td>
+                                    <td><span class="badge bg-info">16%</span></td>
+                                    <td>₫650M</td>
+                                    <td class="text-warning">₫104M</td>
+                                    <td class="text-success">₫75M</td>
+                                    <td class="text-danger">₫29M</td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success me-1" onclick="payCommission('beach-dn')" title="Thanh toán"><i class="fas fa-dollar-sign"></i></button>
+                                        <button class="btn btn-sm btn-info" title="Chi tiết"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>City Hotel HCM</td>
+                                    <td><span class="badge bg-info">14%</span></td>
+                                    <td>₫520M</td>
+                                    <td class="text-warning">₫72.8M</td>
+                                    <td class="text-success">₫72.8M</td>
+                                    <td class="text-success">₫0</td>
+                                    <td><span class="badge bg-success">Paid</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary me-1" disabled title="Đã thanh toán"><i class="fas fa-check"></i></button>
+                                        <button class="btn btn-sm btn-info" title="Chi tiết"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Đối soát -->
+            <div id="reconciliationSection" class="content-section">
+                <div class="finance-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5><i class="fas fa-balance-scale me-2"></i>Đối soát tài chính</h5>
+                        <div>
+                            <button class="btn btn-warning btn-sm me-2" onclick="startReconciliation()">
+                                <i class="fas fa-play"></i> Bắt đầu đối soát
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="autoReconcile()">
+                                <i class="fas fa-robot"></i> Tự động đối soát
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Upload file đối soát -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="border rounded p-3">
+                                <h6><i class="fas fa-upload me-2"></i>Upload file từ khách sạn</h6>
+                                <input type="file" class="form-control mb-2" accept=".xlsx,.csv" id="reconcileFile">
+                                <button class="btn btn-primary btn-sm" onclick="uploadReconcileFile()">
+                                    <i class="fas fa-cloud-upload-alt"></i> Tải lên
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="border rounded p-3">
+                                <h6><i class="fas fa-download me-2"></i>Tải template</h6>
+                                <p class="small mb-2">File Excel mẫu cho khách sạn gửi dữ liệu đối soát</p>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="downloadTemplate()">
+                                    <i class="fas fa-file-excel"></i> Tải template
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kết quả đối soát -->
+                    <div class="data-table">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Khách sạn</th>
+                                    <th>Hệ thống</th>
+                                    <th>Khách sạn báo cáo</th>
+                                    <th>Chênh lệch</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ghi chú</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>BK001234</td>
+                                    <td>Luxury Hotel HN</td>
+                                    <td class="text-success">₫2,500,000</td>
+                                    <td class="text-success">₫2,500,000</td>
+                                    <td class="text-success">₫0</td>
+                                    <td><span class="badge bg-success">Matched</span></td>
+                                    <td>-</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success" disabled><i class="fas fa-check"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BK001235</td>
+                                    <td>Beach Resort DN</td>
+                                    <td class="text-warning">₫1,800,000</td>
+                                    <td class="text-danger">₫1,700,000</td>
+                                    <td class="text-danger">-₫100,000</td>
+                                    <td><span class="badge bg-danger">Mismatch</span></td>
+                                    <td>Cần kiểm tra</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning me-1" onclick="investigateDiscrepancy('BK001235')" title="Điều tra"><i class="fas fa-search"></i></button>
+                                        <button class="btn btn-sm btn-danger" onclick="markDispute('BK001235')" title="Dispute"><i class="fas fa-exclamation"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BK001236</td>
+                                    <td>City Hotel HCM</td>
+                                    <td class="text-info">₫3,200,000</td>
+                                    <td class="text-warning">Chưa có dữ liệu</td>
+                                    <td class="text-muted">N/A</td>
+                                    <td><span class="badge bg-secondary">Pending</span></td>
+                                    <td>Chờ dữ liệu từ KS</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info" onclick="requestData('BK001236')" title="Yêu cầu dữ liệu"><i class="fas fa-envelope"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Báo cáo -->
+            <div id="reportsSection" class="content-section">
+                <div class="finance-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5><i class="fas fa-file-alt me-2"></i>Báo cáo tài chính</h5>
+                        <div>
+                            <button class="btn btn-success btn-sm me-2" onclick="generateFinanceReport()">
+                                <i class="fas fa-plus"></i> Tạo báo cáo
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="scheduleReport()">
+                                <i class="fas fa-clock"></i> Lên lịch
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Báo cáo có sẵn -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="metric-card text-center">
+                                <i class="fas fa-chart-pie fa-2x mb-2" style="color: var(--accent);"></i>
+                                <h6>Báo cáo doanh thu</h6>
+                                <button class="btn btn-sm btn-primary" onclick="generateReport('revenue')">Tạo báo cáo</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="metric-card text-center">
+                                <i class="fas fa-coins fa-2x mb-2" style="color: #ffc107;"></i>
+                                <h6>Báo cáo hoa hồng</h6>
+                                <button class="btn btn-sm btn-warning" onclick="generateReport('commission')">Tạo báo cáo</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="metric-card text-center">
+                                <i class="fas fa-balance-scale fa-2x mb-2" style="color: #28a745;"></i>
+                                <h6>Báo cáo đối soát</h6>
+                                <button class="btn btn-sm btn-success" onclick="generateReport('reconciliation')">Tạo báo cáo</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lịch sử báo cáo -->
+                    <div class="data-table">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tên báo cáo</th>
+                                    <th>Loại</th>
+                                    <th>Kỳ báo cáo</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Báo cáo doanh thu tháng 7/2025</td>
+                                    <td><span class="badge bg-primary">Doanh thu</span></td>
+                                    <td>01/07 - 31/07/2025</td>
+                                    <td>01/08/2025 09:00</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1" title="Xem"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-success me-1" title="Tải"><i class="fas fa-download"></i></button>
+                                        <button class="btn btn-sm btn-warning" title="Chia sẻ"><i class="fas fa-share"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Báo cáo hoa hồng Q2/2025</td>
+                                    <td><span class="badge bg-warning">Hoa hồng</span></td>
+                                    <td>01/04 - 30/06/2025</td>
+                                    <td>02/07/2025 14:30</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1" title="Xem"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-success me-1" title="Tải"><i class="fas fa-download"></i></button>
+                                        <button class="btn btn-sm btn-warning" title="Chia sẻ"><i class="fas fa-share"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Báo cáo đối soát tuần 31</td>
+                                    <td><span class="badge bg-success">Đối soát</span></td>
+                                    <td>29/07 - 04/08/2025</td>
+                                    <td>03/08/2025 16:45</td>
+                                    <td><span class="badge bg-info">Processing</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary me-1" disabled title="Đang xử lý"><i class="fas fa-clock"></i></button>
+                                        <button class="btn btn-sm btn-danger" title="Hủy" onclick="cancelReport('week31')"><i class="fas fa-times"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Cài đặt -->
+            <div id="settingsSection" class="content-section">
+                <div class="finance-card">
+                    <h5><i class="fas fa-cogs me-2"></i>Cài đặt tài chính</h5>
+                    
+                    <div class="row g-4">
+                        <!-- Cài đặt hoa hồng -->
+                        <div class="col-md-6">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-percent me-2"></i>Cài đặt tỷ lệ hoa hồng</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Tỷ lệ hoa hồng mặc định</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" value="15" min="0" max="100">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Hoa hồng tối thiểu</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" value="10" min="0" max="100">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-sm">Lưu cài đặt</button>
+                            </div>
+                        </div>
+
+                        <!-- Cài đặt thanh toán -->
+                        <div class="col-md-6">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-credit-card me-2"></i>Cài đặt thanh toán</h6>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="autoPayment" checked>
+                                    <label class="form-check-label" for="autoPayment">
+                                        Tự động thanh toán hoa hồng
+                                    </label>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Chu kỳ thanh toán</label>
+                                    <select class="form-select">
+                                        <option value="weekly">Hàng tuần</option>
+                                        <option value="monthly" selected>Hàng tháng</option>
+                                        <option value="quarterly">Hàng quý</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-success btn-sm">Cập nhật</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cài đặt thông báo -->
+                    <div class="row g-4 mt-2">
+                        <div class="col-md-12">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-bell me-2"></i>Cài đặt thông báo</h6>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="revenueAlert" checked>
+                                            <label class="form-check-label" for="revenueAlert">
+                                                Cảnh báo doanh thu
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="reconcileAlert" checked>
+                                            <label class="form-check-label" for="reconcileAlert">
+                                                Cảnh báo đối soát
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="paymentAlert">
+                                            <label class="form-check-label" for="paymentAlert">
+                                                Nhắc nhở thanh toán
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-info btn-sm mt-3">Lưu thông báo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Quản lý hiển thị section
+        window.showSection = function(sectionName) {
+            // Ẩn tất cả sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Hiển thị section được chọn
+            document.getElementById(sectionName + 'Section').classList.add('active');
+            
+            // Cập nhật active state cho menu
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+            
+            // Cập nhật tiêu đề header
+            const titles = {
+                'role': 'Quản lý tài chính',
+                'dashboard': 'Finance Dashboard',
+                'revenue': 'Quản lý doanh thu',
+                'commission': 'Quản lý hoa hồng',
+                'reconciliation': 'Đối soát tài chính',
+                'reports': 'Báo cáo tài chính',
+                'settings': 'Cài đặt tài chính'
+            };
+            document.querySelector('.main-header h1').textContent = titles[sectionName];
+        };
+
+        // Các hàm chức năng Dashboard
+        window.processCommissions = function() {
+            if (confirm('Xử lý thanh toán hoa hồng cho tất cả khách sạn đang chờ?')) {
+                alert('Đang xử lý thanh toán hoa hồng...\nThời gian ước tính: 5-10 phút');
+            }
+        };
+
+        // Các hàm chức năng Doanh thu
+        window.exportRevenue = function() {
+            alert('Xuất báo cáo doanh thu Excel - Bao gồm tất cả dữ liệu đã lọc');
+        };
+
+        window.refreshRevenue = function() {
+            alert('Đang làm mới dữ liệu doanh thu từ hệ thống...');
+            // Simulate refresh
+            setTimeout(() => {
+                alert('Dữ liệu đã được cập nhật!');
+            }, 2000);
+        };
+
+        window.filterRevenue = function() {
+            const hotel = document.getElementById('revenueHotel').value;
+            const fromDate = document.getElementById('revenueFromDate').value;
+            const toDate = document.getElementById('revenueToDate').value;
+            alert(`Lọc dữ liệu:\nKhách sạn: ${hotel || 'Tất cả'}\nTừ: ${fromDate}\nĐến: ${toDate}`);
+        };
+
+        // Các hàm chức năng Hoa hồng
+        window.processAllCommissions = function() {
+            if (confirm('Thanh toán hoa hồng cho tất cả khách sạn đang chờ (₫89M)?')) {
+                alert('Đang xử lý thanh toán...\nThông báo sẽ được gửi đến các khách sạn');
+            }
+        };
+
+        window.commissionSettings = function() {
+            alert('Mở modal cài đặt tỷ lệ hoa hồng cho từng khách sạn');
+        };
+
+        window.payCommission = function(hotelId) {
+            const hotelNames = {
+                'luxury-hn': 'Luxury Hotel HN',
+                'beach-dn': 'Beach Resort DN'
+            };
+            if (confirm(`Thanh toán hoa hồng cho ${hotelNames[hotelId]}?`)) {
+                alert(`Đang xử lý thanh toán cho ${hotelNames[hotelId]}...`);
+            }
+        };
+
+        // Các hàm chức năng Đối soát
+        window.startReconciliation = function() {
+            alert('Bắt đầu quy trình đối soát thủ công\nVui lòng chọn kỳ đối soát và khách sạn');
+        };
+
+        window.autoReconcile = function() {
+            if (confirm('Chạy tự động đối soát cho tất cả khách sạn?')) {
+                alert('Đang chạy tự động đối soát...\nKết quả sẽ có trong 15-30 phút');
+            }
+        };
+
+        window.uploadReconcileFile = function() {
+            const fileInput = document.getElementById('reconcileFile');
+            if (fileInput.files.length === 0) {
+                alert('Vui lòng chọn file để upload');
+                return;
+            }
+            alert(`Đang upload file: ${fileInput.files[0].name}\nHệ thống sẽ xử lý và đối soát tự động`);
+        };
+
+        window.downloadTemplate = function() {
+            alert('Tải template Excel cho khách sạn\nFile chứa các cột: Booking ID, Date, Amount, Status');
+        };
+
+        window.investigateDiscrepancy = function(bookingId) {
+            alert(`Điều tra chênh lệch cho booking ${bookingId}\nMở chi tiết giao dịch và lịch sử thay đổi`);
+        };
+
+        window.markDispute = function(bookingId) {
+            if (confirm(`Đánh dấu dispute cho booking ${bookingId}?`)) {
+                alert('Đã tạo ticket dispute và gửi thông báo đến khách sạn');
+            }
+        };
+
+        window.requestData = function(bookingId) {
+            alert(`Gửi yêu cầu dữ liệu cho booking ${bookingId}\nEmail sẽ được gửi đến khách sạn`);
+        };
+
+        // Các hàm chức năng Báo cáo
+        window.generateFinanceReport = function() {
+            alert('Mở form tạo báo cáo tài chính tùy chỉnh\nChọn loại báo cáo, kỳ báo cáo và định dạng');
+        };
+
+        window.scheduleReport = function() {
+            alert('Cài đặt lên lịch báo cáo tự động\nChọn tần suất: hàng ngày, tuần, tháng');
+        };
+
+        window.generateReport = function(type) {
+            const types = {
+                'revenue': 'Báo cáo doanh thu',
+                'commission': 'Báo cáo hoa hồng', 
+                'reconciliation': 'Báo cáo đối soát'
+            };
+            alert(`Tạo ${types[type]} cho kỳ hiện tại\nBáo cáo sẽ được tạo trong 5-10 phút`);
+        };
+
+        window.cancelReport = function(reportId) {
+            if (confirm('Hủy báo cáo đang xử lý?')) {
+                alert(`Đã hủy báo cáo ${reportId}`);
+            }
+        };
+
+        // Simulate real-time updates
+        function updateFinanceStats() {
+            // Animate numbers slightly
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                stat.style.transition = 'color 0.3s ease';
+                stat.style.color = '#00eaff';
+                setTimeout(() => {
+                    stat.style.color = '';
+                }, 500);
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show role section by default
+            showSection('role');
+            
+            // Update stats every 30 seconds
+            setInterval(updateFinanceStats, 30000);
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Simple notification system
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} position-fixed`;
+            notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            notification.innerHTML = `
+                <i class="fas fa-info-circle me-2"></i>${message}
+                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Auto-refresh dashboard data every 5 minutes
+        setInterval(() => {
+            if (document.getElementById('dashboardSection').classList.contains('active')) {
+                showNotification('Dữ liệu dashboard đã được cập nhật', 'success');
+            }
+        }, 300000);
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.appspot.com",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Đăng xuất với Firebase Auth
+        function logout() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                // Kiểm tra xem Firebase Auth có sẵn không
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    firebase.auth().signOut().then(() => {
+                        console.log('Đăng xuất thành công');
+                        window.location.href = '../auth.html';
+                    }).catch((error) => {
+                        console.error('Lỗi đăng xuất:', error);
+                        // Vẫn chuyển trang nếu có lỗi
+                        window.location.href = '../auth.html';
+                    });
+                } else {
+                    // Fallback nếu Firebase không có
+                    window.location.href = '../auth.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

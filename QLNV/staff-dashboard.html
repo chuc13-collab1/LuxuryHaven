@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Nhân Viên</title>
+    <!-- Bootstrap, FontAwesome, Chart.js -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <style>
+        :root {
+            --main-bg: #181c2f;
+            --sidebar-bg: #23244a;
+            --card-bg: #23244a;
+            --accent: #7c3aed;
+            --accent2: #00eaff;
+            --text: #f3f6fa;
+            --text-muted: #b0b8d1;
+            --border: #2e325a;
+            --shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.15);
+        }
+        body {
+            background: var(--main-bg);
+            color: var(--text);
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+        }
+        .sidebar {
+            width: 240px;
+            background: var(--sidebar-bg);
+            color: var(--text);
+            min-height: 100vh;
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar .logo {
+            padding: 32px 0 24px 0;
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--accent);
+        }
+        .sidebar .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 32px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1.08rem;
+            border-left: 4px solid transparent;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .sidebar .nav-item.active, .sidebar .nav-item:hover {
+            background: #1a1d36;
+            color: var(--accent2);
+            border-left: 4px solid var(--accent);
+        }
+        .sidebar .nav-item i {
+            margin-right: 14px;
+            font-size: 1.2rem;
+        }
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 24px 32px;
+        }
+        .sidebar-footer .btn {
+            width: 100%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .main-container {
+            margin-left: 240px;
+            min-height: 100vh;
+            background: var(--main-bg);
+        }
+        .main-header {
+            background: #1a1d36;
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .main-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .main-header .user-info img {
+            width: 44px; height: 44px; border-radius: 50%; object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+        .content-wrapper {
+            padding: 40px 32px 32px 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card-modern {
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 32px;
+            padding: 0;
+        }
+        .card-modern .card-body {
+            padding: 32px 28px;
+        }
+        .card-modern .card-title {
+            color: var(--accent2);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+        .profile-info img {
+            width: 100px; height: 100px; border-radius: 50%; object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+        .profile-info .info {
+            font-size: 1.1rem;
+        }
+        .stat-cards {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            flex: 1;
+            background: linear-gradient(135deg, #7c3aed 0%, #00eaff 100%);
+            color: #fff;
+            border-radius: 14px;
+            padding: 24px 18px;
+            box-shadow: 0 2px 12px 0 rgba(44, 62, 80, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 160px;
+        }
+        .stat-card .stat-label {
+            font-size: 1rem;
+            opacity: 0.85;
+        }
+        .stat-card .stat-value {
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin: 8px 0 0 0;
+        }
+        .stat-card .stat-icon {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+        .table-modern {
+            color: var(--text);
+        }
+        .table-modern th, .table-modern td {
+            background: transparent !important;
+            border-color: var(--border) !important;
+        }
+        .form-control, .form-select {
+            background: #23244a;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .form-control:focus, .form-select:focus {
+            background: #23244a;
+            color: var(--text);
+            border-color: var(--accent2);
+            box-shadow: 0 0 0 2px var(--accent2, #00eaff33);
+        }
+        .btn-primary, .btn-success {
+            background: var(--accent);
+            border: none;
+        }
+        .btn-primary:hover, .btn-success:hover {
+            background: var(--accent2);
+        }
+        .sidebar .nav-item.booking { color: #ffb300; }
+        .sidebar .nav-item.checkin { color: #00eaff; }
+        .sidebar .nav-item.housekeeping { color: #7c3aed; }
+        .sidebar .nav-item.feedback { color: #ff4081; }
+        .sidebar .nav-item.stats { color: #00e676; }
+
+        @media (max-width: 900px) {
+            .sidebar { width: 80px; }
+            .main-container { margin-left: 80px; }
+            .sidebar .nav-item { padding: 12px 10px; font-size: 0.95rem; }
+            .sidebar .logo { font-size: 1.1rem; }
+        }
+        @media (max-width: 700px) {
+            .sidebar { display: none; }
+            .main-container { margin-left: 0; }
+            .main-header { padding: 12px 10px; }
+            .content-wrapper { padding: 12px 4px; }
+            .stat-cards { flex-direction: column; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i> LUXSTAFF
+        </div>
+        <a href="#profile" class="nav-item active" onclick="showSection('profile')"><i class="fas fa-id-badge"></i> Hồ sơ cá nhân</a>
+        <a href="#attendance" class="nav-item" onclick="showSection('attendance')"><i class="fas fa-calendar-check"></i> Chấm công</a>
+        <a href="#leave" class="nav-item" onclick="showSection('leave')"><i class="fas fa-plane-departure"></i> Xin nghỉ phép</a>
+        <a href="#booking" class="nav-item booking" onclick="showSection('booking')"><i class="fas fa-bed"></i> Quản lý đặt phòng</a>
+        <a href="#checkin" class="nav-item checkin" onclick="showSection('checkin')"><i class="fas fa-sign-in-alt"></i> Check-in/Check-out</a>
+        <a href="#housekeeping" class="nav-item housekeeping" onclick="showSection('housekeeping')"><i class="fas fa-broom"></i> Giao việc buồng phòng</a>
+        <a href="#feedback" class="nav-item feedback" onclick="showSection('feedback')"><i class="fas fa-comment-dots"></i> Phản hồi khách</a>
+        <a href="#stats" class="nav-item stats" onclick="showSection('stats')"><i class="fas fa-chart-bar"></i> Thống kê cá nhân</a>
+        <div class="sidebar-footer">
+            <button class="btn" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</button>
+        </div>
+    </div>
+    <!-- Main content -->
+    <div class="main-container">
+        <!-- Header -->
+        <header class="main-header">
+            <h1 class="h4 mb-0" style="color:var(--accent2);">Dashboard Nhân viên</h1>
+            <div class="user-info">
+                <img src="images/z6704204165630_f126462fb6b33e841e82b706ba2e582c.jpg" alt="Avatar">
+                <span><strong>Nguyễn Văn A</strong></span>
+            </div>
+        </header>
+        <main class="content-wrapper">
+            <!-- Stat cards (demo) -->
+            <div class="stat-cards">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="stat-label">Ngày làm việc tháng này</div>
+                    <div class="stat-value" id="stat-workdays">22</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-user-clock"></i></div>
+                    <div class="stat-label">Số lần đi muộn</div>
+                    <div class="stat-value" id="stat-late">2</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-plane-departure"></i></div>
+                    <div class="stat-label">Ngày nghỉ phép</div>
+                    <div class="stat-value" id="stat-leave">1</div>
+                </div>
+            </div>
+            <!-- Hồ sơ cá nhân -->
+            <section id="profile-section">
+                <div class="card-modern mb-4">
+                    <div class="card-body profile-info">
+                        <img src="images/z6704204165630_f126462fb6b33e841e82b706ba2e582c.jpg" alt="Avatar">
+                        <div class="info">
+                            <h4 class="mb-1" style="color:var(--accent2);">Nguyễn Văn A</h4>
+                            <div><i class="fas fa-envelope me-2"></i> nguyenvana@email.com</div>
+                            <div><i class="fas fa-briefcase me-2"></i> Nhân viên lễ tân</div>
+                            <div><i class="fas fa-id-card me-2"></i> Mã NV: NV001</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Biểu đồ chấm công (demo) -->
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <div class="card-title">Biểu đồ chấm công tháng này</div>
+                        <canvas id="attendanceChart" height="80"></canvas>
+                    </div>
+                </div>
+            </section>
+            <!-- Chấm công -->
+            <section id="attendance-section" style="display:none;">
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="card-title">Chấm công hôm nay</div>
+                        </div>
+                        <form id="workplace-form" class="mb-4">
+                            <label class="mb-2">Hôm nay bạn làm việc ở đâu?</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="workplace" id="office" value="office">
+                                <label class="form-check-label" for="office">Văn phòng</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="workplace" id="home" value="home">
+                                <label class="form-check-label" for="home">Tại nhà</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="workplace" id="outside" value="outside">
+                                <label class="form-check-label" for="outside">Công tác bên ngoài</label>
+                            </div>
+                        </form>
+                        <!-- Văn phòng: chỉ trưởng phòng điểm danh -->
+                        <div id="office-info" class="alert alert-info" style="display:none; background:#23244a; color:#7c3aed; border:none;">
+                            Chỉ trưởng phòng mới được điểm danh cho bạn.
+                        </div>
+                        <!-- Tại nhà: form báo cáo công việc -->
+                        <form id="home-form" style="display:none;" class="mb-4" enctype="multipart/form-data">
+                            <div class="mb-2">
+                                <label class="form-label">Làm việc gì?</label>
+                                <input type="text" class="form-control" id="home-task" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Gặp khách hàng nào?</label>
+                                <input type="text" class="form-control" id="home-client">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Kết quả?</label>
+                                <input type="text" class="form-control" id="home-result">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Gửi ảnh/chứng từ (nếu có)</label>
+                                <input type="file" class="form-control" id="home-file" accept="image/*,application/pdf">
+                            </div>
+                            <button type="submit" class="btn btn-success mt-2">Gửi báo cáo công việc</button>
+                        </form>
+                        <!-- Công tác bên ngoài: GPS + nhật ký -->
+                        <div id="outside-form" style="display:none;">
+                            <button class="btn btn-primary mb-3" type="button" onclick="sendGPS()"><i class="fas fa-map-marker-alt me-1"></i> Gửi vị trí GPS</button>
+                            <form id="outside-log-form" class="mb-2">
+                                <div class="mb-2">
+                                    <label class="form-label">Nhật ký công việc (từng buổi)</label>
+                                    <textarea class="form-control" id="outside-log" rows="2" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Gửi báo cáo công việc</button>
+                            </form>
+                        </div>
+                        <hr style="border-color:var(--border);">
+                        <div class="card-title mb-2">Lịch sử chấm công/báo cáo</div>
+                        <div class="table-responsive">
+                            <table class="table table-modern table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Ngày</th>
+                                        <th>Địa điểm</th>
+                                        <th>Báo cáo/Nhật ký</th>
+                                        <th>File/GPS</th>
+                                        <th>Trạng thái</th>
+                                        <th>Người duyệt</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendance-body">
+                                    <tr>
+                                        <td>2024-06-01</td>
+                                        <td>Văn phòng</td>
+                                        <td>Đã chấm công</td>
+                                        <td>--</td>
+                                        <td>Đã duyệt</td>
+                                        <td>--</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2024-05-31</td>
+                                        <td>Văn phòng</td>
+                                        <td>Đã chấm công</td>
+                                        <td>--</td>
+                                        <td>Đã duyệt</td>
+                                        <td>--</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Xin nghỉ phép -->
+            <section id="leave-section" style="display:none;">
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <div class="card-title">Xin nghỉ phép</div>
+                        <form class="row g-2 align-items-end mb-3" onsubmit="requestLeave(event)">
+                            <div class="col-md-3">
+                                <label class="form-label">Ngày nghỉ</label>
+                                <input type="date" id="leave-date" class="form-control" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Loại nghỉ</label>
+                                <select id="leave-type" class="form-select" required>
+                                    <option value="">Chọn loại nghỉ</option>
+                                    <option value="Nghỉ phép năm">Nghỉ phép năm</option>
+                                    <option value="Nghỉ ốm">Nghỉ ốm</option>
+                                    <option value="Nghỉ việc riêng">Nghỉ việc riêng</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Lý do</label>
+                                <input type="text" id="leave-reason" class="form-control" placeholder="Lý do" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success w-100" type="submit"><i class="fas fa-paper-plane me-1"></i> Gửi yêu cầu</button>
+                            </div>
+                        </form>
+                        <div class="table-responsive">
+                            <table class="table table-modern table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Ngày</th>
+                                        <th>Loại nghỉ</th>
+                                        <th>Lý do</th>
+                                        <th>Trạng thái</th>
+                                        <th>Người duyệt</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leave-body">
+                                    <tr>
+                                        <td>2024-05-28</td>
+                                        <td>Nghỉ phép năm</td>
+                                        <td>Về quê</td>
+                                        <td>Đã duyệt</td>
+                                        <td>--</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2024-05-15</td>
+                                        <td>Nghỉ ốm</td>
+                                        <td>Cảm cúm</td>
+                                        <td>Đã duyệt</td>
+                                        <td>--</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Quản lý đặt phòng -->
+            <section id="booking-section" style="display:none;">
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <div class="card-title"><i class="fas fa-bed me-2"></i>Quản lý đặt phòng</div>
+                        <div class="table-responsive">
+                            <table class="table table-modern table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Mã booking</th>
+                                        <th>Khách hàng</th>
+                                        <th>Ngày đến</th>
+                                        <th>Trạng thái</th>
+                                        <th>Phân công</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="booking-table-body">
+                                    <tr>
+                                        <td>BK001</td>
+                                        <td>Nguyễn Văn B</td>
+                                        <td>2024-06-10</td>
+                                        <td><span class="badge bg-warning">Chờ xử lý</span></td>
+                                        <td>Lễ tân</td>
+                                        <td><button class="btn btn-sm btn-primary">Nhận xử lý</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>BK002</td>
+                                        <td>Trần Thị C</td>
+                                        <td>2024-06-11</td>
+                                        <td><span class="badge bg-success">Đã xác nhận</span></td>
+                                        <td>Lễ tân</td>
+                                        <td><button class="btn btn-sm btn-secondary" disabled>Đã nhận</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Check-in/Check-out -->
+            <section id="checkin-section" style="display:none;">
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <div class="card-title"><i class="fas fa-sign-in-alt me-2"></i>Quản lý Check-in/Check-out</div>
+                        <div class="table-responsive">
+                            <table class="table table-modern table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Phòng</th>
+                                        <th>Khách</th>
+                                        <th>Ngày đến</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="checkin-table-body">
+                                    <tr>
+                                        <td>101</td>
+                                        <td>Nguyễn Văn B</td>
+                                        <td>2024-06-10</td>
+                                        <td><span class="badge bg-info">Chờ check-in</span></td>
+                                        <td><button class="btn btn-sm btn-success">Check-in</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>102</td>
+                                        <td>Trần Thị C</td>
+                                        <td>2024-06-11</td>
+                                        <td><span class="badge bg-secondary">Đã check-in</span></td>
+                                        <td><button class="btn btn-sm btn-warning">Check-out</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Giao việc buồng phòng -->
+            <section id="housekeeping-section" style="display:none;">
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <div class="card-title"><i class="fas fa-broom me-2"></i>Giao việc buồng phòng</div>
+                        <div class="table-responsive">
+                            <table class="table table-modern table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Phòng</th>
+                                        <th>Công việc</th>
+                                        <th>Trạng thái</th>
+                                        <th>Nhân viên</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="housekeeping-table-body">
+                                    <tr>
+                                        <td>101</td>
+                                        <td>Dọn phòng</td>
+                                        <td><span class="badge bg-warning">Chờ làm</span></td>
+                                        <td>Nguyễn Văn D</td>
+                                        <td><button class="btn btn-sm btn-primary">Xác nhận hoàn thành</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>102</td>
+                                        <td>Sửa điều hòa</td>
+                                        <td><span class="badge bg-success">Đã xong</span></td>
+                                        <td>Trần Thị E</td>
+                                        <td><button class="btn btn-sm btn-secondary" disabled>Đã xác nhận</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Phản hồi khách -->
+            <section id="feedback-section" style="display:none;">
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <div class="card-title"><i class="fas fa-comment-dots me-2"></i>Phản hồi từ khách</div>
+                        <div class="table-responsive">
+                            <table class="table table-modern table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Khách hàng</th>
+                                        <th>Phòng</th>
+                                        <th>Nội dung</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="feedback-table-body">
+                                    <tr>
+                                        <td>Nguyễn Văn B</td>
+                                        <td>101</td>
+                                        <td>Phòng có mùi lạ</td>
+                                        <td><span class="badge bg-warning">Chờ xử lý</span></td>
+                                        <td><button class="btn btn-sm btn-primary">Đánh dấu đã xử lý</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trần Thị C</td>
+                                        <td>102</td>
+                                        <td>Điều hòa yếu</td>
+                                        <td><span class="badge bg-success">Đã xử lý</span></td>
+                                        <td><button class="btn btn-sm btn-secondary" disabled>Đã xử lý</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Thống kê cá nhân -->
+            <section id="stats-section" style="display:none;">
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <div class="card-title"><i class="fas fa-chart-bar me-2"></i>Thống kê năng suất cá nhân</div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i class="fas fa-bed"></i></div>
+                                    <div class="stat-label">Đặt phòng đã xử lý</div>
+                                    <div class="stat-value">12</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i class="fas fa-sign-in-alt"></i></div>
+                                    <div class="stat-label">Check-in/out đã hỗ trợ</div>
+                                    <div class="stat-value">8</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i class="fas fa-comment-dots"></i></div>
+                                    <div class="stat-label">Phản hồi khách đã xử lý</div>
+                                    <div class="stat-value">5</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <canvas id="personalStatsChart" height="80"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Phân quyền mẫu
+        // Các giá trị: 'receptionist', 'manager', 'housekeeping', 'marketing', ...
+        const userRole = 'receptionist'; // Đổi giá trị này để test các vai trò khác nhau
+        const userName = 'Nguyễn Văn A';
+        const userManager = 'Trần Thị B'; // Trưởng phòng
+
+        // Hiển thị vai trò trên header
+        document.addEventListener('DOMContentLoaded', function() {
+            // Thêm vai trò vào header
+            const header = document.querySelector('.main-header .user-info');
+            if (header && !document.getElementById('role-badge')) {
+                const badge = document.createElement('span');
+                badge.id = 'role-badge';
+                badge.className = 'badge bg-info';
+                badge.style.marginLeft = '8px';
+                badge.textContent =
+                    userRole === 'manager' ? 'Trưởng phòng' :
+                    userRole === 'receptionist' ? 'Lễ tân' :
+                    userRole === 'housekeeping' ? 'Buồng phòng' :
+                    userRole === 'marketing' ? 'Marketing' : userRole;
+                header.appendChild(badge);
+            }
+        });
+
+        // Sidebar navigation
+        function showSection(section) {
+            document.getElementById('profile-section').style.display = 'none';
+            document.getElementById('attendance-section').style.display = 'none';
+            document.getElementById('leave-section').style.display = 'none';
+            document.getElementById('booking-section').style.display = 'none';
+            document.getElementById('checkin-section').style.display = 'none';
+            document.getElementById('housekeeping-section').style.display = 'none';
+            document.getElementById('feedback-section').style.display = 'none';
+            document.getElementById('stats-section').style.display = 'none';
+            document.querySelectorAll('.sidebar .nav-item').forEach(item => item.classList.remove('active'));
+            if (section === 'profile') {
+                document.getElementById('profile-section').style.display = '';
+                document.querySelector('.sidebar .nav-item[href="#profile"]').classList.add('active');
+            } else if (section === 'attendance') {
+                document.getElementById('attendance-section').style.display = '';
+                document.querySelector('.sidebar .nav-item[href="#attendance"]').classList.add('active');
+            } else if (section === 'leave') {
+                document.getElementById('leave-section').style.display = '';
+                document.querySelector('.sidebar .nav-item[href="#leave"]').classList.add('active');
+            } else if (section === 'booking') {
+                document.getElementById('booking-section').style.display = '';
+                document.querySelector('.sidebar .nav-item.booking').classList.add('active');
+            } else if (section === 'checkin') {
+                document.getElementById('checkin-section').style.display = '';
+                document.querySelector('.sidebar .nav-item.checkin').classList.add('active');
+            } else if (section === 'housekeeping') {
+                document.getElementById('housekeeping-section').style.display = '';
+                document.querySelector('.sidebar .nav-item.housekeeping').classList.add('active');
+            } else if (section === 'feedback') {
+                document.getElementById('feedback-section').style.display = '';
+                document.querySelector('.sidebar .nav-item.feedback').classList.add('active');
+            } else if (section === 'stats') {
+                document.getElementById('stats-section').style.display = '';
+                document.querySelector('.sidebar .nav-item.stats').classList.add('active');
+            }
+        }
+
+        // Ẩn/hiện form chấm công theo lựa chọn địa điểm
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('profile');
+            // Attendance chart demo
+            const ctx = document.getElementById('attendanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'],
+                    datasets: [{
+                        label: 'Giờ vào',
+                        data: [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+                        borderColor: '#7c3aed',
+                        backgroundColor: 'rgba(124,58,237,0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Giờ ra',
+                        data: [17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17],
+                        borderColor: '#00eaff',
+                        backgroundColor: 'rgba(0,234,255,0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { labels: { color: '#fff' } }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#b0b8d1' }, grid: { color: '#2e325a' } },
+                        y: { ticks: { color: '#b0b8d1' }, grid: { color: '#2e325a' } }
+                    }
+                }
+            });
+
+            // Chấm công logic
+            const workplaceForm = document.getElementById('workplace-form');
+            const officeInfo = document.getElementById('office-info');
+            const homeForm = document.getElementById('home-form');
+            const outsideForm = document.getElementById('outside-form');
+            const attendanceBody = document.getElementById('attendance-body');
+            // Lắng nghe thay đổi radio
+            workplaceForm.addEventListener('change', function(e) {
+                const val = workplaceForm.querySelector('input[name="workplace"]:checked')?.value;
+                officeInfo.style.display = 'none';
+                homeForm.style.display = 'none';
+                outsideForm.style.display = 'none';
+                if (val === 'office') {
+                    // Chỉ trưởng phòng mới được điểm danh
+                    if (userRole === 'manager') {
+                        officeInfo.textContent = 'Bạn là trưởng phòng, có thể điểm danh cho nhân viên.';
+                    } else {
+                        officeInfo.textContent = 'Chỉ trưởng phòng mới được điểm danh cho bạn.';
+                    }
+                    officeInfo.style.display = '';
+                } else if (val === 'home') {
+                    homeForm.style.display = '';
+                } else if (val === 'outside') {
+                    outsideForm.style.display = '';
+                }
+            });
+            // Gửi báo cáo tại nhà
+            homeForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const task = document.getElementById('home-task').value;
+                const client = document.getElementById('home-client').value;
+                const result = document.getElementById('home-result').value;
+                const fileInput = document.getElementById('home-file');
+                let fileName = '';
+                if (fileInput.files.length > 0) {
+                    fileName = fileInput.files[0].name;
+                }
+                const today = new Date();
+                const dateStr = today.toISOString().slice(0,10);
+                attendanceBody.insertAdjacentHTML('afterbegin', `
+                    <tr>
+                        <td>${dateStr}</td>
+                        <td>Tại nhà</td>
+                        <td>
+                            <div><b>Làm việc:</b> ${task}</div>
+                            <div><b>Khách hàng:</b> ${client}</div>
+                            <div><b>Kết quả:</b> ${result}</div>
+                        </td>
+                        <td>${fileName ? `<span class='badge bg-info'>${fileName}</span>` : '--'}</td>
+                        <td>Chờ duyệt</td>
+                        <td>--</td>
+                    </tr>
+                `);
+                homeForm.reset();
+                alert('Đã gửi báo cáo công việc tại nhà!');
+            });
+            // Gửi GPS bên ngoài
+            window.sendGPS = function() {
+                if (!navigator.geolocation) {
+                    alert('Trình duyệt không hỗ trợ GPS!');
+                    return;
+                }
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    const lat = pos.coords.latitude.toFixed(5);
+                    const lng = pos.coords.longitude.toFixed(5);
+                    const today = new Date();
+                    const dateStr = today.toISOString().slice(0,10);
+                    attendanceBody.insertAdjacentHTML('afterbegin', `
+                        <tr>
+                            <td>${dateStr}</td>
+                            <td>Công tác bên ngoài</td>
+                            <td>Gửi vị trí GPS</td>
+                            <td><span class='badge bg-success'>${lat}, ${lng}</span></td>
+                            <td>Chờ duyệt</td>
+                            <td>--</td>
+                        </tr>
+                    `);
+                    alert('Đã gửi vị trí GPS!');
+                }, function() {
+                    alert('Không lấy được vị trí GPS!');
+                });
+            }
+            // Gửi nhật ký công việc bên ngoài
+            const outsideLogForm = document.getElementById('outside-log-form');
+            outsideLogForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const log = document.getElementById('outside-log').value;
+                const today = new Date();
+                const dateStr = today.toISOString().slice(0,10);
+                attendanceBody.insertAdjacentHTML('afterbegin', `
+                    <tr>
+                        <td>${dateStr}</td>
+                        <td>Công tác bên ngoài</td>
+                        <td>${log}</td>
+                        <td>--</td>
+                        <td>Chờ duyệt</td>
+                        <td>--</td>
+                    </tr>
+                `);
+                outsideLogForm.reset();
+                alert('Đã gửi nhật ký công việc!');
+            });
+        });
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.appspot.com",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
+        
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        // Đăng xuất với Firebase Auth
+        function logout() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                // Kiểm tra xem Firebase Auth có sẵn không
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    firebase.auth().signOut().then(() => {
+                        console.log('Đăng xuất thành công');
+                        window.location.href = '../auth.html';
+                    }).catch((error) => {
+                        console.error('Lỗi đăng xuất:', error);
+                        // Vẫn chuyển trang nếu có lỗi
+                        window.location.href = '../auth.html';
+                    });
+                } else {
+                    // Fallback nếu Firebase không có
+                    window.location.href = '../auth.html';
+                }
+            }
+        }
+
+        // Thống kê cá nhân Chart.js
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.getElementById('personalStatsChart')) {
+                new Chart(document.getElementById('personalStatsChart').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Đặt phòng', 'Check-in/out', 'Phản hồi'],
+                        datasets: [{
+                            label: 'Số lượt xử lý',
+                            data: [12, 8, 5],
+                            backgroundColor: [
+                                '#ffb300', '#00eaff', '#ff4081'
+                            ]
+                        }]
+                    },
+                    options: {
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { ticks: { color: '#fff' }, grid: { color: '#2e325a' } },
+                            y: { ticks: { color: '#fff' }, grid: { color: '#2e325a' } }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

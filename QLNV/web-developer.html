@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhân viên kỹ thuật (Web Developer / DevOps)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <style>
+        :root { --main-bg: #181c2f; --sidebar-bg: #23244a; --card-bg: #23244a; --accent: #7c3aed; --accent2: #00eaff; --text: #f3f6fa; --text-muted: #b0b8d1; --border: #2e325a; --shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.15); }
+        body { background: var(--main-bg); color: var(--text); font-family: 'Poppins', Arial, sans-serif; margin: 0; }
+        .sidebar { width: 240px; background: var(--sidebar-bg); color: var(--text); min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 100; display: flex; flex-direction: column; }
+        .sidebar .logo { padding: 32px 0 24px 0; text-align: center; font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; color: var(--accent); }
+        .sidebar .nav-item { display: flex; align-items: center; padding: 14px 32px; color: var(--text-muted); text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        .sidebar .nav-item.active, .sidebar .nav-item:hover { background: #1a1d36; color: var(--accent2); border-left: 4px solid var(--accent); }
+        .sidebar .nav-item i { margin-right: 14px; font-size: 1.2rem; }
+        .sidebar-footer { margin-top: auto; padding: 24px 32px; }
+        .sidebar-footer .btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 500; }
+        .main-container { margin-left: 240px; min-height: 100vh; background: var(--main-bg); }
+        .main-header { background: #1a1d36; border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+        .main-header .user-info { display: flex; align-items: center; gap: 14px; }
+        .main-header .user-info img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .content-wrapper { padding: 40px 32px 32px 32px; }
+        .card-modern { background: var(--card-bg); border-radius: 18px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 32px; padding: 0; }
+        .card-modern .card-body { padding: 32px 28px; }
+        .card-modern .card-title { color: var(--accent2); font-weight: 600; font-size: 1.2rem; margin-bottom: 18px; }
+        .profile-info { display: flex; align-items: center; gap: 32px; }
+        .profile-info img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .profile-info .info { font-size: 1.1rem; }
+
+        /* DevOps specific styles */
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .stat-card { background: var(--card-bg); border-radius: 12px; padding: 24px; border: 1px solid var(--border); text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+        .stat-label { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px; }
+        .tech-card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); padding: 24px; margin-bottom: 24px; }
+        .tech-card h5 { color: var(--accent2); margin-bottom: 20px; font-weight: 600; }
+        .data-table { background: var(--card-bg); border-radius: 12px; overflow: hidden; }
+        .table-dark { --bs-table-bg: var(--card-bg); --bs-table-border-color: var(--border); }
+        .form-control, .form-select { background: var(--main-bg); border: 1px solid var(--border); color: var(--text); }
+        .form-control:focus, .form-select:focus { background: var(--main-bg); border-color: var(--accent); color: var(--text); box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.25); }
+        .btn-primary { background: var(--accent); border-color: var(--accent); }
+        .btn-primary:hover { background: #6d28d9; border-color: #6d28d9; }
+        .btn-success:hover { background: #1e7e34; }
+        .btn-warning:hover { background: #d39e00; }
+        .btn-info:hover { background: #138496; }
+        .btn-danger:hover { background: #c82333; }
+        .modal-content { background: var(--card-bg); border: 1px solid var(--border); }
+        .modal-header { border-bottom: 1px solid var(--border); }
+        .modal-footer { border-top: 1px solid var(--border); }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-bottom: 32px; }
+        .metric-card { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+        .status-online { color: #28a745; }
+        .status-offline { color: #dc3545; }
+        .status-warning { color: #ffc107; }
+        .code-block { background: #1a1d36; border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-family: 'Courier New', monospace; font-size: 0.9rem; overflow-x: auto; }
+        .server-status { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+        .server-online { background: #28a745; }
+        .server-offline { background: #dc3545; }
+        .server-maintenance { background: #ffc107; }
+        .progress-custom { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; }
+        .progress-bar-custom { height: 100%; transition: width 0.3s ease; }
+        .log-entry { font-family: 'Courier New', monospace; font-size: 0.85rem; padding: 8px; border-radius: 4px; margin-bottom: 8px; }
+        .log-info { background: rgba(23, 162, 184, 0.2); border-left: 4px solid #17a2b8; }
+        .log-warning { background: rgba(255, 193, 7, 0.2); border-left: 4px solid #ffc107; }
+        .log-error { background: rgba(220, 53, 69, 0.2); border-left: 4px solid #dc3545; }
+        .log-success { background: rgba(40, 167, 69, 0.2); border-left: 4px solid #28a745; }
+
+        @media (max-width: 900px) { .sidebar { width: 80px; } .main-container { margin-left: 80px; } .sidebar .nav-item { padding: 12px 10px; font-size: 0.95rem; } .sidebar .logo { font-size: 1.1rem; } .kpi-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 700px) { .sidebar { display: none; } .main-container { margin-left: 0; } .main-header { padding: 12px 10px; } .content-wrapper { padding: 12px 4px; } }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i> LUXSTAFF
+        </div>
+        <a href="#roleSection" class="nav-item active" onclick="showSection('roleSection')"><i class="fas fa-user-tie"></i> Vai trò</a>
+        <a href="#dashboardSection" class="nav-item" onclick="showSection('dashboardSection')"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="#serverSection" class="nav-item" onclick="showSection('serverSection')"><i class="fas fa-server"></i> Servers</a>
+        <a href="#websiteSection" class="nav-item" onclick="showSection('websiteSection')"><i class="fas fa-globe"></i> Website</a>
+        <a href="#databaseSection" class="nav-item" onclick="showSection('databaseSection')"><i class="fas fa-database"></i> Database</a>
+        <a href="#securitySection" class="nav-item" onclick="showSection('securitySection')"><i class="fas fa-shield-alt"></i> Security</a>
+        <a href="#deploymentSection" class="nav-item" onclick="showSection('deploymentSection')"><i class="fas fa-rocket"></i> Deployment</a>
+        <a href="#settingsSection" class="nav-item" onclick="showSection('settingsSection')"><i class="fas fa-cogs"></i> Cài đặt</a>
+        <div class="sidebar-footer">
+            <button class="btn" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</button>
+        </div>
+    </div>
+    <div class="main-container">
+        <header class="main-header">
+            <h1 class="h4 mb-0" style="color:var(--accent2);">Nhân viên kỹ thuật</h1>
+            <div class="user-info">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                <span><strong>Web Developer / DevOps</strong></span>
+            </div>
+        </header>
+        <main class="content-wrapper">
+            <!-- Section Vai trò (mặc định) -->
+            <div id="roleSection" class="content-section active">
+                <!-- KPI Overview -->
+                <section class="mb-4">
+                    <div class="kpi-grid">
+                        <div class="stat-card">
+                            <div class="stat-number status-online">99.8%</div>
+                            <div class="stat-label">Server Uptime</div>
+                            <small class="text-success"><i class="fas fa-arrow-up"></i> +0.1%</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: var(--accent2);">2.3s</div>
+                            <div class="stat-label">Website Load Time</div>
+                            <small class="text-success"><i class="fas fa-arrow-down"></i> -0.2s</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #28a745;">15</div>
+                            <div class="stat-label">Tasks Completed</div>
+                            <small class="text-success"><i class="fas fa-plus"></i> +3</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #ffc107;">3</div>
+                            <div class="stat-label">Active Issues</div>
+                            <small class="text-warning"><i class="fas fa-exclamation-triangle"></i> Monitor</small>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="card-modern mb-4">
+                        <div class="card-body profile-info">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                            <div class="info">
+                                <h4 class="mb-1" style="color:var(--accent2);">Nhân viên Web Developer / DevOps</h4>
+                                <div><i class="fas fa-briefcase me-2"></i> Bảo trì website, server, xử lý lỗi kỹ thuật</div>
+                                <hr style="border-color: var(--border); margin: 16px 0;">
+                                <div>
+                                    <strong style="color: var(--accent2);">Chức năng chính:</strong>
+                                    <ul style="margin: 8px 0; padding-left: 20px;">
+                                        <li>Quản lý và monitor server infrastructure</li>
+                                        <li>Phát triển và bảo trì website booking</li>
+                                        <li>Database management và backup</li>
+                                        <li>Security monitoring và vulnerability fixes</li>
+                                        <li>CI/CD deployment và version control</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Section Dashboard -->
+            <div id="dashboardSection" class="content-section">
+                <div class="row g-4">
+                    <div class="col-md-8">
+                        <div class="tech-card">
+                            <h5><i class="fas fa-chart-line me-2"></i>System Performance Overview</h5>
+                            <div class="row text-center">
+                                <div class="col-3">
+                                    <div class="stat-number text-success">87%</div>
+                                    <small>CPU Usage</small>
+                                </div>
+                                <div class="col-3">
+                                    <div class="stat-number text-info">62%</div>
+                                    <small>Memory</small>
+                                </div>
+                                <div class="col-3">
+                                    <div class="stat-number text-warning">45%</div>
+                                    <small>Disk Space</small>
+                                </div>
+                                <div class="col-3">
+                                    <div class="stat-number text-primary">156 MB/s</div>
+                                    <small>Network</small>
+                                </div>
+                            </div>
+                            <div class="progress-custom mt-3">
+                                <div class="progress-bar-custom" style="width: 87%; background: #28a745;"></div>
+                            </div>
+                            <small class="text-muted">Overall system health: Excellent</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="tech-card">
+                            <h5><i class="fas fa-server me-2"></i>Server Status</h5>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span><span class="server-status server-online"></span>Web Server</span>
+                                    <span class="badge bg-success">Online</span>
+                                </div>
+                                <small class="text-muted">nginx 1.20.2</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span><span class="server-status server-online"></span>Database</span>
+                                    <span class="badge bg-success">Online</span>
+                                </div>
+                                <small class="text-muted">MySQL 8.0.35</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span><span class="server-status server-maintenance"></span>Cache Server</span>
+                                    <span class="badge bg-warning">Maintenance</span>
+                                </div>
+                                <small class="text-muted">Redis 7.0.12</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-md-6">
+                        <div class="tech-card">
+                            <h5>Recent Activities</h5>
+                            <div class="log-entry log-success">
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="fas fa-check me-2"></i>Deployment successful</span>
+                                    <small>2h ago</small>
+                                </div>
+                                <small class="text-muted">Version 2.1.4 deployed to production</small>
+                            </div>
+                            <div class="log-entry log-info">
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="fas fa-database me-2"></i>Database backup</span>
+                                    <small>4h ago</small>
+                                </div>
+                                <small class="text-muted">Automated backup completed</small>
+                            </div>
+                            <div class="log-entry log-warning">
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="fas fa-exclamation-triangle me-2"></i>High memory usage</span>
+                                    <small>6h ago</small>
+                                </div>
+                                <small class="text-muted">Memory usage reached 85%</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="tech-card">
+                            <h5>Active Monitoring</h5>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>Website Response Time</span>
+                                    <span class="text-success">2.3s</span>
+                                </div>
+                                <div class="progress-custom mt-2">
+                                    <div class="progress-bar-custom" style="width: 77%; background: #28a745;"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>SSL Certificate</span>
+                                    <span class="text-success">Valid (89 days)</span>
+                                </div>
+                                <div class="progress-custom mt-2">
+                                    <div class="progress-bar-custom" style="width: 75%; background: #28a745;"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>Security Score</span>
+                                    <span class="text-success">A+</span>
+                                </div>
+                                <div class="progress-custom mt-2">
+                                    <div class="progress-bar-custom" style="width: 95%; background: #28a745;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Server Management -->
+            <div id="serverSection" class="content-section">
+                <div class="tech-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5><i class="fas fa-server me-2"></i>Server Management</h5>
+                        <div>
+                            <button class="btn btn-success btn-sm me-2" onclick="restartServer()">
+                                <i class="fas fa-redo"></i> Restart Services
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="viewLogs()">
+                                <i class="fas fa-file-alt"></i> View Logs
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Server Overview -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-microchip me-2"></i>CPU Performance</h6>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Usage:</span>
+                                    <span class="text-success">12%</span>
+                                </div>
+                                <div class="progress-custom mt-2">
+                                    <div class="progress-bar-custom" style="width: 12%; background: #28a745;"></div>
+                                </div>
+                                <small class="text-muted">Intel Xeon E5-2686 v4 @ 2.3GHz</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-memory me-2"></i>Memory Usage</h6>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>RAM:</span>
+                                    <span class="text-warning">62%</span>
+                                </div>
+                                <div class="progress-custom mt-2">
+                                    <div class="progress-bar-custom" style="width: 62%; background: #ffc107;"></div>
+                                </div>
+                                <small class="text-muted">12.4GB / 20GB used</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-hdd me-2"></i>Storage</h6>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Disk:</span>
+                                    <span class="text-info">45%</span>
+                                </div>
+                                <div class="progress-custom mt-2">
+                                    <div class="progress-bar-custom" style="width: 45%; background: #17a2b8;"></div>
+                                </div>
+                                <small class="text-muted">225GB / 500GB SSD</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Services Status -->
+                    <div class="data-table">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Status</th>
+                                    <th>Port</th>
+                                    <th>CPU</th>
+                                    <th>Memory</th>
+                                    <th>Uptime</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><i class="fab fa-html5 me-2"></i>Nginx</td>
+                                    <td><span class="badge bg-success">Running</span></td>
+                                    <td>80, 443</td>
+                                    <td>2.1%</td>
+                                    <td>156MB</td>
+                                    <td>15 days</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning me-1" onclick="restartService('nginx')" title="Restart"><i class="fas fa-redo"></i></button>
+                                        <button class="btn btn-sm btn-info me-1" onclick="viewServiceLogs('nginx')" title="Logs"><i class="fas fa-file-alt"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-database me-2"></i>MySQL</td>
+                                    <td><span class="badge bg-success">Running</span></td>
+                                    <td>3306</td>
+                                    <td>5.8%</td>
+                                    <td>2.4GB</td>
+                                    <td>15 days</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning me-1" onclick="restartService('mysql')" title="Restart"><i class="fas fa-redo"></i></button>
+                                        <button class="btn btn-sm btn-info me-1" onclick="viewServiceLogs('mysql')" title="Logs"><i class="fas fa-file-alt"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fab fa-php me-2"></i>PHP-FPM</td>
+                                    <td><span class="badge bg-success">Running</span></td>
+                                    <td>9000</td>
+                                    <td>8.2%</td>
+                                    <td>512MB</td>
+                                    <td>15 days</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning me-1" onclick="restartService('php')" title="Restart"><i class="fas fa-redo"></i></button>
+                                        <button class="btn btn-sm btn-info me-1" onclick="viewServiceLogs('php')" title="Logs"><i class="fas fa-file-alt"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-bolt me-2"></i>Redis</td>
+                                    <td><span class="badge bg-warning">Maintenance</span></td>
+                                    <td>6379</td>
+                                    <td>0.5%</td>
+                                    <td>89MB</td>
+                                    <td>2h (restarted)</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success me-1" onclick="startService('redis')" title="Start"><i class="fas fa-play"></i></button>
+                                        <button class="btn btn-sm btn-info me-1" onclick="viewServiceLogs('redis')" title="Logs"><i class="fas fa-file-alt"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Website Management -->
+            <div id="websiteSection" class="content-section">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="tech-card">
+                            <h5><i class="fas fa-globe me-2"></i>Website Health</h5>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>Response Time</span>
+                                    <span class="text-success">2.3s</span>
+                                </div>
+                                <small class="text-muted">Average over last 24h</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>Page Load Speed</span>
+                                    <span class="text-success">A</span>
+                                </div>
+                                <small class="text-muted">Google PageSpeed score: 94/100</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>SSL Certificate</span>
+                                    <span class="text-success">Valid</span>
+                                </div>
+                                <small class="text-muted">Expires in 89 days</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>SEO Score</span>
+                                    <span class="text-success">95/100</span>
+                                </div>
+                                <small class="text-muted">Lighthouse audit result</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="tech-card">
+                            <h5><i class="fas fa-code me-2"></i>Development Tasks</h5>
+                            <div class="mb-3">
+                                <button class="btn btn-primary btn-sm me-2" onclick="runTests()">
+                                    <i class="fas fa-vials"></i> Run Tests
+                                </button>
+                                <button class="btn btn-success btn-sm me-2" onclick="buildProject()">
+                                    <i class="fas fa-hammer"></i> Build
+                                </button>
+                                <button class="btn btn-warning btn-sm" onclick="clearCache()">
+                                    <i class="fas fa-trash"></i> Clear Cache
+                                </button>
+                            </div>
+                            
+                            <div class="code-block">
+                                <div class="text-success">✓ Unit tests: 125 passed</div>
+                                <div class="text-success">✓ Integration tests: 15 passed</div>
+                                <div class="text-warning">⚠ Code coverage: 87%</div>
+                                <div class="text-info">ℹ Build time: 2m 34s</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card mt-4">
+                    <h5>Website Issues & Fixes</h5>
+                    <div class="data-table">
+                        <table class="table table-dark table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Severity</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Slow booking form submission</td>
+                                    <td><span class="badge bg-warning">Medium</span></td>
+                                    <td><span class="badge bg-info">In Progress</span></td>
+                                    <td>2h ago</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" onclick="viewIssue(1)">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Mobile responsive issue on iOS</td>
+                                    <td><span class="badge bg-danger">High</span></td>
+                                    <td><span class="badge bg-success">Fixed</span></td>
+                                    <td>1 day ago</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary" disabled>Resolved</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Payment gateway timeout</td>
+                                    <td><span class="badge bg-danger">Critical</span></td>
+                                    <td><span class="badge bg-success">Fixed</span></td>
+                                    <td>3 days ago</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary" disabled>Resolved</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Database Management -->
+            <div id="databaseSection" class="content-section">
+                <div class="row g-4">
+                    <div class="col-md-8">
+                        <div class="tech-card">
+                            <h5><i class="fas fa-database me-2"></i>Database Status</h5>
+                            <div class="row text-center mb-3">
+                                <div class="col-3">
+                                    <div class="stat-number text-primary">15.2GB</div>
+                                    <small>Total Size</small>
+                                </div>
+                                <div class="col-3">
+                                    <div class="stat-number text-success">8</div>
+                                    <small>Databases</small>
+                                </div>
+                                <div class="col-3">
+                                    <div class="stat-number text-info">156</div>
+                                    <small>Active Connections</small>
+                                </div>
+                                <div class="col-3">
+                                    <div class="stat-number text-warning">25ms</div>
+                                    <small>Avg Query Time</small>
+                                </div>
+                            </div>
+                            
+                            <div class="data-table">
+                                <table class="table table-dark table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Database</th>
+                                            <th>Size</th>
+                                            <th>Tables</th>
+                                            <th>Records</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>luxhaven_booking</td>
+                                            <td>8.5GB</td>
+                                            <td>24</td>
+                                            <td>1.2M</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-info me-1" onclick="backupDatabase('booking')" title="Backup"><i class="fas fa-download"></i></button>
+                                                <button class="btn btn-sm btn-warning" onclick="optimizeDatabase('booking')" title="Optimize"><i class="fas fa-tools"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>luxhaven_users</td>
+                                            <td>2.1GB</td>
+                                            <td>8</td>
+                                            <td>45K</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-info me-1" onclick="backupDatabase('users')" title="Backup"><i class="fas fa-download"></i></button>
+                                                <button class="btn btn-sm btn-warning" onclick="optimizeDatabase('users')" title="Optimize"><i class="fas fa-tools"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>luxhaven_analytics</td>
+                                            <td>4.6GB</td>
+                                            <td>12</td>
+                                            <td>2.8M</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-info me-1" onclick="backupDatabase('analytics')" title="Backup"><i class="fas fa-download"></i></button>
+                                                <button class="btn btn-sm btn-warning" onclick="optimizeDatabase('analytics')" title="Optimize"><i class="fas fa-tools"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="tech-card">
+                            <h5><i class="fas fa-save me-2"></i>Backup Management</h5>
+                            <div class="mb-3">
+                                <button class="btn btn-success btn-sm w-100 mb-2" onclick="createFullBackup()">
+                                    <i class="fas fa-plus"></i> Create Full Backup
+                                </button>
+                                <button class="btn btn-info btn-sm w-100" onclick="scheduleBackup()">
+                                    <i class="fas fa-clock"></i> Schedule Backup
+                                </button>
+                            </div>
+                            
+                            <div class="metric-card">
+                                <h6>Recent Backups</h6>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Full Backup</span>
+                                        <small>4h ago</small>
+                                    </div>
+                                    <small class="text-success">✓ 15.2GB - Completed</small>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Incremental</span>
+                                        <small>1 day ago</small>
+                                    </div>
+                                    <small class="text-success">✓ 1.8GB - Completed</small>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Full Backup</span>
+                                        <small>1 week ago</small>
+                                    </div>
+                                    <small class="text-success">✓ 14.9GB - Completed</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Security -->
+            <div id="securitySection" class="content-section">
+                <div class="tech-card">
+                    <h5><i class="fas fa-shield-alt me-2"></i>Security Dashboard</h5>
+                    
+                    <!-- Security Overview -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-success">A+</div>
+                                <div class="stat-label">Security Score</div>
+                                <small class="text-success"><i class="fas fa-shield-alt"></i> Excellent</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-warning">3</div>
+                                <div class="stat-label">Active Threats</div>
+                                <small class="text-warning"><i class="fas fa-exclamation-triangle"></i> Monitor</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-info">89</div>
+                                <div class="stat-label">Days Until SSL Expiry</div>
+                                <small class="text-info"><i class="fas fa-certificate"></i> Renew Soon</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-danger">245</div>
+                                <div class="stat-label">Failed Login Attempts</div>
+                                <small class="text-danger"><i class="fas fa-ban"></i> Last 24h</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Alerts -->
+                    <div class="row g-4">
+                        <div class="col-md-8">
+                            <div class="metric-card">
+                                <h6>Security Alerts</h6>
+                                <div class="log-entry log-warning">
+                                    <div class="d-flex justify-content-between">
+                                        <span><i class="fas fa-user-times me-2"></i>Multiple failed login attempts</span>
+                                        <small>15 min ago</small>
+                                    </div>
+                                    <small class="text-muted">IP: 192.168.1.105 - 15 attempts in 5 minutes</small>
+                                </div>
+                                <div class="log-entry log-error">
+                                    <div class="d-flex justify-content-between">
+                                        <span><i class="fas fa-bug me-2"></i>SQL injection attempt detected</span>
+                                        <small>1h ago</small>
+                                    </div>
+                                    <small class="text-muted">Blocked by WAF - IP: 203.45.12.87</small>
+                                </div>
+                                <div class="log-entry log-info">
+                                    <div class="d-flex justify-content-between">
+                                        <span><i class="fas fa-shield-alt me-2"></i>Firewall rule updated</span>
+                                        <small>2h ago</small>
+                                    </div>
+                                    <small class="text-muted">New rule added to block suspicious IPs</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="metric-card">
+                                <h6>Quick Actions</h6>
+                                <button class="btn btn-danger btn-sm w-100 mb-2" onclick="emergencyLockdown()">
+                                    <i class="fas fa-lock"></i> Emergency Lockdown
+                                </button>
+                                <button class="btn btn-warning btn-sm w-100 mb-2" onclick="renewSSL()">
+                                    <i class="fas fa-certificate"></i> Renew SSL Certificate
+                                </button>
+                                <button class="btn btn-info btn-sm w-100 mb-2" onclick="scanVulnerabilities()">
+                                    <i class="fas fa-search"></i> Vulnerability Scan
+                                </button>
+                                <button class="btn btn-success btn-sm w-100" onclick="updateSecurity()">
+                                    <i class="fas fa-download"></i> Update Security Patches
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Deployment -->
+            <div id="deploymentSection" class="content-section">
+                <div class="tech-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5><i class="fas fa-rocket me-2"></i>Deployment Management</h5>
+                        <div>
+                            <button class="btn btn-success btn-sm me-2" onclick="deployToProduction()">
+                                <i class="fas fa-cloud-upload-alt"></i> Deploy to Production
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="rollbackDeployment()">
+                                <i class="fas fa-undo"></i> Rollback
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Current Version Info -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-code-branch me-2"></i>Current Version</h6>
+                                <div class="d-flex justify-content-between">
+                                    <span>Production:</span>
+                                    <span class="text-success">v2.1.4</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Staging:</span>
+                                    <span class="text-warning">v2.1.5-beta</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Development:</span>
+                                    <span class="text-info">v2.2.0-dev</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-clock me-2"></i>Deployment Stats</h6>
+                                <div class="d-flex justify-content-between">
+                                    <span>Last Deploy:</span>
+                                    <span class="text-success">2h ago</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Deploy Time:</span>
+                                    <span class="text-info">3m 45s</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Success Rate:</span>
+                                    <span class="text-success">98.5%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-check-circle me-2"></i>Pipeline Status</h6>
+                                <div class="d-flex justify-content-between">
+                                    <span>Build:</span>
+                                    <span class="text-success">✓ Passed</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Tests:</span>
+                                    <span class="text-success">✓ Passed</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Security Scan:</span>
+                                    <span class="text-success">✓ Passed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deployment History -->
+                    <div class="data-table">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Version</th>
+                                    <th>Environment</th>
+                                    <th>Status</th>
+                                    <th>Deploy Time</th>
+                                    <th>Duration</th>
+                                    <th>Developer</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>v2.1.4</td>
+                                    <td><span class="badge bg-success">Production</span></td>
+                                    <td><span class="badge bg-success">Success</span></td>
+                                    <td>2h ago</td>
+                                    <td>3m 45s</td>
+                                    <td>DevOps Team</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1" onclick="viewDeploymentLog('v2.1.4')" title="View Log"><i class="fas fa-file-alt"></i></button>
+                                        <button class="btn btn-sm btn-warning" onclick="rollbackToVersion('v2.1.3')" title="Rollback"><i class="fas fa-undo"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>v2.1.5-beta</td>
+                                    <td><span class="badge bg-warning">Staging</span></td>
+                                    <td><span class="badge bg-success">Success</span></td>
+                                    <td>1 day ago</td>
+                                    <td>4m 12s</td>
+                                    <td>DevOps Team</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1" onclick="viewDeploymentLog('v2.1.5-beta')" title="View Log"><i class="fas fa-file-alt"></i></button>
+                                        <button class="btn btn-sm btn-success" onclick="promoteToProduction('v2.1.5-beta')" title="Promote"><i class="fas fa-arrow-up"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>v2.1.3</td>
+                                    <td><span class="badge bg-secondary">Previous</span></td>
+                                    <td><span class="badge bg-success">Success</span></td>
+                                    <td>1 week ago</td>
+                                    <td>3m 28s</td>
+                                    <td>DevOps Team</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1" onclick="viewDeploymentLog('v2.1.3')" title="View Log"><i class="fas fa-file-alt"></i></button>
+                                        <button class="btn btn-sm btn-secondary" disabled title="Archived"><i class="fas fa-archive"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Settings -->
+            <div id="settingsSection" class="content-section">
+                <div class="tech-card">
+                    <h5><i class="fas fa-cogs me-2"></i>System Settings</h5>
+                    
+                    <div class="row g-4">
+                        <!-- Environment Configuration -->
+                        <div class="col-md-6">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-server me-2"></i>Environment Configuration</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Environment Mode</label>
+                                    <select class="form-select">
+                                        <option value="production" selected>Production</option>
+                                        <option value="staging">Staging</option>
+                                        <option value="development">Development</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Debug Level</label>
+                                    <select class="form-select">
+                                        <option value="error" selected>Error Only</option>
+                                        <option value="warning">Warning</option>
+                                        <option value="info">Info</option>
+                                        <option value="debug">Debug</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-success btn-sm">Save Configuration</button>
+                            </div>
+                        </div>
+
+                        <!-- Maintenance Mode -->
+                        <div class="col-md-6">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-tools me-2"></i>Maintenance Mode</h6>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="maintenanceMode">
+                                    <label class="form-check-label" for="maintenanceMode">
+                                        Enable Maintenance Mode
+                                    </label>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Maintenance Message</label>
+                                    <textarea class="form-control" rows="3" placeholder="Website is temporarily down for maintenance..."></textarea>
+                                </div>
+                                <button class="btn btn-warning btn-sm">Update Maintenance</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Alerts -->
+                    <div class="row g-4 mt-2">
+                        <div class="col-md-12">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-bell me-2"></i>Alert Configuration</h6>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="emailAlerts" checked>
+                                            <label class="form-check-label" for="emailAlerts">
+                                                Email Alerts for System Issues
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="smsAlerts">
+                                            <label class="form-check-label" for="smsAlerts">
+                                                SMS Alerts for Critical Issues
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="autoBackup" checked>
+                                            <label class="form-check-label" for="autoBackup">
+                                                Automatic Daily Backups
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-info btn-sm mt-3">Update Alert Settings</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Section navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-item').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Add active class to clicked nav link
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+        }
+
+        // Server Management Functions
+        function restartServer() {
+            showNotification('Restarting all services...', 'info');
+            setTimeout(() => {
+                showNotification('All services restarted successfully!', 'success');
+            }, 3000);
+        }
+
+        function restartService(service) {
+            showNotification(`Restarting ${service} service...`, 'info');
+            setTimeout(() => {
+                showNotification(`${service} service restarted successfully!`, 'success');
+            }, 2000);
+        }
+
+        function startService(service) {
+            showNotification(`Starting ${service} service...`, 'info');
+            setTimeout(() => {
+                showNotification(`${service} service started successfully!`, 'success');
+            }, 1500);
+        }
+
+        function viewLogs() {
+            const modal = `
+                <div class="modal fade" id="logsModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title">System Logs</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="code-block">
+                                    <div class="text-info">[2025-08-03 14:30:21] INFO: Server started successfully</div>
+                                    <div class="text-success">[2025-08-03 14:28:15] SUCCESS: Database connection established</div>
+                                    <div class="text-warning">[2025-08-03 14:25:33] WARNING: High memory usage detected (87%)</div>
+                                    <div class="text-info">[2025-08-03 14:20:12] INFO: Backup completed successfully</div>
+                                    <div class="text-error">[2025-08-03 14:15:45] ERROR: Failed login attempt from 192.168.1.105</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modal);
+            new bootstrap.Modal(document.getElementById('logsModal')).show();
+        }
+
+        function viewServiceLogs(service) {
+            showNotification(`Opening ${service} logs...`, 'info');
+        }
+
+        // Website Management Functions
+        function runTests() {
+            showNotification('Running test suite...', 'info');
+            setTimeout(() => {
+                showNotification('All tests passed! ✓ 140 tests completed', 'success');
+            }, 5000);
+        }
+
+        function buildProject() {
+            showNotification('Building project...', 'info');
+            setTimeout(() => {
+                showNotification('Build completed successfully in 2m 34s', 'success');
+            }, 4000);
+        }
+
+        function clearCache() {
+            showNotification('Clearing application cache...', 'info');
+            setTimeout(() => {
+                showNotification('Cache cleared successfully!', 'success');
+            }, 1500);
+        }
+
+        function viewIssue(issueId) {
+            showNotification(`Opening issue #${issueId} details...`, 'info');
+        }
+
+        // Database Management Functions
+        function backupDatabase(dbName) {
+            showNotification(`Starting backup for ${dbName} database...`, 'info');
+            setTimeout(() => {
+                showNotification(`${dbName} database backup completed!`, 'success');
+            }, 3000);
+        }
+
+        function optimizeDatabase(dbName) {
+            showNotification(`Optimizing ${dbName} database...`, 'info');
+            setTimeout(() => {
+                showNotification(`${dbName} database optimization completed!`, 'success');
+            }, 4000);
+        }
+
+        function createFullBackup() {
+            showNotification('Starting full system backup...', 'info');
+            setTimeout(() => {
+                showNotification('Full backup completed! Size: 15.2GB', 'success');
+            }, 8000);
+        }
+
+        function scheduleBackup() {
+            const modal = `
+                <div class="modal fade" id="scheduleModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Schedule Backup</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label">Backup Type</label>
+                                        <select class="form-select">
+                                            <option value="full">Full Backup</option>
+                                            <option value="incremental">Incremental Backup</option>
+                                            <option value="differential">Differential Backup</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Schedule</label>
+                                        <select class="form-select">
+                                            <option value="daily">Daily at 2:00 AM</option>
+                                            <option value="weekly">Weekly on Sunday</option>
+                                            <option value="monthly">Monthly on 1st</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-success" onclick="saveSchedule()">Schedule Backup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modal);
+            new bootstrap.Modal(document.getElementById('scheduleModal')).show();
+        }
+
+        function saveSchedule() {
+            showNotification('Backup schedule saved successfully!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('scheduleModal')).hide();
+        }
+
+        // Security Functions
+        function emergencyLockdown() {
+            if (confirm('Are you sure you want to enable emergency lockdown? This will block all traffic.')) {
+                showNotification('Emergency lockdown activated!', 'warning');
+            }
+        }
+
+        function renewSSL() {
+            showNotification('Renewing SSL certificate...', 'info');
+            setTimeout(() => {
+                showNotification('SSL certificate renewed successfully! Valid for 90 days.', 'success');
+            }, 3000);
+        }
+
+        function scanVulnerabilities() {
+            showNotification('Starting vulnerability scan...', 'info');
+            setTimeout(() => {
+                showNotification('Vulnerability scan completed. 0 critical issues found.', 'success');
+            }, 6000);
+        }
+
+        function updateSecurity() {
+            showNotification('Downloading security patches...', 'info');
+            setTimeout(() => {
+                showNotification('Security patches installed successfully!', 'success');
+            }, 5000);
+        }
+
+        // Deployment Functions
+        function deployToProduction() {
+            if (confirm('Deploy current staging version to production?')) {
+                showNotification('Starting deployment to production...', 'info');
+                setTimeout(() => {
+                    showNotification('Deployment to production completed successfully!', 'success');
+                }, 4000);
+            }
+        }
+
+        function rollbackDeployment() {
+            if (confirm('Rollback to previous version?')) {
+                showNotification('Rolling back to previous version...', 'warning');
+                setTimeout(() => {
+                    showNotification('Rollback completed successfully!', 'success');
+                }, 3000);
+            }
+        }
+
+        function viewDeploymentLog(version) {
+            showNotification(`Opening deployment log for ${version}...`, 'info');
+        }
+
+        function rollbackToVersion(version) {
+            if (confirm(`Rollback to version ${version}?`)) {
+                showNotification(`Rolling back to ${version}...`, 'warning');
+                setTimeout(() => {
+                    showNotification(`Rollback to ${version} completed!`, 'success');
+                }, 3000);
+            }
+        }
+
+        function promoteToProduction(version) {
+            if (confirm(`Promote ${version} to production?`)) {
+                showNotification(`Promoting ${version} to production...`, 'info');
+                setTimeout(() => {
+                    showNotification(`${version} promoted to production successfully!`, 'success');
+                }, 4000);
+            }
+        }
+
+        // Utility Functions
+        function showNotification(message, type = 'info') {
+            const alertClass = {
+                'success': 'alert-success',
+                'warning': 'alert-warning',
+                'error': 'alert-danger',
+                'info': 'alert-info'
+            }[type] || 'alert-info';
+            
+            const notification = document.createElement('div');
+            notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-refresh system status every 10 seconds
+            setInterval(() => {
+                // Simulate real-time data updates
+                const elements = document.querySelectorAll('.stat-number');
+                elements.forEach(el => {
+                    // Add slight animation to indicate data refresh
+                    el.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        el.style.transform = 'scale(1)';
+                    }, 200);
+                });
+            }, 10000);
+            
+            console.log('Web Developer/DevOps Dashboard loaded successfully');
+        });
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.appspot.com",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Đăng xuất với Firebase Auth
+        function logout() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                // Kiểm tra xem Firebase Auth có sẵn không
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    firebase.auth().signOut().then(() => {
+                        console.log('Đăng xuất thành công');
+                        window.location.href = '../auth.html';
+                    }).catch((error) => {
+                        console.error('Lỗi đăng xuất:', error);
+                        // Vẫn chuyển trang nếu có lỗi
+                        window.location.href = '../auth.html';
+                    });
+                } else {
+                    // Fallback nếu Firebase không có
+                    window.location.href = '../auth.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

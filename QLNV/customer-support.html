@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhân viên hỗ trợ khách hàng (Customer Support)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <style>
+        :root { --main-bg: #181c2f; --sidebar-bg: #23244a; --card-bg: #23244a; --accent: #7c3aed; --accent2: #00eaff; --text: #f3f6fa; --text-muted: #b0b8d1; --border: #2e325a; --shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.15); }
+        body { background: var(--main-bg); color: var(--text); font-family: 'Poppins', Arial, sans-serif; margin: 0; }
+        .sidebar { width: 240px; background: var(--sidebar-bg); color: var(--text); min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 100; display: flex; flex-direction: column; }
+        .sidebar .logo { padding: 32px 0 24px 0; text-align: center; font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; color: var(--accent); }
+        .sidebar .nav-item { display: flex; align-items: center; padding: 14px 32px; color: var(--text-muted); text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        .sidebar .nav-item.active, .sidebar .nav-item:hover { background: #1a1d36; color: var(--accent2); border-left: 4px solid var(--accent); }
+        .sidebar .nav-item i { margin-right: 14px; font-size: 1.2rem; }
+        .sidebar-footer { margin-top: auto; padding: 24px 32px; }
+        .sidebar-footer .btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 500; }
+        .main-container { margin-left: 240px; min-height: 100vh; background: var(--main-bg); }
+        .main-header { background: #1a1d36; border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+        .main-header .user-info { display: flex; align-items: center; gap: 14px; }
+        .main-header .user-info img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .content-wrapper { padding: 40px 32px 32px 32px; max-width: 800px; margin: 0 auto; }
+        .card-modern { background: var(--card-bg); border-radius: 18px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 32px; padding: 0; }
+        .card-modern .card-body { padding: 32px 28px; }
+        .card-modern .card-title { color: var(--accent2); font-weight: 600; font-size: 1.2rem; margin-bottom: 18px; }
+        .profile-info { display: flex; align-items: center; gap: 32px; }
+        .profile-info img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .profile-info .info { font-size: 1.1rem; }
+        @media (max-width: 900px) { .sidebar { width: 80px; } .main-container { margin-left: 80px; } .sidebar .nav-item { padding: 12px 10px; font-size: 0.95rem; } .sidebar .logo { font-size: 1.1rem; } }
+        @media (max-width: 700px) { .sidebar { display: none; } .main-container { margin-left: 0; } .main-header { padding: 12px 10px; } .content-wrapper { padding: 12px 4px; } }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i> LUXSTAFF
+        </div>
+        <a href="#role" class="nav-item active"><i class="fas fa-user-tie"></i> Vai trò</a>
+        <a href="#" class="nav-item"><i class="fas fa-users"></i> Nhân sự</a>
+        <a href="#" class="nav-item"><i class="fas fa-cogs"></i> Cài đặt</a>
+        <div class="sidebar-footer">
+            <button class="btn" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</button>
+        </div>
+    </div>
+    <div class="main-container">
+        <header class="main-header">
+            <h1 class="h4 mb-0" style="color:var(--accent2);">Nhân viên hỗ trợ khách hàng</h1>
+            <div class="user-info">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                <span><strong>Customer Support</strong></span>
+            </div>
+        </header>
+        <main class="content-wrapper">
+            <section>
+                <div class="card-modern mb-4">
+                    <div class="card-body profile-info">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                        <div class="info">
+                            <h4 class="mb-1" style="color:var(--accent2);">Nhân viên hỗ trợ khách hàng (Customer Support)</h4>
+                            <div><i class="fas fa-briefcase me-2"></i> Hỗ trợ khách đặt phòng, hoàn tiền</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.appspot.com",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Đăng xuất với Firebase Auth
+        function logout() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                // Kiểm tra xem Firebase Auth có sẵn không
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    firebase.auth().signOut().then(() => {
+                        console.log('Đăng xuất thành công');
+                        window.location.href = '../auth.html';
+                    }).catch((error) => {
+                        console.error('Lỗi đăng xuất:', error);
+                        // Vẫn chuyển trang nếu có lỗi
+                        window.location.href = '../auth.html';
+                    });
+                } else {
+                    // Fallback nếu Firebase không có
+                    window.location.href = '../auth.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -21,6 +21,68 @@
     <link rel="stylesheet" href="css/admin-dashboard.css">
     <link rel="stylesheet" href="css/admin-dashboard-mobile.css">
     <link rel="stylesheet" href="css/mobile.css">
+    
+    <!-- Custom CSS for table responsiveness -->
+    <style>
+        .table-responsive {
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .table-responsive table {
+            min-width: 1000px; /* Ensure minimum width for all columns */
+        }
+        
+        .table thead th {
+            background-color: #f8f9fa !important;
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+        
+        .table tbody td {
+            vertical-align: middle;
+            padding: 12px 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* Custom scrollbar for table */
+        .table-responsive::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.8rem;
+            }
+            
+            .btn-group-sm .btn {
+                padding: 0.25rem 0.4rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
 </head>
 
 <body class="admin-body">
@@ -41,6 +103,15 @@
             </div>
             <div class="nav-group">
                 <span class="nav-group-title">QUẢN LÝ</span>
+            <a href="#staff-management" class="nav-item">
+            <i class="fas fa-users-cog"></i><span>Quản lý nhân viên</span>
+         </a>
+            <a href="#roles-management" class="nav-item">
+                <i class="fas fa-user-shield"></i> <span>Quản lý chức vụ</span>
+            </a>
+            <a href="#departments-management" class="nav-item">
+                <i class="fas fa-building"></i> <span>Quản lý phòng ban</span>
+            </a>
             <a href="#bookings" class="nav-item">
                 <i class="fas fa-bed"></i><span>Đặt phòng</span>
              </a>
@@ -132,6 +203,114 @@
         </header>
         
         <main class="content-wrapper">
+        <!-- Roles Management Section (Dynamic) -->
+        <div id="roles-management" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header bg-white d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <h5 class="mb-0"><i class="fas fa-user-shield me-2"></i>Quản lý chức vụ</h5>
+                        <input type="text" id="roleSearchInput" class="form-control form-control-sm" style="max-width:220px;" placeholder="Tìm kiếm tên chức vụ..." oninput="filterAndDisplayRoles()">
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="addRole()">
+                        <i class="fas fa-plus"></i> Thêm chức vụ
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+                        <table class="table table-hover align-middle mb-0 table-bordered">
+                            <thead class="table-light sticky-top">
+                                <tr>
+                                    <th style="min-width: 120px;">Phòng ban</th>
+                                    <th style="min-width: 150px;">Tên chức vụ</th>
+                                    <th style="min-width: 100px;">Mã chức vụ</th>
+                                    <th style="min-width: 200px;">Mô tả</th>
+                                    <th style="min-width: 120px;">Lương cơ bản</th>
+                                    <th style="min-width: 120px;">Phụ cấp</th>
+                                    <th style="min-width: 150px;">Quyền hạn</th>
+                                    <th style="min-width: 120px;">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rolesTable">
+                                <!-- Role data will be rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Departments Management Section -->
+        <div id="departments-management" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header bg-white d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <h5 class="mb-0"><i class="fas fa-building me-2"></i>Quản lý phòng ban</h5>
+                        <input type="text" id="departmentSearchInput" class="form-control form-control-sm" style="max-width:220px;" placeholder="Tìm kiếm tên phòng ban..." oninput="filterAndDisplayDepartments()">
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="addDepartment()">
+                        <i class="fas fa-plus"></i> Thêm phòng ban
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+                        <table class="table table-hover align-middle mb-0 table-bordered">
+                            <thead class="table-light sticky-top">
+                                <tr>
+                                    <th style="min-width: 150px;">Tên phòng ban</th>
+                                    <th style="min-width: 100px;">Mã phòng ban</th>
+                                    <th style="min-width: 200px;">Mô tả</th>
+                                    <th style="min-width: 120px;">Trưởng phòng</th>
+                                    <th style="min-width: 100px;">Số nhân viên</th>
+                                    <th style="min-width: 120px;">Ngân sách</th>
+                                    <th style="min-width: 100px;">Trạng thái</th>
+                                    <th style="min-width: 150px;">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="departmentsTable">
+                                <!-- Department data will be rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Staff Management Section -->
+        <div id="staff-management" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header bg-white d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <h5 class="mb-0"><i class="fas fa-users-cog me-2"></i>Quản lý nhân viên</h5>
+                        <input type="text" id="staffSearchInput" class="form-control form-control-sm" style="max-width:220px;" placeholder="Tìm kiếm tên, email..." oninput="filterAndDisplayStaff()">
+                        <select id="staffRoleFilter" class="form-select form-select-sm" style="max-width:160px;" onchange="filterAndDisplayStaff()">
+                            <option value="all">Tất cả vai trò</option>
+                            <!-- Dynamic role options will be loaded here -->
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="addStaff()">
+                        <i class="fas fa-plus"></i> Thêm nhân viên
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Avatar</th>
+                                    <th>Tên</th>
+                                    <th>Email</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Vai trò</th>
+                                    <th>Ngày tham gia</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="staffTable">
+                                <!-- Staff data will be rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
             <!-- Dashboard Section -->
             <div id="dashboard" class="content-section">
             <!-- Thêm vào sau header, trước phần thống kê cards -->
@@ -404,21 +583,37 @@
         <!-- Users Section -->
         <div id="users" class="content-section" style="display: none;">
             <div class="card">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Danh sách người dùng</h5>
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <h5 class="mb-0"><i class="fas fa-users me-2"></i>Danh sách người dùng</h5>
+                        <input type="text" id="userSearchInput" class="form-control form-control-sm" style="max-width:250px;" placeholder="Tìm kiếm tên, email, SĐT..." oninput="filterAndDisplayUsers()">
+                    </div>
+                    <div class="d-flex gap-2">
+                        <select id="userStatusFilter" class="form-select form-select-sm" style="max-width:150px;" onchange="filterAndDisplayUsers()">
+                            <option value="all">Tất cả trạng thái</option>
+                            <option value="active">Đang hoạt động</option>
+                            <option value="inactive">Tạm khóa</option>
+                            <option value="banned">Bị cấm</option>
+                        </select>
+                        <button class="btn btn-primary btn-sm" onclick="addUser()">
+                            <i class="fas fa-plus"></i> Thêm người dùng
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table data-table mb-0">
-                            <thead>
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
                                 <tr>
-                                    <th>Avatar</th>
-                                    <th>Tên</th>
-                                    <th>Email</th>
-                                    <th>Số điện thoại</th>
+                                    <th style="width: 60px;">Avatar</th>
+                                    <th>Thông tin cá nhân</th>
+                                    <th>Liên hệ</th>
+                                    <th>Giới tính</th>
                                     <th>Địa chỉ</th>
+                                    <th>Quốc tịch</th>
                                     <th>Ngày sinh</th>
                                     <th>Ngày tham gia</th>
+                                    <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
@@ -626,6 +821,2184 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <script>
+        // Roles Management Section Logic
+        let allRoles = [];
+        function loadRoles() {
+            const rolesTable = document.getElementById('rolesTable');
+            rolesTable.innerHTML = '<tr><td colspan="8" class="text-center">Đang tải dữ liệu...</td></tr>';
+            db.ref('roles').on('value', (snapshot) => {
+                allRoles = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((roleSnapshot) => {
+                        const role = roleSnapshot.val();
+                        role.id = roleSnapshot.key;
+                        allRoles.push(role);
+                    });
+                }
+                filterAndDisplayRoles();
+            }, (error) => {
+                rolesTable.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Lỗi khi tải dữ liệu</td></tr>';
+            });
+        }
+
+        function filterAndDisplayRoles() {
+            let filteredRoles = [...allRoles];
+            const searchTerm = document.getElementById('roleSearchInput')?.value.toLowerCase().trim() || '';
+            if (searchTerm) {
+                filteredRoles = filteredRoles.filter(r =>
+                    (r.name && r.name.toLowerCase().includes(searchTerm)) ||
+                    (r.code && r.code.toLowerCase().includes(searchTerm)) ||
+                    (r.description && r.description.toLowerCase().includes(searchTerm)) ||
+                    (r.department && r.department.toLowerCase().includes(searchTerm)) ||
+                    (r.permissions && r.permissions.toLowerCase().includes(searchTerm))
+                );
+            }
+            renderRolesTable(filteredRoles);
+        }
+
+        function renderRolesTable(roleList) {
+            const rolesTable = document.getElementById('rolesTable');
+            rolesTable.innerHTML = '';
+            if (roleList.length === 0) {
+                rolesTable.innerHTML = '<tr><td colspan="8" class="text-center py-5">Không tìm thấy chức vụ phù hợp.</td></tr>';
+                return;
+            }
+            roleList.forEach(role => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span class="badge bg-primary">${role.department || 'N/A'}</span></td>
+                    <td><strong>${role.name || 'N/A'}</strong></td>
+                    <td>${role.code || 'N/A'}</td>
+                    <td>${role.description || ''}</td>
+                    <td>${role.salary ? role.salary.toLocaleString('vi-VN') + ' VNĐ' : ''}</td>
+                    <td>${role.allowance ? role.allowance.toLocaleString('vi-VN') + ' VNĐ' : ''}</td>
+                    <td>${role.permissions || ''}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-warning" onclick="editRole('${role.id}')" title="Chỉnh sửa" data-bs-toggle="tooltip">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger" onclick="deleteRole('${role.id}')" title="Xóa" data-bs-toggle="tooltip">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                rolesTable.appendChild(row);
+            });
+        }
+
+        function addRole() {
+            // Debug: kiểm tra authentication
+            const currentUser = auth.currentUser;
+            console.log('Current user:', currentUser);
+            console.log('User email:', currentUser?.email);
+            
+            // Đảm bảo load departments trước khi hiển thị form
+            console.log('Loading departments for role form...');
+            
+            // Load danh sách phòng ban trực tiếp từ Firebase để đảm bảo đầy đủ và mới nhất
+            db.ref('departments').once('value').then((snapshot) => {
+                console.log('Departments snapshot received:', snapshot.val());
+                
+                let departmentOptions = '<option value="">Chọn phòng ban *</option>';
+                
+                if (snapshot.exists()) {
+                    console.log('Found departments in Firebase');
+                    snapshot.forEach((deptSnapshot) => {
+                        const dept = deptSnapshot.val();
+                        console.log('Processing department:', dept);
+                        if (dept.name && dept.code) {
+                            departmentOptions += `<option value="${dept.name}">${dept.name} (${dept.code})</option>`;
+                        }
+                    });
+                } else {
+                    console.log('No departments found in Firebase, using fallback');
+                    // Fallback nếu không có departments trong database
+                    departmentOptions += `
+                        <option value="Lễ tân (Front Desk)">Lễ tân (Front Desk) (01)</option>
+                        <option value="Quan lý đối tác">Quan lý đối tác (QL01)</option>
+                        <option value="Kiểm duyệt đặt phòng">Kiểm duyệt đặt phòng (KD01)</option>
+                        <option value="Chăm sóc khách hàng">Chăm sóc khách hàng (CSKH)</option>
+                        <option value="Marketing">Marketing (MKT)</option>
+                        <option value="Kỹ thuật">Kỹ thuật (KT)</option>
+                        <option value="Tài chính">Tài chính (TC)</option>
+                        <option value="Nhân sự">Nhân sự (NS)</option>
+                        <option value="Bảo vệ">Bảo vệ (BV)</option>
+                        <option value="Buồng phòng">Buồng phòng (BP)</option>
+                    `;
+                }
+                
+                console.log('Department options generated:', departmentOptions);
+                console.log('departmentOptions length:', departmentOptions.length);
+                console.log('departmentOptions content:', departmentOptions);
+                
+                // Thêm debug để kiểm tra nội dung options
+                if (departmentOptions.includes('<option')) {
+                    console.log('✅ Options found in departmentOptions');
+                } else {
+                    console.log('❌ No options found in departmentOptions');
+                }
+                
+                Swal.fire({
+                    title: 'Thêm chức vụ mới',
+                    html: `
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select id="roleDepartment" class="form-select mb-2">
+                                    ${departmentOptions}
+                                </select>
+                                <input type="text" id="roleName" class="form-control mb-2" placeholder="Tên chức vụ">
+                                <input type="text" id="roleCode" class="form-control mb-2" placeholder="Mã chức vụ (ví dụ: cskh, marketing, ...)">
+                                <textarea id="roleDesc" class="form-control mb-2" rows="3" placeholder="Mô tả chức vụ"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="number" id="roleSalary" class="form-control mb-2" placeholder="Lương cơ bản (VNĐ)" min="0">
+                                <input type="number" id="roleAllowance" class="form-control mb-2" placeholder="Phụ cấp (VNĐ)" min="0">
+                                <textarea id="rolePermissions" class="form-control mb-2" rows="3" placeholder="Quyền hạn (ví dụ: Quản lý nhân viên, Xem báo cáo, ...)"></textarea>
+                            </div>
+                        </div>
+                    `,
+                width: '80%',
+                showCancelButton: true,
+                confirmButtonText: 'Thêm mới',
+                cancelButtonText: 'Hủy',
+                didOpen: () => {
+                    // Debug: kiểm tra dropdown sau khi modal mở
+                    console.log('Modal opened, checking dropdown...');
+                    const dropdown = document.getElementById('roleDepartment');
+                    if (dropdown) {
+                        console.log('Dropdown found:', dropdown);
+                        console.log('Dropdown innerHTML:', dropdown.innerHTML);
+                        console.log('Number of options:', dropdown.options.length);
+                        
+                        // Log từng option
+                        for (let i = 0; i < dropdown.options.length; i++) {
+                            console.log(`Option ${i}:`, dropdown.options[i].value, dropdown.options[i].text);
+                        }
+                        
+                        // Thêm event listener cho dropdown để tự động điền thông tin
+                        dropdown.addEventListener('change', function() {
+                            const selectedDept = this.value;
+                            console.log('Department selected:', selectedDept);
+                            
+                            if (selectedDept) {
+                                // Tự động tạo mã chức vụ dựa trên tên phòng ban
+                                const deptCode = selectedDept.toLowerCase()
+                                    .replace(/\s+/g, '')
+                                    .replace(/[()]/g, '')
+                                    .substring(0, 10);
+                                
+                                // Đặt focus vào tên chức vụ để user dễ nhập
+                                const roleNameInput = document.getElementById('roleName');
+                                if (roleNameInput) {
+                                    roleNameInput.focus();
+                                    roleNameInput.placeholder = `Nhập tên chức vụ cho ${selectedDept}`;
+                                }
+                                
+                                // Đặt placeholder cho mã chức vụ
+                                const roleCodeInput = document.getElementById('roleCode');
+                                if (roleCodeInput) {
+                                    roleCodeInput.placeholder = `Ví dụ: ${deptCode}_manager, ${deptCode}_staff...`;
+                                }
+                                
+                                // Tự động điền mô tả dựa trên phòng ban
+                                const roleDescInput = document.getElementById('roleDesc');
+                                if (roleDescInput && !roleDescInput.value) {
+                                    let defaultDesc = '';
+                                    if (selectedDept.includes('Lễ tân')) {
+                                        defaultDesc = 'Chịu trách nhiệm tiếp đón khách, check-in/check-out, hỗ trợ khách hàng tại quầy lễ tân';
+                                    } else if (selectedDept.includes('Marketing')) {
+                                        defaultDesc = 'Thực hiện các chiến lược marketing, quảng bá thương hiệu, tối ưu SEO';
+                                    } else if (selectedDept.includes('Quản lý đối tác')) {
+                                        defaultDesc = 'Quản lý mối quan hệ đối tác, liên kết với các website/đại lý khác';
+                                    } else if (selectedDept.includes('Hỗ trợ khách hàng')) {
+                                        defaultDesc = 'Hỗ trợ khách hàng đặt phòng, giải quyết khiếu nại, xử lý hoàn tiền';
+                                    } else if (selectedDept.includes('Kiểm duyệt')) {
+                                        defaultDesc = 'Kiểm duyệt đặt phòng, xử lý tranh chấp giữa khách hàng và khách sạn';
+                                    } else {
+                                        defaultDesc = `Thực hiện các nhiệm vụ liên quan đến ${selectedDept}`;
+                                    }
+                                    roleDescInput.value = defaultDesc;
+                                }
+                                
+                                // Đặt lương mặc định dựa trên phòng ban
+                                const roleSalaryInput = document.getElementById('roleSalary');
+                                if (roleSalaryInput && !roleSalaryInput.value) {
+                                    let defaultSalary = 15000000; // Mặc định 15 triệu
+                                    if (selectedDept.includes('Marketing') || selectedDept.includes('Quản lý')) {
+                                        defaultSalary = 20000000; // 20 triệu cho vị trí cao
+                                    } else if (selectedDept.includes('Lễ tân') || selectedDept.includes('Hỗ trợ')) {
+                                        defaultSalary = 12000000; // 12 triệu cho vị trí entry
+                                    }
+                                    roleSalaryInput.value = defaultSalary;
+                                }
+                                
+                                console.log('✅ Department selection processed with auto-fill');
+                            }
+                        });
+                    } else {
+                        console.log('❌ Dropdown not found in DOM');
+                    }
+                },
+                preConfirm: () => {
+                    const department = document.getElementById('roleDepartment').value.trim();
+                    const name = document.getElementById('roleName').value.trim();
+                    const code = document.getElementById('roleCode').value.trim();
+                    const description = document.getElementById('roleDesc').value.trim();
+                    const salary = parseInt(document.getElementById('roleSalary').value) || 0;
+                    const allowance = parseInt(document.getElementById('roleAllowance').value) || 0;
+                    const permissions = document.getElementById('rolePermissions').value.trim();
+                    
+                    if (!name || !code) {
+                        Swal.showValidationMessage('Vui lòng nhập tên và mã chức vụ');
+                        return false;
+                    }
+                    
+                    if (!department) {
+                        Swal.showValidationMessage('Vui lòng chọn phòng ban');
+                        return false;
+                    }
+                    
+                    return { 
+                        department, 
+                        name, 
+                        code, 
+                        description, 
+                        salary, 
+                        allowance, 
+                        permissions,
+                        createdAt: Date.now()
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const newRole = result.value;
+                    console.log('Attempting to create role:', newRole);
+                    console.log('Current user email:', auth.currentUser?.email);
+                    
+                    db.ref('roles').push(newRole).then(() => {
+                        loadRoles();
+                        Swal.fire('Thành công', 'Đã thêm chức vụ mới!', 'success');
+                    }).catch((error) => {
+                        console.error('Error creating role:', error);
+                        Swal.fire('Lỗi', `Không thể thêm chức vụ: ${error.message}`, 'error');
+                    });
+                }
+            });
+            
+            }).catch((error) => {
+                console.error('Error loading departments for role form:', error);
+                Swal.fire('Lỗi', 'Không thể tải danh sách phòng ban. Vui lòng thử lại.', 'error');
+            });
+        }
+
+        function editRole(roleId) {
+            const role = allRoles.find(r => r.id === roleId);
+            if (!role) {
+                Swal.fire('Lỗi', 'Không tìm thấy chức vụ này.', 'error');
+                return;
+            }
+            
+            console.log('Editing role:', role);
+            console.log('Loading departments for role edit form...');
+            
+            // Load danh sách phòng ban trực tiếp từ Firebase để đảm bảo đầy đủ và mới nhất
+            db.ref('departments').once('value').then((snapshot) => {
+                console.log('Departments snapshot for edit received:', snapshot.val());
+                
+                let departmentOptions = '<option value="">Chọn phòng ban *</option>';
+                
+                if (snapshot.exists()) {
+                    console.log('Found departments in Firebase for edit');
+                    snapshot.forEach((deptSnapshot) => {
+                        const dept = deptSnapshot.val();
+                        console.log('Processing department for edit:', dept);
+                        if (dept.name && dept.code) {
+                            const selected = role.department === dept.name ? 'selected' : '';
+                            departmentOptions += `<option value="${dept.name}" ${selected}>${dept.name} (${dept.code})</option>`;
+                        }
+                    });
+                } else {
+                    console.log('No departments found in Firebase for edit, using fallback');
+                    // Fallback nếu không có departments trong database
+                    const fallbackDepartments = [
+                        'Lễ tân (Front Desk)', 'Quan lý đối tác', 'Kiểm duyệt đặt phòng',
+                        'Chăm sóc khách hàng', 'Marketing', 'Kỹ thuật', 
+                        'Tài chính', 'Nhân sự', 'Bảo vệ', 'Buồng phòng'
+                    ];
+                    
+                    fallbackDepartments.forEach(deptName => {
+                        const selected = role.department === deptName ? 'selected' : '';
+                        departmentOptions += `<option value="${deptName}" ${selected}>${deptName}</option>`;
+                    });
+                }
+                
+                console.log('Department options for edit generated:', departmentOptions);
+            
+            Swal.fire({
+                title: 'Chỉnh sửa chức vụ',
+                html: `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select id="editRoleDepartment" class="form-select mb-2">
+                                <option value="">Chọn phòng ban *</option>
+                                ${departmentOptions}
+                            </select>
+                            <input type="text" id="editRoleName" class="form-control mb-2" value="${role.name || ''}" placeholder="Tên chức vụ">
+                            <input type="text" id="editRoleCode" class="form-control mb-2" value="${role.code || ''}" placeholder="Mã chức vụ">
+                            <textarea id="editRoleDesc" class="form-control mb-2" rows="3" placeholder="Mô tả chức vụ">${role.description || ''}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="number" id="editRoleSalary" class="form-control mb-2" value="${role.salary || ''}" placeholder="Lương cơ bản (VNĐ)" min="0">
+                            <input type="number" id="editRoleAllowance" class="form-control mb-2" value="${role.allowance || ''}" placeholder="Phụ cấp (VNĐ)" min="0">
+                            <textarea id="editRolePermissions" class="form-control mb-2" rows="3" placeholder="Quyền hạn (ví dụ: Quản lý nhân viên, Xem báo cáo, ...)">${role.permissions || ''}</textarea>
+                        </div>
+                    </div>
+                `,
+                width: '80%',
+                showCancelButton: true,
+                confirmButtonText: 'Lưu thay đổi',
+                cancelButtonText: 'Hủy',
+                preConfirm: () => {
+                    const department = document.getElementById('editRoleDepartment').value.trim();
+                    const name = document.getElementById('editRoleName').value.trim();
+                    const code = document.getElementById('editRoleCode').value.trim();
+                    const description = document.getElementById('editRoleDesc').value.trim();
+                    const salary = parseInt(document.getElementById('editRoleSalary').value) || 0;
+                    const allowance = parseInt(document.getElementById('editRoleAllowance').value) || 0;
+                    const permissions = document.getElementById('editRolePermissions').value.trim();
+                    
+                    if (!name || !code) {
+                        Swal.showValidationMessage('Vui lòng nhập tên và mã chức vụ');
+                        return false;
+                    }
+                    
+                    if (!department) {
+                        Swal.showValidationMessage('Vui lòng chọn phòng ban');
+                        return false;
+                    }
+                    
+                    return { 
+                        department, 
+                        name, 
+                        code, 
+                        description, 
+                        salary, 
+                        allowance, 
+                        permissions,
+                        updatedAt: Date.now()
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const updatedRole = result.value;
+                    db.ref('roles/' + roleId).update(updatedRole).then(() => {
+                        loadRoles();
+                        Swal.fire('Thành công', 'Đã cập nhật chức vụ!', 'success');
+                    }).catch((error) => {
+                        Swal.fire('Lỗi', 'Không thể cập nhật chức vụ.', 'error');
+                    });
+                }
+            });
+            
+            }).catch((error) => {
+                console.error('Error loading departments for role edit form:', error);
+                Swal.fire('Lỗi', 'Không thể tải danh sách phòng ban. Vui lòng thử lại.', 'error');
+            });
+        }
+
+        function deleteRole(roleId) {
+            Swal.fire({
+                title: 'Xác nhận xóa?',
+                text: 'Bạn không thể hoàn tác sau khi xóa!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    db.ref('roles/' + roleId).remove().then(() => {
+                        loadRoles();
+                        Swal.fire('Đã xóa', 'Chức vụ đã bị xóa.', 'success');
+                    }).catch((error) => {
+                        Swal.fire('Lỗi', 'Không thể xóa chức vụ.', 'error');
+                    });
+                }
+            });
+        }
+
+        // Test function để kiểm tra Firebase Rules
+        function testFirebaseRules() {
+            console.log('=== FIREBASE RULES TEST STARTED ===');
+            console.log('Current user:', auth.currentUser);
+            console.log('User email:', auth.currentUser?.email);
+            console.log('User UID:', auth.currentUser?.uid);
+            console.log('User emailVerified:', auth.currentUser?.emailVerified);
+            console.log('User metadata:', auth.currentUser?.metadata);
+            
+            if (!auth.currentUser) {
+                console.log('❌ No user logged in');
+                return;
+            }
+            
+            // Kiểm tra đặc biệt về email verification
+            if (!auth.currentUser.emailVerified) {
+                console.log('⚠️ WARNING: Email not verified! This might cause permission issues.');
+                console.log('Email verification status:', auth.currentUser.emailVerified);
+            }
+            
+            // Test 1: Kiểm tra connection
+            console.log('Test 1: Checking Firebase connection...');
+            db.ref('.info/connected').once('value').then((snapshot) => {
+                if (snapshot.val() === true) {
+                    console.log('✅ Firebase connected successfully');
+                } else {
+                    console.log('❌ Firebase not connected');
+                }
+            }).catch((error) => {
+                console.log('❌ Firebase connection test failed:', error);
+            });
+            
+            // Test 2: Read departments permission
+            console.log('Test 2: Testing read departments permission...');
+            db.ref('departments').once('value').then((snapshot) => {
+                console.log('✅ Read departments permission: SUCCESS');
+                console.log('Departments data:', snapshot.val());
+            }).catch((error) => {
+                console.log('❌ Read departments permission: FAILED');
+                console.log('Error code:', error.code);
+                console.log('Error message:', error.message);
+            });
+            
+            // Test 3: Write departments permission với data tối thiểu
+            console.log('Test 3: Testing write departments permission...');
+            const testDepartment = {
+                name: 'Test Department',
+                code: 'TEST',
+                status: 'active',
+                createdAt: Date.now()
+            };
+            
+            console.log('Test data:', testDepartment);
+            
+            db.ref('departments').push(testDepartment).then((ref) => {
+                console.log('✅ Write departments permission: SUCCESS');
+                console.log('Created test department with ID:', ref.key);
+                
+                // Xóa test data
+                ref.remove().then(() => {
+                    console.log('✅ Cleaned up test department');
+                }).catch((cleanupError) => {
+                    console.log('⚠️ Failed to cleanup test department:', cleanupError);
+                });
+            }).catch((error) => {
+                console.log('❌ Write departments permission: FAILED');
+                console.log('Error code:', error.code);
+                console.log('Error message:', error.message);
+                console.log('Full error object:', error);
+            });
+            
+            // Test 4: Kiểm tra token claims
+            auth.currentUser.getIdTokenResult().then((idTokenResult) => {
+                console.log('=== TOKEN ANALYSIS ===');
+                console.log('Token claims:', idTokenResult.claims);
+                console.log('Token email:', idTokenResult.claims.email);
+                console.log('Token email verified:', idTokenResult.claims.email_verified);
+                console.log('Token auth time:', idTokenResult.authTime);
+                console.log('Token issued at:', idTokenResult.issuedAtTime);
+                console.log('Token expiration:', idTokenResult.expirationTime);
+                console.log('Token sign-in provider:', idTokenResult.signInProvider);
+                console.log('User UID in token:', idTokenResult.claims.user_id || idTokenResult.claims.sub);
+                
+                // Test đặc biệt về email verification
+                if (idTokenResult.claims.email !== 'quantrikhachsan@gmail.com') {
+                    console.log('❌ EMAIL MISMATCH in token!');
+                    console.log('Expected: quantrikhachsan@gmail.com');
+                    console.log('Got in token:', idTokenResult.claims.email);
+                }
+                
+                if (!idTokenResult.claims.email_verified) {
+                    console.log('⚠️ WARNING: email_verified is false in token!');
+                    console.log('This might cause permission issues in Firebase Rules');
+                }
+                
+                // Test với fresh token
+                console.log('Getting fresh token...');
+                return auth.currentUser.getIdToken(true);
+            }).then((freshToken) => {
+                console.log('Fresh token obtained (first 100 chars):', freshToken.substring(0, 100) + '...');
+                
+                // Decode token để xem claims (chỉ để debug - không an toàn trong production)
+                try {
+                    const tokenParts = freshToken.split('.');
+                    const payload = JSON.parse(atob(tokenParts[1]));
+                    console.log('Fresh token payload:', payload);
+                    console.log('Fresh token email:', payload.email);
+                    console.log('Fresh token email_verified:', payload.email_verified);
+                    console.log('Fresh token exp:', new Date(payload.exp * 1000));
+                } catch (decodeError) {
+                    console.log('Could not decode token for debugging:', decodeError);
+                }
+                
+            }).catch((tokenError) => {
+                console.log('❌ Failed to get token claims:', tokenError);
+            });
+            
+            console.log('=== FIREBASE RULES TEST COMPLETED ===');
+        }
+        
+        // Thêm button test vào console (có thể gọi bằng cách gõ testFirebaseRules() trong console)
+        window.testFirebaseRules = testFirebaseRules;
+        
+        // Function để verify email nếu cần
+        function verifyEmail() {
+            if (!auth.currentUser) {
+                console.log('❌ No user logged in');
+                return;
+            }
+            
+            if (auth.currentUser.emailVerified) {
+                console.log('✅ Email already verified');
+                return;
+            }
+            
+            console.log('Sending email verification...');
+            auth.currentUser.sendEmailVerification().then(() => {
+                console.log('✅ Email verification sent');
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Email verification sent',
+                    text: 'Please check your email and click the verification link.'
+                });
+            }).catch((error) => {
+                console.error('❌ Failed to send email verification:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to send verification',
+                    text: error.message
+                });
+            });
+        }
+        
+        // Function để reload user để cập nhật emailVerified status
+        function reloadUser() {
+            if (!auth.currentUser) {
+                console.log('❌ No user logged in');
+                return;
+            }
+            
+            console.log('Reloading user...');
+            auth.currentUser.reload().then(() => {
+                console.log('✅ User reloaded');
+                console.log('Email verified status:', auth.currentUser.emailVerified);
+                
+                if (auth.currentUser.emailVerified) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Email verified!',
+                        text: 'You can now try adding departments again.'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Email not verified yet',
+                        text: 'Please check your email for verification link.'
+                    });
+                }
+            }).catch((error) => {
+                console.error('❌ Failed to reload user:', error);
+            });
+        }
+        
+        // Thêm functions vào console
+        window.verifyEmail = verifyEmail;
+        window.reloadUser = reloadUser;
+        
+        // Debug function để kiểm tra allDepartments
+        function debugDepartments() {
+            console.log('=== DEPARTMENTS DEBUG ===');
+            console.log('allDepartments array:', allDepartments);
+            console.log('Number of departments:', allDepartments.length);
+            
+            if (allDepartments.length > 0) {
+                console.log('First department:', allDepartments[0]);
+                allDepartments.forEach((dept, index) => {
+                    console.log(`Department ${index + 1}:`, {
+                        name: dept.name,
+                        code: dept.code,
+                        id: dept.id
+                    });
+                });
+            } else {
+                console.log('❌ No departments found in allDepartments array');
+            }
+            
+            // Test dropdown generation
+            if (allDepartments.length > 0) {
+                const testOptions = allDepartments.map(dept => 
+                    `<option value="${dept.name}">${dept.name} (${dept.code})</option>`
+                ).join('');
+                console.log('Generated dropdown options:', testOptions);
+            }
+            
+            console.log('=== END DEPARTMENTS DEBUG ===');
+        }
+        
+        // Thêm debug function vào console
+        window.debugDepartments = debugDepartments;
+
+        // Tự động load roles khi vào trang
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded - initializing...');
+            
+            // Load tất cả data cần thiết
+            loadDepartments(); // Load departments trước để có sẵn cho roles
+            loadRoles();
+            loadStaff(); // Load staff data
+            loadStaffRoleFilter(); // Load dynamic role filter options
+            
+            // Initialize navigation
+            initializeNavigation();
+            
+            console.log('All initialization completed');
+        });
+        
+        // Navigation handling
+        function initializeNavigation() {
+            // Add click handlers for navigation items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all nav items
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Hide all content sections
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    
+                    // Show target section
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.style.display = 'block';
+                        
+                        // Update page title
+                        const titleElement = document.getElementById('page-title-header');
+                        if (titleElement) {
+                            titleElement.textContent = this.querySelector('span').textContent;
+                        }
+                        
+                        // Load data for specific sections
+                        switch(targetId) {
+                            case 'departments-management':
+                                loadDepartments();
+                                break;
+                            case 'roles-management':
+                                loadRoles();
+                                // Đảm bảo departments được load trước khi vào section roles
+                                loadDepartments();
+                                break;
+                            case 'staff-management':
+                                loadStaff();
+                                break;
+                        }
+                    }
+                });
+            });
+        }
+
+        // Departments Management Section Logic
+        let allDepartments = [];
+        
+        function loadDepartments() {
+            console.log('loadDepartments() called');
+            const departmentsTable = document.getElementById('departmentsTable');
+            if (!departmentsTable) {
+                console.log('No departmentsTable found, but continuing to load data for allDepartments');
+            } else {
+                departmentsTable.innerHTML = '<tr><td colspan="8" class="text-center">Đang tải dữ liệu...</td></tr>';
+            }
+            
+            // Load data from Firebase
+            console.log('Loading departments from Firebase...');
+            db.ref('departments').on('value', (snapshot) => {
+                console.log('Departments snapshot received in loadDepartments:', snapshot.val());
+                allDepartments = [];
+                if (snapshot.exists()) {
+                    console.log('Departments exist in Firebase');
+                    snapshot.forEach((deptSnapshot) => {
+                        const department = deptSnapshot.val();
+                        department.id = deptSnapshot.key;
+                        allDepartments.push(department);
+                        console.log('Added department to allDepartments:', department);
+                    });
+                } else {
+                    // Add sample data if no departments exist
+                    console.log('No departments found in Firebase, using sample data');
+                    allDepartments = [
+                        {
+                            id: 'sample1',
+                            name: 'Lễ tân (Front Desk)',
+                            code: '01',
+                            description: 'Quản lý check-in/check-out, tiếp khách',
+                            manager: 'Nguyễn Tiến Chúc',
+                            staffCount: 0,
+                            budget: 150000000,
+                            status: 'active',
+                            location: 'Tầng trệt',
+                            email: 'frontdesk@luxuryhaven.com',
+                            phone: '0123456789'
+                        },
+                        {
+                            id: 'sample2', 
+                            name: 'Quan lý đối tác',
+                            code: 'QL01',
+                            description: 'Quản lý liên kết với đại lý/website khác',
+                            manager: 'Nguyễn Văn B',
+                            staffCount: 0,
+                            budget: 120000000,
+                            status: 'active',
+                            location: 'Tầng 2',
+                            email: 'partner@luxuryhaven.com',
+                            phone: '0123456790'
+                        },
+                        {
+                            id: 'sample3',
+                            name: 'Kiểm duyệt đặt phòng',
+                            code: 'KD01',
+                            description: 'Giải quyết vấn đề giữa khách & khách sạn',
+                            manager: 'Nguyễn Văn C',
+                            staffCount: 0,
+                            budget: 100000000,
+                            status: 'active',
+                            location: 'Tầng 2',
+                            email: 'booking@luxuryhaven.com',
+                            phone: '0123456791'
+                        }
+                    ];
+                }
+                
+                console.log('Final allDepartments array:', allDepartments);
+                console.log('Number of departments loaded:', allDepartments.length);
+                
+                filterAndDisplayDepartments();
+            }, (error) => {
+                console.error('Error loading departments:', error);
+                departmentsTable.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Lỗi khi tải dữ liệu: ' + error.message + '</td></tr>';
+            });
+        }
+
+        function filterAndDisplayDepartments() {
+            let filteredDepartments = [...allDepartments];
+            const searchTerm = document.getElementById('departmentSearchInput')?.value.toLowerCase().trim() || '';
+            
+            if (searchTerm) {
+                filteredDepartments = filteredDepartments.filter(d =>
+                    (d.name && d.name.toLowerCase().includes(searchTerm)) ||
+                    (d.code && d.code.toLowerCase().includes(searchTerm)) ||
+                    (d.description && d.description.toLowerCase().includes(searchTerm)) ||
+                    (d.manager && d.manager.toLowerCase().includes(searchTerm))
+                );
+            }
+            renderDepartmentsTable(filteredDepartments);
+        }
+
+        function renderDepartmentsTable(departmentList) {
+            const departmentsTable = document.getElementById('departmentsTable');
+            if (!departmentsTable) return;
+            
+            departmentsTable.innerHTML = '';
+            if (departmentList.length === 0) {
+                departmentsTable.innerHTML = '<tr><td colspan="8" class="text-center py-5"><i class="fas fa-inbox fa-2x text-muted mb-2"></i><br>Không tìm thấy phòng ban phù hợp.</td></tr>';
+                return;
+            }
+            
+            departmentList.forEach(department => {
+                const budget = department.budget ? department.budget.toLocaleString('vi-VN') + ' VNĐ' : '<span class="text-muted">Chưa có</span>';
+                const staffCount = department.staffCount || 0;
+                const status = department.status === 'active' ? 
+                    '<span class="badge bg-success"><i class="fas fa-check-circle"></i> Hoạt động</span>' : 
+                    '<span class="badge bg-secondary"><i class="fas fa-pause-circle"></i> Không hoạt động</span>';
+                
+                const manager = department.manager || '<span class="text-muted">Chưa có</span>';
+                const description = department.description ? 
+                    (department.description.length > 50 ? 
+                        `<span title="${department.description}">${department.description.substring(0, 50)}...</span>` : 
+                        department.description) : 
+                    '<span class="text-muted">Không có</span>';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong class="text-primary">${department.name || 'N/A'}</strong></td>
+                    <td><span class="badge bg-info">${department.code || 'N/A'}</span></td>
+                    <td>${description}</td>
+                    <td>${manager}</td>
+                    <td><span class="badge bg-secondary"><i class="fas fa-users"></i> ${staffCount} người</span></td>
+                    <td>${budget}</td>
+                    <td>${status}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-info" onclick="viewDepartment('${department.id}')" title="Xem chi tiết" data-bs-toggle="tooltip">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-warning" onclick="editDepartment('${department.id}')" title="Chỉnh sửa" data-bs-toggle="tooltip">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger" onclick="deleteDepartment('${department.id}')" title="Xóa" data-bs-toggle="tooltip">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                departmentsTable.appendChild(row);
+            });
+            
+            // Initialize tooltips after rendering
+            setTimeout(() => {
+                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            }, 100);
+        }
+
+        function addDepartment() {
+            console.log('=== ADD DEPARTMENT FUNCTION CALLED ===');
+            
+            // Kiểm tra authentication trước khi tạo department
+            const currentUser = auth.currentUser;
+            console.log('Current user:', currentUser);
+            console.log('User email:', currentUser?.email);
+            console.log('User UID:', currentUser?.uid);
+            console.log('User emailVerified:', currentUser?.emailVerified);
+            
+            if (!currentUser) {
+                console.log('❌ No user logged in - auth.currentUser is null/undefined');
+                Swal.fire('Lỗi', 'Bạn cần đăng nhập để thực hiện chức năng này.', 'error');
+                return;
+            }
+            
+            if (currentUser.email !== 'quantrikhachsan@gmail.com') {
+                console.log('❌ Unauthorized user:', currentUser.email);
+                console.log('Expected: quantrikhachsan@gmail.com');
+                Swal.fire('Lỗi', 'Bạn không có quyền thực hiện hành động này. Vui lòng đăng nhập với tài khoản admin.', 'error');
+                return;
+            }
+            
+            console.log('✅ Admin authorization confirmed');
+            
+            Swal.fire({
+                title: 'Thêm phòng ban mới',
+                html: `
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" id="deptName" class="form-control mb-2" placeholder="Tên phòng ban *" required>
+                                <input type="text" id="deptCode" class="form-control mb-2" placeholder="Mã phòng ban *" required>
+                                <textarea id="deptDescription" class="form-control mb-2" rows="3" placeholder="Mô tả phòng ban"></textarea>
+                                <input type="text" id="deptManager" class="form-control mb-2" placeholder="Trưởng phòng">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="number" id="deptBudget" class="form-control mb-2" placeholder="Ngân sách (VNĐ)" min="0">
+                                <input type="text" id="deptLocation" class="form-control mb-2" placeholder="Địa điểm">
+                                <input type="email" id="deptEmail" class="form-control mb-2" placeholder="Email phòng ban">
+                                <input type="text" id="deptPhone" class="form-control mb-2" placeholder="Số điện thoại">
+                                <select id="deptStatus" class="form-select mb-2">
+                                    <option value="active">Hoạt động</option>
+                                    <option value="inactive">Không hoạt động</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                width: '80%',
+                showCancelButton: true,
+                confirmButtonText: 'Thêm mới',
+                cancelButtonText: 'Hủy',
+                preConfirm: () => {
+                    const name = document.getElementById('deptName').value.trim();
+                    const code = document.getElementById('deptCode').value.trim();
+                    
+                    if (!name || !code) {
+                        Swal.showValidationMessage('Vui lòng nhập tên và mã phòng ban');
+                        return false;
+                    }
+                    
+                    return {
+                        name: name,
+                        code: code,
+                        description: document.getElementById('deptDescription').value.trim(),
+                        manager: document.getElementById('deptManager').value.trim(),
+                        budget: parseInt(document.getElementById('deptBudget').value) || 0,
+                        location: document.getElementById('deptLocation').value.trim(),
+                        email: document.getElementById('deptEmail').value.trim(),
+                        phone: document.getElementById('deptPhone').value.trim(),
+                        status: document.getElementById('deptStatus').value,
+                        staffCount: 0,
+                        createdAt: Date.now()
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log('=== SAVING DEPARTMENT DATA ===');
+                    
+                    const newDepartment = result.value;
+                    console.log('Department data to save:', newDepartment);
+                    console.log('Current user auth state:', {
+                        uid: auth.currentUser?.uid,
+                        email: auth.currentUser?.email,
+                        emailVerified: auth.currentUser?.emailVerified
+                    });
+                    
+                    // Test Firebase connection trước
+                    console.log('Testing Firebase connection...');
+                    db.ref('.info/connected').once('value').then((snapshot) => {
+                        console.log('Firebase connection status:', snapshot.val());
+                        
+                        if (snapshot.val() === true) {
+                            console.log('✅ Firebase connected successfully');
+                            
+                            // Get fresh token trước khi save
+                            return auth.currentUser.getIdToken(true).then((token) => {
+                                console.log('Fresh ID token obtained (first 50 chars):', token.substring(0, 50) + '...');
+                                
+                                // Thử tạo department
+                                console.log('Attempting to save to: departments/');
+                                const savePromise = db.ref('departments').push(newDepartment);
+                                console.log('Save promise created, waiting for result...');
+                                
+                                return savePromise;
+                            });
+                        } else {
+                            throw new Error('Firebase not connected');
+                        }
+                    }).then((ref) => {
+                        console.log('✅ Department created successfully!');
+                        console.log('New department ID:', ref.key);
+                        console.log('Full reference path:', ref.toString());
+                        
+                        loadDepartments();
+                        Swal.fire('Thành công', 'Đã thêm phòng ban mới!', 'success');
+                    }).catch((error) => {
+                        console.error('❌ ERROR SAVING DEPARTMENT');
+                        console.error('Error object:', error);
+                        console.error('Error code:', error.code);
+                        console.error('Error message:', error.message);
+                        console.error('Error stack:', error.stack);
+                        
+                        // Log thêm thông tin debug
+                        console.error('Current user at time of error:', {
+                            uid: auth.currentUser?.uid,
+                            email: auth.currentUser?.email,
+                            emailVerified: auth.currentUser?.emailVerified
+                        });
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            html: `
+                                <p>Không thể thêm phòng ban:</p>
+                                <p><strong>Mã lỗi:</strong> ${error.code}</p>
+                                <p><strong>Thông điệp:</strong> ${error.message}</p>
+                                <p><em>Kiểm tra Console để xem chi tiết</em></p>
+                            `
+                        });
+                    });
+                }
+            });
+        }
+
+        function editDepartment(deptId) {
+            const department = allDepartments.find(d => d.id === deptId);
+            if (!department) {
+                Swal.fire('Lỗi', 'Không tìm thấy phòng ban này.', 'error');
+                return;
+            }
+            
+            Swal.fire({
+                title: 'Chỉnh sửa phòng ban',
+                html: `
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" id="editDeptName" class="form-control mb-2" value="${department.name || ''}" placeholder="Tên phòng ban *" required>
+                                <input type="text" id="editDeptCode" class="form-control mb-2" value="${department.code || ''}" placeholder="Mã phòng ban *" required>
+                                <textarea id="editDeptDescription" class="form-control mb-2" rows="3" placeholder="Mô tả phòng ban">${department.description || ''}</textarea>
+                                <input type="text" id="editDeptManager" class="form-control mb-2" value="${department.manager || ''}" placeholder="Trưởng phòng">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="number" id="editDeptBudget" class="form-control mb-2" value="${department.budget || ''}" placeholder="Ngân sách (VNĐ)" min="0">
+                                <input type="text" id="editDeptLocation" class="form-control mb-2" value="${department.location || ''}" placeholder="Địa điểm">
+                                <input type="email" id="editDeptEmail" class="form-control mb-2" value="${department.email || ''}" placeholder="Email phòng ban">
+                                <input type="text" id="editDeptPhone" class="form-control mb-2" value="${department.phone || ''}" placeholder="Số điện thoại">
+                                <select id="editDeptStatus" class="form-select mb-2">
+                                    <option value="active" ${department.status === 'active' ? 'selected' : ''}>Hoạt động</option>
+                                    <option value="inactive" ${department.status === 'inactive' ? 'selected' : ''}>Không hoạt động</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                width: '80%',
+                showCancelButton: true,
+                confirmButtonText: 'Lưu thay đổi',
+                cancelButtonText: 'Hủy',
+                preConfirm: () => {
+                    const name = document.getElementById('editDeptName').value.trim();
+                    const code = document.getElementById('editDeptCode').value.trim();
+                    
+                    if (!name || !code) {
+                        Swal.showValidationMessage('Vui lòng nhập tên và mã phòng ban');
+                        return false;
+                    }
+                    
+                    return {
+                        name: name,
+                        code: code,
+                        description: document.getElementById('editDeptDescription').value.trim(),
+                        manager: document.getElementById('editDeptManager').value.trim(),
+                        budget: parseInt(document.getElementById('editDeptBudget').value) || 0,
+                        location: document.getElementById('editDeptLocation').value.trim(),
+                        email: document.getElementById('editDeptEmail').value.trim(),
+                        phone: document.getElementById('editDeptPhone').value.trim(),
+                        status: document.getElementById('editDeptStatus').value,
+                        updatedAt: Date.now()
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const updatedDepartment = result.value;
+                    db.ref('departments/' + deptId).update(updatedDepartment).then(() => {
+                        loadDepartments();
+                        Swal.fire('Thành công', 'Đã cập nhật phòng ban!', 'success');
+                    }).catch((error) => {
+                        console.error('Error updating department:', error);
+                        Swal.fire('Lỗi', 'Không thể cập nhật phòng ban.', 'error');
+                    });
+                }
+            });
+        }
+
+        function viewDepartment(deptId) {
+            const department = allDepartments.find(d => d.id === deptId);
+            if (!department) {
+                Swal.fire('Lỗi', 'Không tìm thấy phòng ban này.', 'error');
+                return;
+            }
+            
+            const budget = department.budget ? department.budget.toLocaleString('vi-VN') + ' VNĐ' : 'Chưa có';
+            const created = department.createdAt ? new Date(department.createdAt).toLocaleDateString('vi-VN') : 'N/A';
+            const updated = department.updatedAt ? new Date(department.updatedAt).toLocaleDateString('vi-VN') : 'N/A';
+            
+            Swal.fire({
+                title: `Chi tiết phòng ban: ${department.name}`,
+                html: `
+                    <div class="container-fluid text-start">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3"><i class="fas fa-info-circle"></i> Thông tin cơ bản</h6>
+                                <p><strong>Tên phòng ban:</strong> ${department.name}</p>
+                                <p><strong>Mã phòng ban:</strong> ${department.code}</p>
+                                <p><strong>Mô tả:</strong> ${department.description || 'Không có'}</p>
+                                <p><strong>Trưởng phòng:</strong> ${department.manager || 'Chưa có'}</p>
+                                <p><strong>Số nhân viên:</strong> ${department.staffCount || 0} người</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-success mb-3"><i class="fas fa-contact-card"></i> Thông tin liên hệ</h6>
+                                <p><strong>Ngân sách:</strong> ${budget}</p>
+                                <p><strong>Địa điểm:</strong> ${department.location || 'Không có'}</p>
+                                <p><strong>Email:</strong> ${department.email || 'Không có'}</p>
+                                <p><strong>Số điện thoại:</strong> ${department.phone || 'Không có'}</p>
+                                <p><strong>Trạng thái:</strong> ${department.status === 'active' ? 'Hoạt động' : 'Không hoạt động'}</p>
+                                <p><strong>Ngày tạo:</strong> ${created}</p>
+                                <p><strong>Cập nhật lần cuối:</strong> ${updated}</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                width: '80%',
+                confirmButtonText: 'Đóng'
+            });
+        }
+
+        function deleteDepartment(deptId) {
+            const department = allDepartments.find(d => d.id === deptId);
+            if (!department) {
+                Swal.fire('Lỗi', 'Không tìm thấy phòng ban này.', 'error');
+                return;
+            }
+            
+            Swal.fire({
+                title: 'Xác nhận xóa?',
+                text: `Bạn có chắc chắn muốn xóa phòng ban "${department.name}"? Hành động này không thể hoàn tác!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    db.ref('departments/' + deptId).remove().then(() => {
+                        loadDepartments();
+                        Swal.fire('Đã xóa', 'Phòng ban đã được xóa thành công.', 'success');
+                    }).catch((error) => {
+                        console.error('Error deleting department:', error);
+                        Swal.fire('Lỗi', 'Không thể xóa phòng ban.', 'error');
+                    });
+                }
+            });
+        }
+
+        // Staff Management Section Logic - Booking.com style
+        function filterAndDisplayStaff() {
+            let filteredStaff = [...allStaff];
+            const searchTerm = document.getElementById('staffSearchInput')?.value.toLowerCase().trim() || '';
+            const roleFilter = document.getElementById('staffRoleFilter')?.value || 'all';
+            if (searchTerm) {
+                filteredStaff = filteredStaff.filter(s =>
+                    (s.name && s.name.toLowerCase().includes(searchTerm)) ||
+                    (s.email && s.email.toLowerCase().includes(searchTerm)) ||
+                    (s.phone && s.phone.includes(searchTerm))
+                );
+            }
+            if (roleFilter !== 'all') {
+                filteredStaff = filteredStaff.filter(s => s.role === roleFilter);
+            }
+            renderStaffTable(filteredStaff);
+        }
+
+        function loadStaff() {
+            const staffTable = document.getElementById('staffTable');
+            staffTable.innerHTML = '<tr><td colspan="7" class="text-center">Đang tải dữ liệu...</td></tr>';
+            db.ref('staff').on('value', (snapshot) => {
+                allStaff = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((staffSnapshot) => {
+                        const staff = staffSnapshot.val();
+                        staff.id = staffSnapshot.key;
+                        allStaff.push(staff);
+                    });
+                }
+                filterAndDisplayStaff();
+            }, (error) => {
+                staffTable.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Lỗi khi tải dữ liệu</td></tr>';
+            });
+        }
+
+        function loadStaffRoleFilter() {
+            const roleFilter = document.getElementById('staffRoleFilter');
+            if (!roleFilter) return;
+            
+            // Lưu giá trị hiện tại
+            const currentValue = roleFilter.value;
+            
+            // Load roles từ Firebase
+            db.ref('roles').once('value').then((snapshot) => {
+                // Reset filter với option "Tất cả vai trò"
+                roleFilter.innerHTML = '<option value="all">Tất cả vai trò</option>';
+                
+                if (snapshot.exists()) {
+                    snapshot.forEach((roleSnapshot) => {
+                        const role = roleSnapshot.val();
+                        if (role.name && role.code) {
+                            const option = document.createElement('option');
+                            option.value = role.code;
+                            option.textContent = role.name;
+                            roleFilter.appendChild(option);
+                        }
+                    });
+                } else {
+                    // Fallback options nếu không có roles trong database
+                    const fallbackRoles = [
+                        {code: 'admin', name: 'Quản trị viên'},
+                        {code: 'cskh', name: 'Chăm sóc khách hàng'},
+                        {code: 'manager', name: 'Quản lý khách sạn'},
+                        {code: 'marketing', name: 'Marketing'},
+                        {code: 'kythuat', name: 'Kỹ thuật'},
+                        {code: 'receptionist', name: 'Lễ tân'},
+                        {code: 'housekeeping', name: 'Buồng phòng'},
+                        {code: 'security', name: 'Bảo vệ'},
+                        {code: 'finance', name: 'Kế toán'},
+                        {code: 'hr', name: 'Nhân sự'}
+                    ];
+                    
+                    fallbackRoles.forEach(role => {
+                        const option = document.createElement('option');
+                        option.value = role.code;
+                        option.textContent = role.name;
+                        roleFilter.appendChild(option);
+                    });
+                }
+                
+                // Khôi phục giá trị đã chọn (nếu có)
+                if (currentValue) {
+                    roleFilter.value = currentValue;
+                }
+                
+            }).catch((error) => {
+                console.error('Error loading roles for filter:', error);
+                // Sử dụng fallback nếu có lỗi
+                roleFilter.innerHTML = `
+                    <option value="all">Tất cả vai trò</option>
+                    <option value="admin">Quản trị viên</option>
+                    <option value="cskh">Chăm sóc khách hàng</option>
+                    <option value="manager">Quản lý khách sạn</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="kythuat">Kỹ thuật</option>
+                    <option value="receptionist">Lễ tân</option>
+                    <option value="housekeeping">Buồng phòng</option>
+                    <option value="security">Bảo vệ</option>
+                    <option value="finance">Kế toán</option>
+                    <option value="hr">Nhân sự</option>
+                `;
+            });
+        }
+
+        function loadDepartmentOptions(selectElementId) {
+            const departmentSelect = document.getElementById(selectElementId);
+            if (!departmentSelect) return Promise.resolve();
+            
+            return db.ref('departments').once('value').then((snapshot) => {
+                // Lưu giá trị hiện tại
+                const currentValue = departmentSelect.value;
+                
+                // Reset với option mặc định
+                departmentSelect.innerHTML = '<option value="">Chọn phòng ban</option>';
+                
+                if (snapshot.exists()) {
+                    snapshot.forEach((deptSnapshot) => {
+                        const department = deptSnapshot.val();
+                        if (department.name && department.status === 'active') {
+                            const option = document.createElement('option');
+                            option.value = department.code || department.name;
+                            option.textContent = department.name;
+                            departmentSelect.appendChild(option);
+                        }
+                    });
+                } else {
+                    // Fallback options nếu không có departments trong database
+                    const fallbackDepartments = [
+                        'Operations',
+                        'Sales & Marketing', 
+                        'Human Resources',
+                        'Finance',
+                        'IT',
+                        'Customer Service'
+                    ];
+                    
+                    fallbackDepartments.forEach(dept => {
+                        const option = document.createElement('option');
+                        option.value = dept;
+                        option.textContent = dept;
+                        departmentSelect.appendChild(option);
+                    });
+                }
+                
+                // Khôi phục giá trị đã chọn (nếu có)
+                if (currentValue) {
+                    departmentSelect.value = currentValue;
+                }
+                
+            }).catch((error) => {
+                console.error('Error loading departments:', error);
+                // Sử dụng fallback nếu có lỗi
+                departmentSelect.innerHTML = `
+                    <option value="">Chọn phòng ban</option>
+                    <option value="Operations">Vận hành</option>
+                    <option value="Sales & Marketing">Kinh doanh & Marketing</option>
+                    <option value="Human Resources">Nhân sự</option>
+                    <option value="Finance">Tài chính</option>
+                    <option value="IT">Công nghệ thông tin</option>
+                    <option value="Customer Service">Chăm sóc khách hàng</option>
+                `;
+            });
+        }
+
+        function renderStaffTable(staffList) {
+            const staffTable = document.getElementById('staffTable');
+            staffTable.innerHTML = '';
+            if (staffList.length === 0) {
+                staffTable.innerHTML = '<tr><td colspan="7" class="text-center py-5">Không tìm thấy nhân viên phù hợp.</td></tr>';
+                return;
+            }
+            staffList.forEach(staff => {
+                const avatar = staff.avatar ? `<img src="${staff.avatar}" alt="avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">` : '<span class="avatar-placeholder" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;background-color:#e9ecef;border-radius:50%;color:#6c757d;"><i class="fas fa-user"></i></span>';
+                const joined = staff.joinedAt ? new Date(staff.joinedAt).toLocaleDateString('vi-VN') : 'N/A';
+                
+                // Dynamic role display từ Firebase
+                let roleDisplay = 'Chưa phân vai trò';
+                if (staff.role) {
+                    // Tìm role từ allRoles (Firebase data)
+                    const roleData = allRoles.find(r => r.code === staff.role);
+                    if (roleData && roleData.name) {
+                        roleDisplay = roleData.name;
+                    } else {
+                        // Fallback mapping nếu không tìm thấy trong Firebase
+                        const roleDisplayNames = {
+                            'cskh': 'Chăm sóc khách hàng',
+                            'manager': 'Quản lý khách sạn',
+                            'marketing': 'Marketing',
+                            'kythuat': 'Kỹ thuật',
+                            'admin': 'Quản trị viên',
+                            'receptionist': 'Lễ tân',
+                            'housekeeping': 'Buồng phòng',
+                            'security': 'Bảo vệ',
+                            'finance': 'Kế toán',
+                            'hr': 'Nhân sự'
+                        };
+                        roleDisplay = roleDisplayNames[staff.role] || staff.role;
+                    }
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${avatar}</td>
+                    <td>
+                        <div class="fw-bold">${staff.name || 'N/A'}</div>
+                        <small class="text-muted">${staff.employeeId || 'N/A'}</small>
+                    </td>
+                    <td>${staff.email || 'N/A'}</td>
+                    <td>${staff.phone || 'N/A'}</td>
+                    <td>
+                        <span class="badge bg-primary">${roleDisplay}</span>
+                    </td>
+                    <td>${joined}</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-sm btn-info" onclick="viewStaff('${staff.id}')" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="editStaff('${staff.id}')" title="Chỉnh sửa">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteStaff('${staff.id}')" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                staffTable.appendChild(row);
+            });
+        }
+
+        function addStaff() {
+            // Load danh sách users, roles và departments từ Firebase trước khi hiển thị modal
+            Promise.all([
+                db.ref('users').once('value'),
+                db.ref('roles').once('value'),
+                db.ref('departments').once('value')
+            ]).then(([usersSnapshot, rolesSnapshot, departmentsSnapshot]) => {
+                let usersOptions = '<option value="">-- Nhập thủ công hoặc chọn từ danh sách --</option>';
+                let rolesOptions = '<option value="">Chọn chức vụ *</option>';
+                let departmentsOptions = '<option value="">Chọn phòng ban</option>';
+                
+                // Load users options
+                if (usersSnapshot.exists()) {
+                    usersSnapshot.forEach((userSnapshot) => {
+                        const user = userSnapshot.val();
+                        const userId = userSnapshot.key;
+                        if (user.name && user.phone) {
+                            usersOptions += `<option value="${userId}" data-user='${JSON.stringify(user)}'>${user.name} - ${user.phone}</option>`;
+                        }
+                    });
+                }
+                
+                // Load roles options
+                window.rolesData = {}; // Khởi tạo đối tượng lưu trữ thông tin roles
+                if (rolesSnapshot.exists()) {
+                    rolesSnapshot.forEach((roleSnapshot) => {
+                        const role = roleSnapshot.val();
+                        const roleId = roleSnapshot.key;
+                        if (role.name && role.code) {
+                            // Lưu thông tin role vào window.rolesData
+                            window.rolesData[role.code] = role;
+                            
+                            const salary = role.salary ? ` - ${role.salary.toLocaleString('vi-VN')} VNĐ` : '';
+                            const allowance = role.allowance ? ` + ${role.allowance.toLocaleString('vi-VN')} VNĐ phụ cấp` : '';
+                            rolesOptions += `<option value="${role.code}" data-role='${JSON.stringify(role)}'>${role.name} (${role.code})${salary}${allowance}</option>`;
+                        }
+                    });
+                } else {
+                    // Fallback options nếu không có roles trong database
+                    rolesOptions += `
+                        <option value="cskh">Chăm sóc khách hàng</option>
+                        <option value="manager">Quản lý khách sạn</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="kythuat">Kỹ thuật</option>
+                        <option value="admin">Quản trị viên</option>
+                        <option value="receptionist">Lễ tân</option>
+                        <option value="housekeeping">Buồng phòng</option>
+                        <option value="security">Bảo vệ</option>
+                        <option value="finance">Kế toán</option>
+                        <option value="hr">Nhân sự</option>
+                    `;
+                }
+                
+                // Load departments options
+                if (departmentsSnapshot.exists()) {
+                    departmentsSnapshot.forEach((deptSnapshot) => {
+                        const department = deptSnapshot.val();
+                        if (department.name && department.status === 'active') {
+                            departmentsOptions += `<option value="${department.code || department.name}">${department.name}</option>`;
+                        }
+                    });
+                } else {
+                    // Fallback options nếu không có departments trong database
+                    departmentsOptions += `
+                        <option value="Operations">Vận hành</option>
+                        <option value="Sales & Marketing">Kinh doanh & Marketing</option>
+                        <option value="Human Resources">Nhân sự</option>
+                        <option value="Finance">Tài chính</option>
+                        <option value="IT">Công nghệ thông tin</option>
+                        <option value="Customer Service">Chăm sóc khách hàng</option>
+                    `;
+                }
+                
+                Swal.fire({
+                title: 'Thêm nhân viên mới',
+                html: `
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3"><i class="fas fa-user"></i> Thông tin cá nhân</h6>
+                                <div class="mb-2">
+                                    <label class="form-label">Chọn từ khách hàng hiện có (tùy chọn)</label>
+                                    <select id="staffUserSelect" class="form-select" onchange="fillUserData()">
+                                        ${usersOptions}
+                                    </select>
+                                </div>
+                                <input type="text" id="staffName" class="form-control mb-2" placeholder="Họ và tên đầy đủ *" required>
+                                <input type="date" id="staffBirthDate" class="form-control mb-2" placeholder="Ngày sinh">
+                                <select id="staffGender" class="form-select mb-2">
+                                    <option value="">Chọn giới tính</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                    <option value="Khác">Khác</option>
+                                </select>
+                                <input type="text" id="staffIdCard" class="form-control mb-2" placeholder="Số CCCD/CMND *" required>
+                                <input type="date" id="staffIdCardDate" class="form-control mb-2" placeholder="Ngày cấp CCCD">
+                                <input type="text" id="staffIdCardPlace" class="form-control mb-2" placeholder="Nơi cấp CCCD">
+                                <input type="text" id="staffNationality" class="form-control mb-2" placeholder="Quốc tịch" value="Việt Nam">
+                                <input type="text" id="staffEthnicity" class="form-control mb-2" placeholder="Dân tộc" value="Kinh">
+                                <input type="text" id="staffReligion" class="form-control mb-2" placeholder="Tôn giáo">
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-success mb-3"><i class="fas fa-address-card"></i> Thông tin liên hệ</h6>
+                                <input type="email" id="staffEmail" class="form-control mb-2" placeholder="Email công ty *" required>
+                                <input type="text" id="staffPhone" class="form-control mb-2" placeholder="Số điện thoại *" required>
+                                <input type="text" id="staffPersonalPhone" class="form-control mb-2" placeholder="Số điện thoại cá nhân">
+                                <textarea id="staffAddress" class="form-control mb-2" rows="2" placeholder="Địa chỉ thường trú"></textarea>
+                                <textarea id="staffTempAddress" class="form-control mb-2" rows="2" placeholder="Địa chỉ tạm trú (nếu khác)"></textarea>
+                                <input type="text" id="staffEmergencyContact" class="form-control mb-2" placeholder="Người liên hệ khẩn cấp">
+                                <input type="text" id="staffEmergencyPhone" class="form-control mb-2" placeholder="Số điện thoại khẩn cấp">
+                                <input type="text" id="staffRelationship" class="form-control mb-2" placeholder="Mối quan hệ (Cha/Mẹ/Anh/Chị/...)">
+
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <h6 class="text-warning mb-3"><i class="fas fa-graduation-cap"></i> Học vấn & Kinh nghiệm</h6>
+                                <select id="staffEducation" class="form-select mb-2">
+                                    <option value="">Trình độ học vấn</option>
+                                    <option value="Tiểu học">Tiểu học</option>
+                                    <option value="Trung học cơ sở">Trung học cơ sở</option>
+                                    <option value="Trung học phổ thông">Trung học phổ thông</option>
+                                    <option value="Trung cấp">Trung cấp</option>
+                                    <option value="Cao đẳng">Cao đẳng</option>
+                                    <option value="Đại học">Đại học</option>
+                                    <option value="Thạc sĩ">Thạc sĩ</option>
+                                    <option value="Tiến sĩ">Tiến sĩ</option>
+                                </select>
+                                <input type="text" id="staffMajor" class="form-control mb-2" placeholder="Chuyên ngành">
+                                <input type="text" id="staffSchool" class="form-control mb-2" placeholder="Trường học/Đại học">
+                                <input type="number" id="staffExperience" class="form-control mb-2" placeholder="Số năm kinh nghiệm" min="0">
+                                <textarea id="staffSkills" class="form-control mb-2" rows="2" placeholder="Kỹ năng chuyên môn"></textarea>
+                                <textarea id="staffCertificates" class="form-control mb-2" rows="2" placeholder="Chứng chỉ/Bằng cấp khác"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-info mb-3"><i class="fas fa-briefcase"></i> Thông tin công việc</h6>
+                                <select id="staffRole" class="form-select mb-2" required onchange="fillRoleData()">
+                                    ${rolesOptions}
+                                </select>
+                                <div id="roleDetails" class="mb-2 p-2 bg-light rounded" style="display: none;">
+                                    <small class="text-muted">
+                                        <div><strong>Mô tả:</strong> <span id="roleDescription"></span></div>
+                                        <div><strong>Quyền hạn:</strong> <span id="rolePermissions"></span></div>
+                                        <div><strong>Lương cơ bản:</strong> <span id="roleSalary"></span></div>
+                                        <div><strong>Phụ cấp:</strong> <span id="roleAllowance"></span></div>
+                                    </small>
+                                </div>
+                                <select id="staffDepartment" class="form-select mb-2">
+                                    ${departmentsOptions}
+                                </select>
+                                <input type="date" id="staffStartDate" class="form-control mb-2" placeholder="Ngày bắt đầu làm việc">
+                                <select id="staffEmploymentType" class="form-select mb-2">
+                                    <option value="Toàn thời gian">Toàn thời gian</option>
+                                    <option value="Bán thời gian">Bán thời gian</option>
+                                    <option value="Thử việc">Thử việc</option>
+                                    <option value="Thực tập">Thực tập</option>
+                                    <option value="Hợp đồng">Hợp đồng</option>
+                                </select>
+                                <input type="number" id="staffBasicSalary" class="form-control mb-2" placeholder="Lương cơ bản (VNĐ)" min="0">
+                                <input type="text" id="staffBankAccount" class="form-control mb-2" placeholder="Số tài khoản ngân hàng">
+                                <input type="text" id="staffBankName" class="form-control mb-2" placeholder="Tên ngân hàng">
+                                <textarea id="staffNote" class="form-control mb-2" rows="2" placeholder="Ghi chú thêm"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                width: '90%',
+                showCancelButton: true,
+                confirmButtonText: 'Thêm nhân viên',
+                cancelButtonText: 'Hủy',
+                preConfirm: () => {
+                    const name = document.getElementById('staffName').value.trim();
+                    const email = document.getElementById('staffEmail').value.trim();
+                    const phone = document.getElementById('staffPhone').value.trim();
+                    const idCard = document.getElementById('staffIdCard').value.trim();
+                    const role = document.getElementById('staffRole').value;
+                    
+                    if (!name || !email || !phone || !idCard || !role) {
+                        Swal.showValidationMessage('Vui lòng nhập đầy đủ các thông tin bắt buộc (*)');
+                        return false;
+                    }
+                    
+                    // Validate email
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        Swal.showValidationMessage('Email không hợp lệ');
+                        return false;
+                    }
+                    
+                    // Validate phone
+                    const phoneRegex = /^[0-9]{10,11}$/;
+                    if (!phoneRegex.test(phone)) {
+                        Swal.showValidationMessage('Số điện thoại phải có 10-11 chữ số');
+                        return false;
+                    }
+                    
+                    // Validate ID Card
+                    const idCardRegex = /^[0-9]{9,12}$/;
+                    if (!idCardRegex.test(idCard)) {
+                        Swal.showValidationMessage('Số CCCD/CMND không hợp lệ');
+                        return false;
+                    }
+                    
+                    return {
+                        // Thông tin cá nhân
+                        name: name,
+                        birthDate: (document.getElementById('staffBirthDate') || {}).value || '',
+                        gender: (document.getElementById('staffGender') || {}).value || '',
+                        idCard: idCard,
+                        idCardDate: (document.getElementById('staffIdCardDate') || {}).value || '',
+                        idCardPlace: (document.getElementById('staffIdCardPlace') || {}).value || '',
+                        nationality: (document.getElementById('staffNationality') || {}).value || 'Việt Nam',
+                        ethnicity: (document.getElementById('staffEthnicity') || {}).value || 'Kinh',
+                        religion: (document.getElementById('staffReligion') || {}).value || '',
+                        
+                        // Thông tin liên hệ
+                        email: email,
+                        phone: phone,
+                        personalPhone: (document.getElementById('staffPersonalPhone') || {}).value || '',
+                        address: (document.getElementById('staffAddress') || {}).value || '',
+                        tempAddress: (document.getElementById('staffTempAddress') || {}).value || '',
+                        emergencyContact: (document.getElementById('staffEmergencyContact') || {}).value || '',
+                        emergencyPhone: (document.getElementById('staffEmergencyPhone') || {}).value || '',
+                        relationship: (document.getElementById('staffRelationship') || {}).value || '',
+                        
+                        // Học vấn & Kinh nghiệm
+                        education: (document.getElementById('staffEducation') || {}).value || '',
+                        major: (document.getElementById('staffMajor') || {}).value || '',
+                        school: (document.getElementById('staffSchool') || {}).value || '',
+                        experience: parseInt((document.getElementById('staffExperience') || {}).value) || 0,
+                        skills: (document.getElementById('staffSkills') || {}).value || '',
+                        certificates: (document.getElementById('staffCertificates') || {}).value || '',
+                        
+                        // Thông tin công việc
+                        role: role,
+                        department: (document.getElementById('staffDepartment') || {}).value || '',
+                        startDate: (document.getElementById('staffStartDate') || {}).value || '',
+                        employmentType: (document.getElementById('staffEmploymentType') || {}).value || 'Toàn thời gian',
+                        basicSalary: parseInt((document.getElementById('staffBasicSalary') || {}).value) || 0,
+                        bankAccount: (document.getElementById('staffBankAccount') || {}).value || '',
+                        bankName: (document.getElementById('staffBankName') || {}).value || '',
+                        note: (document.getElementById('staffNote') || {}).value || ''
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const newStaff = result.value;
+                    console.log('New staff data:', newStaff); // Debug log
+                    
+                    newStaff.joinedAt = Date.now();
+                    newStaff.createdAt = Date.now();
+                    newStaff.status = 'active';
+                    newStaff.employeeId = 'EMP' + Date.now().toString().slice(-8); // Tạo mã nhân viên
+                    
+                    console.log('Attempting to save staff to Firebase...'); // Debug log
+                    
+                    db.ref('staff').push(newStaff).then(() => {
+                        console.log('Staff saved successfully!'); // Debug log
+                        loadStaff();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: `Đã thêm nhân viên mới: ${newStaff.name}`,
+                            timer: 2000
+                        });
+                    }).catch((error) => {
+                        console.error('Error saving staff:', error); // Debug log
+                        Swal.fire('Lỗi', 'Không thể thêm nhân viên: ' + error.message, 'error');
+                    });
+                }
+            });
+            }).catch((error) => {
+                console.error('Error loading users for staff dropdown:', error);
+                // Nếu lỗi load users, vẫn hiển thị modal nhưng không có dropdown
+                Swal.fire({
+                    title: 'Thêm nhân viên mới',
+                    text: 'Lỗi tải danh sách khách hàng, vui lòng nhập thủ công.',
+                    icon: 'warning'
+                });
+            });
+        }
+
+        // Function để điền dữ liệu từ user đã chọn
+        function fillUserData() {
+            const select = document.getElementById('staffUserSelect');
+            const selectedOption = select.options[select.selectedIndex];
+            
+            if (selectedOption.value && selectedOption.dataset.user) {
+                const userData = JSON.parse(selectedOption.dataset.user);
+                
+                // Điền thông tin cá nhân
+                if (userData.name) document.getElementById('staffName').value = userData.name;
+                if (userData.birthday) document.getElementById('staffBirthDate').value = userData.birthday;
+                if (userData.gender) document.getElementById('staffGender').value = userData.gender;
+                if (userData.identityNumber) document.getElementById('staffIdCard').value = userData.identityNumber;
+                if (userData.nationality) document.getElementById('staffNationality').value = userData.nationality;
+                
+                // Điền thông tin liên hệ (nếu có email trong dữ liệu user)
+                if (userData.email) document.getElementById('staffEmail').value = userData.email;
+                if (userData.phone) document.getElementById('staffPhone').value = userData.phone;
+                if (userData.address) document.getElementById('staffAddress').value = userData.address;
+                
+                // Tự động điền một số thông tin mặc định
+                document.getElementById('staffEmploymentType').value = 'Toàn thời gian';
+                document.getElementById('staffStartDate').value = new Date().toISOString().split('T')[0];
+                
+                Swal.showValidationMessage('Đã điền thông tin từ khách hàng: ' + userData.name);
+                setTimeout(() => {
+                    Swal.resetValidationMessage();
+                }, 2000);
+            }
+        }
+
+        // Hàm điền thông tin chức vụ khi chọn
+        function fillRoleData() {
+            const roleSelect = document.getElementById('staffRole');
+            const roleDetails = document.getElementById('roleDetails');
+            const roleValue = roleSelect.value;
+
+            console.log('fillRoleData called with:', roleValue); // Debug log
+            console.log('rolesData:', window.rolesData); // Debug log
+
+            if (roleValue && window.rolesData && window.rolesData[roleValue]) {
+                const roleData = window.rolesData[roleValue];
+                console.log('Selected role data:', roleData); // Debug log
+                
+                // Hiển thị thông tin chi tiết chức vụ
+                document.getElementById('roleDescription').textContent = roleData.description || 'Chưa có mô tả';
+                
+                // Xử lý permissions - có thể là string hoặc array
+                let permissionsText = 'Chưa có quyền hạn';
+                if (roleData.permissions) {
+                    if (Array.isArray(roleData.permissions)) {
+                        permissionsText = roleData.permissions.join(', ');
+                    } else {
+                        permissionsText = roleData.permissions;
+                    }
+                }
+                document.getElementById('rolePermissions').textContent = permissionsText;
+                
+                document.getElementById('roleSalary').textContent = roleData.salary ? formatCurrency(roleData.salary) : 'Chưa có thông tin';
+                document.getElementById('roleAllowance').textContent = roleData.allowance ? formatCurrency(roleData.allowance) : 'Chưa có thông tin';
+                
+                roleDetails.style.display = 'block';
+                
+                // Tự động điền lương cơ bản vào form với delay nhỏ
+                setTimeout(() => {
+                    const salaryField = document.getElementById('staffBasicSalary');
+                    console.log('Salary field found:', salaryField); // Debug log
+                    
+                    if (roleData.salary && salaryField) {
+                        salaryField.value = roleData.salary;
+                        console.log('Salary filled:', roleData.salary); // Debug log
+                        
+                        // Trigger change event để đảm bảo UI update
+                        salaryField.dispatchEvent(new Event('change'));
+                    }
+                }, 100);
+                
+                // Tạo một thông báo nhỏ về phụ cấp (vì không có field riêng cho phụ cấp)
+                setTimeout(() => {
+                    if (roleData.allowance) {
+                        const noteField = document.getElementById('staffNote');
+                        if (noteField) {
+                            const currentNote = noteField.value;
+                            const allowanceNote = `Phụ cấp chức vụ: ${formatCurrency(roleData.allowance)}`;
+                            
+                            if (!currentNote.includes('Phụ cấp chức vụ:')) {
+                                noteField.value = currentNote ? `${currentNote}\n${allowanceNote}` : allowanceNote;
+                                console.log('Allowance note added:', allowanceNote); // Debug log
+                            }
+                        }
+                    }
+                }, 100);
+                
+            } else {
+                roleDetails.style.display = 'none';
+                // Xóa giá trị lương cơ bản nếu không có chức vụ
+                setTimeout(() => {
+                    const salaryField = document.getElementById('staffBasicSalary');
+                    if (salaryField) {
+                        salaryField.value = '';
+                    }
+                    
+                    // Xóa thông tin phụ cấp khỏi ghi chú
+                    const noteField = document.getElementById('staffNote');
+                    if (noteField && noteField.value.includes('Phụ cấp chức vụ:')) {
+                        noteField.value = noteField.value.replace(/Phụ cấp chức vụ:.*?\n?/g, '').trim();
+                    }
+                }, 100);
+            }
+        }
+
+        // Hàm format tiền tệ
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+
+        function viewStaff(staffId) {
+            const staff = allStaff.find(s => s.id === staffId);
+            if (!staff) {
+                Swal.fire('Lỗi', 'Không tìm thấy nhân viên này.', 'error');
+                return;
+            }
+            
+            Swal.fire({
+                title: `<i class="fas fa-user-circle"></i> Thông tin nhân viên: ${staff.name}`,
+                html: `
+                    <div class="container-fluid text-start">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-primary text-white">
+                                        <h6 class="mb-0"><i class="fas fa-user"></i> Thông tin cá nhân</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Mã nhân viên:</strong> ${staff.employeeId || 'N/A'}</p>
+                                        <p><strong>Họ và tên:</strong> ${staff.name || 'N/A'}</p>
+                                        <p><strong>Ngày sinh:</strong> ${staff.birthDate ? new Date(staff.birthDate).toLocaleDateString('vi-VN') : 'N/A'}</p>
+                                        <p><strong>Giới tính:</strong> ${staff.gender || 'N/A'}</p>
+                                        <p><strong>CCCD/CMND:</strong> ${staff.idCard || 'N/A'}</p>
+                                        <p><strong>Ngày cấp:</strong> ${staff.idCardDate ? new Date(staff.idCardDate).toLocaleDateString('vi-VN') : 'N/A'}</p>
+                                        <p><strong>Nơi cấp:</strong> ${staff.idCardPlace || 'N/A'}</p>
+                                        <p><strong>Quốc tịch:</strong> ${staff.nationality || 'N/A'}</p>
+                                        <p><strong>Dân tộc:</strong> ${staff.ethnicity || 'N/A'}</p>
+                                        <p><strong>Tôn giáo:</strong> ${staff.religion || 'N/A'}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-3">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0"><i class="fas fa-address-card"></i> Thông tin liên hệ</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Email công ty:</strong> ${staff.email || 'N/A'}</p>
+                                        <p><strong>Điện thoại:</strong> ${staff.phone || 'N/A'}</p>
+                                        <p><strong>Điện thoại cá nhân:</strong> ${staff.personalPhone || 'N/A'}</p>
+                                        <p><strong>Địa chỉ thường trú:</strong> ${staff.address || 'N/A'}</p>
+                                        <p><strong>Địa chỉ tạm trú:</strong> ${staff.tempAddress || 'N/A'}</p>
+                                        <p><strong>Liên hệ khẩn cấp:</strong> ${staff.emergencyContact || 'N/A'}</p>
+                                        <p><strong>SĐT khẩn cấp:</strong> ${staff.emergencyPhone || 'N/A'}</p>
+                                        <p><strong>Mối quan hệ:</strong> ${staff.relationship || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h6 class="mb-0"><i class="fas fa-graduation-cap"></i> Học vấn & Kinh nghiệm</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Trình độ học vấn:</strong> ${staff.education || 'N/A'}</p>
+                                        <p><strong>Chuyên ngành:</strong> ${staff.major || 'N/A'}</p>
+                                        <p><strong>Trường học:</strong> ${staff.school || 'N/A'}</p>
+                                        <p><strong>Kinh nghiệm:</strong> ${staff.experience || 0} năm</p>
+                                        <p><strong>Kỹ năng:</strong> ${staff.skills || 'N/A'}</p>
+                                        <p><strong>Chứng chỉ:</strong> ${staff.certificates || 'N/A'}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-3">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 class="mb-0"><i class="fas fa-briefcase"></i> Thông tin công việc</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Chức vụ:</strong> ${staff.role || 'N/A'}</p>
+                                        <p><strong>Phòng ban:</strong> ${staff.department || 'N/A'}</p>
+                                        <p><strong>Ngày bắt đầu:</strong> ${staff.startDate ? new Date(staff.startDate).toLocaleDateString('vi-VN') : 'N/A'}</p>
+                                        <p><strong>Loại hợp đồng:</strong> ${staff.employmentType || 'N/A'}</p>
+                                        <p><strong>Lương cơ bản:</strong> ${staff.basicSalary ? staff.basicSalary.toLocaleString('vi-VN') + ' VNĐ' : 'N/A'}</p>
+                                        <p><strong>Tài khoản ngân hàng:</strong> ${staff.bankAccount || 'N/A'}</p>
+                                        <p><strong>Ngân hàng:</strong> ${staff.bankName || 'N/A'}</p>
+                                        <p><strong>Trạng thái:</strong> 
+                                            <span class="badge ${staff.status === 'active' ? 'bg-success' : staff.status === 'inactive' ? 'bg-secondary' : 'bg-warning'}">
+                                                ${staff.status === 'active' ? 'Đang làm việc' : staff.status === 'inactive' ? 'Đã nghỉ việc' : 'Tạm nghỉ'}
+                                            </span>
+                                        </p>
+                                        <p><strong>Ghi chú:</strong> ${staff.note || 'N/A'}</p>
+                                        <p><strong>Ngày tạo:</strong> ${staff.createdAt ? new Date(staff.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                width: '90%',
+                showCloseButton: true,
+                focusConfirm: false,
+                confirmButtonText: 'Đóng'
+            });
+        }
+
+        function editStaff(staffId) {
+            const staff = allStaff.find(s => s.id === staffId);
+            if (!staff) {
+                Swal.fire('Lỗi', 'Không tìm thấy nhân viên này.', 'error');
+                return;
+            }
+            
+            // Load roles và departments từ Firebase trước khi hiển thị modal
+            Promise.all([
+                db.ref('roles').once('value'),
+                db.ref('departments').once('value')
+            ]).then(([rolesSnapshot, departmentsSnapshot]) => {
+                let rolesOptions = '<option value="">Chọn chức vụ *</option>';
+                let departmentsOptions = '<option value="">Phòng ban</option>';
+                
+                if (rolesSnapshot.exists()) {
+                    rolesSnapshot.forEach((roleSnapshot) => {
+                        const role = roleSnapshot.val();
+                        const roleId = roleSnapshot.key;
+                        if (role.name && role.code) {
+                            const salary = role.salary ? ` - ${role.salary.toLocaleString('vi-VN')} VNĐ` : '';
+                            const allowance = role.allowance ? ` + ${role.allowance.toLocaleString('vi-VN')} VNĐ phụ cấp` : '';
+                            const isSelected = staff.role === role.code ? 'selected' : '';
+                            rolesOptions += `<option value="${role.code}" ${isSelected} data-salary="${role.salary || 0}" data-allowance="${role.allowance || 0}" data-description="${role.description || ''}" data-permissions="${role.permissions || ''}">${role.name} (${role.code})${salary}${allowance}</option>`;
+                        }
+                    });
+                } else {
+                    // Fallback options nếu không có roles trong database
+                    rolesOptions += `
+                        <option value="cskh" ${staff.role === 'cskh' ? 'selected' : ''}>Chăm sóc khách hàng</option>
+                        <option value="manager" ${staff.role === 'manager' ? 'selected' : ''}>Quản lý khách sạn</option>
+                        <option value="marketing" ${staff.role === 'marketing' ? 'selected' : ''}>Marketing</option>
+                        <option value="kythuat" ${staff.role === 'kythuat' ? 'selected' : ''}>Kỹ thuật</option>
+                        <option value="admin" ${staff.role === 'admin' ? 'selected' : ''}>Quản trị viên</option>
+                        <option value="receptionist" ${staff.role === 'receptionist' ? 'selected' : ''}>Lễ tân</option>
+                        <option value="housekeeping" ${staff.role === 'housekeeping' ? 'selected' : ''}>Buồng phòng</option>
+                        <option value="security" ${staff.role === 'security' ? 'selected' : ''}>Bảo vệ</option>
+                        <option value="finance" ${staff.role === 'finance' ? 'selected' : ''}>Kế toán</option>
+                        <option value="hr" ${staff.role === 'hr' ? 'selected' : ''}>Nhân sự</option>
+                    `;
+                }
+                
+                // Load departments options
+                if (departmentsSnapshot.exists()) {
+                    departmentsSnapshot.forEach((deptSnapshot) => {
+                        const department = deptSnapshot.val();
+                        if (department.name && department.status === 'active') {
+                            const isSelected = staff.department === (department.code || department.name) ? 'selected' : '';
+                            departmentsOptions += `<option value="${department.code || department.name}" ${isSelected}>${department.name}</option>`;
+                        }
+                    });
+                } else {
+                    // Fallback options nếu không có departments trong database
+                    departmentsOptions += `
+                        <option value="Operations" ${staff.department === 'Operations' ? 'selected' : ''}>Vận hành</option>
+                        <option value="Sales & Marketing" ${staff.department === 'Sales & Marketing' ? 'selected' : ''}>Kinh doanh & Marketing</option>
+                        <option value="Human Resources" ${staff.department === 'Human Resources' ? 'selected' : ''}>Nhân sự</option>
+                        <option value="Finance" ${staff.department === 'Finance' ? 'selected' : ''}>Tài chính</option>
+                        <option value="IT" ${staff.department === 'IT' ? 'selected' : ''}>Công nghệ thông tin</option>
+                        <option value="Customer Service" ${staff.department === 'Customer Service' ? 'selected' : ''}>Chăm sóc khách hàng</option>
+                    `;
+                }
+            
+            Swal.fire({
+                title: 'Chỉnh sửa thông tin nhân viên',
+                html: `
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3"><i class="fas fa-user"></i> Thông tin cá nhân</h6>
+                                <input type="text" id="editStaffName" class="form-control mb-2" placeholder="Họ và tên đầy đủ *" value="${staff.name || ''}" required>
+                                <input type="date" id="editStaffBirthDate" class="form-control mb-2" value="${staff.birthDate || ''}">
+                                <select id="editStaffGender" class="form-select mb-2">
+                                    <option value="">Chọn giới tính</option>
+                                    <option value="Nam" ${staff.gender === 'Nam' ? 'selected' : ''}>Nam</option>
+                                    <option value="Nữ" ${staff.gender === 'Nữ' ? 'selected' : ''}>Nữ</option>
+                                    <option value="Khác" ${staff.gender === 'Khác' ? 'selected' : ''}>Khác</option>
+                                </select>
+                                <input type="text" id="editStaffIdCard" class="form-control mb-2" placeholder="Số CCCD/CMND *" value="${staff.idCard || ''}" required>
+                                <input type="date" id="editStaffIdCardDate" class="form-control mb-2" value="${staff.idCardDate || ''}">
+                                <input type="text" id="editStaffIdCardPlace" class="form-control mb-2" placeholder="Nơi cấp CCCD" value="${staff.idCardPlace || ''}">
+                                <input type="text" id="editStaffNationality" class="form-control mb-2" placeholder="Quốc tịch" value="${staff.nationality || 'Việt Nam'}">
+                                <input type="text" id="editStaffEthnicity" class="form-control mb-2" placeholder="Dân tộc" value="${staff.ethnicity || 'Kinh'}">
+                                <input type="text" id="editStaffReligion" class="form-control mb-2" placeholder="Tôn giáo" value="${staff.religion || ''}">
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-success mb-3"><i class="fas fa-address-card"></i> Thông tin liên hệ</h6>
+                                <input type="email" id="editStaffEmail" class="form-control mb-2" placeholder="Email công ty *" value="${staff.email || ''}" required>
+                                <input type="text" id="editStaffPhone" class="form-control mb-2" placeholder="Số điện thoại *" value="${staff.phone || ''}" required>
+                                <input type="text" id="editStaffPersonalPhone" class="form-control mb-2" placeholder="Số điện thoại cá nhân" value="${staff.personalPhone || ''}">
+                                <textarea id="editStaffAddress" class="form-control mb-2" rows="2" placeholder="Địa chỉ thường trú">${staff.address || ''}</textarea>
+                                <textarea id="editStaffTempAddress" class="form-control mb-2" rows="2" placeholder="Địa chỉ tạm trú">${staff.tempAddress || ''}</textarea>
+                                <input type="text" id="editStaffEmergencyContact" class="form-control mb-2" placeholder="Người liên hệ khẩn cấp" value="${staff.emergencyContact || ''}">
+                                <input type="text" id="editStaffEmergencyPhone" class="form-control mb-2" placeholder="SĐT người liên hệ khẩn cấp" value="${staff.emergencyPhone || ''}">
+                                <input type="text" id="editStaffRelationship" class="form-control mb-2" placeholder="Mối quan hệ" value="${staff.relationship || ''}">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <h6 class="text-warning mb-3"><i class="fas fa-graduation-cap"></i> Học vấn & Kinh nghiệm</h6>
+                                <select id="editStaffEducation" class="form-select mb-2">
+                                    <option value="">Trình độ học vấn</option>
+                                    <option value="Tiểu học" ${staff.education === 'Tiểu học' ? 'selected' : ''}>Tiểu học</option>
+                                    <option value="Trung học cơ sở" ${staff.education === 'Trung học cơ sở' ? 'selected' : ''}>Trung học cơ sở</option>
+                                    <option value="Trung học phổ thông" ${staff.education === 'Trung học phổ thông' ? 'selected' : ''}>Trung học phổ thông</option>
+                                    <option value="Trung cấp" ${staff.education === 'Trung cấp' ? 'selected' : ''}>Trung cấp</option>
+                                    <option value="Cao đẳng" ${staff.education === 'Cao đẳng' ? 'selected' : ''}>Cao đẳng</option>
+                                    <option value="Đại học" ${staff.education === 'Đại học' ? 'selected' : ''}>Đại học</option>
+                                    <option value="Thạc sĩ" ${staff.education === 'Thạc sĩ' ? 'selected' : ''}>Thạc sĩ</option>
+                                    <option value="Tiến sĩ" ${staff.education === 'Tiến sĩ' ? 'selected' : ''}>Tiến sĩ</option>
+                                </select>
+                                <input type="text" id="editStaffMajor" class="form-control mb-2" placeholder="Chuyên ngành" value="${staff.major || ''}">
+                                <input type="text" id="editStaffSchool" class="form-control mb-2" placeholder="Trường học/Đại học" value="${staff.school || ''}">
+                                <input type="number" id="editStaffExperience" class="form-control mb-2" placeholder="Số năm kinh nghiệm" min="0" value="${staff.experience || 0}">
+                                <textarea id="editStaffSkills" class="form-control mb-2" rows="2" placeholder="Kỹ năng chuyên môn">${staff.skills || ''}</textarea>
+                                <textarea id="editStaffCertificates" class="form-control mb-2" rows="2" placeholder="Chứng chỉ/Bằng cấp khác">${staff.certificates || ''}</textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-info mb-3"><i class="fas fa-briefcase"></i> Thông tin công việc</h6>
+                                <select id="editStaffRole" class="form-select mb-2" required onchange="updateEditRoleInfo()">
+                                    ${rolesOptions}
+                                </select>
+                                <div id="editRoleDetails" class="mb-2 p-2 bg-light rounded" style="display: none;">
+                                    <small class="text-muted">
+                                        <div><strong>Mô tả:</strong> <span id="editRoleDescription"></span></div>
+                                        <div><strong>Quyền hạn:</strong> <span id="editRolePermissions"></span></div>
+                                        <div><strong>Lương cơ bản:</strong> <span id="editRoleSalary"></span></div>
+                                        <div><strong>Phụ cấp:</strong> <span id="editRoleAllowance"></span></div>
+                                    </small>
+                                </div>
+                                <select id="editStaffDepartment" class="form-select mb-2">
+                                    ${departmentsOptions}
+                                </select>
+                                <input type="date" id="editStaffStartDate" class="form-control mb-2" value="${staff.startDate || ''}">
+                                <select id="editStaffEmploymentType" class="form-select mb-2">
+                                    <option value="Toàn thời gian" ${staff.employmentType === 'Toàn thời gian' ? 'selected' : ''}>Toàn thời gian</option>
+                                    <option value="Bán thời gian" ${staff.employmentType === 'Bán thời gian' ? 'selected' : ''}>Bán thời gian</option>
+                                    <option value="Thử việc" ${staff.employmentType === 'Thử việc' ? 'selected' : ''}>Thử việc</option>
+                                    <option value="Thực tập" ${staff.employmentType === 'Thực tập' ? 'selected' : ''}>Thực tập</option>
+                                    <option value="Hợp đồng" ${staff.employmentType === 'Hợp đồng' ? 'selected' : ''}>Hợp đồng</option>
+                                </select>
+                                <input type="number" id="editStaffBasicSalary" class="form-control mb-2" placeholder="Lương cơ bản (VNĐ)" min="0" value="${staff.basicSalary || ''}">
+                                <input type="text" id="editStaffBankAccount" class="form-control mb-2" placeholder="Số tài khoản ngân hàng" value="${staff.bankAccount || ''}">
+                                <input type="text" id="editStaffBankName" class="form-control mb-2" placeholder="Tên ngân hàng" value="${staff.bankName || ''}">
+                                <select id="editStaffStatus" class="form-select mb-2">
+                                    <option value="active" ${staff.status === 'active' ? 'selected' : ''}>Đang làm việc</option>
+                                    <option value="inactive" ${staff.status === 'inactive' ? 'selected' : ''}>Đã nghỉ việc</option>
+                                    <option value="leave" ${staff.status === 'leave' ? 'selected' : ''}>Tạm nghỉ</option>
+                                </select>
+                                <textarea id="editStaffNote" class="form-control mb-2" rows="2" placeholder="Ghi chú thêm">${staff.note || ''}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                width: '90%',
+                showCancelButton: true,
+                confirmButtonText: 'Lưu thay đổi',
+                cancelButtonText: 'Hủy',
+                didOpen: () => {
+                    // Hiển thị thông tin role hiện tại nếu có
+                    updateEditRoleInfo();
+                },
+                preConfirm: () => {
+                    const name = document.getElementById('editStaffName').value.trim();
+                    const email = document.getElementById('editStaffEmail').value.trim();
+                    const phone = document.getElementById('editStaffPhone').value.trim();
+                    const idCard = document.getElementById('editStaffIdCard').value.trim();
+                    const role = document.getElementById('editStaffRole').value;
+                    
+                    if (!name || !email || !phone || !idCard || !role) {
+                        Swal.showValidationMessage('Vui lòng nhập đầy đủ các thông tin bắt buộc (*)');
+                        return false;
+                    }
+                    
+                    // Validate email
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        Swal.showValidationMessage('Email không hợp lệ');
+                        return false;
+                    }
+                    
+                    // Validate phone
+                    const phoneRegex = /^[0-9]{10,11}$/;
+                    if (!phoneRegex.test(phone)) {
+                        Swal.showValidationMessage('Số điện thoại phải có 10-11 chữ số');
+                        return false;
+                    }
+                    
+                    // Validate ID Card
+                    const idCardRegex = /^[0-9]{9,12}$/;
+                    if (!idCardRegex.test(idCard)) {
+                        Swal.showValidationMessage('Số CCCD/CMND không hợp lệ');
+                        return false;
+                    }
+                    
+                    return {
+                        // Thông tin cá nhân
+                        name: name,
+                        birthDate: document.getElementById('editStaffBirthDate').value,
+                        gender: document.getElementById('editStaffGender').value,
+                        idCard: idCard,
+                        idCardDate: document.getElementById('editStaffIdCardDate').value,
+                        idCardPlace: document.getElementById('editStaffIdCardPlace').value,
+                        nationality: document.getElementById('editStaffNationality').value || 'Việt Nam',
+                        ethnicity: document.getElementById('editStaffEthnicity').value || 'Kinh',
+                        religion: document.getElementById('editStaffReligion').value,
+                        
+                        // Thông tin liên hệ
+                        email: email,
+                        phone: phone,
+                        personalPhone: document.getElementById('editStaffPersonalPhone').value,
+                        address: document.getElementById('editStaffAddress').value,
+                        tempAddress: document.getElementById('editStaffTempAddress').value,
+                        emergencyContact: document.getElementById('editStaffEmergencyContact').value,
+                        emergencyPhone: document.getElementById('editStaffEmergencyPhone').value,
+                        relationship: document.getElementById('editStaffRelationship').value,
+                        
+                        // Học vấn & Kinh nghiệm
+                        education: document.getElementById('editStaffEducation').value,
+                        major: document.getElementById('editStaffMajor').value,
+                        school: document.getElementById('editStaffSchool').value,
+                        experience: parseInt(document.getElementById('editStaffExperience').value) || 0,
+                        skills: document.getElementById('editStaffSkills').value,
+                        certificates: document.getElementById('editStaffCertificates').value,
+                        
+                        // Thông tin công việc
+                        role: role,
+                        department: document.getElementById('editStaffDepartment').value,
+                        startDate: document.getElementById('editStaffStartDate').value,
+                        employmentType: document.getElementById('editStaffEmploymentType').value || 'Toàn thời gian',
+                        basicSalary: parseInt(document.getElementById('editStaffBasicSalary').value) || 0,
+                        bankAccount: document.getElementById('editStaffBankAccount').value,
+                        bankName: document.getElementById('editStaffBankName').value,
+                        status: document.getElementById('editStaffStatus').value,
+                        note: document.getElementById('editStaffNote').value,
+                        updatedAt: Date.now()
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const updatedStaff = result.value;
+                    db.ref('staff/' + staffId).update(updatedStaff).then(() => {
+                        loadStaff();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: 'Đã cập nhật thông tin nhân viên!',
+                            timer: 2000
+                        });
+                    }).catch((error) => {
+                        Swal.fire('Lỗi', 'Không thể cập nhật nhân viên: ' + error.message, 'error');
+                    });
+                }
+            });
+            
+            }).catch((error) => {
+                console.error('Error loading roles for edit:', error);
+                Swal.fire('Lỗi', 'Không thể tải danh sách chức vụ: ' + error.message, 'error');
+            });
+        }
+
+        function updateEditRoleInfo() {
+            const roleSelect = document.getElementById('editStaffRole');
+            const selectedOption = roleSelect.options[roleSelect.selectedIndex];
+            const roleDetails = document.getElementById('editRoleDetails');
+            
+            if (selectedOption && selectedOption.value && selectedOption.hasAttribute('data-description')) {
+                // Hiển thị thông tin role
+                const description = selectedOption.getAttribute('data-description') || 'Không có mô tả';
+                const permissions = selectedOption.getAttribute('data-permissions') || 'Không có quyền hạn';
+                const salary = selectedOption.getAttribute('data-salary') || '0';
+                const allowance = selectedOption.getAttribute('data-allowance') || '0';
+                
+                document.getElementById('editRoleDescription').textContent = description;
+                document.getElementById('editRolePermissions').textContent = permissions;
+                document.getElementById('editRoleSalary').textContent = parseInt(salary) ? parseInt(salary).toLocaleString('vi-VN') + ' VNĐ' : 'Chưa cấu hình';
+                document.getElementById('editRoleAllowance').textContent = parseInt(allowance) ? parseInt(allowance).toLocaleString('vi-VN') + ' VNĐ' : 'Không có';
+                
+                roleDetails.style.display = 'block';
+            } else {
+                roleDetails.style.display = 'none';
+            }
+        }
+
+        function deleteStaff(staffId) {
+            Swal.fire({
+                title: 'Xác nhận xóa?',
+                text: 'Bạn không thể hoàn tác sau khi xóa!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    db.ref('staff/' + staffId).remove().then(() => {
+                        loadStaff();
+                        Swal.fire('Đã xóa', 'Nhân viên đã bị xóa.', 'success');
+                    }).catch((error) => {
+                        Swal.fire('Lỗi', 'Không thể xóa nhân viên.', 'error');
+                    });
+                }
+            });
+        }
+
+        function changeStaffRole(staffId, newRole) {
+            db.ref('staff/' + staffId).update({ role: newRole }).then(() => {
+                loadStaff();
+            }).catch((error) => {
+                Swal.fire('Lỗi', 'Không thể cập nhật vai trò.', 'error');
+            });
+        }
         // Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
@@ -646,20 +3019,32 @@
         // Biến toàn cục để lưu các thể hiện của biểu đồ
         let revenueChartInstance, bookingTypeChartInstance, newUsersChartInstance, locationChartInstance;
         // Biến lưu trữ dữ liệu gốc
-        let allBookings = [], allUsers = [], allHotels = [], allTours = [], allDeals = [], allTravelGuides = [];
+        let allBookings = [], allUsers = [], allHotels = [], allTours = [], allDeals = [], allTravelGuides = [], allStaff = [];
         let miniRevenueChartInstance;
 
         // Kiểm tra đăng nhập và quyền admin/nhân viên
         function checkAuth() {
             auth.onAuthStateChanged((user) => {
+                console.log('Auth state changed:', user);
+                
                 if (!user) {
+                    console.log('❌ No user authenticated - redirecting');
                     window.location.href = 'index.html';
                     return;
                 }
+                
+                console.log('✅ User authenticated:', user.email);
+                console.log('User UID:', user.uid);
+                
                 // Cho phép cả admin và nhân viên truy cập dashboard
                 const isAdmin = user.email === 'quantrikhachsan@gmail.com';
                 const isStaff = user.email === 'nhanvien2@luxuryhaven.com';
+                
+                console.log('Is Admin:', isAdmin);
+                console.log('Is Staff:', isStaff);
+                
                 if (!isAdmin && !isStaff) {
+                    console.log('❌ Access denied for user:', user.email);
                     Swal.fire({
                         icon: 'error',
                         title: 'Truy cập bị từ chối',
@@ -670,9 +3055,19 @@
                     });
                     return;
                 }
-                // Phân quyền giao diện
+                
+                console.log('✅ Access granted for user:', user.email);
+                
+                // Test Firebase Rules ngay sau khi xác thực
+                if (isAdmin) {
+                    setTimeout(() => {
+                        console.log('Running Firebase Rules test...');
+                        testFirebaseRules();
+                    }, 2000);
+                }
+                // Phân quyền giao diện cho nhân viên theo bảng phân quyền
                 if (isStaff) {
-                    // Sidebar
+                    // Ẩn các mục không được phép truy cập
                     const dealsNav = document.querySelector('a[href="#deals"]');
                     const guidesNav = document.querySelector('a[href="#travel-guides"]');
                     const settingsNav = document.querySelector('a[href="#settings"]');
@@ -686,9 +3081,23 @@
                     if (dealsSection) dealsSection.style.display = 'none';
                     if (guidesSection) guidesSection.style.display = 'none';
                     if (settingsSection) settingsSection.style.display = 'none';
-                    // Ẩn notification bell
+                    // Cho phép xem thông báo
                     const notifBell = document.getElementById('notificationBell');
-                    if (notifBell) notifBell.style.display = 'none';
+                    if (notifBell) notifBell.style.display = 'block';
+                    // Khách sạn: chỉ cho xem, không cho thêm/sửa/xóa
+                    const addHotelBtn = document.querySelector('#hotels .btn.btn-primary');
+                    if (addHotelBtn) addHotelBtn.style.display = 'none';
+                    // Người dùng: chỉ cho xem, không cho sửa/xóa
+                    const usersTable = document.getElementById('usersTable');
+                    if (usersTable) {
+                        usersTable.querySelectorAll('.btn-warning, .btn-danger').forEach(btn => btn.style.display = 'none');
+                    }
+                    // Tours: chỉ cho xem, không cho thêm/sửa/xóa
+                    const addTourBtn = document.querySelector('#tours .btn.btn-primary');
+                    if (addTourBtn) addTourBtn.style.display = 'none';
+                    // Dashboard: cho xuất file
+                    const exportExcelBtn = document.getElementById('export-excel-btn');
+                    if (exportExcelBtn) exportExcelBtn.style.display = 'block';
                 }
             });
         }
@@ -869,7 +3278,7 @@
             usersTable.innerHTML = '';
 
             if (users.length === 0) {
-                usersTable.innerHTML = '<tr><td colspan="8" class="text-center py-5">Không tìm thấy người dùng phù hợp.</td></tr>';
+                usersTable.innerHTML = '<tr><td colspan="10" class="text-center py-5">Không tìm thấy người dùng phù hợp.</td></tr>';
                 return;
             }
 
@@ -877,34 +3286,77 @@
             console.log('Rendering users:', users);
 
             users.forEach(user => {
-                const avatar = user.avatar ? `<img src="${user.avatar}" alt="avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">` : '<span class="avatar-placeholder"><i class="fas fa-user"></i></span>';
+                const avatar = user.avatar ? `<img src="${user.avatar}" alt="avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">` : '<span class="avatar-placeholder" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;background-color:#e9ecef;border-radius:50%;color:#6c757d;"><i class="fas fa-user"></i></span>';
+                
                 const birthday = user.birthday || user.birthdate || '';
+                const formattedBirthday = birthday ? new Date(birthday).toLocaleDateString('vi-VN') : 'N/A';
+                
                 const createdAt = user.createdAt ? new Date(user.createdAt).toLocaleDateString('vi-VN') : (user.updatedAt ? new Date(user.updatedAt).toLocaleDateString('vi-VN') : 'N/A');
+                
                 const memberLevel = user.memberLevel || 'Đồng';
                 const loyaltyPoints = user.loyaltyPoints || 0;
+                
+                // Giới tính với icon
+                const genderIcon = user.gender === 'Nam' ? '<i class="fas fa-mars text-info"></i>' : user.gender === 'Nữ' ? '<i class="fas fa-venus text-danger"></i>' : '<i class="fas fa-genderless text-muted"></i>';
+                const genderDisplay = user.gender ? `${genderIcon} ${user.gender}` : 'N/A';
+                
+                // Trạng thái tài khoản
+                const status = user.status || 'active';
+                const statusBadge = status === 'active' ? '<span class="badge bg-success">Hoạt động</span>' : 
+                                   status === 'inactive' ? '<span class="badge bg-warning">Tạm khóa</span>' :
+                                   status === 'banned' ? '<span class="badge bg-danger">Bị cấm</span>' :
+                                   '<span class="badge bg-secondary">Không xác định</span>';
+                
+                // Quốc tịch với cờ
+                const nationality = user.nationality || 'Việt Nam';
+                const flagIcon = nationality === 'Việt Nam' ? '🇻🇳' : '🏳️';
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${avatar}</td>
                     <td>
-                        <strong>${user.name || 'N/A'}</strong><br>
-                        <small class="text-muted">${memberLevel} - ${loyaltyPoints} điểm</small>
+                        <div class="fw-bold">${user.name || 'N/A'}</div>
+                        <small class="text-muted">
+                            <i class="fas fa-crown text-warning"></i> ${memberLevel} 
+                            <span class="badge bg-light text-dark ms-1">${loyaltyPoints} điểm</span>
+                        </small>
                     </td>
-                    <td>${user.email || 'N/A'}</td>
-                    <td>${user.phone || 'N/A'}</td>
-                    <td>${user.address || 'N/A'}</td>
-                    <td>${birthday}</td>
-                    <td>${createdAt}</td>
                     <td>
-                        <button class="btn btn-sm btn-info" onclick="viewUser('${user.id}')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-warning" onclick="editUser('${user.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.id}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <div>${user.email || 'N/A'}</div>
+                        <small class="text-muted">
+                            <i class="fas fa-phone text-success"></i> ${user.phone || 'N/A'}
+                        </small>
+                    </td>
+                    <td>${genderDisplay}</td>
+                    <td>
+                        <div style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${user.address || 'N/A'}">
+                            ${user.address || 'N/A'}
+                        </div>
+                    </td>
+                    <td>${flagIcon} ${nationality}</td>
+                    <td>${formattedBirthday}</td>
+                    <td>
+                        <div>${createdAt}</div>
+                        <small class="text-muted">
+                            <i class="fas fa-clock"></i> ${user.lastLogin ? new Date(user.lastLogin).toLocaleDateString('vi-VN') : 'Chưa đăng nhập'}
+                        </small>
+                    </td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-sm btn-info" onclick="viewUser('${user.id}')" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="editUser('${user.id}')" title="Chỉnh sửa">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.id}')" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="btn btn-sm ${status === 'active' ? 'btn-secondary' : 'btn-success'}" onclick="toggleUserStatus('${user.id}', '${status}')" title="${status === 'active' ? 'Khóa tài khoản' : 'Kích hoạt tài khoản'}">
+                                <i class="fas ${status === 'active' ? 'fa-lock' : 'fa-unlock'}"></i>
+                            </button>
+                        </div>
                     </td>
                 `;
                 usersTable.appendChild(row);
@@ -913,14 +3365,28 @@
         
         function filterAndDisplayUsers() {
             let filteredUsers = [...allUsers];
-            const searchTerm = document.getElementById('globalSearchInput').value.toLowerCase().trim();
+            
+            // Lấy từ khóa tìm kiếm từ input riêng cho users
+            const searchTerm = (document.getElementById('userSearchInput') || {}).value ? 
+                             document.getElementById('userSearchInput').value.toLowerCase().trim() : 
+                             (document.getElementById('globalSearchInput') || {}).value ? 
+                             document.getElementById('globalSearchInput').value.toLowerCase().trim() : '';
 
+            // Lọc theo từ khóa tìm kiếm
             if (searchTerm) {
                 filteredUsers = filteredUsers.filter(u =>
                     (u.name && u.name.toLowerCase().includes(searchTerm)) ||
                     (u.email && u.email.toLowerCase().includes(searchTerm)) ||
-                    (u.phone && u.phone.includes(searchTerm))
+                    (u.phone && u.phone.includes(searchTerm)) ||
+                    (u.address && u.address.toLowerCase().includes(searchTerm)) ||
+                    (u.nationality && u.nationality.toLowerCase().includes(searchTerm))
                 );
+            }
+            
+            // Lọc theo trạng thái
+            const statusFilter = (document.getElementById('userStatusFilter') || {}).value || 'all';
+            if (statusFilter !== 'all') {
+                filteredUsers = filteredUsers.filter(u => (u.status || 'active') === statusFilter);
             }
             
             renderUsersTable(filteredUsers);
@@ -2503,6 +4969,259 @@
                         });
                     }
                 });
+            });
+        }
+
+        // Hàm xem chi tiết người dùng
+        function viewUser(userId) {
+            const user = allUsers.find(u => u.id === userId);
+            if (!user) {
+                Swal.fire('Lỗi', 'Không tìm thấy người dùng này.', 'error');
+                return;
+            }
+            
+            const avatar = user.avatar ? `<img src="${user.avatar}" alt="avatar" style="width:80px;height:80px;border-radius:50%;object-fit:cover;">` : '<div style="width:80px;height:80px;border-radius:50%;background-color:#e9ecef;display:flex;align-items:center;justify-content:center;"><i class="fas fa-user fa-2x text-muted"></i></div>';
+            const memberLevel = user.memberLevel || 'Đồng';
+            const loyaltyPoints = user.loyaltyPoints || 0;
+            const status = user.status || 'active';
+            const lastLogin = user.lastLogin ? new Date(user.lastLogin).toLocaleDateString('vi-VN') : 'Chưa đăng nhập';
+            
+            Swal.fire({
+                title: `<i class="fas fa-user-circle"></i> Thông tin chi tiết người dùng`,
+                html: `
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12 text-center mb-3">
+                                ${avatar}
+                                <h5 class="mt-2 mb-1">${user.name || 'N/A'}</h5>
+                                <div class="mb-2">
+                                    <span class="badge bg-warning text-dark"><i class="fas fa-crown"></i> ${memberLevel}</span>
+                                    <span class="badge bg-info ms-1">${loyaltyPoints} điểm thưởng</span>
+                                    <span class="badge ${status === 'active' ? 'bg-success' : status === 'inactive' ? 'bg-warning' : 'bg-danger'} ms-1">
+                                        ${status === 'active' ? 'Hoạt động' : status === 'inactive' ? 'Tạm khóa' : 'Bị cấm'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3"><i class="fas fa-user"></i> Thông tin cá nhân</h6>
+                                <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+                                <p><strong>Số điện thoại:</strong> ${user.phone || 'N/A'}</p>
+                                <p><strong>Giới tính:</strong> ${user.gender || 'N/A'}</p>
+                                <p><strong>Ngày sinh:</strong> ${user.birthday ? new Date(user.birthday).toLocaleDateString('vi-VN') : 'N/A'}</p>
+                                <p><strong>Quốc tịch:</strong> ${user.nationality || 'N/A'}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-success mb-3"><i class="fas fa-map-marker-alt"></i> Thông tin khác</h6>
+                                <p><strong>Địa chỉ:</strong> ${user.address || 'N/A'}</p>
+                                <p><strong>Số CCCD:</strong> ${user.identityNumber || 'N/A'}</p>
+                                <p><strong>Ngày tham gia:</strong> ${user.createdAt ? new Date(user.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</p>
+                                <p><strong>Lần đăng nhập cuối:</strong> ${lastLogin}</p>
+                                <p><strong>Tổng số booking:</strong> ${user.totalBookings || 0}</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                width: '80%',
+                showCloseButton: true,
+                focusConfirm: false,
+                confirmButtonText: 'Đóng'
+            });
+        }
+
+        // Hàm chỉnh sửa người dùng
+        function editUser(userId) {
+            const user = allUsers.find(u => u.id === userId);
+            if (!user) {
+                Swal.fire('Lỗi', 'Không tìm thấy người dùng này.', 'error');
+                return;
+            }
+            
+            Swal.fire({
+                title: 'Chỉnh sửa thông tin người dùng',
+                html: `
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" id="editUserName" class="form-control mb-2" placeholder="Họ và tên" value="${user.name || ''}">
+                                <input type="email" id="editUserEmail" class="form-control mb-2" placeholder="Email" value="${user.email || ''}">
+                                <input type="text" id="editUserPhone" class="form-control mb-2" placeholder="Số điện thoại" value="${user.phone || ''}">
+                                <input type="date" id="editUserBirthday" class="form-control mb-2" value="${user.birthday || ''}">
+                                <select id="editUserGender" class="form-select mb-2">
+                                    <option value="">Chọn giới tính</option>
+                                    <option value="Nam" ${user.gender === 'Nam' ? 'selected' : ''}>Nam</option>
+                                    <option value="Nữ" ${user.gender === 'Nữ' ? 'selected' : ''}>Nữ</option>
+                                    <option value="Khác" ${user.gender === 'Khác' ? 'selected' : ''}>Khác</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <textarea id="editUserAddress" class="form-control mb-2" rows="2" placeholder="Địa chỉ">${user.address || ''}</textarea>
+                                <input type="text" id="editUserNationality" class="form-control mb-2" placeholder="Quốc tịch" value="${user.nationality || 'Việt Nam'}">
+                                <input type="text" id="editUserIdentityNumber" class="form-control mb-2" placeholder="Số CCCD" value="${user.identityNumber || ''}">
+                                <select id="editUserMemberLevel" class="form-select mb-2">
+                                    <option value="Đồng" ${user.memberLevel === 'Đồng' ? 'selected' : ''}>Đồng</option>
+                                    <option value="Bạc" ${user.memberLevel === 'Bạc' ? 'selected' : ''}>Bạc</option>
+                                    <option value="Vàng" ${user.memberLevel === 'Vàng' ? 'selected' : ''}>Vàng</option>
+                                    <option value="Kim cương" ${user.memberLevel === 'Kim cương' ? 'selected' : ''}>Kim cương</option>
+                                </select>
+                                <input type="number" id="editUserLoyaltyPoints" class="form-control mb-2" placeholder="Điểm thưởng" value="${user.loyaltyPoints || 0}" min="0">
+                            </div>
+                        </div>
+                    </div>
+                `,
+                width: '80%',
+                showCancelButton: true,
+                confirmButtonText: 'Lưu thay đổi',
+                cancelButtonText: 'Hủy',
+                preConfirm: () => {
+                    const name = document.getElementById('editUserName').value.trim();
+                    const email = document.getElementById('editUserEmail').value.trim();
+                    const phone = document.getElementById('editUserPhone').value.trim();
+                    
+                    if (!name || !email || !phone) {
+                        Swal.showValidationMessage('Vui lòng nhập đầy đủ họ tên, email và số điện thoại');
+                        return false;
+                    }
+                    
+                    return {
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        birthday: document.getElementById('editUserBirthday').value,
+                        gender: document.getElementById('editUserGender').value,
+                        address: document.getElementById('editUserAddress').value.trim(),
+                        nationality: document.getElementById('editUserNationality').value.trim(),
+                        identityNumber: document.getElementById('editUserIdentityNumber').value.trim(),
+                        memberLevel: document.getElementById('editUserMemberLevel').value,
+                        loyaltyPoints: parseInt(document.getElementById('editUserLoyaltyPoints').value) || 0
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const updatedUser = result.value;
+                    db.ref('users/' + userId).update(updatedUser).then(() => {
+                        Swal.fire('Thành công', 'Đã cập nhật thông tin người dùng!', 'success');
+                        loadUsers();
+                    }).catch((error) => {
+                        Swal.fire('Lỗi', 'Không thể cập nhật người dùng: ' + error.message, 'error');
+                    });
+                }
+            });
+        }
+
+        // Hàm thêm người dùng mới
+        function addUser() {
+            Swal.fire({
+                title: 'Thêm người dùng mới',
+                html: `
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" id="newUserName" class="form-control mb-2" placeholder="Họ và tên *" required>
+                                <input type="email" id="newUserEmail" class="form-control mb-2" placeholder="Email *" required>
+                                <input type="text" id="newUserPhone" class="form-control mb-2" placeholder="Số điện thoại *" required>
+                                <input type="date" id="newUserBirthday" class="form-control mb-2">
+                                <select id="newUserGender" class="form-select mb-2">
+                                    <option value="">Chọn giới tính</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                    <option value="Khác">Khác</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <textarea id="newUserAddress" class="form-control mb-2" rows="2" placeholder="Địa chỉ"></textarea>
+                                <input type="text" id="newUserNationality" class="form-control mb-2" placeholder="Quốc tịch" value="Việt Nam">
+                                <input type="text" id="newUserIdentityNumber" class="form-control mb-2" placeholder="Số CCCD">
+                                <select id="newUserMemberLevel" class="form-select mb-2">
+                                    <option value="Đồng" selected>Đồng</option>
+                                    <option value="Bạc">Bạc</option>
+                                    <option value="Vàng">Vàng</option>
+                                    <option value="Kim cương">Kim cương</option>
+                                </select>
+                                <input type="number" id="newUserLoyaltyPoints" class="form-control mb-2" placeholder="Điểm thưởng" value="0" min="0">
+                            </div>
+                        </div>
+                    </div>
+                `,
+                width: '80%',
+                showCancelButton: true,
+                confirmButtonText: 'Thêm người dùng',
+                cancelButtonText: 'Hủy',
+                preConfirm: () => {
+                    const name = document.getElementById('newUserName').value.trim();
+                    const email = document.getElementById('newUserEmail').value.trim();
+                    const phone = document.getElementById('newUserPhone').value.trim();
+                    
+                    if (!name || !email || !phone) {
+                        Swal.showValidationMessage('Vui lòng nhập đầy đủ họ tên, email và số điện thoại');
+                        return false;
+                    }
+                    
+                    // Validate email
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        Swal.showValidationMessage('Email không hợp lệ');
+                        return false;
+                    }
+                    
+                    return {
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        birthday: document.getElementById('newUserBirthday').value,
+                        gender: document.getElementById('newUserGender').value,
+                        address: document.getElementById('newUserAddress').value.trim(),
+                        nationality: document.getElementById('newUserNationality').value.trim(),
+                        identityNumber: document.getElementById('newUserIdentityNumber').value.trim(),
+                        memberLevel: document.getElementById('newUserMemberLevel').value,
+                        loyaltyPoints: parseInt(document.getElementById('newUserLoyaltyPoints').value) || 0,
+                        status: 'active',
+                        createdAt: Date.now()
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const newUser = result.value;
+                    db.ref('users').push(newUser).then(() => {
+                        Swal.fire('Thành công', 'Đã thêm người dùng mới!', 'success');
+                        loadUsers();
+                    }).catch((error) => {
+                        Swal.fire('Lỗi', 'Không thể thêm người dùng: ' + error.message, 'error');
+                    });
+                }
+            });
+        }
+
+        // Hàm chuyển đổi trạng thái người dùng
+        function toggleUserStatus(userId, currentStatus) {
+            const user = allUsers.find(u => u.id === userId);
+            if (!user) {
+                Swal.fire('Lỗi', 'Không tìm thấy người dùng này.', 'error');
+                return;
+            }
+            
+            const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+            const action = newStatus === 'active' ? 'kích hoạt' : 'khóa';
+            
+            Swal.fire({
+                title: `Xác nhận ${action} tài khoản?`,
+                text: `Bạn có chắc chắn muốn ${action} tài khoản của ${user.name}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: newStatus === 'active' ? '#28a745' : '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: `${action.charAt(0).toUpperCase() + action.slice(1)}`,
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    db.ref('users/' + userId).update({ status: newStatus }).then(() => {
+                        Swal.fire('Thành công', `Đã ${action} tài khoản thành công!`, 'success');
+                        loadUsers();
+                    }).catch((error) => {
+                        Swal.fire('Lỗi', `Không thể ${action} tài khoản: ` + error.message, 'error');
+                    });
+                }
             });
         }
 

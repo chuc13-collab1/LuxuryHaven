@@ -437,16 +437,164 @@
     googleProvider.addScope('email');
     googleProvider.addScope('profile');
 
+    // Hàm ánh xạ chức vụ với trang tương ứng
+    function getPageByRole(role) {
+      if (!role) return 'index.html';
+      
+      const rolePageMap = {
+        // Ánh xạ theo tên chức vụ đầy đủ
+        'Quản lý đối tác': 'QLNV/affiliate-manager.html',
+        'Kiểm duyệt đặt phòng': 'QLNV/booking-moderator.html',
+        'Tuân thủ pháp lý': 'QLNV/compliance-officer.html',
+        'Quản lý nội dung': 'QLNV/content-admin.html',
+        'Hỗ trợ khách hàng': 'QLNV/customer-support.html',
+        'Phân tích dữ liệu': 'QLNV/data-analyst.html',
+        'Quản lý tài chính': 'QLNV/finance-manager.html',
+        'Marketing & SEO': 'QLNV/marketing-seo.html',
+        'Dashboard nhân viên': 'QLNV/staff-dashboard.html',
+        'Phát triển web': 'QLNV/web-developer.html',
+        'Lễ tân (Front Desk)': 'QLNV/staff-dashboard.html',
+        'Nhân viên lễ tân': 'QLNV/staff-dashboard.html',
+        'nhân viên': 'QLNV/staff-dashboard.html',
+        'trưởng phòng': 'QLNV/staff-dashboard.html',
+        'phó trưởng phòng': 'QLNV/staff-dashboard.html',
+        
+        // Ánh xạ theo code chức vụ từ Firebase (case-insensitive)
+        'LT0001': 'QLNV/staff-dashboard.html', // Nhân viên lễ tân
+        'QL01': 'QLNV/affiliate-manager.html', // Quản lý đối tác
+        'KD01': 'QLNV/booking-moderator.html', // Kiểm duyệt đặt phòng
+        'PL01': 'QLNV/compliance-officer.html', // Tuân thủ pháp lý
+        'PL1': 'QLNV/compliance-officer.html', // Tuân thủ pháp lý (alternative)
+        'Pl1': 'QLNV/compliance-officer.html', // Tuân thủ pháp lý (case variation)
+        'pl1': 'QLNV/compliance-officer.html', // Tuân thủ pháp lý (lowercase)
+        'HT01': 'QLNV/customer-support.html', // Hỗ trợ khách hàng
+        'PT01': 'QLNV/data-analyst.html', // Phân tích dữ liệu
+        'QLTC01': 'QLNV/finance-manager.html', // Quản lý tài chính
+        'MK01': 'QLNV/marketing-seo.html', // Marketing & SEO
+        'NV01': 'QLNV/staff-dashboard.html', // nhân viên
+        'PTW01': 'QLNV/web-developer.html', // Phát triển web
+        'QL02': 'QLNV/affiliate-manager.html', // phó trưởng phòng
+        
+        // Department codes (fallback)
+        '01': 'QLNV/staff-dashboard.html', // Lễ tân
+        
+        // Ánh xạ theo code chức vụ (legacy)
+        'cskh': 'QLNV/customer-support.html',
+        'manager': 'QLNV/staff-dashboard.html',
+        'marketing': 'QLNV/marketing-seo.html',
+        'kythuat': 'QLNV/web-developer.html',
+        'admin': 'admin-dashboard.html',
+        'receptionist': 'QLNV/staff-dashboard.html',
+        'housekeeping': 'QLNV/staff-dashboard.html',
+        'affiliate': 'QLNV/affiliate-manager.html',
+        'content': 'QLNV/content-admin.html',
+        'finance': 'QLNV/finance-manager.html',
+        'analyst': 'QLNV/data-analyst.html',
+        'compliance': 'QLNV/compliance-officer.html',
+        'booking': 'QLNV/booking-moderator.html'
+      };
+      
+      // Thử exact match trước
+      if (rolePageMap[role]) {
+        return rolePageMap[role];
+      }
+      
+      // Thử case-insensitive match
+      const roleKey = Object.keys(rolePageMap).find(key => 
+        key.toLowerCase() === role.toLowerCase()
+      );
+      
+      if (roleKey) {
+        return rolePageMap[roleKey];
+      }
+      
+      return 'index.html';
+    }
+
+    // Hàm kiểm tra chức vụ từ Firebase và chuyển hướng
+    function checkUserRoleAndRedirect(email) {
+      // Kiểm tra admin trước
+      if (email === 'quantrikhachsan@gmail.com') {
+        return Promise.resolve('admin-dashboard.html');
+      }
+
+      // Tìm kiếm trong danh sách nhân viên
+      return Promise.all([
+        firebase.database().ref('staff').once('value'),
+        firebase.database().ref('roles').once('value')
+      ])
+        .then(([staffSnapshot, rolesSnapshot]) => {
+          const staffData = staffSnapshot.val();
+          const rolesData = rolesSnapshot.val();
+          
+          if (!staffData) {
+            console.log('Không tìm thấy dữ liệu nhân viên');
+            return 'index.html';
+          }
+
+          // Tạo map role code -> role name
+          const roleCodeToName = {};
+          if (rolesData) {
+            Object.values(rolesData).forEach(role => {
+              if (role.code && role.name) {
+                roleCodeToName[role.code] = role.name;
+              }
+            });
+          }
+
+          // Tìm nhân viên có email khớp
+          for (let staffId in staffData) {
+            const staff = staffData[staffId];
+            // Kiểm tra cả email và êmmail (typo)
+            const staffEmail = staff.email || staff.êmmail || staff['êmmail'];
+            if (staffEmail === email) {
+              console.log('Tìm thấy nhân viên:', staff);
+              
+              let role = staff.role || staff.chucVu;
+              if (role) {
+                console.log('🔍 Debug thông tin role:');
+                console.log('- Original role:', role);
+                console.log('- Type of role:', typeof role);
+                
+                // Nếu role là code, chuyển đổi thành tên đầy đủ
+                const fullRoleName = roleCodeToName[role] || role;
+                console.log('- Role code → Full name:', role, '→', fullRoleName);
+                
+                // Thử mapping trực tiếp với role code trước
+                let page = getPageByRole(role);
+                console.log('- Direct role mapping:', role, '→', page);
+                
+                // Nếu không tìm thấy, thử với full name
+                if (page === 'index.html' && fullRoleName !== role) {
+                  page = getPageByRole(fullRoleName);
+                  console.log('- Full name mapping:', fullRoleName, '→', page);
+                }
+                
+                console.log('✅ Final redirect:', page);
+                return page;
+              }
+              console.log('❌ Không tìm thấy role cho nhân viên');
+              break;
+            }
+          }
+          
+          console.log('Không tìm thấy chức vụ, chuyển về index');
+          return 'index.html';
+        })
+        .catch((error) => {
+          console.error('Lỗi khi kiểm tra chức vụ:', error);
+          return 'index.html';
+        });
+    }
+
     // Kiểm tra trạng thái đăng nhập
     firebase.auth().onAuthStateChanged(function(user) {
       if (user && (window.location.pathname.includes('login.html') || window.location.pathname.includes('auth.html'))) {
         // Nếu đã đăng nhập và đang ở trang login, chuyển hướng
         const email = user.email;
-        if (email === 'quantrikhachsan@gmail.com' || email === 'nhanvien2@luxuryhaven.com') {
-          window.location.href = 'admin-dashboard.html';
-        } else {
-          window.location.href = 'index.html';
-        }
+        checkUserRoleAndRedirect(email).then((redirectPage) => {
+          window.location.href = redirectPage;
+        });
       }
     });
 
@@ -609,20 +757,19 @@
         })
         .then(() => {
           const user = firebase.auth().currentUser;
-          Swal.fire({
-            icon: 'success',
-            title: 'Đăng nhập thành công!',
-            text: `Chào mừng ${user.displayName || user.email}!`,
-            timer: 1500,
-            showConfirmButton: false
-          }).then(() => {
-            // Kiểm tra role và chuyển hướng
-            const email = user.email;
-            if (email === 'quantrikhachsan@gmail.com' || email === 'nhanvien2@luxuryhaven.com') {
-              window.location.href = 'admin-dashboard.html';
-            } else {
-              window.location.href = 'index.html';
-            }
+          const email = user.email;
+          
+          // Kiểm tra chức vụ và chuyển hướng
+          checkUserRoleAndRedirect(email).then((redirectPage) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Đăng nhập thành công!',
+              text: `Chào mừng ${user.displayName || user.email}!`,
+              timer: 1500,
+              showConfirmButton: false
+            }).then(() => {
+              window.location.href = redirectPage;
+            });
           });
         })
         .catch((error) => {
@@ -739,35 +886,28 @@
         .then((userCredential) => {
           const user = userCredential.user;
           
-          // Kiểm tra role
-          if (email === 'quantrikhachsan@gmail.com') {
+          // Kiểm tra chức vụ và chuyển hướng
+          checkUserRoleAndRedirect(email).then((redirectPage) => {
+            let userTitle = 'Người dùng';
+            let userMessage = 'Chào mừng bạn!';
+            
+            if (redirectPage === 'admin-dashboard.html') {
+              userTitle = 'Quản trị viên';
+              userMessage = 'Chào mừng Quản trị viên!';
+            } else if (redirectPage.includes('QLNV/')) {
+              userTitle = 'Nhân viên';
+              userMessage = 'Chào mừng Nhân viên!';
+            }
+            
             Swal.fire({
               icon: 'success',
               title: 'Đăng nhập thành công!',
-              text: 'Chào mừng Quản trị viên!',
+              text: userMessage,
               confirmButtonColor: '#1abc9c'
             }).then(() => {
-              window.location.href = 'admin-dashboard.html';
+              window.location.href = redirectPage;
             });
-          } else if (email === 'nhanvien2@luxuryhaven.com') {
-            Swal.fire({
-              icon: 'success',
-              title: 'Đăng nhập thành công!',
-              text: 'Chào mừng Nhân viên!',
-              confirmButtonColor: '#1abc9c'
-            }).then(() => {
-              window.location.href = 'admin-dashboard.html';
-            });
-          } else {
-            Swal.fire({
-              icon: 'success',
-              title: 'Đăng nhập thành công!',
-              timer: 1500,
-              showConfirmButton: false
-            }).then(() => {
-              window.location.href = 'index.html';
-            });
-          }
+          });
         })
         .catch((error) => {
           console.error('Lỗi đăng nhập:', error);

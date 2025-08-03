@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị viên nội dung (Content Admin)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <style>
+        :root { --main-bg: #181c2f; --sidebar-bg: #23244a; --card-bg: #23244a; --accent: #7c3aed; --accent2: #00eaff; --text: #f3f6fa; --text-muted: #b0b8d1; --border: #2e325a; --shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.15); }
+        body { background: var(--main-bg); color: var(--text); font-family: 'Poppins', Arial, sans-serif; margin: 0; }
+        .sidebar { width: 240px; background: var(--sidebar-bg); color: var(--text); min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 100; display: flex; flex-direction: column; }
+        .sidebar .logo { padding: 32px 0 24px 0; text-align: center; font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; color: var(--accent); }
+        .sidebar .nav-item { display: flex; align-items: center; padding: 14px 32px; color: var(--text-muted); text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        .sidebar .nav-item.active, .sidebar .nav-item:hover { background: #1a1d36; color: var(--accent2); border-left: 4px solid var(--accent); }
+        .sidebar .nav-item i { margin-right: 14px; font-size: 1.2rem; }
+        .sidebar-footer { margin-top: auto; padding: 24px 32px; }
+        .sidebar-footer .btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 500; }
+        .main-container { margin-left: 240px; min-height: 100vh; background: var(--main-bg); }
+        .main-header { background: #1a1d36; border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+        .main-header .user-info { display: flex; align-items: center; gap: 14px; }
+        .main-header .user-info img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .content-wrapper { padding: 40px 32px 32px 32px; max-width: 800px; margin: 0 auto; }
+        .card-modern { background: var(--card-bg); border-radius: 18px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 32px; padding: 0; }
+        .card-modern .card-body { padding: 32px 28px; }
+        .card-modern .card-title { color: var(--accent2); font-weight: 600; font-size: 1.2rem; margin-bottom: 18px; }
+        .profile-info { display: flex; align-items: center; gap: 32px; }
+        .profile-info img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .profile-info .info { font-size: 1.1rem; }
+        .content-section { display: block; }
+        .content-editor { min-height: 300px; border: 1px solid var(--border); border-radius: 8px; padding: 15px; background: var(--card-bg); }
+        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .media-item { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: transform 0.2s; }
+        .media-item:hover { transform: scale(1.02); }
+        .media-item img { width: 100%; height: 150px; object-fit: cover; }
+        .media-item-info { padding: 10px; }
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500; }
+        .status-pending { background: #ffc107; color: #000; }
+        .status-approved { background: #28a745; color: #fff; }
+        .status-rejected { background: #dc3545; color: #fff; }
+        .status-draft { background: #6c757d; color: #fff; }
+        .analytics-card { text-align: center; padding: 20px; }
+        .analytics-number { font-size: 2rem; font-weight: bold; margin-bottom: 5px; }
+        @media (max-width: 900px) { .sidebar { width: 80px; } .main-container { margin-left: 80px; } .sidebar .nav-item { padding: 12px 10px; font-size: 0.95rem; } .sidebar .logo { font-size: 1.1rem; } }
+        @media (max-width: 700px) { .sidebar { display: none; } .main-container { margin-left: 0; } .main-header { padding: 12px 10px; } .content-wrapper { padding: 12px 4px; } }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i> LUXSTAFF
+        </div>
+        <a href="#role" class="nav-item active" onclick="showSection('role')"><i class="fas fa-user-tie"></i> Vai trò</a>
+        <a href="#content" class="nav-item" onclick="showSection('content')"><i class="fas fa-edit"></i> Quản lý nội dung</a>
+        <a href="#media" class="nav-item" onclick="showSection('media')"><i class="fas fa-images"></i> Thư viện Media</a>
+        <a href="#review" class="nav-item" onclick="showSection('review')"><i class="fas fa-check-circle"></i> Kiểm duyệt</a>
+        <a href="#seo" class="nav-item" onclick="showSection('seo')"><i class="fas fa-search"></i> SEO & Analytics</a>
+        <a href="#settings" class="nav-item" onclick="showSection('settings')"><i class="fas fa-cogs"></i> Cài đặt</a>
+        <div class="sidebar-footer">
+            <button class="btn" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</button>
+        </div>
+    </div>
+    <div class="main-container">
+        <header class="main-header">
+            <h1 class="h4 mb-0" style="color:var(--accent2);">Quản trị viên nội dung</h1>
+            <div class="user-info">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                <span><strong>Content Admin</strong></span>
+            </div>
+        </header>
+        <main class="content-wrapper">
+            <!-- Section Vai trò (mặc định) -->
+            <div id="roleSection" class="content-section">
+                <!-- Dashboard thống kê -->
+                <section class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="card-modern">
+                                <div class="card-body analytics-card">
+                                    <div class="analytics-number" style="color: var(--accent2);" id="totalContent">0</div>
+                                    <p class="mb-0">Tổng nội dung</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card-modern">
+                                <div class="card-body analytics-card">
+                                    <div class="analytics-number" style="color: #ffc107;" id="pendingReview">0</div>
+                                    <p class="mb-0">Chờ duyệt</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card-modern">
+                                <div class="card-body analytics-card">
+                                    <div class="analytics-number" style="color: #28a745;" id="publishedContent">0</div>
+                                    <p class="mb-0">Đã xuất bản</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card-modern">
+                                <div class="card-body analytics-card">
+                                    <div class="analytics-number" style="color: #17a2b8;" id="mediaFiles">0</div>
+                                    <p class="mb-0">File media</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="card-modern mb-4">
+                        <div class="card-body profile-info">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                            <div class="info">
+                                <h4 class="mb-1" style="color:var(--accent2);">Quản trị viên nội dung (Content Admin)</h4>
+                                <div><i class="fas fa-briefcase me-2"></i> Kiểm duyệt khách sạn, ảnh, mô tả phòng</div>
+                                <hr style="border-color: var(--border); margin: 16px 0;">
+                                <div>
+                                    <strong style="color: var(--accent2);">Vai trò:</strong>
+                                    <ul style="margin: 8px 0; padding-left: 20px;">
+                                        <li>Quản lý và kiểm duyệt toàn bộ nội dung website khách sạn</li>
+                                        <li>Đảm bảo chất lượng hình ảnh, mô tả phòng và thông tin khách sạn</li>
+                                        <li>Tối ưu hóa nội dung cho SEO và trải nghiệm người dùng</li>
+                                        <li>Quản lý thư viện media và tài nguyên số</li>
+                                    </ul>
+                                    <strong style="color: var(--accent2);">Chức năng:</strong>
+                                    <ul style="margin: 8px 0; padding-left: 20px;">
+                                        <li>Tạo, chỉnh sửa và xuất bản nội dung website</li>
+                                        <li>Kiểm duyệt và phê duyệt thông tin khách sạn mới</li>
+                                        <li>Quản lý thư viện hình ảnh và video</li>
+                                        <li>Tối ưu hóa SEO và theo dõi analytics</li>
+                                        <li>Quản lý banner, promotion và campaign marketing</li>
+                                        <li>Đảm bảo tuân thủ tiêu chuẩn nội dung và pháp lý</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Section Quản lý nội dung -->
+            <div id="contentSection" class="content-section" style="display: none;">
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title">Quản lý nội dung</h5>
+                            <button class="btn btn-success" onclick="createNewContent()"><i class="fas fa-plus"></i> Tạo nội dung mới</button>
+                        </div>
+                        
+                        <!-- Bộ lọc -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <select class="form-control" id="contentTypeFilter">
+                                    <option value="">Tất cả loại</option>
+                                    <option value="hotel">Khách sạn</option>
+                                    <option value="room">Phòng</option>
+                                    <option value="tour">Tour</option>
+                                    <option value="blog">Blog</option>
+                                    <option value="promotion">Khuyến mãi</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-control" id="contentStatusFilter">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="draft">Bản nháp</option>
+                                    <option value="pending">Chờ duyệt</option>
+                                    <option value="approved">Đã duyệt</option>
+                                    <option value="published">Đã xuất bản</option>
+                                    <option value="rejected">Từ chối</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="contentSearch" placeholder="Tìm kiếm nội dung...">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-outline-secondary w-100" onclick="clearContentFilters()">Xóa lọc</button>
+                            </div>
+                        </div>
+
+                        <!-- Bảng nội dung -->
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tiêu đề</th>
+                                    <th>Loại</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Tác giả</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contentTableBody">
+                                <!-- Dữ liệu sẽ được render bằng JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Thư viện Media -->
+            <div id="mediaSection" class="content-section" style="display: none;">
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title">Thư viện Media</h5>
+                            <div>
+                                <button class="btn btn-info me-2" onclick="uploadMedia()"><i class="fas fa-upload"></i> Upload</button>
+                                <button class="btn btn-warning" onclick="organizeMedia()"><i class="fas fa-folder"></i> Tổ chức</button>
+                            </div>
+                        </div>
+
+                        <!-- Bộ lọc media -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <select class="form-control" id="mediaTypeFilter">
+                                    <option value="">Tất cả file</option>
+                                    <option value="image">Hình ảnh</option>
+                                    <option value="video">Video</option>
+                                    <option value="document">Tài liệu</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-control" id="mediaCategoryFilter">
+                                    <option value="">Tất cả danh mục</option>
+                                    <option value="hotel-photos">Ảnh khách sạn</option>
+                                    <option value="room-photos">Ảnh phòng</option>
+                                    <option value="tour-photos">Ảnh tour</option>
+                                    <option value="banners">Banner</option>
+                                    <option value="icons">Icon</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="mediaSearch" placeholder="Tìm kiếm media...">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-outline-secondary w-100" onclick="clearMediaFilters()">Xóa lọc</button>
+                            </div>
+                        </div>
+
+                        <!-- Grid media -->
+                        <div class="media-grid" id="mediaGrid">
+                            <!-- Media items sẽ được render bằng JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Kiểm duyệt -->
+            <div id="reviewSection" class="content-section" style="display: none;">
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Hàng đợi kiểm duyệt</h5>
+                        
+                        <!-- Tabs kiểm duyệt -->
+                        <ul class="nav nav-tabs mb-4" id="reviewTabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" onclick="showReviewTab('content')">Nội dung (<span id="pendingContentCount">0</span>)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="showReviewTab('hotels')">Khách sạn (<span id="pendingHotelsCount">0</span>)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="showReviewTab('media')">Media (<span id="pendingMediaCount">0</span>)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="showReviewTab('reviews')">Đánh giá (<span id="pendingReviewsCount">0</span>)</a>
+                            </li>
+                        </ul>
+
+                        <!-- Nội dung tab -->
+                        <div id="reviewTabContent">
+                            <!-- Sẽ được render bằng JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section SEO & Analytics -->
+            <div id="seoSection" class="content-section" style="display: none;">
+                <div class="row g-4">
+                    <!-- SEO Overview -->
+                    <div class="col-md-8">
+                        <div class="card-modern">
+                            <div class="card-body">
+                                <h5 class="card-title">SEO Overview</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 style="color: #28a745;" id="seoScore">85</h4>
+                                                <p class="mb-0">SEO Score</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 style="color: #17a2b8;" id="totalKeywords">124</h4>
+                                                <p class="mb-0">Keywords</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 style="color: #ffc107;" id="avgPageSpeed">2.3s</h4>
+                                                <p class="mb-0">Page Speed</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="mt-4 mb-3">Top Keywords</h6>
+                                <table class="table table-dark table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Keyword</th>
+                                            <th>Ranking</th>
+                                            <th>Traffic</th>
+                                            <th>Difficulty</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="keywordsTable">
+                                        <!-- Sẽ được render bằng JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Performance -->
+                    <div class="col-md-4">
+                        <div class="card-modern">
+                            <div class="card-body">
+                                <h5 class="card-title">Content Performance</h5>
+                                <canvas id="contentPerformanceChart" width="300" height="200"></canvas>
+                                <div class="mt-3">
+                                    <small class="text-muted">Hiệu suất nội dung 30 ngày qua</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Dashboard -->
+                <div class="card-modern mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Analytics Dashboard</h5>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h4 style="color: var(--accent2);" id="totalViews">1,234,567</h4>
+                                        <p class="mb-0">Lượt xem</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h4 style="color: #28a745;" id="uniqueVisitors">89,123</h4>
+                                        <p class="mb-0">Khách độc nhất</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h4 style="color: #ffc107;" id="bounceRate">34.5%</h4>
+                                        <p class="mb-0">Bounce Rate</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h4 style="color: #17a2b8;" id="avgSessionTime">4:32</h4>
+                                        <p class="mb-0">Thời gian trung bình</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Cài đặt -->
+            <div id="settingsSection" class="content-section" style="display: none;">
+                <div class="card-modern mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Cài đặt Content Admin</h5>
+                        
+                        <div class="row g-4">
+                            <!-- Cài đặt nội dung -->
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-edit me-2"></i>Cài đặt nội dung</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="autoSave" checked>
+                                            <label class="form-check-label" for="autoSave">
+                                                Tự động lưu bản nháp
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="enableComments" checked>
+                                            <label class="form-check-label" for="enableComments">
+                                                Cho phép bình luận
+                                            </label>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Số bài viết trên trang</label>
+                                            <select class="form-control" id="postsPerPage">
+                                                <option value="10">10 bài</option>
+                                                <option value="20" selected>20 bài</option>
+                                                <option value="50">50 bài</option>
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-primary">Lưu cài đặt</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cài đặt SEO -->
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-search me-2"></i>Cài đặt SEO</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">Meta Title mặc định</label>
+                                            <input type="text" class="form-control" id="defaultMetaTitle" value="LuxHaven Travel - Đặt phòng khách sạn">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Meta Description mặc định</label>
+                                            <textarea class="form-control" id="defaultMetaDesc" rows="3">Đặt phòng khách sạn giá tốt nhất tại LuxHaven Travel</textarea>
+                                        </div>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="enableSitemap" checked>
+                                            <label class="form-check-label" for="enableSitemap">
+                                                Tự động tạo sitemap
+                                            </label>
+                                        </div>
+                                        <button class="btn btn-success">Cập nhật SEO</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cài đặt media -->
+                        <div class="row g-4 mt-2">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-images me-2"></i>Cài đặt Media</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">Kích thước ảnh tối đa (MB)</label>
+                                            <select class="form-control" id="maxImageSize">
+                                                <option value="2">2 MB</option>
+                                                <option value="5" selected>5 MB</option>
+                                                <option value="10">10 MB</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Định dạng ảnh cho phép</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="allowJPG" checked>
+                                                <label class="form-check-label" for="allowJPG">JPG/JPEG</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="allowPNG" checked>
+                                                <label class="form-check-label" for="allowPNG">PNG</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="allowWEBP" checked>
+                                                <label class="form-check-label" for="allowWEBP">WebP</label>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-info">Lưu cài đặt Media</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6><i class="fas fa-shield-alt me-2"></i>Bảo mật nội dung</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="enableModeration" checked>
+                                            <label class="form-check-label" for="enableModeration">
+                                                Kiểm duyệt tự động
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="enableWatermark">
+                                            <label class="form-check-label" for="enableWatermark">
+                                                Thêm watermark ảnh
+                                            </label>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Backup tự động</label>
+                                            <select class="form-control" id="autoBackup">
+                                                <option value="daily" selected>Hàng ngày</option>
+                                                <option value="weekly">Hàng tuần</option>
+                                                <option value="monthly">Hàng tháng</option>
+                                                <option value="disabled">Tắt</option>
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-warning">Cập nhật bảo mật</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal tạo nội dung mới -->
+    <div class="modal fade" id="createContentModal" tabindex="-1" aria-labelledby="createContentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form class="modal-content" id="createContentForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createContentModalLabel">Tạo nội dung mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="contentTitle" class="form-label">Tiêu đề</label>
+                                <input type="text" class="form-control" id="contentTitle" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contentDescription" class="form-label">Mô tả ngắn</label>
+                                <textarea class="form-control" id="contentDescription" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contentBody" class="form-label">Nội dung</label>
+                                <div class="content-editor" id="contentBody" contenteditable="true">
+                                    Nhập nội dung tại đây...
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="contentType" class="form-label">Loại nội dung</label>
+                                <select class="form-control" id="contentType" required>
+                                    <option value="">Chọn loại</option>
+                                    <option value="hotel">Khách sạn</option>
+                                    <option value="room">Phòng</option>
+                                    <option value="tour">Tour</option>
+                                    <option value="blog">Blog</option>
+                                    <option value="promotion">Khuyến mãi</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contentStatus" class="form-label">Trạng thái</label>
+                                <select class="form-control" id="contentStatus">
+                                    <option value="draft">Bản nháp</option>
+                                    <option value="pending">Chờ duyệt</option>
+                                    <option value="published">Xuất bản ngay</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contentTags" class="form-label">Tags</label>
+                                <input type="text" class="form-control" id="contentTags" placeholder="Nhập tags, cách nhau bởi dấu phẩy">
+                            </div>
+                            <div class="mb-3">
+                                <label for="contentImage" class="form-label">Ảnh đại diện</label>
+                                <input type="file" class="form-control" id="contentImage" accept="image/*">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">SEO Settings</label>
+                                <input type="text" class="form-control mb-2" id="seoTitle" placeholder="SEO Title">
+                                <textarea class="form-control" id="seoDescription" rows="2" placeholder="SEO Description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Tạo nội dung</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal upload media -->
+    <div class="modal fade" id="uploadMediaModal" tabindex="-1" aria-labelledby="uploadMediaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" id="uploadMediaForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadMediaModalLabel">Upload Media</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="mediaFiles" class="form-label">Chọn file</label>
+                        <input type="file" class="form-control" id="mediaFiles" multiple accept="image/*,video/*,.pdf,.doc,.docx">
+                        <small class="text-muted">Chọn một hoặc nhiều file. Hỗ trợ: JPG, PNG, WebP, MP4, PDF, DOC</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mediaCategory" class="form-label">Danh mục</label>
+                        <select class="form-control" id="mediaCategory" required>
+                            <option value="">Chọn danh mục</option>
+                            <option value="hotel-photos">Ảnh khách sạn</option>
+                            <option value="room-photos">Ảnh phòng</option>
+                            <option value="tour-photos">Ảnh tour</option>
+                            <option value="banners">Banner</option>
+                            <option value="icons">Icon</option>
+                            <option value="documents">Tài liệu</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mediaDescription" class="form-label">Mô tả</label>
+                        <textarea class="form-control" id="mediaDescription" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal kiểm duyệt -->
+    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reviewModalLabel">Kiểm duyệt nội dung</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body" id="reviewModalBody">
+                    <!-- Nội dung sẽ được load bằng JS -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="approveContent()">Phê duyệt</button>
+                    <button type="button" class="btn btn-danger" onclick="rejectContent()">Từ chối</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Quản lý hiển thị section
+        window.showSection = function(sectionName) {
+            // Ẩn tất cả sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Hiển thị section được chọn
+            document.getElementById(sectionName + 'Section').style.display = 'block';
+            
+            // Cập nhật active state cho menu
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Cập nhật tiêu đề header
+            const titles = {
+                'role': 'Quản trị viên nội dung',
+                'content': 'Quản lý nội dung',
+                'media': 'Thư viện Media',
+                'review': 'Kiểm duyệt',
+                'seo': 'SEO & Analytics',
+                'settings': 'Cài đặt'
+            };
+            document.querySelector('.main-header h1').textContent = titles[sectionName];
+            
+            // Load dữ liệu theo section
+            if (sectionName === 'content') {
+                loadContentData();
+            } else if (sectionName === 'media') {
+                loadMediaData();
+            } else if (sectionName === 'review') {
+                loadReviewData();
+            } else if (sectionName === 'seo') {
+                loadSEOData();
+            }
+            
+            updateDashboard();
+        };
+
+        // Hàm lấy dữ liệu từ localStorage
+        function getContent() { return JSON.parse(localStorage.getItem('content') || '[]'); }
+        function setContent(data) { localStorage.setItem('content', JSON.stringify(data)); }
+        function getMedia() { return JSON.parse(localStorage.getItem('media') || '[]'); }
+        function setMedia(data) { localStorage.setItem('media', JSON.stringify(data)); }
+        function getReviews() { return JSON.parse(localStorage.getItem('reviews') || '[]'); }
+        function setReviews(data) { localStorage.setItem('reviews', JSON.stringify(data)); }
+
+        // Cập nhật dashboard
+        function updateDashboard() {
+            const content = getContent();
+            const media = getMedia();
+            
+            document.getElementById('totalContent').textContent = content.length;
+            document.getElementById('pendingReview').textContent = content.filter(c => c.status === 'pending').length;
+            document.getElementById('publishedContent').textContent = content.filter(c => c.status === 'published').length;
+            document.getElementById('mediaFiles').textContent = media.length;
+        }
+
+        // Tạo nội dung mới
+        window.createNewContent = function() {
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('createContentModal')).show();
+        };
+
+        document.getElementById('createContentForm').onsubmit = function(e) {
+            e.preventDefault();
+            const title = document.getElementById('contentTitle').value;
+            const description = document.getElementById('contentDescription').value;
+            const body = document.getElementById('contentBody').innerHTML;
+            const type = document.getElementById('contentType').value;
+            const status = document.getElementById('contentStatus').value;
+            const tags = document.getElementById('contentTags').value;
+            const seoTitle = document.getElementById('seoTitle').value;
+            const seoDescription = document.getElementById('seoDescription').value;
+            
+            if (!title || !type) return;
+            
+            const content = getContent();
+            const newContent = {
+                id: Date.now(),
+                title, description, body, type, status, tags,
+                seoTitle: seoTitle || title,
+                seoDescription: seoDescription || description,
+                author: 'Content Admin',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            content.push(newContent);
+            setContent(content);
+            loadContentData();
+            updateDashboard();
+            this.reset();
+            document.getElementById('contentBody').innerHTML = 'Nhập nội dung tại đây...';
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('createContentModal')).hide();
+        };
+
+        // Load dữ liệu nội dung
+        function loadContentData() {
+            const content = getContent();
+            const typeFilter = document.getElementById('contentTypeFilter')?.value || '';
+            const statusFilter = document.getElementById('contentStatusFilter')?.value || '';
+            const searchTerm = document.getElementById('contentSearch')?.value.toLowerCase() || '';
+            
+            let filteredContent = content.filter(c => {
+                const matchType = !typeFilter || c.type === typeFilter;
+                const matchStatus = !statusFilter || c.status === statusFilter;
+                const matchSearch = !searchTerm || c.title.toLowerCase().includes(searchTerm) || 
+                                  c.description.toLowerCase().includes(searchTerm);
+                return matchType && matchStatus && matchSearch;
+            });
+            
+            const tbody = document.getElementById('contentTableBody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = filteredContent.map(c => `
+                <tr>
+                    <td>${c.title}</td>
+                    <td><span class="badge bg-info">${getTypeLabel(c.type)}</span></td>
+                    <td><span class="status-badge status-${c.status}">${getStatusLabel(c.status)}</span></td>
+                    <td>${new Date(c.createdAt).toLocaleDateString('vi-VN')}</td>
+                    <td>${c.author}</td>
+                    <td>
+                        <button class="btn btn-sm btn-info me-1" onclick="viewContent(${c.id})" title="Xem"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-sm btn-warning me-1" onclick="editContent(${c.id})" title="Sửa"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-success me-1" onclick="reviewContent(${c.id})" title="Duyệt"><i class="fas fa-check"></i></button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteContent(${c.id})" title="Xóa"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Upload media
+        window.uploadMedia = function() {
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('uploadMediaModal')).show();
+        };
+
+        document.getElementById('uploadMediaForm').onsubmit = function(e) {
+            e.preventDefault();
+            const files = document.getElementById('mediaFiles').files;
+            const category = document.getElementById('mediaCategory').value;
+            const description = document.getElementById('mediaDescription').value;
+            
+            if (!files.length || !category) return;
+            
+            const media = getMedia();
+            Array.from(files).forEach(file => {
+                const newMedia = {
+                    id: Date.now() + Math.random(),
+                    name: file.name,
+                    type: file.type.startsWith('image/') ? 'image' : file.type.startsWith('video/') ? 'video' : 'document',
+                    category,
+                    description,
+                    size: file.size,
+                    uploadedAt: new Date().toISOString(),
+                    url: URL.createObjectURL(file) // Demo URL
+                };
+                media.push(newMedia);
+            });
+            
+            setMedia(media);
+            loadMediaData();
+            updateDashboard();
+            this.reset();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('uploadMediaModal')).hide();
+        };
+
+        // Load dữ liệu media
+        function loadMediaData() {
+            const media = getMedia();
+            const grid = document.getElementById('mediaGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = media.map(m => `
+                <div class="media-item">
+                    <img src="${m.url || 'https://via.placeholder.com/200x150?text=' + m.name}" alt="${m.name}">
+                    <div class="media-item-info">
+                        <strong>${m.name}</strong>
+                        <div><small class="text-muted">${m.category}</small></div>
+                        <div><small>${formatFileSize(m.size)}</small></div>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-danger" onclick="deleteMedia(${m.id})">Xóa</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Các hàm tiện ích
+        function getTypeLabel(type) {
+            const labels = {
+                'hotel': 'Khách sạn',
+                'room': 'Phòng',
+                'tour': 'Tour',
+                'blog': 'Blog',
+                'promotion': 'Khuyến mãi'
+            };
+            return labels[type] || type;
+        }
+
+        function getStatusLabel(status) {
+            const labels = {
+                'draft': 'Bản nháp',
+                'pending': 'Chờ duyệt',
+                'approved': 'Đã duyệt',
+                'published': 'Đã xuất bản',
+                'rejected': 'Từ chối'
+            };
+            return labels[status] || status;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Các hàng placeholder
+        window.viewContent = function(id) { alert('Xem nội dung ID: ' + id); };
+        window.editContent = function(id) { alert('Sửa nội dung ID: ' + id); };
+        window.reviewContent = function(id) { alert('Duyệt nội dung ID: ' + id); };
+        window.deleteContent = function(id) {
+            if (confirm('Bạn có chắc muốn xóa nội dung này?')) {
+                const content = getContent().filter(c => c.id !== id);
+                setContent(content);
+                loadContentData();
+                updateDashboard();
+            }
+        };
+        window.deleteMedia = function(id) {
+            if (confirm('Bạn có chắc muốn xóa media này?')) {
+                const media = getMedia().filter(m => m.id !== id);
+                setMedia(media);
+                loadMediaData();
+                updateDashboard();
+            }
+        };
+        window.organizeMedia = function() { alert('Chức năng tổ chức media'); };
+        window.clearContentFilters = function() {
+            document.getElementById('contentTypeFilter').value = '';
+            document.getElementById('contentStatusFilter').value = '';
+            document.getElementById('contentSearch').value = '';
+            loadContentData();
+        };
+        window.clearMediaFilters = function() {
+            document.getElementById('mediaTypeFilter').value = '';
+            document.getElementById('mediaCategoryFilter').value = '';
+            document.getElementById('mediaSearch').value = '';
+            loadMediaData();
+        };
+        window.showReviewTab = function(tab) { alert('Hiển thị tab: ' + tab); };
+        window.loadReviewData = function() { /* Load review data */ };
+        window.loadSEOData = function() { /* Load SEO data */ };
+        window.approveContent = function() { alert('Phê duyệt nội dung'); };
+        window.rejectContent = function() { alert('Từ chối nội dung'); };
+
+        // Khởi tạo
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDashboard();
+            
+            // Thêm event listeners cho filters
+            ['contentTypeFilter', 'contentStatusFilter', 'contentSearch'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', loadContentData);
+                    element.addEventListener('input', loadContentData);
+                }
+            });
+        });
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.appspot.com",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Đăng xuất với Firebase Auth
+        function logout() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                // Kiểm tra xem Firebase Auth có sẵn không
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    firebase.auth().signOut().then(() => {
+                        console.log('Đăng xuất thành công');
+                        window.location.href = '../auth.html';
+                    }).catch((error) => {
+                        console.error('Lỗi đăng xuất:', error);
+                        // Vẫn chuyển trang nếu có lỗi
+                        window.location.href = '../auth.html';
+                    });
+                } else {
+                    // Fallback nếu Firebase không có
+                    window.location.href = '../auth.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

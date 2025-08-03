@@ -849,6 +849,225 @@
           }
         }
       }
+    },
+    "roles": {
+      ".read": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      "$roleId": {
+        ".validate": "newData.hasChildren(['name'])",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "code": {
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().length > 0)"
+        },
+        "description": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "salary": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "allowance": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "permissions": {
+          ".validate": "!newData.exists() || newData.isString()"
+        }
+      }
+    },
+    "staff": {
+      ".read": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      "$staffId": {
+        ".validate": "newData.hasChildren(['name', 'email', 'phone', 'idCard', 'role'])",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "email": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "phone": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "idCard": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "role": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "birthDate": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "gender": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "idCardDate": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "idCardPlace": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "nationality": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "ethnicity": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "religion": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "personalPhone": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "address": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tempAddress": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "emergencyContact": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "emergencyPhone": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "relationship": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "education": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "major": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "school": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "experience": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "skills": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "certificates": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "department": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "startDate": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "employmentType": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "basicSalary": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "bankAccount": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "bankName": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "note": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "joinedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "createdAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "status": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "employeeId": {
+          ".validate": "!newData.exists() || newData.isString()"
+        }
+      }
+    },
+    "departments": {
+      ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.uid === 'C0KP03RRSFahajSy8RnQhWyV1T82')",
+      ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.uid === 'C0KP03RRSFahajSy8RnQhWyV1T82')",
+      "$departmentId": {
+        ".validate": "newData.hasChildren(['name', 'code', 'status'])",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "code": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "description": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "manager": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "budget": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "location": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "email": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "phone": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'active' || newData.val() === 'inactive')"
+        },
+        "staffCount": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "createdAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "updatedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        }
+      }
+    },
+    "affiliatePartners": {
+      ".indexOn": [
+        "status",
+        "name",
+        "createdAt"
+      ],
+      "$partnerId": {
+        ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.role === 'affiliate-manager')",
+        ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.role === 'affiliate-manager')",
+        "name": {
+          ".validate": "newData.isString()"
+        },
+        "website": {
+          ".validate": "newData.isString()"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'Đang hợp tác' || newData.val() === 'Tạm dừng' || newData.val() === 'Kết thúc')"
+        },
+        "commission": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+        },
+        "revenue": {
+          ".validate": "newData.isString()"
+        },
+        "contactEmail": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "contactPhone": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        }
+      }
     }
   }
-} 
+}
+

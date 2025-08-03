@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhân viên marketing / SEO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <style>
+        :root { --main-bg: #181c2f; --sidebar-bg: #23244a; --card-bg: #23244a; --accent: #7c3aed; --accent2: #00eaff; --text: #f3f6fa; --text-muted: #b0b8d1; --border: #2e325a; --shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.15); }
+        body { background: var(--main-bg); color: var(--text); font-family: 'Poppins', Arial, sans-serif; margin: 0; }
+        .sidebar { width: 240px; background: var(--sidebar-bg); color: var(--text); min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 100; display: flex; flex-direction: column; }
+        .sidebar .logo { padding: 32px 0 24px 0; text-align: center; font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; color: var(--accent); }
+        .sidebar .nav-item { display: flex; align-items: center; padding: 14px 32px; color: var(--text-muted); text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        .sidebar .nav-item.active, .sidebar .nav-item:hover { background: #1a1d36; color: var(--accent2); border-left: 4px solid var(--accent); }
+        .sidebar .nav-item i { margin-right: 14px; font-size: 1.2rem; }
+        .sidebar-footer { margin-top: auto; padding: 24px 32px; }
+        .sidebar-footer .btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 500; }
+        .main-container { margin-left: 240px; min-height: 100vh; background: var(--main-bg); }
+        .main-header { background: #1a1d36; border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+        .main-header .user-info { display: flex; align-items: center; gap: 14px; }
+        .main-header .user-info img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .content-wrapper { padding: 40px 32px 32px 32px; }
+        .card-modern { background: var(--card-bg); border-radius: 18px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 32px; padding: 0; }
+        .card-modern .card-body { padding: 32px 28px; }
+        .card-modern .card-title { color: var(--accent2); font-weight: 600; font-size: 1.2rem; margin-bottom: 18px; }
+        .profile-info { display: flex; align-items: center; gap: 32px; }
+        .profile-info img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .profile-info .info { font-size: 1.1rem; }
+
+        /* New styles for marketing/SEO */
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .stat-card { background: var(--card-bg); border-radius: 12px; padding: 24px; border: 1px solid var(--border); text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+        .stat-label { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px; }
+        .trend-up { color: #28a745; font-weight: 600; }
+        .trend-down { color: #dc3545; font-weight: 600; }
+        .trend-stable { color: #ffc107; font-weight: 600; }
+        .marketing-card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); padding: 24px; margin-bottom: 24px; }
+        .marketing-card h5 { color: var(--accent2); margin-bottom: 20px; font-weight: 600; }
+        .data-table { background: var(--card-bg); border-radius: 12px; overflow: hidden; }
+        .table-dark { --bs-table-bg: var(--card-bg); --bs-table-border-color: var(--border); }
+        .form-control, .form-select { background: var(--main-bg); border: 1px solid var(--border); color: var(--text); }
+        .form-control:focus, .form-select:focus { background: var(--main-bg); border-color: var(--accent); color: var(--text); box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.25); }
+        .btn-primary { background: var(--accent); border-color: var(--accent); }
+        .btn-primary:hover { background: #6d28d9; border-color: #6d28d9; }
+        .btn-success:hover { background: #1e7e34; }
+        .btn-warning:hover { background: #d39e00; }
+        .btn-info:hover { background: #138496; }
+        .btn-danger:hover { background: #c82333; }
+        .progress-custom { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; }
+        .progress-bar-custom { height: 100%; transition: width 0.3s ease; }
+        .modal-content { background: var(--card-bg); border: 1px solid var(--border); }
+        .modal-header { border-bottom: 1px solid var(--border); }
+        .modal-footer { border-top: 1px solid var(--border); }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-bottom: 32px; }
+        .metric-card { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+        .campaign-card { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 12px; padding: 20px; color: white; margin-bottom: 20px; }
+        .seo-score { font-size: 3rem; font-weight: 800; }
+        .keyword-rank { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+        .rank-1-10 { background: #28a745; color: white; }
+        .rank-11-30 { background: #ffc107; color: black; }
+        .rank-31-100 { background: #dc3545; color: white; }
+        .social-card { border-left: 4px solid var(--accent2); }
+
+        @media (max-width: 900px) { .sidebar { width: 80px; } .main-container { margin-left: 80px; } .sidebar .nav-item { padding: 12px 10px; font-size: 0.95rem; } .sidebar .logo { font-size: 1.1rem; } .kpi-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 700px) { .sidebar { display: none; } .main-container { margin-left: 0; } .main-header { padding: 12px 10px; } .content-wrapper { padding: 12px 4px; } }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i> LUXSTAFF
+        </div>
+        <a href="#roleSection" class="nav-item active" onclick="showSection('roleSection')"><i class="fas fa-user-tie"></i> Vai trò</a>
+        <a href="#dashboardSection" class="nav-item" onclick="showSection('dashboardSection')"><i class="fas fa-chart-line"></i> Dashboard</a>
+        <a href="#campaignsSection" class="nav-item" onclick="showSection('campaignsSection')"><i class="fas fa-bullhorn"></i> Campaigns</a>
+        <a href="#seoSection" class="nav-item" onclick="showSection('seoSection')"><i class="fas fa-search"></i> SEO</a>
+        <a href="#socialSection" class="nav-item" onclick="showSection('socialSection')"><i class="fas fa-share-alt"></i> Social Media</a>
+        <a href="#analyticsSection" class="nav-item" onclick="showSection('analyticsSection')"><i class="fas fa-chart-bar"></i> Analytics</a>
+        <a href="#settingsSection" class="nav-item" onclick="showSection('settingsSection')"><i class="fas fa-cogs"></i> Cài đặt</a>
+        <div class="sidebar-footer">
+            <button class="btn" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</button>
+        </div>
+    </div>
+    <div class="main-container">
+        <header class="main-header">
+            <h1 class="h4 mb-0" style="color:var(--accent2);">Nhân viên marketing / SEO</h1>
+            <div class="user-info">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                <span><strong>Marketing / SEO</strong></span>
+            </div>
+        </header>
+        <main class="content-wrapper">
+            <!-- Section Vai trò (mặc định) -->
+            <div id="roleSection" class="content-section active">
+                <!-- KPI Overview -->
+                <section class="mb-4">
+                    <div class="kpi-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: var(--accent2);">125K</div>
+                            <div class="stat-label">Website Traffic tháng</div>
+                            <small class="trend-up"><i class="fas fa-arrow-up"></i> +28.5%</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #28a745;">3.2%</div>
+                            <div class="stat-label">Conversion Rate</div>
+                            <small class="trend-up"><i class="fas fa-arrow-up"></i> +0.8%</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #ffc107;">₫89M</div>
+                            <div class="stat-label">Ad Spend tháng</div>
+                            <small class="trend-stable"><i class="fas fa-minus"></i> 0.0%</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #17a2b8;">4.2x</div>
+                            <div class="stat-label">ROAS (Return on Ad Spend)</div>
+                            <small class="trend-up"><i class="fas fa-arrow-up"></i> +0.3x</small>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="card-modern mb-4">
+                        <div class="card-body profile-info">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                            <div class="info">
+                                <h4 class="mb-1" style="color:var(--accent2);">Nhân viên Marketing / SEO</h4>
+                                <div><i class="fas fa-briefcase me-2"></i> Tối ưu quảng bá, chương trình khuyến mãi</div>
+                                <hr style="border-color: var(--border); margin: 16px 0;">
+                                <div>
+                                    <strong style="color: var(--accent2);">Chức năng chính:</strong>
+                                    <ul style="margin: 8px 0; padding-left: 20px;">
+                                        <li>Quản lý campaigns quảng cáo (Google Ads, Facebook Ads)</li>
+                                        <li>Tối ưu SEO và từ khóa tìm kiếm</li>
+                                        <li>Quản lý social media và content marketing</li>
+                                        <li>Phân tích hiệu quả marketing và ROI</li>
+                                        <li>Tạo và quản lý chương trình khuyến mãi</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Section Dashboard -->
+            <div id="dashboardSection" class="content-section">
+                <div class="row g-4">
+                    <div class="col-md-8">
+                        <div class="marketing-card">
+                            <h5><i class="fas fa-chart-line me-2"></i>Traffic Overview hôm nay</h5>
+                            <div class="row text-center">
+                                <div class="col-3">
+                                    <div class="stat-number text-primary">4,250</div>
+                                    <small>Visitors</small>
+                                </div>
+                                <div class="col-3">
+                                    <div class="stat-number text-success">156</div>
+                                    <small>Conversions</small>
+                                </div>
+                                <div class="col-3">
+                                    <div class="stat-number text-warning">3.7%</div>
+                                    <small>CVR</small>
+                                </div>
+                                <div class="col-3">
+                                    <div class="stat-number text-info">₫2.8M</div>
+                                    <small>Ad Spend</small>
+                                </div>
+                            </div>
+                            <div class="progress-custom mt-3">
+                                <div class="progress-bar-custom" style="width: 67%; background: var(--accent2);"></div>
+                            </div>
+                            <small class="text-muted">Target hôm nay: 6,000 visitors</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="marketing-card">
+                            <h5><i class="fas fa-bullhorn me-2"></i>Active Campaigns</h5>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>Google Ads</span>
+                                    <span class="badge bg-success">Live</span>
+                                </div>
+                                <small class="text-muted">Budget: ₫50K/day</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>Facebook Ads</span>
+                                    <span class="badge bg-success">Live</span>
+                                </div>
+                                <small class="text-muted">Budget: ₫30K/day</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>Instagram Ads</span>
+                                    <span class="badge bg-warning">Paused</span>
+                                </div>
+                                <small class="text-muted">Budget: ₫20K/day</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-md-6">
+                        <div class="marketing-card">
+                            <h5>Top Performing Keywords</h5>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>khách sạn hà nội</span>
+                                    <span class="keyword-rank rank-1-10">#3</span>
+                                </div>
+                                <small class="text-success">1,250 clicks/tháng</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>resort đà nẵng</span>
+                                    <span class="keyword-rank rank-1-10">#7</span>
+                                </div>
+                                <small class="text-success">890 clicks/tháng</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span>khách sạn 5 sao</span>
+                                    <span class="keyword-rank rank-11-30">#15</span>
+                                </div>
+                                <small class="text-warning">650 clicks/tháng</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="marketing-card">
+                            <h5>Recent Activities</h5>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="fas fa-play text-success me-2"></i>Campaign started</span>
+                                    <small>2h ago</small>
+                                </div>
+                                <small class="text-muted">Summer Promotion 2025</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="fas fa-edit text-info me-2"></i>SEO updated</span>
+                                    <small>4h ago</small>
+                                </div>
+                                <small class="text-muted">Meta descriptions optimized</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="fas fa-share text-primary me-2"></i>Social post</span>
+                                    <small>6h ago</small>
+                                </div>
+                                <small class="text-muted">Instagram story published</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Campaigns -->
+            <div id="campaignsSection" class="content-section">
+                <div class="marketing-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5><i class="fas fa-bullhorn me-2"></i>Quản lý Campaigns</h5>
+                        <div>
+                            <button class="btn btn-success btn-sm me-2" onclick="createCampaign()">
+                                <i class="fas fa-plus"></i> Tạo Campaign
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="campaignTemplates()">
+                                <i class="fas fa-template"></i> Templates
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Active Campaigns -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="campaign-card">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0">Summer Promotion 2025</h6>
+                                    <span class="badge bg-light text-dark">Google Ads</span>
+                                </div>
+                                <div class="row text-center">
+                                    <div class="col-6">
+                                        <div class="h5 mb-0">₫45K</div>
+                                        <small>Daily Budget</small>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="h5 mb-0">4.5x</div>
+                                        <small>ROAS</small>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-light btn-sm me-2" onclick="editCampaign('summer2025')">Edit</button>
+                                    <button class="btn btn-outline-light btn-sm" onclick="pauseCampaign('summer2025')">Pause</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="campaign-card" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0">Facebook Retargeting</h6>
+                                    <span class="badge bg-light text-dark">Facebook</span>
+                                </div>
+                                <div class="row text-center">
+                                    <div class="col-6">
+                                        <div class="h5 mb-0">₫30K</div>
+                                        <small>Daily Budget</small>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="h5 mb-0">6.2x</div>
+                                        <small>ROAS</small>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-light btn-sm me-2" onclick="editCampaign('fb-retarget')">Edit</button>
+                                    <button class="btn btn-outline-light btn-sm" onclick="pauseCampaign('fb-retarget')">Pause</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="campaign-card" style="background: linear-gradient(135deg, #ffc107, #fd7e14);">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0">Brand Awareness</h6>
+                                    <span class="badge bg-light text-dark">Instagram</span>
+                                </div>
+                                <div class="row text-center">
+                                    <div class="col-6">
+                                        <div class="h5 mb-0">₫25K</div>
+                                        <small>Daily Budget</small>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="h5 mb-0">2.8x</div>
+                                        <small>ROAS</small>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-light btn-sm me-2" onclick="editCampaign('brand-awareness')">Edit</button>
+                                    <button class="btn btn-outline-light btn-sm" onclick="pauseCampaign('brand-awareness')">Pause</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Campaign Performance Table -->
+                    <div class="data-table">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Campaign Name</th>
+                                    <th>Platform</th>
+                                    <th>Status</th>
+                                    <th>Budget</th>
+                                    <th>Spent</th>
+                                    <th>Clicks</th>
+                                    <th>Conversions</th>
+                                    <th>ROAS</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Summer Promotion 2025</td>
+                                    <td><i class="fab fa-google me-1"></i>Google Ads</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>₫45,000/day</td>
+                                    <td>₫42,500</td>
+                                    <td>1,250</td>
+                                    <td>56</td>
+                                    <td class="text-success">4.5x</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-warning me-1" title="Pause"><i class="fas fa-pause"></i></button>
+                                        <button class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Facebook Retargeting</td>
+                                    <td><i class="fab fa-facebook me-1"></i>Facebook</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>₫30,000/day</td>
+                                    <td>₫28,750</td>
+                                    <td>890</td>
+                                    <td>78</td>
+                                    <td class="text-success">6.2x</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-warning me-1" title="Pause"><i class="fas fa-pause"></i></button>
+                                        <button class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Brand Awareness</td>
+                                    <td><i class="fab fa-instagram me-1"></i>Instagram</td>
+                                    <td><span class="badge bg-warning">Paused</span></td>
+                                    <td>₫25,000/day</td>
+                                    <td>₫0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td class="text-muted">N/A</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success me-1" title="Resume" onclick="resumeCampaign('brand-awareness')"><i class="fas fa-play"></i></button>
+                                        <button class="btn btn-sm btn-info me-1" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section SEO -->
+            <div id="seoSection" class="content-section">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="marketing-card text-center">
+                            <h5><i class="fas fa-search me-2"></i>SEO Score</h5>
+                            <div class="seo-score text-success">87</div>
+                            <small class="text-muted">Overall Health Score</small>
+                            <div class="progress-custom mt-3">
+                                <div class="progress-bar-custom" style="width: 87%; background: #28a745;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="marketing-card">
+                            <h5>SEO Tasks & Recommendations</h5>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="fas fa-exclamation-triangle text-warning me-2"></i>Fix missing meta descriptions</span>
+                                    <span class="badge bg-warning">High Priority</span>
+                                </div>
+                                <small class="text-muted">12 pages missing meta descriptions</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="fas fa-image text-info me-2"></i>Optimize image alt texts</span>
+                                    <span class="badge bg-info">Medium</span>
+                                </div>
+                                <small class="text-muted">45 images without alt text</small>
+                            </div>
+                            <div class="metric-card">
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="fas fa-link text-success me-2"></i>Build internal links</span>
+                                    <span class="badge bg-success">Low Priority</span>
+                                </div>
+                                <small class="text-muted">Improve internal linking structure</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-md-6">
+                        <div class="marketing-card">
+                            <h5>Keyword Rankings</h5>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span>Target Keywords: 24</span>
+                                <button class="btn btn-sm btn-primary" onclick="addKeyword()">
+                                    <i class="fas fa-plus"></i> Add Keyword
+                                </button>
+                            </div>
+                            <div class="data-table">
+                                <table class="table table-dark table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Keyword</th>
+                                            <th>Position</th>
+                                            <th>Change</th>
+                                            <th>Volume</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>khách sạn hà nội</td>
+                                            <td><span class="keyword-rank rank-1-10">#3</span></td>
+                                            <td class="text-success">+2</td>
+                                            <td>8,200</td>
+                                        </tr>
+                                        <tr>
+                                            <td>resort đà nẵng</td>
+                                            <td><span class="keyword-rank rank-1-10">#7</span></td>
+                                            <td class="text-success">+1</td>
+                                            <td>5,100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>khách sạn 5 sao</td>
+                                            <td><span class="keyword-rank rank-11-30">#15</span></td>
+                                            <td class="text-danger">-3</td>
+                                            <td>12,400</td>
+                                        </tr>
+                                        <tr>
+                                            <td>booking khách sạn</td>
+                                            <td><span class="keyword-rank rank-31-100">#45</span></td>
+                                            <td class="text-success">+8</td>
+                                            <td>15,600</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="marketing-card">
+                            <h5>Content Optimization</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Page URL</label>
+                                <input type="url" class="form-control" placeholder="https://luxhaven.com/hotels" id="pageUrl">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Target Keyword</label>
+                                <input type="text" class="form-control" placeholder="khách sạn luxury" id="targetKeyword">
+                            </div>
+                            <button class="btn btn-primary me-2" onclick="analyzeContent()">
+                                <i class="fas fa-search"></i> Analyze Page
+                            </button>
+                            <button class="btn btn-success" onclick="optimizePage()">
+                                <i class="fas fa-magic"></i> Auto Optimize
+                            </button>
+                            
+                            <div class="mt-4">
+                                <h6>Recent Optimizations</h6>
+                                <div class="metric-card">
+                                    <small class="text-success">✓ Updated meta title - Hotel Luxury Page</small>
+                                </div>
+                                <div class="metric-card">
+                                    <small class="text-success">✓ Added structured data - Review schema</small>
+                                </div>
+                                <div class="metric-card">
+                                    <small class="text-warning">⚠ Needs improvement - Page loading speed</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Social Media -->
+            <div id="socialSection" class="content-section">
+                <div class="marketing-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5><i class="fas fa-share-alt me-2"></i>Social Media Management</h5>
+                        <div>
+                            <button class="btn btn-success btn-sm me-2" onclick="createPost()">
+                                <i class="fas fa-plus"></i> Create Post
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="schedulePost()">
+                                <i class="fas fa-calendar"></i> Schedule
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Stats -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <div class="social-card metric-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fab fa-facebook fa-2x text-primary"></i>
+                                        <div class="h5 mt-2 mb-0">25.4K</div>
+                                        <small>Followers</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="text-success">+450</div>
+                                        <small>This month</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="social-card metric-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fab fa-instagram fa-2x text-danger"></i>
+                                        <div class="h5 mt-2 mb-0">18.7K</div>
+                                        <small>Followers</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="text-success">+320</div>
+                                        <small>This month</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="social-card metric-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fab fa-youtube fa-2x text-danger"></i>
+                                        <div class="h5 mt-2 mb-0">8.9K</div>
+                                        <small>Subscribers</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="text-success">+120</div>
+                                        <small>This month</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="social-card metric-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fab fa-tiktok fa-2x text-dark"></i>
+                                        <div class="h5 mt-2 mb-0">12.3K</div>
+                                        <small>Followers</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="text-success">+890</div>
+                                        <small>This month</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Posts & Engagement -->
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="metric-card">
+                                <h6>Recent Posts</h6>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span><i class="fab fa-facebook me-2 text-primary"></i>Summer promotion launch</span>
+                                        <small>2h ago</small>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <span>👍 245 | 💬 32 | 🔄 18</span>
+                                        <span class="text-success">High engagement</span>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span><i class="fab fa-instagram me-2 text-danger"></i>Beach resort story</span>
+                                        <small>4h ago</small>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <span>❤️ 189 | 💬 24 | 📤 12</span>
+                                        <span class="text-warning">Medium engagement</span>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span><i class="fab fa-youtube me-2 text-danger"></i>Hotel tour video</span>
+                                        <small>1d ago</small>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <span>👍 567 | 💬 89 | 👁 2.4K</span>
+                                        <span class="text-success">Viral potential</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="metric-card">
+                                <h6>Content Calendar</h6>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span><i class="fas fa-calendar me-2 text-info"></i>Aug 4, 9:00 AM</span>
+                                        <span class="badge bg-primary">Facebook</span>
+                                    </div>
+                                    <small class="text-muted">Weekend getaway promotion</small>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span><i class="fas fa-calendar me-2 text-info"></i>Aug 4, 2:00 PM</span>
+                                        <span class="badge bg-danger">Instagram</span>
+                                    </div>
+                                    <small class="text-muted">Behind the scenes - Hotel staff</small>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span><i class="fas fa-calendar me-2 text-info"></i>Aug 5, 10:00 AM</span>
+                                        <span class="badge bg-dark">TikTok</span>
+                                    </div>
+                                    <small class="text-muted">Quick hotel room tour</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary mt-2 w-100" onclick="viewFullCalendar()">
+                                    View Full Calendar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Analytics -->
+            <div id="analyticsSection" class="content-section">
+                <div class="marketing-card">
+                    <h5><i class="fas fa-chart-bar me-2"></i>Marketing Analytics</h5>
+                    
+                    <!-- Key Metrics -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-primary">₫374M</div>
+                                <div class="stat-label">Revenue from Marketing</div>
+                                <small class="trend-up"><i class="fas fa-arrow-up"></i> +22%</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-success">4.2x</div>
+                                <div class="stat-label">Average ROAS</div>
+                                <small class="trend-up"><i class="fas fa-arrow-up"></i> +0.3x</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-warning">₫89M</div>
+                                <div class="stat-label">Total Ad Spend</div>
+                                <small class="trend-stable"><i class="fas fa-minus"></i> 0%</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number text-info">2.8%</div>
+                                <div class="stat-label">Cost per Acquisition</div>
+                                <small class="trend-down"><i class="fas fa-arrow-down"></i> -0.5%</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Channel Performance -->
+                    <div class="row g-4">
+                        <div class="col-md-8">
+                            <div class="metric-card">
+                                <h6>Channel Performance</h6>
+                                <div class="data-table">
+                                    <table class="table table-dark table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Channel</th>
+                                                <th>Spend</th>
+                                                <th>Revenue</th>
+                                                <th>ROAS</th>
+                                                <th>CPA</th>
+                                                <th>Performance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><i class="fab fa-google me-2"></i>Google Ads</td>
+                                                <td>₫45M</td>
+                                                <td>₫189M</td>
+                                                <td class="text-success">4.2x</td>
+                                                <td>₫285K</td>
+                                                <td><span class="badge bg-success">Excellent</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><i class="fab fa-facebook me-2"></i>Facebook Ads</td>
+                                                <td>₫28M</td>
+                                                <td>₫126M</td>
+                                                <td class="text-success">4.5x</td>
+                                                <td>₫320K</td>
+                                                <td><span class="badge bg-success">Excellent</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><i class="fab fa-instagram me-2"></i>Instagram Ads</td>
+                                                <td>₫16M</td>
+                                                <td>₫59M</td>
+                                                <td class="text-warning">3.7x</td>
+                                                <td>₫420K</td>
+                                                <td><span class="badge bg-warning">Good</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="metric-card">
+                                <h6>Top Converting Keywords</h6>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>khách sạn hà nội</span>
+                                        <span class="text-success">156 conv.</span>
+                                    </div>
+                                    <small class="text-muted">CPA: ₫275K</small>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>resort đà nẵng</span>
+                                        <span class="text-success">89 conv.</span>
+                                    </div>
+                                    <small class="text-muted">CPA: ₫320K</small>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>khách sạn 5 sao</span>
+                                        <span class="text-success">67 conv.</span>
+                                    </div>
+                                    <small class="text-muted">CPA: ₫450K</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Settings -->
+            <div id="settingsSection" class="content-section">
+                <div class="marketing-card">
+                    <h5><i class="fas fa-cogs me-2"></i>Marketing Settings</h5>
+                    
+                    <div class="row g-4">
+                        <!-- Ad Account Settings -->
+                        <div class="col-md-6">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-link me-2"></i>Ad Account Connections</h6>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span><i class="fab fa-google me-2"></i>Google Ads</span>
+                                        <span class="badge bg-success">Connected</span>
+                                    </div>
+                                    <small class="text-muted">Account: luxury-haven-hotels</small>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span><i class="fab fa-facebook me-2"></i>Facebook Business</span>
+                                        <span class="badge bg-success">Connected</span>
+                                    </div>
+                                    <small class="text-muted">Account: LuxHaven Travel</small>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span><i class="fab fa-google me-2"></i>Google Analytics</span>
+                                        <span class="badge bg-warning">Needs Refresh</span>
+                                    </div>
+                                    <small class="text-muted">Last sync: 2 days ago</small>
+                                </div>
+                                <button class="btn btn-primary btn-sm">Manage Connections</button>
+                            </div>
+                        </div>
+
+                        <!-- Budget & Bidding -->
+                        <div class="col-md-6">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-dollar-sign me-2"></i>Budget & Bidding</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Daily Budget Limit</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₫</span>
+                                        <input type="number" class="form-control" value="100000">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Auto-bidding Strategy</label>
+                                    <select class="form-select">
+                                        <option value="maximize-conversions" selected>Maximize Conversions</option>
+                                        <option value="target-cpa">Target CPA</option>
+                                        <option value="target-roas">Target ROAS</option>
+                                        <option value="manual-cpc">Manual CPC</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-success btn-sm">Save Settings</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Automation Settings -->
+                    <div class="row g-4 mt-2">
+                        <div class="col-md-12">
+                            <div class="metric-card">
+                                <h6><i class="fas fa-robot me-2"></i>Automation Rules</h6>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="autoIncreaseBudget" checked>
+                                            <label class="form-check-label" for="autoIncreaseBudget">
+                                                Auto-increase budget for high ROAS campaigns
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="autoPauseLowPerform" checked>
+                                            <label class="form-check-label" for="autoPauseLowPerform">
+                                                Auto-pause low performing ads
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="autoOptimizeKeywords">
+                                            <label class="form-check-label" for="autoOptimizeKeywords">
+                                                Auto-optimize keyword bids
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-info btn-sm mt-3">Update Automation</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Section navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-item').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Add active class to clicked nav link
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+        }
+
+        // Campaign Management Functions
+        function createCampaign() {
+            const modal = `
+                <div class="modal fade" id="createCampaignModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Tạo Campaign Mới</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Campaign Name</label>
+                                            <input type="text" class="form-control" placeholder="Summer Promotion 2025">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Platform</label>
+                                            <select class="form-select">
+                                                <option value="google">Google Ads</option>
+                                                <option value="facebook">Facebook Ads</option>
+                                                <option value="instagram">Instagram Ads</option>
+                                                <option value="youtube">YouTube Ads</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Daily Budget</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">₫</span>
+                                                <input type="number" class="form-control" placeholder="50000">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Campaign Type</label>
+                                            <select class="form-select">
+                                                <option value="search">Search Campaign</option>
+                                                <option value="display">Display Campaign</option>
+                                                <option value="shopping">Shopping Campaign</option>
+                                                <option value="video">Video Campaign</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Target Keywords</label>
+                                            <textarea class="form-control" rows="3" placeholder="khách sạn hà nội, resort đà nẵng, khách sạn 5 sao"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="button" class="btn btn-success" onclick="saveCampaign()">Tạo Campaign</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modal);
+            new bootstrap.Modal(document.getElementById('createCampaignModal')).show();
+        }
+
+        function editCampaign(campaignId) {
+            showNotification('Editing campaign: ' + campaignId, 'info');
+        }
+
+        function pauseCampaign(campaignId) {
+            showNotification('Campaign paused: ' + campaignId, 'warning');
+        }
+
+        function resumeCampaign(campaignId) {
+            showNotification('Campaign resumed: ' + campaignId, 'success');
+        }
+
+        function saveCampaign() {
+            showNotification('Campaign created successfully!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('createCampaignModal')).hide();
+        }
+
+        // SEO Functions
+        function addKeyword() {
+            const modal = `
+                <div class="modal fade" id="addKeywordModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Thêm Keyword Mới</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label">Keyword</label>
+                                        <input type="text" class="form-control" placeholder="khách sạn luxury">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Target URL</label>
+                                        <input type="url" class="form-control" placeholder="https://luxhaven.com/hotels">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Priority</label>
+                                        <select class="form-select">
+                                            <option value="high">High</option>
+                                            <option value="medium" selected>Medium</option>
+                                            <option value="low">Low</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="button" class="btn btn-primary" onclick="saveKeyword()">Thêm Keyword</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modal);
+            new bootstrap.Modal(document.getElementById('addKeywordModal')).show();
+        }
+
+        function analyzeContent() {
+            const pageUrl = document.getElementById('pageUrl').value;
+            const keyword = document.getElementById('targetKeyword').value;
+            
+            if (!pageUrl || !keyword) {
+                showNotification('Please enter both page URL and target keyword', 'warning');
+                return;
+            }
+            
+            showNotification('Analyzing content for: ' + keyword, 'info');
+            
+            // Simulate analysis delay
+            setTimeout(() => {
+                showNotification('Analysis complete! SEO score: 78/100', 'success');
+            }, 2000);
+        }
+
+        function optimizePage() {
+            showNotification('Auto-optimization started...', 'info');
+            
+            setTimeout(() => {
+                showNotification('Page optimized successfully! SEO score improved to 85/100', 'success');
+            }, 3000);
+        }
+
+        function saveKeyword() {
+            showNotification('Keyword added successfully!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('addKeywordModal')).hide();
+        }
+
+        // Social Media Functions
+        function createPost() {
+            const modal = `
+                <div class="modal fade" id="createPostModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Tạo Post Mới</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label">Platforms</label>
+                                        <div class="d-flex gap-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="facebook" id="facebook">
+                                                <label class="form-check-label" for="facebook">
+                                                    <i class="fab fa-facebook me-1"></i> Facebook
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="instagram" id="instagram">
+                                                <label class="form-check-label" for="instagram">
+                                                    <i class="fab fa-instagram me-1"></i> Instagram
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="youtube" id="youtube">
+                                                <label class="form-check-label" for="youtube">
+                                                    <i class="fab fa-youtube me-1"></i> YouTube
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Post Content</label>
+                                        <textarea class="form-control" rows="4" placeholder="Khám phá những trải nghiệm tuyệt vời tại LuxHaven..."></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Media Upload</label>
+                                        <input type="file" class="form-control" multiple accept="image/*,video/*">
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Publish Time</label>
+                                            <select class="form-select">
+                                                <option value="now">Publish Now</option>
+                                                <option value="schedule">Schedule</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Hashtags</label>
+                                            <input type="text" class="form-control" placeholder="#LuxHaven #Travel #Hotel">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="button" class="btn btn-success" onclick="publishPost()">Publish</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modal);
+            new bootstrap.Modal(document.getElementById('createPostModal')).show();
+        }
+
+        function schedulePost() {
+            showNotification('Opening content calendar...', 'info');
+        }
+
+        function publishPost() {
+            showNotification('Post published successfully across selected platforms!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('createPostModal')).hide();
+        }
+
+        function viewFullCalendar() {
+            showNotification('Opening full content calendar...', 'info');
+        }
+
+        // Template Functions
+        function campaignTemplates() {
+            const modal = `
+                <div class="modal fade" id="templateModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Campaign Templates</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="card bg-secondary h-100">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Summer Vacation</h6>
+                                                <p class="card-text">Template for summer travel promotions</p>
+                                                <button class="btn btn-primary btn-sm" onclick="useTemplate('summer')">Use Template</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card bg-secondary h-100">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Business Travel</h6>
+                                                <p class="card-text">Template for business traveler campaigns</p>
+                                                <button class="btn btn-primary btn-sm" onclick="useTemplate('business')">Use Template</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card bg-secondary h-100">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Weekend Getaway</h6>
+                                                <p class="card-text">Template for weekend travel offers</p>
+                                                <button class="btn btn-primary btn-sm" onclick="useTemplate('weekend')">Use Template</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card bg-secondary h-100">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Luxury Experience</h6>
+                                                <p class="card-text">Template for luxury hotel campaigns</p>
+                                                <button class="btn btn-primary btn-sm" onclick="useTemplate('luxury')">Use Template</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modal);
+            new bootstrap.Modal(document.getElementById('templateModal')).show();
+        }
+
+        function useTemplate(templateType) {
+            showNotification('Template applied: ' + templateType, 'success');
+            bootstrap.Modal.getInstance(document.getElementById('templateModal')).hide();
+        }
+
+        // Utility Functions
+        function showNotification(message, type = 'info') {
+            const alertClass = {
+                'success': 'alert-success',
+                'warning': 'alert-warning',
+                'error': 'alert-danger',
+                'info': 'alert-info'
+            }[type] || 'alert-info';
+            
+            const notification = document.createElement('div');
+            notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-refresh data every 30 seconds
+            setInterval(() => {
+                // Simulate real-time data updates
+                const elements = document.querySelectorAll('.stat-number, .trend-up, .trend-down');
+                elements.forEach(el => {
+                    if (el.classList.contains('stat-number')) {
+                        // Add slight animation to indicate data refresh
+                        el.style.transform = 'scale(1.05)';
+                        setTimeout(() => {
+                            el.style.transform = 'scale(1)';
+                        }, 200);
+                    }
+                });
+            }, 30000);
+            
+            console.log('Marketing/SEO Dashboard loaded successfully');
+        });
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.appspot.com",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Đăng xuất với Firebase Auth
+        function logout() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                // Kiểm tra xem Firebase Auth có sẵn không
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    firebase.auth().signOut().then(() => {
+                        console.log('Đăng xuất thành công');
+                        window.location.href = '../auth.html';
+                    }).catch((error) => {
+                        console.error('Lỗi đăng xuất:', error);
+                        // Vẫn chuyển trang nếu có lỗi
+                        window.location.href = '../auth.html';
+                    });
+                } else {
+                    // Fallback nếu Firebase không có
+                    window.location.href = '../auth.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
