@@ -46,6 +46,20 @@
         .form-control:focus, .form-select:focus { background: var(--main-bg); border-color: var(--accent); color: var(--text); box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.25); }
         .form-control::placeholder { color: var(--text-muted); }
         .btn-close { filter: invert(1); }
+        /* Stats Cards */
+        .stat-card { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 12px; padding: 24px; text-align: center; color: #fff; margin-bottom: 16px; }
+        .stat-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.9; }
+        .stat-label { font-size: 0.9rem; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value { font-size: 2rem; font-weight: 700; }
+        /* Campaign and Commission tables */
+        .badge { font-size: 0.8rem; padding: 6px 12px; }
+        .table-actions { display: flex; gap: 8px; }
+        .table-actions .btn { padding: 4px 8px; font-size: 0.8rem; }
+        /* Alert styling */
+        .alert-custom { background: var(--card-bg); border: 1px solid var(--accent); color: var(--text); border-radius: 8px; }
+        /* Loading spinner */
+        .loading-spinner { display: none; text-align: center; padding: 40px; }
+        .loading-spinner .spinner-border { color: var(--accent); }
         @media (max-width: 900px) { .sidebar { width: 80px; } .main-container { margin-left: 80px; } .sidebar .nav-item { padding: 12px 10px; font-size: 0.95rem; } .sidebar .logo { font-size: 1.1rem; } }
         @media (max-width: 700px) { .sidebar { display: none; } .main-container { margin-left: 0; } .main-header { padding: 12px 10px; } .content-wrapper { padding: 12px 4px; } }
     </style>
@@ -187,9 +201,9 @@
                 <div class="card-modern mb-4">
                     <div class="card-body">
                         <div class="card-title"><i class="fas fa-bullhorn me-2"></i>Quản lý chiến dịch affiliate</div>
-                        <button class="btn btn-success mb-3"><i class="fas fa-plus me-1"></i> Tạo chiến dịch</button>
+                        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#campaignModal"><i class="fas fa-plus me-1"></i> Tạo chiến dịch</button>
                         <div class="table-responsive">
-                            <table class="table table-modern table-hover align-middle">
+                            <table class="table table-modern table-hover align-middle" id="campaigns-table">
                                 <thead>
                                     <tr>
                                         <th>Tên chiến dịch</th>
@@ -202,31 +216,73 @@
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Summer Promo</td>
-                                        <td>01/06 - 30/06</td>
-                                        <td>TravelNow</td>
-                                        <td>1200</td>
-                                        <td>150</td>
-                                        <td>30,000,000đ</td>
-                                        <td><span class="badge bg-success">Đang chạy</span></td>
-                                        <td><button class="btn btn-sm btn-primary">Chi tiết</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>HotelLink Sale</td>
-                                        <td>15/05 - 15/06</td>
-                                        <td>HotelLink</td>
-                                        <td>800</td>
-                                        <td>90</td>
-                                        <td>12,000,000đ</td>
-                                        <td><span class="badge bg-secondary">Kết thúc</span></td>
-                                        <td><button class="btn btn-sm btn-primary">Chi tiết</button></td>
-                                    </tr>
+                                <tbody id="campaigns-tbody">
+                                    <!-- Dữ liệu sẽ được render bằng JS từ Firebase -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                </div>
+                
+                <!-- Modal Tạo/Sửa Chiến dịch -->
+                <div class="modal fade" id="campaignModal" tabindex="-1" aria-labelledby="campaignModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <form id="campaignForm">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="campaignModalLabel"><i class="fas fa-bullhorn me-2"></i>Tạo chiến dịch affiliate</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label class="form-label"><i class="fas fa-tag me-1"></i>Tên chiến dịch</label>
+                              <input type="text" class="form-control" id="campaignName" placeholder="Nhập tên chiến dịch" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label class="form-label"><i class="fas fa-handshake me-1"></i>Đối tác</label>
+                              <select class="form-select" id="campaignPartner" required>
+                                <option value="">Chọn đối tác</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label class="form-label"><i class="fas fa-calendar me-1"></i>Ngày bắt đầu</label>
+                              <input type="date" class="form-control" id="campaignStartDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label class="form-label"><i class="fas fa-calendar me-1"></i>Ngày kết thúc</label>
+                              <input type="date" class="form-control" id="campaignEndDate" required>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label class="form-label"><i class="fas fa-percentage me-1"></i>Hoa hồng đặc biệt (%)</label>
+                              <input type="number" class="form-control" id="campaignCommission" min="0" max="100" step="0.1" placeholder="15.0">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label class="form-label"><i class="fas fa-bullseye me-1"></i>Mục tiêu booking</label>
+                              <input type="number" class="form-control" id="campaignTarget" placeholder="100" required>
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-info-circle me-1"></i>Mô tả chiến dịch</label>
+                            <textarea class="form-control" id="campaignDescription" rows="3" placeholder="Mô tả chi tiết về chiến dịch..."></textarea>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i>Hủy bỏ
+                          </button>
+                          <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save me-1"></i>Lưu chiến dịch
+                          </button>
+                        </div>
+                        <input type="hidden" id="campaignIndex">
+                      </form>
+                    </div>
+                  </div>
                 </div>
             </section>
             <!-- Hoa hồng & đối soát -->
@@ -234,8 +290,38 @@
                 <div class="card-modern mb-4">
                     <div class="card-body">
                         <div class="card-title"><i class="fas fa-coins me-2"></i>Quản lý hoa hồng & đối soát</div>
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                                    <div class="stat-label">Tổng hoa hồng tháng này</div>
+                                    <div class="stat-value" id="commission-total">0đ</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                                    <div class="stat-label">Chờ thanh toán</div>
+                                    <div class="stat-value" id="commission-pending">0đ</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                                    <div class="stat-label">Đã thanh toán</div>
+                                    <div class="stat-value" id="commission-paid">0đ</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                                    <div class="stat-label">Tỷ lệ thanh toán</div>
+                                    <div class="stat-value" id="commission-rate">0%</div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-modern table-hover align-middle">
+                            <table class="table table-modern table-hover align-middle" id="commission-table">
                                 <thead>
                                     <tr>
                                         <th>Đối tác</th>
@@ -243,30 +329,32 @@
                                         <th>Doanh thu</th>
                                         <th>Hoa hồng</th>
                                         <th>Trạng thái</th>
+                                        <th>Ngày thanh toán</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>TravelNow</td>
-                                        <td>06/2024</td>
-                                        <td>20,000,000đ</td>
-                                        <td>2,000,000đ</td>
-                                        <td><span class="badge bg-warning">Chờ thanh toán</span></td>
-                                        <td><button class="btn btn-sm btn-success">Thanh toán</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>HotelLink</td>
-                                        <td>06/2024</td>
-                                        <td>10,000,000đ</td>
-                                        <td>800,000đ</td>
-                                        <td><span class="badge bg-success">Đã thanh toán</span></td>
-                                        <td><button class="btn btn-sm btn-secondary" disabled>Đã thanh toán</button></td>
-                                    </tr>
+                                <tbody id="commission-tbody">
+                                    <!-- Dữ liệu sẽ được render bằng JS từ Firebase -->
                                 </tbody>
                             </table>
-                        </div>
+                </div>
+                
+                <!-- Modal Chi tiết hoa hồng -->
+                <div class="modal fade" id="commissionDetailModal" tabindex="-1" aria-labelledby="commissionDetailModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="commissionDetailModalLabel"><i class="fas fa-coins me-2"></i>Chi tiết hoa hồng</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body" id="commissionDetailContent">
+                        <!-- Nội dung chi tiết sẽ được load bằng JS -->
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                      </div>
                     </div>
+                  </div>
                 </div>
             </section>
             <!-- Thống kê hiệu suất affiliate -->
@@ -279,21 +367,21 @@
                                 <div class="stat-card">
                                     <div class="stat-icon"><i class="fas fa-handshake"></i></div>
                                     <div class="stat-label">Đối tác đang hợp tác</div>
-                                    <div class="stat-value">2</div>
+                                    <div class="stat-value" id="stat-active-partners">0</div>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="stat-card">
                                     <div class="stat-icon"><i class="fas fa-bullhorn"></i></div>
                                     <div class="stat-label">Chiến dịch đang chạy</div>
-                                    <div class="stat-value">1</div>
+                                    <div class="stat-value" id="stat-active-campaigns">0</div>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="stat-card">
                                     <div class="stat-icon"><i class="fas fa-coins"></i></div>
                                     <div class="stat-label">Hoa hồng tháng này</div>
-                                    <div class="stat-value">2,800,000đ</div>
+                                    <div class="stat-value" id="stat-month-commission">0đ</div>
                                 </div>
                             </div>
                         </div>
@@ -308,45 +396,72 @@
                 <div class="card-modern mb-4">
                     <div class="card-body">
                         <div class="card-title"><i class="fas fa-headset me-2"></i>Hỗ trợ đối tác</div>
-                        <form class="mb-3">
-                            <div class="mb-2">
-                                <label class="form-label">Tiêu đề yêu cầu</label>
-                                <input type="text" class="form-control" required>
+                        
+                        
+                        <div class="card-title mb-3"><i class="fas fa-history me-2"></i>Lịch sử hỗ trợ</div>
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select class="form-select" id="filterStatus">
+                                        <option value="">Tất cả trạng thái</option>
+                                        <option value="Chờ xử lý">Chờ xử lý</option>
+                                        <option value="Đang xử lý">Đang xử lý</option>
+                                        <option value="Đã phản hồi">Đã phản hồi</option>
+                                        <option value="Đã đóng">Đã đóng</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" id="filterPartner">
+                                        <option value="">Tất cả đối tác</option>
+                                        <!-- Options sẽ được load động từ Firebase -->
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-primary" onclick="filterSupport()">
+                                        <i class="fas fa-filter me-1"></i>Lọc
+                                    </button>
+                                </div>
                             </div>
-                            <div class="mb-2">
-                                <label class="form-label">Nội dung</label>
-                                <textarea class="form-control" rows="3" required></textarea>
-                            </div>
-                            <button class="btn btn-success" type="submit"><i class="fas fa-paper-plane me-1"></i> Gửi yêu cầu</button>
-                        </form>
-                        <div class="card-title mb-2">Lịch sử hỗ trợ</div>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-modern table-hover align-middle">
+                            <table class="table table-modern table-hover align-middle" id="support-table">
                                 <thead>
                                     <tr>
                                         <th>Thời gian</th>
+                                        <th>Đối tác</th>
+                                        <th>Loại</th>
                                         <th>Tiêu đề</th>
+                                        <th>Ưu tiên</th>
                                         <th>Trạng thái</th>
-                                        <th>Phản hồi</th>
+                                        <th>Phản hồi cuối</th>
+                                        <th>Thao tác</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>2024-06-01</td>
-                                        <td>Hỗ trợ API</td>
-                                        <td><span class="badge bg-success">Đã phản hồi</span></td>
-                                        <td>Đã gửi tài liệu hướng dẫn</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2024-05-28</td>
-                                        <td>Vấn đề tracking</td>
-                                        <td><span class="badge bg-warning">Đang xử lý</span></td>
-                                        <td>--</td>
-                                    </tr>
+                                <tbody id="support-tbody">
+                                    <!-- Dữ liệu sẽ được render bằng JS từ Firebase -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                </div>
+                
+                <!-- Modal Chi tiết yêu cầu hỗ trợ -->
+                <div class="modal fade" id="supportDetailModal" tabindex="-1" aria-labelledby="supportDetailModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="supportDetailModalLabel"><i class="fas fa-headset me-2"></i>Chi tiết yêu cầu hỗ trợ</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body" id="supportDetailContent">
+                        <!-- Nội dung chi tiết sẽ được load bằng JS -->
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-success" id="addSupportResponse">Thêm phản hồi</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
             </section>
         </main>
@@ -354,6 +469,125 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Kiểm tra quyền truy cập khi trang tải
+        function checkAccess() {
+            return new Promise((resolve, reject) => {
+                // Kiểm tra xem có đăng nhập không
+                const loggedInUser = localStorage.getItem('loggedInUser');
+                
+                if (!loggedInUser) {
+                    showAccessDeniedAlert('Bạn chưa đăng nhập!');
+                    reject('Not logged in');
+                    return;
+                }
+                
+                try {
+                    const userData = JSON.parse(loggedInUser);
+                    
+                    // Kiểm tra email và chức vụ
+                    const allowedRoles = ['affiliate manager', 'admin', 'quản lý đối tác'];
+                    const allowedEmails = ['affiliate@email.com', 'admin@luxurytravel.vn', 'affiliate@luxurytravel.vn'];
+                    
+                    const userRole = userData.role?.toLowerCase() || '';
+                    const userEmail = userData.email?.toLowerCase() || '';
+                    
+                    // Kiểm tra quyền truy cập
+                    const hasValidRole = allowedRoles.some(role => userRole.includes(role.toLowerCase()));
+                    const hasValidEmail = allowedEmails.includes(userEmail);
+                    
+                    if (!hasValidRole && !hasValidEmail) {
+                        showAccessDeniedAlert('Bạn không có quyền truy cập trang này!<br>Chỉ dành cho Affiliate Manager.');
+                        reject('Access denied');
+                        return;
+                    }
+                    
+                    // Nếu có quyền truy cập, cập nhật thông tin user
+                    updateUserInfo(userData.email, userData.role);
+                    resolve(userData);
+                    
+                } catch (error) {
+                    console.error('Lỗi đọc thông tin user:', error);
+                    showAccessDeniedAlert('Lỗi xác thực người dùng!');
+                    reject('Auth error');
+                }
+            });
+        }
+        
+        // Hiển thị thông báo từ chối truy cập và chuyển hướng
+        function showAccessDeniedAlert(message) {
+            // Tạo overlay và modal cảnh báo
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            const alertBox = document.createElement('div');
+            alertBox.style.cssText = `
+                background: #23244a;
+                border: 2px solid #7c3aed;
+                border-radius: 12px;
+                padding: 30px;
+                text-align: center;
+                color: #f3f6fa;
+                max-width: 400px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            `;
+            
+            alertBox.innerHTML = `
+                <div style="color: #ff4757; font-size: 3rem; margin-bottom: 15px;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 style="color: #00eaff; margin-bottom: 15px;">Truy cập bị từ chối</h3>
+                <p style="margin-bottom: 20px; line-height: 1.6;">${message}</p>
+                <div style="background: #1a1d36; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <div style="color: #00eaff; font-weight: bold;">Đang chuyển hướng...</div>
+                    <div id="countdown" style="color: #7c3aed; font-size: 1.2rem; margin-top: 5px;">2</div>
+                </div>
+                <button onclick="redirectToHome()" style="
+                    background: #7c3aed;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-weight: bold;
+                ">Về trang chủ ngay</button>
+            `;
+            
+            overlay.appendChild(alertBox);
+            document.body.appendChild(overlay);
+            
+            // Đếm ngược và chuyển hướng
+            let countdown = 2;
+            const countdownElement = document.getElementById('countdown');
+            
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                if (countdownElement) {
+                    countdownElement.textContent = countdown;
+                }
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    redirectToHome();
+                }
+            }, 1000);
+        }
+        
+        // Chuyển hướng về trang chủ
+        function redirectToHome() {
+            window.location.href = '../index.html';
+        }
+
         // Sidebar navigation
         function showSection(section) {
             document.getElementById('profile-section').style.display = 'none';
@@ -385,6 +619,9 @@
         }
         // Đối tác liên kết: dữ liệu Firebase và logic thêm/sửa/xóa
         let partners = [];
+        let campaigns = [];
+        let commissions = [];
+        let supportTickets = [];
         let database;
         
         // Khởi tạo Firebase
@@ -402,44 +639,100 @@
         firebase.initializeApp(firebaseConfig);
         database = firebase.database();
         
-        // Kiểm tra quyền truy cập
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // Kiểm tra role của user
-                user.getIdTokenResult().then((idTokenResult) => {
-                    const userRole = idTokenResult.claims.role;
-                    const userEmail = user.email;
-                    
-                    // Cho phép truy cập nếu là admin chính hoặc có role affiliate-manager
-                    if (userEmail === 'quantrikhachsan@gmail.com' || userRole === 'affiliate-manager') {
-                        console.log('Người dùng có quyền truy cập affiliate manager');
-                        loadPartnersFromFirebase();
-                    } else {
-                        console.log('Người dùng không có quyền truy cập');
-                        alert('Bạn không có quyền truy cập vào trang này!');
-                        window.location.href = '../auth.html';
-                    }
-                }).catch((error) => {
-                    console.error('Lỗi khi kiểm tra role:', error);
-                    // Fallback: chỉ cho phép admin chính
-                    if (user.email === 'quantrikhachsan@gmail.com') {
-                        loadPartnersFromFirebase();
-                    } else {
-                        alert('Bạn không có quyền truy cập vào trang này!');
-                        window.location.href = '../auth.html';
-                    }
-                });
-            } else {
-                console.log('Người dùng chưa đăng nhập');
-                window.location.href = '../auth.html';
+        // Global variables
+        let partnersData = [];
+        let campaignsData = [];
+        let commissionsData = [];
+        let supportData = [];
+        let affiliateChart = null; // Store chart instance
+        
+        // Đảm bảo Firebase được khởi tạo trước khi sử dụng
+        function initializeFirebase() {
+            try {
+                if (!database) {
+                    database = firebase.database();
+                }
+                console.log('Firebase đã được khởi tạo thành công');
+                return true;
+            } catch (error) {
+                console.error('Lỗi khởi tạo Firebase:', error);
+                return false;
             }
+        }
+        
+        // Cập nhật thông tin user trong header
+        function updateUserInfo(email, role) {
+            const userInfoElement = document.querySelector('.main-header .user-info span');
+            const displayName = role || 'Affiliate Manager';
+            
+            if (userInfoElement) {
+                userInfoElement.innerHTML = `<strong>${displayName}</strong>`;
+            }
+            
+            // Cập nhật thông tin trong profile section nếu có email
+            if (email) {
+                const profileNameElement = document.querySelector('#profile-section .info h4');
+                const profileEmailElement = document.querySelector('#profile-section .info div:first-of-type');
+                
+                if (profileNameElement) {
+                    // Tạo tên hiển thị từ email hoặc role
+                    const userName = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    profileNameElement.textContent = userName + ' (' + displayName + ')';
+                }
+                if (profileEmailElement) {
+                    profileEmailElement.innerHTML = `<i class="fas fa-envelope me-2"></i> ${email}`;
+                }
+            }
+        }
+        
+        // Load dữ liệu khi trang tải
+        document.addEventListener('DOMContentLoaded', function() {
+            // Kiểm tra quyền truy cập trước khi load trang
+            checkAccess().then((userData) => {
+                console.log('Truy cập được phép cho:', userData.email);
+                
+                // Đảm bảo Firebase được khởi tạo
+                if (!initializeFirebase()) {
+                    console.warn('Không thể khởi tạo Firebase, sử dụng dữ liệu local');
+                }
+                
+                showSection('profile');
+                updateUserInfo(userData.email, userData.role);
+                
+                // Load dữ liệu và cập nhật thống kê
+                loadPartnersFromFirebase();
+                loadCampaignsFromFirebase();
+                loadCommissionsFromFirebase();
+                loadSupportTicketsFromFirebase();
+                
+                // Khởi tạo form handlers
+                handlePartnerFormSubmit();
+                
+                // Cập nhật thống kê sau khi load xong dữ liệu
+                setTimeout(() => {
+                    updateStatsFromPartners();
+                    updateStatsFromCampaigns();
+                    updateCommissionStats();
+                    updateAffiliateChart();
+                }, 1500);
+                
+            }).catch((error) => {
+                console.error('Truy cập bị từ chối:', error);
+                // Hàm showAccessDeniedAlert đã được gọi trong checkAccess()
+            });
         });
         
         // Load đối tác từ Firebase
         function loadPartnersFromFirebase() {
+            if (!database) {
+                console.error('Database chưa được khởi tạo');
+                createLocalPartnersData();
+                return;
+            }
+            
             const partnersRef = database.ref('affiliatePartners');
             
-            partnersRef.on('value', (snapshot) => {
+            partnersRef.once('value', (snapshot) => {
                 partners = [];
                 if (snapshot.exists()) {
                     snapshot.forEach((childSnapshot) => {
@@ -447,92 +740,125 @@
                         partner.id = childSnapshot.key;
                         partners.push(partner);
                     });
+                    renderPartners();
+                    updateStatsFromPartners();
                 } else {
-                    // Nếu không có dữ liệu, tạo dữ liệu mẫu
-                    createSampleData();
+                    console.log('Không có dữ liệu đối tác trong Firebase, sử dụng dữ liệu local');
+                    createLocalPartnersData();
                 }
-                renderPartners();
-                updateStatsFromPartners();
             }, (error) => {
-                console.error('Lỗi khi tải dữ liệu đối tác:', error);
-                // Fallback về dữ liệu mẫu
-                partners = [
-                    {
-                        id: 'sample1',
-                        name: 'TravelNow', 
-                        website: 'travelnow.com', 
-                        status: 'Đang hợp tác', 
-                        commission: 10, 
-                        revenue: '50,000,000đ',
-                        createdAt: new Date().toISOString()
-                    },
-                    {
-                        id: 'sample2',
-                        name: 'HotelLink', 
-                        website: 'hotellink.vn', 
-                        status: 'Tạm dừng', 
-                        commission: 8, 
-                        revenue: '20,000,000đ',
-                        createdAt: new Date().toISOString()
-                    }
-                ];
-                renderPartners();
+                console.warn('Không thể truy cập Firebase (có thể do quyền hạn):', error.code);
+                createLocalPartnersData();
             });
         }
         
-        // Tạo dữ liệu mẫu trong Firebase
-        function createSampleData() {
-            const partnersRef = database.ref('affiliatePartners');
-            
-            const samplePartners = {
-                'partner_001': {
+        // Tạo dữ liệu local cho partners (fallback)
+        function createLocalPartnersData() {
+            partners = [
+                {
+                    id: 'partner_001',
                     name: 'TravelNow',
-                    website: 'travelnow.com',
+                    website: 'travelnow.vn',
+                    contactEmail: 'partner@travelnow.vn',
+                    contactPhone: '0901-234-567',
                     status: 'Đang hợp tác',
-                    commission: 10,
-                    revenue: '50,000,000đ',
-                    contactEmail: 'partner@travelnow.com',
-                    contactPhone: '0901234567',
-                    createdAt: new Date().toISOString(),
+                    commission: 8.5,
+                    revenue: '95,000,000đ',
+                    createdAt: '2024-01-15',
                     updatedAt: new Date().toISOString()
                 },
-                'partner_002': {
+                {
+                    id: 'partner_002', 
                     name: 'HotelLink',
-                    website: 'hotellink.vn', 
+                    website: 'hotellink.com',
+                    contactEmail: 'support@hotellink.vn',
+                    contactPhone: '0902-345-678',
+                    status: 'Đang hợp tác',
+                    commission: 7.0,
+                    revenue: '73,000,000đ',
+                    createdAt: '2024-02-20',
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'partner_003',
+                    name: 'BookingVN',
+                    website: 'bookingvn.com',
+                    contactEmail: 'partner@bookingvn.com',
+                    contactPhone: '0903-456-789',
+                    status: 'Đang hợp tác',
+                    commission: 9.0,
+                    revenue: '87,000,000đ',
+                    createdAt: '2024-03-10',
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'partner_004',
+                    name: 'StayEasy',
+                    website: 'stayeasy.vn',
+                    contactEmail: 'info@stayeasy.vn',
+                    contactPhone: '0904-567-890',
                     status: 'Tạm dừng',
-                    commission: 8,
-                    revenue: '20,000,000đ',
-                    contactEmail: 'info@hotellink.vn',
-                    contactPhone: '0907654321',
-                    createdAt: new Date().toISOString(),
+                    commission: 6.5,
+                    revenue: '42,000,000đ',
+                    createdAt: '2024-04-05',
                     updatedAt: new Date().toISOString()
                 }
-            };
+            ];
+            renderPartners();
+            updateStatsFromPartners();
             
-            partnersRef.set(samplePartners).then(() => {
-                console.log('Đã tạo dữ liệu mẫu cho đối tác affiliate');
-            }).catch((error) => {
-                console.error('Lỗi khi tạo dữ liệu mẫu:', error);
+            // Tự động đồng bộ lên Firebase nếu có thể
+            syncPartnersToFirebase();
+        }
+        
+        // Đồng bộ dữ liệu partners lên Firebase
+        function syncPartnersToFirebase() {
+            if (!database) return;
+            
+            const partnersRef = database.ref('affiliatePartners');
+            partnersRef.once('value', (snapshot) => {
+                if (!snapshot.exists()) {
+                    console.log('Đồng bộ dữ liệu partners lên Firebase...');
+                    partners.forEach(partner => {
+                        partnersRef.child(partner.id).set(partner);
+                    });
+                }
             });
         }
+
         
         // Cập nhật thống kê từ dữ liệu đối tác
         function updateStatsFromPartners() {
             const activePartners = partners.filter(p => p.status === 'Đang hợp tác').length;
-            const totalRevenue = partners.reduce((sum, p) => {
-                const revenue = parseFloat(p.revenue.replace(/[^\d]/g, '')) || 0;
-                return sum + revenue;
-            }, 0);
-            
-            // Cập nhật stats card
-            document.querySelector('.stat-value').textContent = activePartners;
-            
+            // Cập nhật số đối tác đang hợp tác
+            const statElement = document.getElementById('stat-active-partners');
+            if (statElement) {
+                statElement.textContent = activePartners;
+            }
             // Cập nhật biểu đồ nếu có
             updateAffiliateChart();
         }
         
         function renderPartners() {
             const tbody = document.getElementById('partners-tbody');
+            const thead = document.getElementById('partners-table').querySelector('thead');
+            
+            // Thêm header nếu chưa có
+            if (thead && !thead.innerHTML.trim()) {
+                thead.innerHTML = `
+                    <tr>
+                        <th>Tên đối tác</th>
+                        <th>Website</th>
+                        <th>Email</th>
+                        <th>Điện thoại</th>
+                        <th>Trạng thái</th>
+                        <th>Hoa hồng</th>
+                        <th>Doanh thu</th>
+                        <th>Thao tác</th>
+                    </tr>
+                `;
+            }
+            
             tbody.innerHTML = '';
             
             if (partners.length === 0) {
@@ -558,9 +884,11 @@
                 </tr>`;
             });
         }
+        
         document.addEventListener('DOMContentLoaded', function() {
             showSection('profile');
-            // loadPartnersFromFirebase(); // Đã chuyển vào auth state changed
+            updateUserInfo();
+            loadPartnersFromFirebase();
             
             // Chart.js demo for affiliate stats
             setTimeout(() => {
@@ -570,13 +898,19 @@
         
         function updateAffiliateChart() {
             if (document.getElementById('affiliateStatsChart')) {
+                // Destroy existing chart if it exists
+                if (affiliateChart) {
+                    affiliateChart.destroy();
+                    affiliateChart = null;
+                }
+                
                 const labels = partners.map(p => p.name);
                 const data = partners.map(p => {
                     const revenue = parseFloat(p.revenue.replace(/[^\d]/g, '')) || 0;
                     return revenue;
                 });
                 
-                new Chart(document.getElementById('affiliateStatsChart').getContext('2d'), {
+                affiliateChart = new Chart(document.getElementById('affiliateStatsChart').getContext('2d'), {
                     type: 'bar',
                     data: {
                         labels: labels,
@@ -598,49 +932,69 @@
         }
         
         // Form submit cho thêm/sửa đối tác
-        document.getElementById('partnerForm').onsubmit = function(e) {
-            e.preventDefault();
+        function handlePartnerFormSubmit() {
+            const partnerForm = document.getElementById('partnerForm');
+            if (!partnerForm) return;
             
-            const partnerId = document.getElementById('partnerIndex').value;
-            const partnerData = {
-                name: document.getElementById('partnerName').value,
-                website: document.getElementById('partnerWebsite').value,
-                status: document.getElementById('partnerStatus').value,
-                commission: parseInt(document.getElementById('partnerCommission').value),
-                revenue: document.getElementById('partnerRevenue').value,
-                contactEmail: document.getElementById('partnerEmail').value,
-                contactPhone: document.getElementById('partnerPhone').value,
-                updatedAt: new Date().toISOString()
+            partnerForm.onsubmit = function(e) {
+                e.preventDefault();
+                
+                if (!database) {
+                    alert('Không thể kết nối đến database. Chức năng này yêu cầu quyền admin.');
+                    return;
+                }
+                
+                const partnerId = document.getElementById('partnerIndex').value;
+                const partnerData = {
+                    name: document.getElementById('partnerName').value,
+                    website: document.getElementById('partnerWebsite').value,
+                    status: document.getElementById('partnerStatus').value,
+                    commission: parseInt(document.getElementById('partnerCommission').value),
+                    revenue: document.getElementById('partnerRevenue').value,
+                    contactEmail: document.getElementById('partnerEmail').value,
+                    contactPhone: document.getElementById('partnerPhone').value,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                if (partnerId === '') {
+                    // Thêm mới
+                    partnerData.createdAt = new Date().toISOString();
+                    const newPartnerRef = database.ref('affiliatePartners').push();
+                    newPartnerRef.set(partnerData).then(() => {
+                        console.log('Thêm đối tác thành công');
+                        bootstrap.Modal.getOrCreateInstance(document.getElementById('partnerModal')).hide();
+                        this.reset();
+                        document.getElementById('partnerIndex').value = '';
+                        document.getElementById('partnerModalLabel').textContent = 'Thêm đối tác';
+                        loadPartnersFromFirebase();
+                    }).catch((error) => {
+                        console.error('Lỗi khi thêm đối tác:', error);
+                        if (error.code === 'PERMISSION_DENIED') {
+                            alert('Bạn không có quyền thêm đối tác. Vui lòng liên hệ admin.');
+                        } else {
+                            alert('Có lỗi xảy ra khi thêm đối tác');
+                        }
+                    });
+                } else {
+                    // Cập nhật
+                    database.ref(`affiliatePartners/${partnerId}`).update(partnerData).then(() => {
+                        console.log('Cập nhật đối tác thành công');
+                        bootstrap.Modal.getOrCreateInstance(document.getElementById('partnerModal')).hide();
+                        this.reset();
+                        document.getElementById('partnerIndex').value = '';
+                        document.getElementById('partnerModalLabel').textContent = 'Thêm đối tác';
+                        loadPartnersFromFirebase();
+                    }).catch((error) => {
+                        console.error('Lỗi khi cập nhật đối tác:', error);
+                        if (error.code === 'PERMISSION_DENIED') {
+                            alert('Bạn không có quyền chỉnh sửa đối tác. Vui lòng liên hệ admin.');
+                        } else {
+                            alert('Có lỗi xảy ra khi cập nhật đối tác');
+                        }
+                    });
+                }
             };
-            
-            if (partnerId === '') {
-                // Thêm mới
-                partnerData.createdAt = new Date().toISOString();
-                const newPartnerRef = database.ref('affiliatePartners').push();
-                newPartnerRef.set(partnerData).then(() => {
-                    console.log('Thêm đối tác thành công');
-                    bootstrap.Modal.getOrCreateInstance(document.getElementById('partnerModal')).hide();
-                    this.reset();
-                    document.getElementById('partnerIndex').value = '';
-                    document.getElementById('partnerModalLabel').textContent = 'Thêm đối tác';
-                }).catch((error) => {
-                    console.error('Lỗi khi thêm đối tác:', error);
-                    alert('Có lỗi xảy ra khi thêm đối tác');
-                });
-            } else {
-                // Cập nhật
-                database.ref(`affiliatePartners/${partnerId}`).update(partnerData).then(() => {
-                    console.log('Cập nhật đối tác thành công');
-                    bootstrap.Modal.getOrCreateInstance(document.getElementById('partnerModal')).hide();
-                    this.reset();
-                    document.getElementById('partnerIndex').value = '';
-                    document.getElementById('partnerModalLabel').textContent = 'Thêm đối tác';
-                }).catch((error) => {
-                    console.error('Lỗi khi cập nhật đối tác:', error);
-                    alert('Có lỗi xảy ra khi cập nhật đối tác');
-                });
-            }
-        };
+        }
         
         // Sửa đối tác
         window.editPartner = function(partnerId) {
@@ -661,12 +1015,22 @@
         
         // Xóa đối tác
         window.deletePartner = function(partnerId) {
+            if (!database) {
+                alert('Không thể kết nối đến database. Chức năng này yêu cầu quyền admin.');
+                return;
+            }
+            
             if (confirm('Bạn có chắc chắn muốn xóa đối tác này?')) {
                 database.ref(`affiliatePartners/${partnerId}`).remove().then(() => {
                     console.log('Xóa đối tác thành công');
+                    loadPartnersFromFirebase();
                 }).catch((error) => {
                     console.error('Lỗi khi xóa đối tác:', error);
-                    alert('Có lỗi xảy ra khi xóa đối tác');
+                    if (error.code === 'PERMISSION_DENIED') {
+                        alert('Bạn không có quyền xóa đối tác. Vui lòng liên hệ admin.');
+                    } else {
+                        alert('Có lỗi xảy ra khi xóa đối tác');
+                    }
                 });
             }
         };
@@ -674,18 +1038,992 @@
         // Đăng xuất với Firebase Auth
         function logout() {
             if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                // Xóa thông tin đăng nhập từ localStorage
+                localStorage.removeItem('loggedInUser');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('userEmail');
+                
+                // Kiểm tra xem Firebase Auth có sẵn không
                 if (typeof firebase !== 'undefined' && firebase.auth) {
                     firebase.auth().signOut().then(() => {
-                        console.log('Đăng xuất thành công');
+                        console.log('Đăng xuất thành công từ Firebase');
+                        alert('Đăng xuất thành công!');
                         window.location.href = '../auth.html';
                     }).catch((error) => {
-                        console.error('Lỗi đăng xuất:', error);
+                        console.error('Lỗi đăng xuất từ Firebase:', error);
+                        // Vẫn chuyển trang nếu có lỗi
+                        alert('Đăng xuất thành công!');
                         window.location.href = '../auth.html';
                     });
                 } else {
+                    // Fallback nếu Firebase không có
+                    alert('Đăng xuất thành công!');
                     window.location.href = '../auth.html';
                 }
             }
+        }
+        
+        // ===== CAMPAIGN MANAGEMENT =====
+        function loadCampaignsFromFirebase() {
+            if (!database) {
+                console.error('Database chưa được khởi tạo');
+                createLocalCampaignsData();
+                return;
+            }
+            
+            const campaignsRef = database.ref('affiliateCampaigns');
+            
+            campaignsRef.once('value', (snapshot) => {
+                campaigns = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const campaign = childSnapshot.val();
+                        campaign.id = childSnapshot.key;
+                        campaigns.push(campaign);
+                    });
+                    renderCampaigns();
+                    updateCampaignPartnerSelect();
+                } else {
+                    console.log('Không có dữ liệu chiến dịch, sử dụng dữ liệu local');
+                    createLocalCampaignsData();
+                }
+            }, (error) => {
+                console.warn('Không thể truy cập Firebase campaigns:', error.code);
+                createLocalCampaignsData();
+            });
+        }
+        
+        // Tạo dữ liệu local cho campaigns (fallback)
+        function createLocalCampaignsData() {
+            campaigns = [
+                {
+                    id: 'camp_001',
+                    name: 'Summer 2024 - Du lịch biển',
+                    partner: 'TravelNow',
+                    startDate: '2024-06-01',
+                    endDate: '2024-08-31',
+                    commission: 12.0,
+                    target: 500,
+                    description: 'Chiến dịch quảng bá du lịch biển mùa hè với hoa hồng tăng cường',
+                    status: 'Đang chạy',
+                    clicks: 8750,
+                    bookings: 187,
+                    revenue: '89,500,000đ',
+                    createdAt: '2024-05-15',
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'camp_002',
+                    name: 'Khuyến mãi khách sạn 5 sao',
+                    partner: 'HotelLink',
+                    startDate: '2024-07-15',
+                    endDate: '2024-09-15',
+                    commission: 10.5,
+                    target: 300,
+                    description: 'Chương trình ưu đãi đặc biệt cho khách sạn cao cấp',
+                    status: 'Đang chạy',
+                    clicks: 5420,
+                    bookings: 94,
+                    revenue: '47,800,000đ',
+                    createdAt: '2024-07-01',
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'camp_003',
+                    name: 'Weekend Getaway',
+                    partner: 'BookingVN',
+                    startDate: '2024-05-01',
+                    endDate: '2024-07-31',
+                    commission: 8.5,
+                    target: 200,
+                    description: 'Chương trình du lịch cuối tuần với giá ưu đãi',
+                    status: 'Đã kết thúc',
+                    clicks: 12300,
+                    bookings: 245,
+                    revenue: '52,000,000đ',
+                    createdAt: '2024-04-15',
+                    updatedAt: '2024-07-31'
+                }
+            ];
+            renderCampaigns();
+            updateCampaignPartnerSelect();
+            
+            // Tự động đồng bộ lên Firebase nếu có thể
+            syncCampaignsToFirebase();
+        }
+        
+        // Đồng bộ dữ liệu campaigns lên Firebase
+        function syncCampaignsToFirebase() {
+            if (!database) return;
+            
+            const campaignsRef = database.ref('affiliateCampaigns');
+            campaignsRef.once('value', (snapshot) => {
+                if (!snapshot.exists()) {
+                    console.log('Đồng bộ dữ liệu campaigns lên Firebase...');
+                    campaigns.forEach(campaign => {
+                        campaignsRef.child(campaign.id).set(campaign);
+                    });
+                }
+            });
+        }
+        
+
+        // Load commissions data
+        function loadCommissionsFromFirebase() {
+            if (!database) {
+                console.log('Database chưa sẵn sàng, sử dụng dữ liệu local cho hoa hồng');
+                createLocalCommissionData();
+                return;
+            }
+            
+            const commissionsRef = database.ref('affiliateCommissions');
+            
+            commissionsRef.once('value', (snapshot) => {
+                commissions = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const commission = childSnapshot.val();
+                        commission.id = childSnapshot.key;
+                        commissions.push(commission);
+                    });
+                    renderCommissions();
+                    updateCommissionStats();
+                } else {
+                    console.log('Không có dữ liệu hoa hồng trong Firebase, sử dụng dữ liệu local');
+                    createLocalCommissionData();
+                }
+            }, (error) => {
+                console.warn('Không thể truy cập Firebase commissions:', error.code);
+                createLocalCommissionData();
+            });
+        }
+
+        // Load support tickets data
+        function loadSupportTicketsFromFirebase() {
+            if (!database) {
+                console.log('Database chưa sẵn sàng, sử dụng dữ liệu local cho hỗ trợ');
+                createLocalSupportData();
+                return;
+            }
+            
+            const supportRef = database.ref('affiliateSupport');
+            
+            supportRef.once('value', (snapshot) => {
+                supportTickets = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const ticket = childSnapshot.val();
+                        ticket.id = childSnapshot.key;
+                        supportTickets.push(ticket);
+                    });
+                    renderSupportTickets();
+                    updateSupportPartnerOptions();
+                } else {
+                    createLocalSupportData();
+                    renderSupportTickets();
+                    updateSupportPartnerOptions();
+                }
+            }, (error) => {
+                console.warn('Không thể truy cập Firebase support:', error.code);
+                createLocalSupportData();
+                renderSupportTickets();
+                updateSupportPartnerOptions();
+            });
+        }
+
+        // Cập nhật options cho filter đối tác trong support
+        function updateSupportPartnerOptions() {
+            const select = document.getElementById('filterPartner');
+            if (!select) return;
+            
+            // Giữ lại option đầu tiên
+            select.innerHTML = '<option value="">Tất cả đối tác</option>';
+            
+            // Thêm các đối tác từ dữ liệu partners
+            partners.forEach(p => {
+                select.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+            });
+        }
+
+        // Cập nhật số chiến dịch đang chạy
+        function updateStatsFromCampaigns() {
+            const running = campaigns.filter(c => c.status === 'Đang chạy').length;
+            const statElement = document.getElementById('stat-active-campaigns');
+            if (statElement) {
+                statElement.textContent = running;
+            }
+        }
+
+        
+        function renderCampaigns() {
+            const tbody = document.getElementById('campaigns-tbody');
+            const thead = document.getElementById('campaigns-table').querySelector('thead');
+            
+            // Thêm header nếu chưa có
+            if (thead && !thead.innerHTML.trim()) {
+                thead.innerHTML = `
+                    <tr>
+                        <th>Tên chiến dịch</th>
+                        <th>Thời gian</th>
+                        <th>Đối tác</th>
+                        <th>Clicks</th>
+                        <th>Bookings</th>
+                        <th>Doanh thu</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                `;
+            }
+            
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            if (campaigns.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">Chưa có chiến dịch nào</td></tr>';
+                return;
+            }
+            
+            campaigns.forEach((c) => {
+                let badge = c.status === 'Đang chạy' ? 'success' : (c.status === 'Tạm dừng' ? 'warning' : 'secondary');
+                tbody.innerHTML += `
+                <tr>
+                    <td>${c.name}</td>
+                    <td>${formatDate(c.startDate)} - ${formatDate(c.endDate)}</td>
+                    <td>${c.partner}</td>
+                    <td>${formatNumber(c.clicks || 0)}</td>
+                    <td>${formatNumber(c.bookings || 0)}</td>
+                    <td>${c.revenue || '0đ'}</td>
+                    <td><span class="badge bg-${badge}">${c.status}</span></td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-sm btn-primary" onclick="editCampaign('${c.id}')">Sửa</button>
+                            <button class="btn btn-sm btn-info" onclick="viewCampaignStats('${c.id}')">Thống kê</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCampaign('${c.id}')">Xóa</button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+        }
+        
+        // Utility functions
+        function formatDate(dateString) {
+            if (!dateString) return '--';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('vi-VN');
+        }
+        
+        function formatNumber(number) {
+            if (typeof number === 'undefined' || number === null) return '0';
+            return number.toLocaleString('vi-VN');
+        }
+        
+        function updateCampaignPartnerSelect() {
+            const select = document.getElementById('campaignPartner');
+            if (!select) return;
+            
+            select.innerHTML = '<option value="">Chọn đối tác</option>';
+            partners.forEach(p => {
+                if (p.status === 'Đang hợp tác') {
+                    select.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+                }
+            });
+        }
+        
+        // Campaign form submit
+        document.addEventListener('DOMContentLoaded', function() {
+            const campaignForm = document.getElementById('campaignForm');
+            if (campaignForm) {
+                campaignForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    
+                    if (!database) {
+                        alert('Không thể kết nối đến database. Chức năng này yêu cầu quyền admin.');
+                        return;
+                    }
+                    
+                    const campaignId = document.getElementById('campaignIndex').value;
+                    const campaignData = {
+                        name: document.getElementById('campaignName').value,
+                        partner: document.getElementById('campaignPartner').value,
+                        startDate: document.getElementById('campaignStartDate').value,
+                        endDate: document.getElementById('campaignEndDate').value,
+                        commission: parseFloat(document.getElementById('campaignCommission').value) || 0,
+                        target: parseInt(document.getElementById('campaignTarget').value) || 0,
+                        description: document.getElementById('campaignDescription').value,
+                        status: 'Đang chạy',
+                        clicks: 0,
+                        bookings: 0,
+                        revenue: '0đ',
+                        updatedAt: new Date().toISOString()
+                    };
+                    
+                    if (campaignId === '') {
+                        // Thêm mới
+                        campaignData.createdAt = new Date().toISOString();
+                        const newCampaignRef = database.ref('affiliateCampaigns').push();
+                        newCampaignRef.set(campaignData).then(() => {
+                            console.log('Thêm chiến dịch thành công');
+                            bootstrap.Modal.getOrCreateInstance(document.getElementById('campaignModal')).hide();
+                            this.reset();
+                            document.getElementById('campaignIndex').value = '';
+                            document.getElementById('campaignModalLabel').textContent = 'Tạo chiến dịch affiliate';
+                            loadCampaignsFromFirebase();
+                        }).catch((error) => {
+                            console.error('Lỗi khi thêm chiến dịch:', error);
+                            if (error.code === 'PERMISSION_DENIED') {
+                                alert('Bạn không có quyền tạo chiến dịch. Vui lòng liên hệ admin.');
+                            } else {
+                                alert('Có lỗi xảy ra khi thêm chiến dịch');
+                            }
+                        });
+                    } else {
+                        // Cập nhật
+                        database.ref(`affiliateCampaigns/${campaignId}`).update(campaignData).then(() => {
+                            console.log('Cập nhật chiến dịch thành công');
+                            bootstrap.Modal.getOrCreateInstance(document.getElementById('campaignModal')).hide();
+                            this.reset();
+                            document.getElementById('campaignIndex').value = '';
+                            document.getElementById('campaignModalLabel').textContent = 'Tạo chiến dịch affiliate';
+                            loadCampaignsFromFirebase();
+                        }).catch((error) => {
+                            console.error('Lỗi khi cập nhật chiến dịch:', error);
+                            if (error.code === 'PERMISSION_DENIED') {
+                                alert('Bạn không có quyền cập nhật chiến dịch. Vui lòng liên hệ admin.');
+                            } else {
+                                alert('Có lỗi xảy ra khi cập nhật chiến dịch');
+                            }
+                        });
+                    }
+                };
+            }
+            
+            // Support form submit
+            const supportForm = document.getElementById('supportForm');
+            if (supportForm) {
+                supportForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    
+                    if (!database) {
+                        alert('Không thể kết nối đến database. Chức năng này yêu cầu quyền admin.');
+                        return;
+                    }
+                    
+                    const supportData = {
+                        partner: document.getElementById('supportPartner').value,
+                        type: document.getElementById('supportType').value,
+                        title: document.getElementById('supportTitle').value,
+                        content: document.getElementById('supportContent').value,
+                        priority: document.getElementById('supportPriority').value,
+                        email: document.getElementById('supportEmail').value,
+                        status: 'Chờ xử lý',
+                        response: '',
+                        createdAt: new Date().toISOString().split('T')[0],
+                        updatedAt: new Date().toISOString()
+                    };
+                    
+                    const newSupportRef = database.ref('affiliateSupport').push();
+                    newSupportRef.set(supportData).then(() => {
+                        console.log('Gửi yêu cầu hỗ trợ thành công');
+                        alert('Đã gửi yêu cầu hỗ trợ thành công!');
+                        this.reset();
+                        loadSupportTicketsFromFirebase();
+                    }).catch((error) => {
+                        console.error('Lỗi khi gửi yêu cầu hỗ trợ:', error);
+                        if (error.code === 'PERMISSION_DENIED') {
+                            alert('Bạn không có quyền gửi yêu cầu hỗ trợ. Vui lòng liên hệ admin.');
+                        } else {
+                            alert('Có lỗi xảy ra khi gửi yêu cầu hỗ trợ');
+                        }
+                    });
+                };
+            }
+        });
+        
+        window.editCampaign = function(campaignId) {
+            const campaign = campaigns.find(c => c.id === campaignId);
+            if (!campaign) return;
+            
+            document.getElementById('campaignName').value = campaign.name;
+            document.getElementById('campaignPartner').value = campaign.partner;
+            document.getElementById('campaignStartDate').value = campaign.startDate;
+            document.getElementById('campaignEndDate').value = campaign.endDate;
+            document.getElementById('campaignCommission').value = campaign.commission;
+            document.getElementById('campaignTarget').value = campaign.target;
+            document.getElementById('campaignDescription').value = campaign.description || '';
+            document.getElementById('campaignIndex').value = campaignId;
+            document.getElementById('campaignModalLabel').textContent = 'Sửa chiến dịch affiliate';
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('campaignModal')).show();
+        };
+        
+        window.viewCampaignStats = function(campaignId) {
+            const campaign = campaigns.find(c => c.id === campaignId);
+            if (!campaign) return;
+            
+            alert(`Thống kê chiến dịch: ${campaign.name}
+Clicks: ${formatNumber(campaign.clicks || 0)}
+Bookings: ${formatNumber(campaign.bookings || 0)}
+Doanh thu: ${campaign.revenue || '0đ'}
+Tỷ lệ chuyển đổi: ${campaign.clicks > 0 ? ((campaign.bookings || 0) / campaign.clicks * 100).toFixed(2) : 0}%`);
+        };
+        
+        window.deleteCampaign = function(campaignId) {
+            if (!database) {
+                alert('Không thể kết nối đến database. Chức năng này yêu cầu quyền admin.');
+                return;
+            }
+            
+            if (confirm('Bạn có chắc chắn muốn xóa chiến dịch này?')) {
+                database.ref(`affiliateCampaigns/${campaignId}`).remove().then(() => {
+                    console.log('Xóa chiến dịch thành công');
+                    loadCampaignsFromFirebase();
+                }).catch((error) => {
+                    console.error('Lỗi khi xóa chiến dịch:', error);
+                    if (error.code === 'PERMISSION_DENIED') {
+                        alert('Bạn không có quyền xóa chiến dịch. Vui lòng liên hệ admin.');
+                    } else {
+                        alert('Có lỗi xảy ra khi xóa chiến dịch');
+                    }
+                });
+            }
+        };
+        
+        // ===== COMMISSION MANAGEMENT =====
+        function loadCommissionsFromFirebase() {
+            if (!database) {
+                console.error('Database chưa được khởi tạo');
+                createLocalCommissionData();
+                return;
+            }
+            
+            const commissionsRef = database.ref('affiliateCommissions');
+            
+            commissionsRef.once('value', (snapshot) => {
+                commissions = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const commission = childSnapshot.val();
+                        commission.id = childSnapshot.key;
+                        commissions.push(commission);
+                    });
+                    renderCommissions();
+                    updateCommissionStats();
+                } else {
+                    createLocalCommissionData();
+                    renderCommissions();
+                    updateCommissionStats();
+                }
+            }, (error) => {
+                console.warn('Không thể truy cập Firebase commissions:', error.code);
+                createLocalCommissionData();
+                renderCommissions();
+                updateCommissionStats();
+            });
+        }
+
+        // Render bảng hoa hồng
+        function renderCommissions() {
+            const tbody = document.getElementById('commission-tbody');
+            
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            if (commissions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Chưa có dữ liệu hoa hồng</td></tr>';
+                return;
+            }
+            
+            commissions.forEach((c) => {
+                let statusBadge = c.status === 'Đã thanh toán' ? 'success' : (c.status === 'Chờ thanh toán' ? 'warning' : 'secondary');
+                
+                // Lấy tên đối tác từ partners array nếu có partnerId, ngược lại dùng partner name trực tiếp
+                let partnerName = 'Không xác định';
+                if (c.partnerId) {
+                    const found = partners.find(p => p.id === c.partnerId);
+                    partnerName = found ? found.name : 'Không xác định';
+                } else if (c.partner) {
+                    partnerName = c.partner;
+                }
+                
+                let actionButton = c.status === 'Đã thanh toán' 
+                    ? '<button class="btn btn-sm btn-secondary" disabled>Đã thanh toán</button>'
+                    : `<button class="btn btn-sm btn-success" onclick="processPayment('${c.id}')">Thanh toán</button>`;
+                
+                tbody.innerHTML += `
+                <tr>
+                    <td>${partnerName}</td>
+                    <td>${c.month}</td>
+                    <td>${c.revenue}</td>
+                    <td>${c.commission}</td>
+                    <td><span class="badge bg-${statusBadge}">${c.status}</span></td>
+                    <td>${c.paymentDate ? formatDate(c.paymentDate) : '--'}</td>
+                    <td>
+                        <div class="table-actions">
+                            ${actionButton}
+                            <button class="btn btn-sm btn-info" onclick="viewCommissionDetail('${c.id}')">Chi tiết</button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        // Cập nhật thống kê hoa hồng
+        function updateCommissionStats() {
+            let total = 0, pending = 0, paid = 0;
+            let month = new Date().getMonth() + 1;
+            let year = new Date().getFullYear();
+            let monthStr = (month < 10 ? '0' : '') + month + '/' + year;
+            
+            commissions.forEach(c => {
+                if (c.month === monthStr) {
+                    let val = parseFloat((c.commission||'0').replace(/[^\d]/g, '')) || 0;
+                    total += val;
+                    if (c.status === 'Chờ thanh toán') pending += val;
+                    if (c.status === 'Đã thanh toán') paid += val;
+                }
+            });
+            
+            document.getElementById('commission-total').textContent = total.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('commission-pending').textContent = pending.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('commission-paid').textContent = paid.toLocaleString('vi-VN') + 'đ';
+            let rate = total > 0 ? Math.round((paid/total)*1000)/10 : 0;
+            document.getElementById('commission-rate').textContent = rate + '%';
+            
+            // Cập nhật thống kê tháng này
+            document.getElementById('stat-month-commission').textContent = total.toLocaleString('vi-VN') + 'đ';
+        }
+        
+        // Tạo dữ liệu local cho commissions (fallback)
+        function createLocalCommissionData() {
+            commissions = [
+                {
+                    id: 'comm_001',
+                    partnerId: 'partner_001',
+                    partner: 'TravelNow',
+                    month: '08/2024',
+                    revenue: '45,000,000đ',
+                    commission: '4,500,000đ',
+                    status: 'Chờ thanh toán',
+                    paymentDate: null,
+                    createdAt: '2024-08-01',
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'comm_002', 
+                    partnerId: 'partner_002',
+                    partner: 'HotelLink',
+                    month: '08/2024',
+                    revenue: '28,000,000đ',
+                    commission: '2,240,000đ',
+                    status: 'Chờ thanh toán',
+                    paymentDate: null,
+                    createdAt: '2024-08-02',
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'comm_003',
+                    partnerId: 'partner_003',
+                    partner: 'BookingVN',
+                    month: '07/2024',
+                    revenue: '35,000,000đ',
+                    commission: '3,150,000đ',
+                    status: 'Đã thanh toán',
+                    paymentDate: '2024-08-01',
+                    createdAt: '2024-07-01',
+                    updatedAt: '2024-08-01'
+                },
+                {
+                    id: 'comm_004',
+                    partnerId: 'partner_001',
+                    partner: 'TravelNow',
+                    month: '07/2024',
+                    revenue: '52,000,000đ',
+                    commission: '4,680,000đ',
+                    status: 'Đã thanh toán',
+                    paymentDate: '2024-08-01',
+                    createdAt: '2024-07-01',
+                    updatedAt: '2024-08-01'
+                }
+            ];
+            renderCommissions();
+            updateCommissionStats();
+            
+            // Tự động đồng bộ lên Firebase nếu có thể
+            syncCommissionsToFirebase();
+        }
+        
+        // Đồng bộ dữ liệu commissions lên Firebase
+        function syncCommissionsToFirebase() {
+            if (!database) return;
+            
+            const commissionsRef = database.ref('affiliateCommissions');
+            commissionsRef.once('value', (snapshot) => {
+                if (!snapshot.exists()) {
+                    console.log('Đồng bộ dữ liệu commissions lên Firebase...');
+                    commissions.forEach(comm => {
+                        commissionsRef.child(comm.id).set(comm);
+                    });
+                }
+            });
+        }
+        
+        window.processPayment = function(commissionId) {
+            if (!database) {
+                alert('Không thể kết nối đến database. Chức năng này yêu cầu quyền admin.');
+                return;
+            }
+            
+            if (confirm('Xác nhận thanh toán hoa hồng này?')) {
+                const updateData = {
+                    status: 'Đã thanh toán',
+                    paymentDate: new Date().toISOString().split('T')[0],
+                    updatedAt: new Date().toISOString()
+                };
+                
+                database.ref(`affiliateCommissions/${commissionId}`).update(updateData).then(() => {
+                    console.log('Cập nhật trạng thái thanh toán thành công');
+                    alert('Đã thanh toán hoa hồng thành công!');
+                    loadCommissionsFromFirebase();
+                }).catch((error) => {
+                    console.error('Lỗi khi cập nhật thanh toán:', error);
+                    if (error.code === 'PERMISSION_DENIED') {
+                        alert('Bạn không có quyền cập nhật thanh toán. Vui lòng liên hệ admin.');
+                    } else {
+                        alert('Có lỗi xảy ra khi cập nhật thanh toán');
+                    }
+                });
+            }
+        };
+        
+        window.viewCommissionDetail = function(commissionId) {
+            const commission = commissions.find(c => c.id === commissionId);
+            if (!commission) return;
+            
+            // Lấy tên đối tác từ partners array nếu có partnerId, ngược lại dùng partner name trực tiếp
+            let partnerName = 'Không xác định';
+            if (commission.partnerId) {
+                const found = partners.find(p => p.id === commission.partnerId);
+                partnerName = found ? found.name : 'Không xác định';
+            } else if (commission.partner) {
+                partnerName = commission.partner;
+            }
+            
+            const content = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Đối tác:</strong> ${partnerName}</p>
+                        <p><strong>Tháng:</strong> ${commission.month}</p>
+                        <p><strong>Doanh thu:</strong> ${commission.revenue}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Hoa hồng:</strong> ${commission.commission}</p>
+                        <p><strong>Trạng thái:</strong> ${commission.status}</p>
+                        <p><strong>Ngày thanh toán:</strong> ${commission.paymentDate ? formatDate(commission.paymentDate) : 'Chưa thanh toán'}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('commissionDetailContent').innerHTML = content;
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('commissionDetailModal')).show();
+        };
+        
+        // ===== SUPPORT MANAGEMENT =====
+        function loadSupportTicketsFromFirebase() {
+            if (!database) {
+                console.error('Database chưa được khởi tạo');
+                createLocalSupportData();
+                return;
+            }
+            
+            const supportRef = database.ref('affiliateSupport');
+            
+            supportRef.once('value', (snapshot) => {
+                supportTickets = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const ticket = childSnapshot.val();
+                        ticket.id = childSnapshot.key;
+                        supportTickets.push(ticket);
+                    });
+                    renderSupportTickets();
+                } else {
+                    console.log('Không có dữ liệu hỗ trợ trong Firebase, sử dụng dữ liệu local');
+                    createLocalSupportData();
+                }
+            }, (error) => {
+                console.warn('Không thể truy cập Firebase support (có thể do quyền hạn):', error.code);
+                createLocalSupportData();
+            });
+        }
+        
+        function createLocalSupportData() {
+            supportTickets = [
+                {
+                    id: 'sup_001',
+                    partner: 'TravelNow',
+                    type: 'API',
+                    title: 'Hỗ trợ tích hợp API booking',
+                    content: 'Cần hướng dẫn tích hợp API để tracking booking từ affiliate link',
+                    priority: 'High',
+                    status: 'Đã phản hồi',
+                    email: 'partner@travelnow.com',
+                    response: 'Đã gửi tài liệu hướng dẫn API và sample code',
+                    createdAt: '2024-08-04',
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'sup_002',
+                    partner: 'HotelLink',
+                    type: 'Tracking',
+                    title: 'Vấn đề tracking clicks',
+                    content: 'Clicks không được tracking chính xác từ ngày 1/8',
+                    priority: 'Urgent',
+                    status: 'Đang xử lý',
+                    email: 'support@hotellink.vn',
+                    response: 'Đang kiểm tra hệ thống tracking',
+                    createdAt: '2024-08-02',
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'sup_003',
+                    partner: 'BookingVN',
+                    type: 'Payment',
+                    title: 'Câu hỏi về thanh toán hoa hồng',
+                    content: 'Muốn biết quy trình thanh toán hoa hồng hàng tháng',
+                    priority: 'Medium',
+                    status: 'Đã đóng',
+                    email: 'finance@bookingvn.com',
+                    response: 'Đã giải thích quy trình thanh toán và gửi lịch thanh toán',
+                    createdAt: '2024-07-28',
+                    updatedAt: '2024-07-30'
+                },
+                {
+                    id: 'sup_004',
+                    partner: 'TravelNow',
+                    type: 'Technical',
+                    title: 'Lỗi hiển thị banner affiliate',
+                    content: 'Banner quảng cáo không hiển thị đúng trên mobile',
+                    priority: 'High',
+                    status: 'Chờ xử lý',
+                    email: 'tech@travelnow.com',
+                    response: '',
+                    createdAt: '2024-08-03',
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+            renderSupportTickets();
+            updateSupportPartnerOptions();
+            
+            // Tự động đồng bộ lên Firebase nếu có thể
+            syncSupportToFirebase();
+        }
+        
+        // Đồng bộ dữ liệu support lên Firebase
+        function syncSupportToFirebase() {
+            if (!database) return;
+            
+            const supportRef = database.ref('affiliateSupport');
+            supportRef.once('value', (snapshot) => {
+                if (!snapshot.exists()) {
+                    console.log('Đồng bộ dữ liệu support lên Firebase...');
+                    supportTickets.forEach(ticket => {
+                        supportRef.child(ticket.id).set(ticket);
+                    });
+                }
+            });
+        }
+        
+        function renderSupportTickets() {
+            const tbody = document.getElementById('support-tbody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            if (supportTickets.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">Chưa có yêu cầu hỗ trợ nào</td></tr>';
+                return;
+            }
+            
+            supportTickets.forEach((t) => {
+                let statusBadge = getStatusBadge(t.status);
+                let priorityBadge = getPriorityBadge(t.priority);
+                let typeBadge = getTypeBadge(t.type);
+                
+                tbody.innerHTML += `
+                <tr>
+                    <td>${formatDate(t.createdAt)}</td>
+                    <td>${t.partner}</td>
+                    <td>${typeBadge}</td>
+                    <td>${t.title}</td>
+                    <td>${priorityBadge}</td>
+                    <td>${statusBadge}</td>
+                    <td>${t.response || '--'}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-sm btn-primary" onclick="viewSupportDetail('${t.id}')">Chi tiết</button>
+                            <button class="btn btn-sm btn-warning" onclick="updateSupportStatus('${t.id}')">Cập nhật</button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+        }
+        
+        function getStatusBadge(status) {
+            const badges = {
+                'Chờ xử lý': '<span class="badge bg-secondary">Chờ xử lý</span>',
+                'Đang xử lý': '<span class="badge bg-warning">Đang xử lý</span>',
+                'Đã phản hồi': '<span class="badge bg-success">Đã phản hồi</span>',
+                'Đã đóng': '<span class="badge bg-dark">Đã đóng</span>'
+            };
+            return badges[status] || '<span class="badge bg-secondary">Chờ xử lý</span>';
+        }
+        
+        function getPriorityBadge(priority) {
+            const badges = {
+                'Low': '<span class="badge bg-info">Thấp</span>',
+                'Medium': '<span class="badge bg-primary">Trung bình</span>',
+                'High': '<span class="badge bg-warning">Cao</span>',
+                'Urgent': '<span class="badge bg-danger">Khẩn cấp</span>'
+            };
+            return badges[priority] || '<span class="badge bg-info">Thấp</span>';
+        }
+        
+        function getTypeBadge(type) {
+            const badges = {
+                'API': '<span class="badge bg-info">API</span>',
+                'Tracking': '<span class="badge bg-danger">Tracking</span>',
+                'Payment': '<span class="badge bg-success">Payment</span>',
+                'Technical': '<span class="badge bg-warning">Technical</span>',
+                'Other': '<span class="badge bg-secondary">Other</span>'
+            };
+            return badges[type] || '<span class="badge bg-secondary">Other</span>';
+        }
+        
+        window.viewSupportDetail = function(ticketId) {
+            const ticket = supportTickets.find(t => t.id === ticketId);
+            if (!ticket) return;
+            
+            const content = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Đối tác:</strong> ${ticket.partner}</p>
+                        <p><strong>Loại:</strong> ${ticket.type}</p>
+                        <p><strong>Ưu tiên:</strong> ${ticket.priority}</p>
+                        <p><strong>Email:</strong> ${ticket.email}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Trạng thái:</strong> ${ticket.status}</p>
+                        <p><strong>Ngày tạo:</strong> ${formatDate(ticket.createdAt)}</p>
+                        <p><strong>Cập nhật cuối:</strong> ${formatDate(ticket.updatedAt)}</p>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <h6>Nội dung yêu cầu:</h6>
+                    <p class="border p-3 rounded">${ticket.content}</p>
+                </div>
+                <div class="mt-3">
+                    <h6>Phản hồi:</h6>
+                    <p class="border p-3 rounded">${ticket.response || 'Chưa có phản hồi'}</p>
+                </div>
+            `;
+            
+            document.getElementById('supportDetailContent').innerHTML = content;
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('supportDetailModal')).show();
+        };
+        
+        window.updateSupportStatus = function(ticketId) {
+            const ticket = supportTickets.find(t => t.id === ticketId);
+            if (!ticket) return;
+            
+            if (!database) {
+                alert('Không thể kết nối đến database. Chức năng này yêu cầu quyền admin.');
+                return;
+            }
+            
+            const newStatus = prompt('Nhập trạng thái mới (Chờ xử lý, Đang xử lý, Đã phản hồi, Đã đóng):', ticket.status);
+            if (newStatus && newStatus !== ticket.status) {
+                const updateData = {
+                    status: newStatus,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                if (newStatus === 'Đã phản hồi') {
+                    const response = prompt('Nhập nội dung phản hồi:', ticket.response || '');
+                    if (response) updateData.response = response;
+                }
+                
+                database.ref(`affiliateSupport/${ticketId}`).update(updateData).then(() => {
+                    console.log('Cập nhật trạng thái hỗ trợ thành công');
+                    alert('Đã cập nhật trạng thái thành công!');
+                    loadSupportTicketsFromFirebase();
+                }).catch((error) => {
+                    console.error('Lỗi khi cập nhật trạng thái hỗ trợ:', error);
+                    if (error.code === 'PERMISSION_DENIED') {
+                        alert('Bạn không có quyền cập nhật trạng thái. Vui lòng liên hệ admin.');
+                    } else {
+                        alert('Có lỗi xảy ra khi cập nhật trạng thái');
+                    }
+                });
+            }
+        };
+        
+        window.filterSupport = function() {
+            const statusFilter = document.getElementById('filterStatus').value;
+            const partnerFilter = document.getElementById('filterPartner').value;
+            
+            let filteredTickets = supportTickets;
+            
+            if (statusFilter) {
+                filteredTickets = filteredTickets.filter(t => t.status === statusFilter);
+            }
+            
+            if (partnerFilter) {
+                filteredTickets = filteredTickets.filter(t => t.partner === partnerFilter);
+            }
+            
+            // Re-render table with filtered data
+            const tbody = document.getElementById('support-tbody');
+            tbody.innerHTML = '';
+            
+            if (filteredTickets.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">Không tìm thấy kết quả phù hợp</td></tr>';
+                return;
+            }
+            
+            filteredTickets.forEach((t) => {
+                let statusBadge = getStatusBadge(t.status);
+                let priorityBadge = getPriorityBadge(t.priority);
+                let typeBadge = getTypeBadge(t.type);
+                
+                tbody.innerHTML += `
+                <tr>
+                    <td>${formatDate(t.createdAt)}</td>
+                    <td>${t.partner}</td>
+                    <td>${typeBadge}</td>
+                    <td>${t.title}</td>
+                    <td>${priorityBadge}</td>
+                    <td>${statusBadge}</td>
+                    <td>${t.response || '--'}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-sm btn-primary" onclick="viewSupportDetail('${t.id}')">Chi tiết</button>
+                            <button class="btn btn-sm btn-warning" onclick="updateSupportStatus('${t.id}')">Cập nhật</button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+        };
+        
+        // ===== UTILITY FUNCTIONS =====
+        function formatDate(dateString) {
+            if (!dateString) return '--';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('vi-VN');
+        }
+        
+        function formatNumber(num) {
+            return new Intl.NumberFormat('vi-VN').format(num);
         }
     </script>
 </body>

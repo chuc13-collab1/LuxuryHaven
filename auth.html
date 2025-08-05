@@ -439,11 +439,16 @@
 
     // Hàm ánh xạ chức vụ với trang tương ứng
     function getPageByRole(role) {
+      console.log('🔎 getPageByRole được gọi với role:', role, 'type:', typeof role);
+      
       if (!role) return 'index.html';
       
       const rolePageMap = {
         // Ánh xạ theo tên chức vụ đầy đủ
         'Quản lý đối tác': 'QLNV/affiliate-manager.html',
+        'quản lý đối tác': 'QLNV/affiliate-manager.html',
+        'Affiliate Manager': 'QLNV/affiliate-manager.html',
+        'affiliate manager': 'QLNV/affiliate-manager.html',
         'Kiểm duyệt đặt phòng': 'QLNV/booking-moderator.html',
         'Tuân thủ pháp lý': 'QLNV/compliance-officer.html',
         'Quản lý nội dung': 'QLNV/content-admin.html',
@@ -474,6 +479,7 @@
         'NV01': 'QLNV/staff-dashboard.html', // nhân viên
         'PTW01': 'QLNV/web-developer.html', // Phát triển web
         'QL02': 'QLNV/affiliate-manager.html', // phó trưởng phòng
+        'AFF01': 'QLNV/affiliate-manager.html', // Affiliate Manager
         
         // Department codes (fallback)
         '01': 'QLNV/staff-dashboard.html', // Lễ tân
@@ -487,6 +493,10 @@
         'receptionist': 'QLNV/staff-dashboard.html',
         'housekeeping': 'QLNV/staff-dashboard.html',
         'affiliate': 'QLNV/affiliate-manager.html',
+        'affiliate-manager': 'QLNV/affiliate-manager.html', // Quản lý đối tác
+        'affiliate manager': 'QLNV/affiliate-manager.html', // Quản lý đối tác (có space)
+        'quản lý đối tác': 'QLNV/affiliate-manager.html', // Tiếng Việt
+        'quan ly doi tac': 'QLNV/affiliate-manager.html', // Không dấu
         'content': 'QLNV/content-admin.html',
         'finance': 'QLNV/finance-manager.html',
         'analyst': 'QLNV/data-analyst.html',
@@ -494,21 +504,70 @@
         'booking': 'QLNV/booking-moderator.html'
       };
       
+      console.log('📋 Danh sách rolePageMap keys:', Object.keys(rolePageMap));
+      
       // Thử exact match trước
+      console.log('🔍 Kiểm tra exact match cho role:', role);
       if (rolePageMap[role]) {
+        console.log('✅ Tìm thấy exact match:', role, '→', rolePageMap[role]);
         return rolePageMap[role];
       }
       
       // Thử case-insensitive match
+      console.log('🔍 Kiểm tra case-insensitive match cho role:', role);
       const roleKey = Object.keys(rolePageMap).find(key => 
         key.toLowerCase() === role.toLowerCase()
       );
       
       if (roleKey) {
+        console.log('✅ Tìm thấy case-insensitive match:', role, '→', rolePageMap[roleKey]);
         return rolePageMap[roleKey];
       }
       
+      console.log('❌ Không tìm thấy mapping cho role:', role);
+      
       return 'index.html';
+    }
+
+    // Hàm lấy role từ redirectPage
+    function getRoleFromPage(redirectPage) {
+      if (redirectPage === 'admin-dashboard.html') {
+        return 'Admin';
+      } else if (redirectPage.includes('affiliate-manager.html')) {
+        return 'Affiliate Manager';
+      } else if (redirectPage.includes('customer-support.html')) {
+        return 'Customer Support';
+      } else if (redirectPage.includes('marketing-seo.html')) {
+        return 'Marketing SEO';
+      } else if (redirectPage.includes('web-developer.html')) {
+        return 'Web Developer';
+      } else if (redirectPage.includes('content-admin.html')) {
+        return 'Content Admin';
+      } else if (redirectPage.includes('finance-manager.html')) {
+        return 'Finance Manager';
+      } else if (redirectPage.includes('data-analyst.html')) {
+        return 'Data Analyst';
+      } else if (redirectPage.includes('compliance-officer.html')) {
+        return 'Compliance Officer';
+      } else if (redirectPage.includes('booking-moderator.html')) {
+        return 'Booking Moderator';
+      } else if (redirectPage.includes('staff-dashboard.html')) {
+        return 'Nhân viên';
+      } else if (redirectPage.includes('QLNV/')) {
+        return 'Nhân viên';
+      }
+      return 'Khách hàng';
+    }
+
+    // Hàm kiểm tra chức vụ từ Firebase và chuyển hướng (trả về cả role và page)
+    function checkUserRoleAndRedirectWithInfo(email) {
+      return checkUserRoleAndRedirect(email).then((redirectPage) => {
+        const role = getRoleFromPage(redirectPage);
+        return {
+          redirectPage: redirectPage,
+          role: role
+        };
+      });
     }
 
     // Hàm kiểm tra chức vụ từ Firebase và chuyển hướng
@@ -517,15 +576,48 @@
       if (email === 'quantrikhachsan@gmail.com') {
         return Promise.resolve('admin-dashboard.html');
       }
+      
+      // Kiểm tra các email test cho Affiliate Manager
+      const affiliateEmails = [
+        'affiliate@email.com',
+        'affiliate@luxurytravel.vn', 
+        'admin@luxurytravel.vn',
+        'affiliate.manager@luxurytravel.vn'
+      ];
+      
+      if (affiliateEmails.includes(email.toLowerCase())) {
+        return Promise.resolve('QLNV/affiliate-manager.html');
+      }
 
       // Tìm kiếm trong danh sách nhân viên
       return Promise.all([
         firebase.database().ref('staff').once('value'),
-        firebase.database().ref('roles').once('value')
+        firebase.database().ref('roles').once('value'),
+        firebase.database().ref('staffAccess').once('value')
       ])
-        .then(([staffSnapshot, rolesSnapshot]) => {
+        .then(([staffSnapshot, rolesSnapshot, staffAccessSnapshot]) => {
           const staffData = staffSnapshot.val();
           const rolesData = rolesSnapshot.val();
+          const staffAccessData = staffAccessSnapshot.val();
+          
+          console.log('🔍 Kiểm tra staffAccess cho email:', email);
+          
+          // Chuyển đổi email thành key format (thay @ và . thành _)
+          const emailKey = email.replace(/[@.]/g, '_');
+          console.log('- Email key:', emailKey);
+          
+          // Kiểm tra trong staffAccess trước
+          if (staffAccessData && staffAccessData[emailKey]) {
+            const role = staffAccessData[emailKey];
+            console.log('✅ Tìm thấy trong staffAccess:', emailKey, '→', role);
+            
+            let page = getPageByRole(role);
+            console.log('- Role mapping:', role, '→', page);
+            
+            if (page !== 'index.html') {
+              return page;
+            }
+          }
           
           if (!staffData) {
             console.log('Không tìm thấy dữ liệu nhân viên');
@@ -760,7 +852,22 @@
           const email = user.email;
           
           // Kiểm tra chức vụ và chuyển hướng
-          checkUserRoleAndRedirect(email).then((redirectPage) => {
+          checkUserRoleAndRedirectWithInfo(email).then((userInfo) => {
+            // Lưu thông tin user vào localStorage
+            const userData = {
+              email: email,
+              name: user.displayName || user.email.split('@')[0],
+              role: userInfo.role,
+              loginTime: new Date().toISOString(),
+              loginMethod: 'Google'
+            };
+            
+            localStorage.setItem('loggedInUser', JSON.stringify(userData));
+            localStorage.setItem('userRole', userInfo.role);
+            localStorage.setItem('userEmail', email);
+            
+            console.log('✅ Đã lưu thông tin user:', userData);
+            
             Swal.fire({
               icon: 'success',
               title: 'Đăng nhập thành công!',
@@ -768,7 +875,7 @@
               timer: 1500,
               showConfirmButton: false
             }).then(() => {
-              window.location.href = redirectPage;
+              window.location.href = userInfo.redirectPage;
             });
           });
         })
@@ -887,17 +994,31 @@
           const user = userCredential.user;
           
           // Kiểm tra chức vụ và chuyển hướng
-          checkUserRoleAndRedirect(email).then((redirectPage) => {
-            let userTitle = 'Người dùng';
+          checkUserRoleAndRedirectWithInfo(email).then((userInfo) => {
             let userMessage = 'Chào mừng bạn!';
             
-            if (redirectPage === 'admin-dashboard.html') {
-              userTitle = 'Quản trị viên';
+            if (userInfo.role === 'Admin') {
               userMessage = 'Chào mừng Quản trị viên!';
-            } else if (redirectPage.includes('QLNV/')) {
-              userTitle = 'Nhân viên';
+            } else if (userInfo.role === 'Affiliate Manager') {
+              userMessage = 'Chào mừng Affiliate Manager!';
+            } else if (userInfo.role.includes('Nhân viên') || userInfo.redirectPage.includes('QLNV/')) {
               userMessage = 'Chào mừng Nhân viên!';
             }
+            
+            // Lưu thông tin user vào localStorage
+            const userData = {
+              email: email,
+              name: user.displayName || email.split('@')[0],
+              role: userInfo.role,
+              loginTime: new Date().toISOString(),
+              loginMethod: 'Email/Password'
+            };
+            
+            localStorage.setItem('loggedInUser', JSON.stringify(userData));
+            localStorage.setItem('userRole', userInfo.role);
+            localStorage.setItem('userEmail', email);
+            
+            console.log('✅ Đã lưu thông tin user:', userData);
             
             Swal.fire({
               icon: 'success',
@@ -905,7 +1026,7 @@
               text: userMessage,
               confirmButtonColor: '#1abc9c'
             }).then(() => {
-              window.location.href = redirectPage;
+              window.location.href = userInfo.redirectPage;
             });
           });
         })

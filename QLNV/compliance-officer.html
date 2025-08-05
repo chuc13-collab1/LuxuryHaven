@@ -33,6 +33,137 @@
         .content-section { display: block; }
         @media (max-width: 900px) { .sidebar { width: 80px; } .main-container { margin-left: 80px; } .sidebar .nav-item { padding: 12px 10px; font-size: 0.95rem; } .sidebar .logo { font-size: 1.1rem; } }
         @media (max-width: 700px) { .sidebar { display: none; } .main-container { margin-left: 0; } .main-header { padding: 12px 10px; } .content-wrapper { padding: 12px 4px; } }
+
+    </style>
+        <style>
+            :root { --main-bg: #181c2f; --sidebar-bg: #23244a; --card-bg: #23244a; --accent: #7c3aed; --accent2: #00eaff; --text: #f3f6fa; --text-muted: #b0b8d1; --border: #2e325a; --shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.15); }
+            body { background: var(--main-bg); color: var(--text); font-family: 'Poppins', Arial, sans-serif; margin: 0; }
+            .sidebar { width: 240px; background: var(--sidebar-bg); color: var(--text); min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 100; display: flex; flex-direction: column; }
+            .sidebar .logo { padding: 32px 0 24px 0; text-align: center; font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; color: var(--accent); }
+            .sidebar .nav-item { display: flex; align-items: center; padding: 14px 32px; color: var(--text-muted); text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+            .sidebar .nav-item.active, .sidebar .nav-item:hover { background: #1a1d36; color: var(--accent2); border-left: 4px solid var(--accent); }
+            .sidebar .nav-item i { margin-right: 14px; font-size: 1.2rem; }
+            .sidebar-footer { margin-top: auto; padding: 24px 32px; }
+            .sidebar-footer .btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 500; }
+            .main-container { margin-left: 240px; min-height: 100vh; background: var(--main-bg); }
+            .main-header { background: #1a1d36; border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+            .main-header .user-info { display: flex; align-items: center; gap: 14px; }
+            .main-header .user-info img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+            .content-wrapper { padding: 40px 32px 32px 32px; max-width: 800px; margin: 0 auto; }
+            .card-modern { background: var(--card-bg); border-radius: 18px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 32px; padding: 0; }
+            .card-modern .card-body { padding: 32px 28px; }
+            .card-modern .card-title { color: var(--accent2); font-weight: 600; font-size: 1.2rem; margin-bottom: 18px; }
+            .profile-info { display: flex; align-items: center; gap: 32px; }
+            .profile-info img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+            .profile-info .info { font-size: 1.1rem; }
+            .content-section { display: block; }
+            
+            /* CSS cho form inputs trong dark theme */
+            .form-control, .form-select {
+                background-color: var(--card-bg) !important;
+                border: 1px solid var(--border) !important;
+                color: var(--text) !important;
+                border-radius: 8px;
+            }
+            
+            .form-control:focus, .form-select:focus {
+                background-color: var(--card-bg) !important;
+                border-color: var(--accent) !important;
+                color: var(--text) !important;
+                box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.25) !important;
+            }
+            
+            .form-control::placeholder {
+                color: var(--text-muted) !important;
+                opacity: 0.8;
+            }
+            
+            .form-label {
+                color: var(--text) !important;
+                font-weight: 500;
+                margin-bottom: 8px;
+            }
+            
+            /* CSS cho modal */
+            .modal-content {
+                background-color: var(--card-bg) !important;
+                border: 1px solid var(--border) !important;
+            }
+            
+            .modal-header {
+                border-bottom: 1px solid var(--border) !important;
+            }
+            
+            .modal-footer {
+                border-top: 1px solid var(--border) !important;
+            }
+            
+            .modal-title {
+                color: var(--accent2) !important;
+            }
+            
+            .btn-close {
+                filter: invert(1);
+            }
+            
+            /* CSS cho select options */
+            .form-select option {
+                background-color: var(--card-bg) !important;
+                color: var(--text) !important;
+            }
+            
+            /* CSS cho table trong dark theme */
+            .table-dark {
+                --bs-table-bg: var(--card-bg);
+                --bs-table-border-color: var(--border);
+            }
+            
+            /* Fix z-index cho modal chồng lấp */
+            .modal { z-index: 1050; }
+            .modal-backdrop { z-index: 1040; }
+            
+            /* Modal timesheetModal có z-index thấp hơn */
+            #timesheetModal { z-index: 1055; }
+            #timesheetModal .modal-backdrop { z-index: 1050; }
+            
+            /* Modal con (createScheduleModal, addOvertimeModal) có z-index cao hơn */
+            #createScheduleModal, #addOvertimeModal { z-index: 1060 !important; }
+            #createScheduleModal .modal-backdrop, #addOvertimeModal .modal-backdrop { z-index: 1055 !important; }
+            
+            /* Đảm bảo modal con hiển thị trên modal cha */
+            .modal.show { z-index: 1060 !important; }
+            .modal.show .modal-backdrop { z-index: 1055 !important; }
+            
+            .table-dark td, .table-dark th {
+                border-color: var(--border) !important;
+            }
+            
+            /* CSS cho card trong HR section */
+            .card {
+                background-color: var(--card-bg) !important;
+                border: 1px solid var(--border) !important;
+                color: var(--text) !important;
+            }
+            
+            .card-header {
+                background-color: rgba(124, 58, 237, 0.1) !important;
+                border-bottom: 1px solid var(--border) !important;
+                color: var(--accent2) !important;
+            }
+            
+            .list-group-item {
+                background-color: var(--card-bg) !important;
+                border-color: var(--border) !important;
+                color: var(--text) !important;
+            }
+            
+            .list-group-item.active {
+                background-color: var(--accent) !important;
+                border-color: var(--accent) !important;
+            }
+            
+            @media (max-width: 900px) { .sidebar { width: 80px; } .main-container { margin-left: 80px; } .sidebar .nav-item { padding: 12px 10px; font-size: 0.95rem; } .sidebar .logo { font-size: 1.1rem; } }
+            @media (max-width: 700px) { .sidebar { display: none; } .main-container { margin-left: 0; } .main-header { padding: 12px 10px; } .content-wrapper { padding: 12px 4px; } }
     </style>
 </head>
 <body>
@@ -839,6 +970,233 @@
       </div>
     </div>
 
+    <!-- Modal Chấm công chính -->
+    <div class="modal fade" id="timesheetModal" tabindex="-1" aria-labelledby="timesheetModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="timesheetModalLabel">Hệ thống Chấm công</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="list-group" role="tablist">
+                  <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#timesheet-overview" role="tab">
+                    <i class="fas fa-calendar-alt me-2"></i>Lịch làm việc tháng 8
+                  </a>
+                  <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#checkin-checkout" role="tab">
+                    <i class="fas fa-clock me-2"></i>Check in/out
+                  </a>
+                  <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#timesheet-schedule" role="tab">
+                    <i class="fas fa-calendar-plus me-2"></i>Lịch làm việc
+                  </a>
+                  <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#timesheet-overtime" role="tab">
+                    <i class="fas fa-user-clock me-2"></i>Giờ tăng ca
+                  </a>
+                  <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#timesheet-report" role="tab">
+                    <i class="fas fa-chart-line me-2"></i>Báo cáo chấm công
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="tab-content">
+                  <!-- Tab Lịch làm việc tháng 8 -->
+                  <div class="tab-pane fade show active" id="timesheet-overview" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <h6>Lịch làm việc tháng 8</h6>
+                      <div>
+                        <button class="btn btn-primary btn-sm me-2" onclick="showCreateScheduleModal()">
+                          <i class="fas fa-plus"></i> Tạo lịch
+                        </button>
+                        <button class="btn btn-warning btn-sm" onclick="showOvertimeModal()">
+                          <i class="fas fa-clock"></i> Đăng ký tăng ca
+                        </button>
+                      </div>
+                    </div>
+                    <table class="table table-dark table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Ngày</th>
+                          <th>Ca làm việc</th>
+                          <th>Giờ bắt đầu</th>
+                          <th>Giờ kết thúc</th>
+                          <th>Trạng thái</th>
+                          <th>Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody id="scheduleTableBody">
+                        <tr>
+                          <td>01/08/2025</td>
+                          <td>Ca sáng</td>
+                          <td>08:00</td>
+                          <td>17:00</td>
+                          <td><span class="badge bg-success">Đã hoàn thành</span></td>
+                          <td><button class="btn btn-sm btn-outline-info">Chi tiết</button></td>
+                        </tr>
+                        <tr>
+                          <td>02/08/2025</td>
+                          <td>Ca sáng</td>
+                          <td>08:00</td>
+                          <td>17:00</td>
+                          <td><span class="badge bg-primary">Đang làm việc</span></td>
+                          <td><button class="btn btn-sm btn-outline-info">Chi tiết</button></td>
+                        </tr>
+                        <tr>
+                          <td>03/08/2025</td>
+                          <td>Ca sáng</td>
+                          <td>08:00</td>
+                          <td>17:00</td>
+                          <td><span class="badge bg-secondary">Chưa làm</span></td>
+                          <td><button class="btn btn-sm btn-outline-info">Chi tiết</button></td>
+                        </tr>
+                        <tr>
+                          <td>04/08/2025</td>
+                          <td>Ca sáng</td>
+                          <td>08:00</td>
+                          <td>17:00</td>
+                          <td><span class="badge bg-info">Hôm nay</span></td>
+                          <td><button class="btn btn-sm btn-outline-info">Chi tiết</button></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <!-- Tab Check in/out -->
+                  <div class="tab-pane fade" id="checkin-checkout" role="tabpanel">
+                    <h6>Check in/out hôm nay</h6>
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <div class="card">
+                          <div class="card-body text-center">
+                            <h5>Check In</h5>
+                            <p class="h4" id="checkinTime">--:--</p>
+                            <button class="btn btn-success" onclick="checkIn()">Check In</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="card">
+                          <div class="card-body text-center">
+                            <h5>Check Out</h5>
+                            <p class="h4" id="checkoutTime">--:--</p>
+                            <button class="btn btn-danger" onclick="checkOut()">Check Out</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Tab Lịch làm việc -->
+                  <div class="tab-pane fade" id="timesheet-schedule" role="tabpanel">
+                    <h6>Quản lý lịch làm việc</h6>
+                    <div class="mb-3">
+                      <button class="btn btn-primary" onclick="showCreateScheduleModal()">
+                        <i class="fas fa-plus"></i> Tạo lịch mới
+                      </button>
+                    </div>
+                    <table class="table table-dark table-hover">
+                      <thead>
+                        <tr>
+                          <th>Tuần</th>
+                          <th>Ngày bắt đầu</th>
+                          <th>Ngày kết thúc</th>
+                          <th>Tổng giờ</th>
+                          <th>Trạng thái</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Tuần 31</td>
+                          <td>29/07/2025</td>
+                          <td>02/08/2025</td>
+                          <td>40 giờ</td>
+                          <td><span class="badge bg-success">Hoàn thành</span></td>
+                        </tr>
+                        <tr>
+                          <td>Tuần 32</td>
+                          <td>03/08/2025</td>
+                          <td>09/08/2025</td>
+                          <td>40 giờ</td>
+                          <td><span class="badge bg-warning">Đang thực hiện</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <!-- Tab Tăng ca -->
+                  <div class="tab-pane fade" id="timesheet-overtime" role="tabpanel">
+                    <h6>Quản lý giờ tăng ca</h6>
+                    <div class="mb-3">
+                      <button class="btn btn-warning" onclick="showOvertimeModal()">
+                        <i class="fas fa-clock"></i> Đăng ký tăng ca
+                      </button>
+                    </div>
+                    <table class="table table-dark table-hover">
+                      <thead>
+                        <tr>
+                          <th>Ngày</th>
+                          <th>Giờ bắt đầu</th>
+                          <th>Giờ kết thúc</th>
+                          <th>Số giờ</th>
+                          <th>Lý do</th>
+                          <th>Trạng thái</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>01/08/2025</td>
+                          <td>18:00</td>
+                          <td>20:00</td>
+                          <td>2 giờ</td>
+                          <td>Xử lý hợp đồng khẩn cấp</td>
+                          <td><span class="badge bg-success">Đã duyệt</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <!-- Tab Báo cáo -->
+                  <div class="tab-pane fade" id="timesheet-report" role="tabpanel">
+                    <h6>Báo cáo chấm công</h6>
+                    <div class="row g-3">
+                      <div class="col-md-4">
+                        <div class="card text-center">
+                          <div class="card-body">
+                            <h5 style="color: var(--accent2);">160</h5>
+                            <p class="mb-0">Tổng giờ tháng này</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="card text-center">
+                          <div class="card-body">
+                            <h5 style="color: #28a745;">8</h5>
+                            <p class="mb-0">Giờ tăng ca</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="card text-center">
+                          <div class="card-body">
+                            <h5 style="color: #ffc107;">95%</h5>
+                            <p class="mb-0">Tỷ lệ chấm công</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal Thêm hồ sơ -->
     <div class="modal fade" id="addFileModal" tabindex="-1" aria-labelledby="addFileModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -882,6 +1240,91 @@
       </div>
     </div>
 
+    <!-- Modal Tạo lịch làm việc -->
+    <div class="modal fade" id="createScheduleModal" tabindex="-1" aria-labelledby="createScheduleModalLabel" aria-hidden="true" style="z-index: 1060;">
+      <div class="modal-dialog">
+        <form class="modal-content" id="createScheduleForm">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createScheduleModalLabel">Tạo lịch làm việc</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="scheduleDate" class="form-label">Ngày làm việc</label>
+              <input type="date" class="form-control" id="scheduleDate" required>
+            </div>
+            <div class="mb-3">
+              <label for="scheduleShift" class="form-label">Ca làm việc</label>
+              <select class="form-control" id="scheduleShift" required>
+                <option value="Sáng">Ca sáng (08:00 - 12:00)</option>
+                <option value="Chiều">Ca chiều (13:00 - 17:00)</option>
+                <option value="Tối">Ca tối (18:00 - 22:00)</option>
+                <option value="Toàn thời gian">Toàn thời gian (08:00 - 17:00)</option>
+              </select>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="scheduleStartTime" class="form-label">Giờ bắt đầu</label>
+                  <input type="time" class="form-control" id="scheduleStartTime" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="scheduleEndTime" class="form-label">Giờ kết thúc</label>
+                  <input type="time" class="form-control" id="scheduleEndTime" required>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Tạo lịch</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Đăng ký tăng ca -->
+    <div class="modal fade" id="addOvertimeModal" tabindex="-1" aria-labelledby="addOvertimeModalLabel" aria-hidden="true" style="z-index: 1060;">
+      <div class="modal-dialog">
+        <form class="modal-content" id="addOvertimeForm">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addOvertimeModalLabel">Đăng ký tăng ca</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="overtimeDate" class="form-label">Ngày tăng ca</label>
+              <input type="date" class="form-control" id="overtimeDate" required>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="overtimeStartTime" class="form-label">Giờ bắt đầu</label>
+                  <input type="time" class="form-control" id="overtimeStartTime" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="overtimeEndTime" class="form-label">Giờ kết thúc</label>
+                  <input type="time" class="form-control" id="overtimeEndTime" required>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="overtimeReason" class="form-label">Lý do tăng ca</label>
+              <textarea class="form-control" id="overtimeReason" rows="3" required placeholder="Nhập lý do cần tăng ca..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-warning">Đăng ký</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Quản lý hiển thị section
@@ -890,99 +1333,1008 @@
             document.querySelectorAll('.content-section').forEach(section => {
                 section.style.display = 'none';
             });
-            
             // Hiển thị section được chọn
             document.getElementById(sectionName + 'Section').style.display = 'block';
-            
-            // Cập nhật active state cho menu
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Cập nhật tiêu đề header
-            const titles = {
-                'role': 'Chuyên viên pháp lý',
-                'hr': 'Quản lý nhân sự',
-                'settings': 'Cài đặt hệ thống'
-            };
-            document.querySelector('.main-header h1').textContent = titles[sectionName];
-            
-            // Load dữ liệu theo section
-            if (sectionName === 'hr') {
-                updateHRDashboard();
-                loadLeaveCalendar();
-            }
+        };
+        // ...existing code...
+
+        // === CHỨC NĂNG CHẤM CÔNG ===
+        window.showTimesheet = function() {
+            // Hiển thị modal chấm công
+            const timesheetModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('timesheetModal'));
+            timesheetModal.show();
         };
 
-        // Cập nhật dashboard HR
-        function updateHRDashboard() {
-            const officers = getOfficers();
-            const currentMonth = new Date().getMonth();
-            
-            document.getElementById('hrTotalEmployees').textContent = officers.length;
-            document.getElementById('hrActiveEmployees').textContent = officers.filter(o => o.status === 'Đang làm việc').length;
-            document.getElementById('hrOnLeave').textContent = officers.filter(o => o.status === 'Nghỉ phép').length;
-            document.getElementById('hrNewThisMonth').textContent = officers.filter(o => 
-                o.createdAt && new Date(o.createdAt).getMonth() === currentMonth
-            ).length;
-        }
+        // Hiển thị modal tạo lịch làm việc
+        window.showCreateScheduleModal = function() {
+            const timesheetModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('timesheetModal'));
+            timesheetModal.hide();
+            setTimeout(() => {
+                const createScheduleModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('createScheduleModal'));
+                createScheduleModal.show();
+            }, 300);
+            document.getElementById('createScheduleModal').addEventListener('hidden.bs.modal', function handler() {
+    setTimeout(() => {
+        timesheetModal.show();
+    }, 300); // delay để modal con biến mất hoàn toàn
+    this.removeEventListener('hidden.bs.modal', handler);
+});
+        };
 
-        // Load lịch nghỉ phép
-        function loadLeaveCalendar() {
-            const leaveData = [
-                { name: 'Nguyễn Văn A', dates: '15-20/8', type: 'Nghỉ phép' },
-                { name: 'Trần Thị B', dates: '22-24/8', type: 'Nghỉ ốm' },
-                { name: 'Lê Văn C', dates: '28-30/8', type: 'Nghỉ phép' }
-            ];
+        // Hiển thị modal đăng ký tăng ca
+        window.showOvertimeModal = function() {
+            const timesheetModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('timesheetModal'));
+            timesheetModal.hide();
+            setTimeout(() => {
+                const overtimeModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('addOvertimeModal'));
+                overtimeModal.show();
+            }, 300);
+            document.getElementById('addOvertimeModal').addEventListener('hidden.bs.modal', function handler() {
+                timesheetModal.show();
+                this.removeEventListener('hidden.bs.modal', handler);
+            });
+        };
+
+        // Xử lý form tạo lịch làm việc
+        document.getElementById('createScheduleForm').onsubmit = function(e) {
+            e.preventDefault();
+            const date = document.getElementById('scheduleDate').value;
+            const shift = document.getElementById('scheduleShift').value;
+            const startTime = document.getElementById('scheduleStartTime').value;
+            const endTime = document.getElementById('scheduleEndTime').value;
+
+            if (!date || !shift || !startTime || !endTime) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+
+            // Thêm lịch làm việc mới vào bảng
+            const tableBody = document.getElementById('scheduleTableBody');
+            const newRow = `
+                <tr>
+                    <td>${new Date(date).toLocaleDateString('vi-VN')}</td>
+                    <td>${shift}</td>
+                    <td>${startTime}</td>
+                    <td>${endTime}</td>
+                    <td><span class="badge bg-info">Đã lên lịch</span></td>
+                    <td><button class="btn btn-sm btn-outline-info">Chi tiết</button></td>
+                </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', newRow);
+
+            alert('Đã tạo lịch làm việc thành công!');
+            this.reset();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('createScheduleModal')).hide();
+        };
+
+        // Xử lý form đăng ký tăng ca
+        document.getElementById('addOvertimeForm').onsubmit = function(e) {
+            e.preventDefault();
+            const date = document.getElementById('overtimeDate').value;
+            const startTime = document.getElementById('overtimeStartTime').value;
+            const endTime = document.getElementById('overtimeEndTime').value;
+            const reason = document.getElementById('overtimeReason').value;
+
+            if (!date || !startTime || !endTime || !reason) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+
+            // Tính số giờ tăng ca
+            const start = new Date(`2025-01-01 ${startTime}`);
+            const end = new Date(`2025-01-01 ${endTime}`);
+            const diffHours = Math.abs(end - start) / (1000 * 60 * 60);
+
+            alert(`Đã đăng ký tăng ca thành công!\nNgày: ${new Date(date).toLocaleDateString('vi-VN')}\nSố giờ: ${diffHours} giờ\nLý do: ${reason}`);
             
-            document.getElementById('leaveCalendar').innerHTML = `
-                <div class="list-group list-group-flush">
-                    ${leaveData.map(leave => `
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>${leave.name}</strong><br>
-                                <small class="text-muted">${leave.dates}</small>
+            this.reset();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('addOvertimeModal')).hide();
+        };
+
+        // Check in
+        window.checkIn = function() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'});
+            document.getElementById('checkinTime').textContent = timeString;
+            alert(`Check in thành công lúc ${timeString}`);
+        };
+
+        // Check out
+        window.checkOut = function() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'});
+            document.getElementById('checkoutTime').textContent = timeString;
+            alert(`Check out thành công lúc ${timeString}`);
+        };
+
+        // === CHỨC NĂNG TUYỂN DỤNG ===
+        window.showRecruitment = function() {
+            // Tạo modal tuyển dụng
+            const recruitmentModal = `
+                <div class="modal fade" id="recruitmentModal" tabindex="-1">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><i class="fas fa-user-plus me-2"></i>Quản lý Tuyển dụng</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <span class="badge bg-${leave.type === 'Nghỉ phép' ? 'primary' : 'warning'}">${leave.type}</span>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6><i class="fas fa-list me-2"></i>Chức năng</h6>
+                                            </div>
+                                            <div class="card-body p-0">
+                                                <div class="list-group list-group-flush">
+                                                    <a href="#" class="list-group-item list-group-item-action active" onclick="showRecruitmentTab('job-posting')">
+                                                        <i class="fas fa-bullhorn me-2"></i>Đăng tin tuyển dụng
+                                                    </a>
+                                                    <a href="#" class="list-group-item list-group-item-action" onclick="showRecruitmentTab('applications')">
+                                                        <i class="fas fa-file-alt me-2"></i>Hồ sơ ứng viên
+                                                    </a>
+                                                    <a href="#" class="list-group-item list-group-item-action" onclick="showRecruitmentTab('interviews')">
+                                                        <i class="fas fa-calendar-check me-2"></i>Lịch phỏng vấn
+                                                    </a>
+                                                    <a href="#" class="list-group-item list-group-item-action" onclick="showRecruitmentTab('evaluation')">
+                                                        <i class="fas fa-star me-2"></i>Đánh giá ứng viên
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="col-md-9">
+                                        
+                                        <div id="job-posting-tab" class="recruitment-tab">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6>Đăng tin tuyển dụng</h6>
+                                                <button class="btn btn-success btn-sm" onclick="createJobPosting()">
+                                                    <i class="fas fa-plus"></i> Tạo tin tuyển dụng
+                                                </button>
+                                            </div>
+                                            <div id="jobPostingList"></div>
+                                        </div>
+                                        
+                                        
+                                        <div id="applications-tab" class="recruitment-tab" style="display: none;">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6>Hồ sơ ứng viên</h6>
+                                                <div>
+                                                    <select class="form-select form-select-sm" id="applicationFilter">
+                                                        <option value="">Tất cả trạng thái</option>
+                                                        <option value="Mới">Mới</option>
+                                                        <option value="Đang xét duyệt">Đang xét duyệt</option>
+                                                        <option value="Phỏng vấn">Phỏng vấn</option>
+                                                        <option value="Trúng tuyển">Trúng tuyển</option>
+                                                        <option value="Không trúng tuyển">Không trúng tuyển</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div id="applicationsList"></div>
+                                        </div>
+                                        
+                                        
+                                        <div id="interviews-tab" class="recruitment-tab" style="display: none;">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6>Lịch phỏng vấn</h6>
+                                                <button class="btn btn-primary btn-sm" onclick="scheduleInterview()">
+                                                    <i class="fas fa-calendar-plus"></i> Lên lịch phỏng vấn
+                                                </button>
+                                            </div>
+                                            <div id="interviewsList"></div>
+                                        </div>
+                                        
+                                        
+                                        <div id="evaluation-tab" class="recruitment-tab" style="display: none;">
+                                            <h6>Đánh giá ứng viên</h6>
+                                            <div id="evaluationList"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Xóa modal cũ nếu đã có để tránh lỗi khi mở lại
+            const oldModal = document.getElementById('recruitmentModal');
+            if (oldModal) oldModal.remove();
+            document.body.insertAdjacentHTML('beforeend', recruitmentModal);
+            loadRecruitmentData();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('recruitmentModal')).show();
+        };
+
+        // Chuyển tab tuyển dụng
+        window.showRecruitmentTab = function(tabName) {
+            document.querySelectorAll('.recruitment-tab').forEach(tab => tab.style.display = 'none');
+            document.getElementById(tabName + '-tab').style.display = 'block';
+            
+            document.querySelectorAll('#recruitmentModal .list-group-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tabName === 'applications') loadApplications();
+            if (tabName === 'interviews') loadInterviews();
+            if (tabName === 'evaluation') loadEvaluations();
+        };
+
+        // Load dữ liệu tuyển dụng
+        function loadRecruitmentData() {
+            const jobPostings = getJobPostings();
+            document.getElementById('jobPostingList').innerHTML = `
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Vị trí</th>
+                                <th>Yêu cầu</th>
+                                <th>Hạn nộp</th>
+                                <th>Trạng thái</th>
+                                <th>Ứng viên</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${jobPostings.map(job => `
+                                <tr>
+                                    <td>${job.position}</td>
+                                    <td>${job.requirements.substring(0, 50)}...</td>
+                                    <td>${new Date(job.deadline).toLocaleDateString('vi-VN')}</td>
+                                    <td><span class="badge bg-${job.status === 'Đang tuyển' ? 'success' : 'secondary'}">${job.status}</span></td>
+                                    <td><span class="badge bg-info">${job.applicants || 0}</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info" onclick="viewJobDetails(${job.id})">Chi tiết</button>
+                                        <button class="btn btn-sm btn-warning" onclick="editJobPosting(${job.id})">Sửa</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
                 </div>
             `;
         }
 
-        // Các chức năng HR
-        window.showRecruitment = function() {
-            alert('Chức năng tuyển dụng: Quản lý quy trình tuyển dụng, đăng tin tuyển dụng, sàng lọc hồ sơ ứng viên, lên lịch phỏng vấn');
-        };
-
-        window.showTimesheet = function() {
-            alert('Chức năng chấm công: Theo dõi giờ làm việc, quản lý ca làm việc, tính toán giờ tăng ca, báo cáo chấm công');
-        };
-
-        window.manageLeave = function() {
-            alert('Quản lý nghỉ phép: Duyệt đơn nghỉ phép, theo dõi số ngày phép còn lại, lập lịch nghỉ phép, báo cáo nghỉ phép');
-        };
-
-        window.manageTraining = function() {
-            alert('Quản lý đào tạo: Lên kế hoạch đào tạo, đăng ký khóa học, theo dõi tiến độ học tập, đánh giá hiệu quả đào tạo');
-        };
-
-        window.managePerformance = function() {
-            alert('Quản lý KPI: Thiết lập mục tiêu KPI, đánh giá hiệu suất định kỳ, phản hồi 360 độ, kế hoạch phát triển cá nhân');
-        };
-
-        window.manageSalary = function() {
-            alert('Quản lý lương: Tính toán lương, quản lý phụ cấp, xử lý thuế TNCN, báo cáo bảng lương, quản lý phúc lợi');
-        };
-
-        // Các chức năng Settings
-        window.changePassword = function() {
-            const newPassword = prompt('Nhập mật khẩu mới:');
-            if (newPassword && newPassword.length >= 6) {
-                alert('Đổi mật khẩu thành công!');
-            } else if (newPassword) {
-                alert('Mật khẩu phải có ít nhất 6 ký tự!');
+        // Tạo tin tuyển dụng
+        window.createJobPosting = function() {
+            const position = prompt('Vị trí tuyển dụng:');
+            const requirements = prompt('Yêu cầu công việc:');
+            const deadline = prompt('Hạn nộp (YYYY-MM-DD):');
+            
+            if (position && requirements && deadline) {
+                const jobPostings = getJobPostings();
+                jobPostings.push({
+                    id: Date.now(),
+                    position, requirements, deadline,
+                    status: 'Đang tuyển',
+                    applicants: 0,
+                    createdAt: new Date().toISOString()
+                });
+                setJobPostings(jobPostings);
+                loadRecruitmentData();
             }
         };
+
+        // Load hồ sơ ứng viên
+        function loadApplications() {
+            const applications = getApplications();
+            document.getElementById('applicationsList').innerHTML = `
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Vị trí ứng tuyển</th>
+                                <th>Ngày nộp</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${applications.map(app => `
+                                <tr>
+                                    <td>${app.name}</td>
+                                    <td>${app.email}</td>
+                                    <td>${app.position}</td>
+                                    <td>${new Date(app.submittedAt).toLocaleDateString('vi-VN')}</td>
+                                    <td><span class="badge bg-${getStatusColor(app.status)}">${app.status}</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info" onclick="viewApplication(${app.id})">Xem</button>
+                                        <button class="btn btn-sm btn-success" onclick="approveApplication(${app.id})">Duyệt</button>
+                                        <button class="btn btn-sm btn-danger" onclick="rejectApplication(${app.id})">Từ chối</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        // === CHỨC NĂNG CHẤM CÔNG ===
+        window.showTimesheet = function() {
+            const timesheetModal = `
+                <div class="modal fade" id="timesheetModal" tabindex="-1">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><i class="fas fa-clock me-2"></i>Hệ thống Chấm công</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    
+                                    <div class="col-md-3">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6><i class="fas fa-list me-2"></i>Chức năng</h6>
+                                            </div>
+                                            <div class="card-body p-0">
+                                                <div class="list-group list-group-flush">
+                                                    <a href="#" class="list-group-item list-group-item-action active" onclick="showTimesheetTab('checkin')">
+                                                        <i class="fas fa-sign-in-alt me-2"></i>Check in/out
+                                                    </a>
+                                                    <a href="#" class="list-group-item list-group-item-action" onclick="showTimesheetTab('schedule')">
+                                                        <i class="fas fa-calendar me-2"></i>Lịch làm việc
+                                                    </a>
+                                                    <a href="#" class="list-group-item list-group-item-action" onclick="showTimesheetTab('overtime')">
+                                                        <i class="fas fa-clock me-2"></i>Giờ tăng ca
+                                                    </a>
+                                                    <a href="#" class="list-group-item list-group-item-action" onclick="showTimesheetTab('reports')">
+                                                        <i class="fas fa-chart-bar me-2"></i>Báo cáo chấm công
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="col-md-9">
+                                        
+                                        <div id="checkin-tab" class="timesheet-tab">
+                                            <div class="row mb-4">
+                                                <div class="col-md-6">
+                                                    <div class="card text-center">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title"><i class="fas fa-clock me-2"></i>Thời gian hiện tại</h5>
+                                                            <h2 id="currentTime" class="text-primary mb-3">--:--:--</h2>
+                                                            <p id="currentDate" class="text-muted mb-3"></p>
+                                                            <div class="d-grid gap-2">
+                                                                <button class="btn btn-success btn-lg" onclick="checkIn()">
+                                                                    <i class="fas fa-sign-in-alt me-2"></i>Check In
+                                                                </button>
+                                                                <button class="btn btn-danger btn-lg" onclick="checkOut()">
+                                                                    <i class="fas fa-sign-out-alt me-2"></i>Check Out
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h6><i class="fas fa-calendar-day me-2"></i>Trạng thái hôm nay</h6>
+                                                        </div>
+                                                        <div class="card-body" id="todayStatus">
+                                                            <!-- Sẽ load bằng JS -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="attendanceHistory"></div>
+                                        </div>
+                                        
+                                        
+                                        <div id="schedule-tab" class="timesheet-tab" style="display: none;">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6>Lịch làm việc tháng ${new Date().getMonth() + 1}</h6>
+                                                <button class="btn btn-primary btn-sm" onclick="createSchedule()">
+                                                    <i class="fas fa-plus"></i> Tạo lịch
+                                                </button>
+                                            </div>
+                                            <div id="workSchedule">
+                                                <div class="table-responsive">
+                                                    <table class="table table-dark table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Ngày</th>
+                                                                <th>Ca làm việc</th>
+                                                                <th>Giờ bắt đầu</th>
+                                                                <th>Giờ kết thúc</th>
+                                                                <th>Trạng thái</th>
+                                                                <th>Thao tác</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="scheduleTableBody">
+                                                            <!-- Sẽ load bằng JS -->
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        <div id="overtime-tab" class="timesheet-tab" style="display: none;">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6>Quản lý giờ tăng ca</h6>
+                                                <button class="btn btn-warning btn-sm" onclick="addOvertime()">
+                                                    <i class="fas fa-plus"></i> Đăng ký tăng ca
+                                                </button>
+                                            </div>
+                                            <div id="overtimeList">
+                                                <div class="table-responsive">
+                                                    <table class="table table-dark table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Ngày</th>
+                                                                <th>Giờ bắt đầu</th>
+                                                                <th>Giờ kết thúc</th>
+                                                                <th>Số giờ</th>
+                                                                <th>Lý do</th>
+                                                                <th>Trạng thái</th>
+                                                                <th>Thao tác</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="overtimeTableBody">
+                                                            <!-- Sẽ load bằng JS -->
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        <div id="reports-tab" class="timesheet-tab" style="display: none;">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h6>Thống kê tháng này</h6>
+                                                        </div>
+                                                        <div class="card-body" id="monthlyStats">
+                                                            <div class="row text-center">
+                                                                <div class="col-6">
+                                                                    <h4 id="totalWorkDays">0</h4>
+                                                                    <small>Ngày làm việc</small>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <h4 id="totalWorkHours">0</h4>
+                                                                    <small>Tổng giờ làm</small>
+                                                                </div>
+                                                                <div class="col-6 mt-3">
+                                                                    <h4 id="avgWorkHours">0</h4>
+                                                                    <small>Trung bình/ngày</small>
+                                                                </div>
+                                                                <div class="col-6 mt-3">
+                                                                    <h4 id="totalOvertimeHours">0</h4>
+                                                                    <small>Giờ tăng ca</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h6>Xuất báo cáo</h6>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Từ ngày:</label>
+                                                                <input type="date" class="form-control" id="reportFromDate">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Đến ngày:</label>
+                                                                <input type="date" class="form-control" id="reportToDate">
+                                                            </div>
+                                                            <button class="btn btn-success w-100 mb-2" onclick="exportAttendance()">
+                                                                <i class="fas fa-file-excel me-2"></i>Xuất Excel
+                                                            </button>
+                                                            <button class="btn btn-info w-100" onclick="exportPDF()">
+                                                                <i class="fas fa-file-pdf me-2"></i>Xuất PDF
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Xóa modal cũ nếu đã có để tránh lỗi khi mở lại
+            const oldModal = document.getElementById('timesheetModal');
+            if (oldModal) oldModal.remove();
+            document.body.insertAdjacentHTML('beforeend', timesheetModal);
+            loadTimesheetData();
+            startTimeClock();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('timesheetModal')).show();
+        };
+
+        // Chuyển tab chấm công
+        window.showTimesheetTab = function(tabName) {
+            document.querySelectorAll('.timesheet-tab').forEach(tab => tab.style.display = 'none');
+            document.getElementById(tabName + '-tab').style.display = 'block';
+            
+            document.querySelectorAll('#timesheetModal .list-group-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tabName === 'schedule') loadWorkSchedule();
+            if (tabName === 'overtime') loadOvertimeList();
+            if (tabName === 'reports') loadAttendanceReports();
+        };
+
+        // Cập nhật đồng hồ
+        function startTimeClock() {
+            function updateClock() {
+                const now = new Date();
+                const timeElement = document.getElementById('currentTime');
+                const dateElement = document.getElementById('currentDate');
+                
+                if (timeElement) {
+                    timeElement.textContent = now.toLocaleTimeString('vi-VN');
+                }
+                if (dateElement) {
+                    dateElement.textContent = now.toLocaleDateString('vi-VN', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                }
+            }
+            
+            updateClock(); // Cập nhật ngay lập tức
+            setInterval(updateClock, 1000); // Cập nhật mỗi giây
+        }
+
+        // Check in
+        window.checkIn = function() {
+            const attendances = getAttendances();
+            const today = new Date().toDateString();
+            const existing = attendances.find(a => new Date(a.date).toDateString() === today && a.employeeId === getCurrentEmployeeId());
+            
+            if (existing && existing.checkIn) {
+                alert('Bạn đã check in hôm nay!');
+                return;
+            }
+            
+            const checkInTime = new Date();
+            if (existing) {
+                existing.checkIn = checkInTime.toISOString();
+            } else {
+                attendances.push({
+                    id: Date.now(),
+                    employeeId: getCurrentEmployeeId(),
+                    date: checkInTime.toISOString(),
+                    checkIn: checkInTime.toISOString()
+                });
+            }
+            
+            setAttendances(attendances);
+            loadTodayStatus();
+            alert(`Check in thành công lúc ${checkInTime.toLocaleTimeString('vi-VN')}`);
+        };
+
+        // Check out
+        window.checkOut = function() {
+            const attendances = getAttendances();
+            const today = new Date().toDateString();
+            const existing = attendances.find(a => new Date(a.date).toDateString() === today && a.employeeId === getCurrentEmployeeId());
+            
+            if (!existing || !existing.checkIn) {
+                alert('Bạn chưa check in hôm nay!');
+                return;
+            }
+            
+            if (existing.checkOut) {
+                alert('Bạn đã check out hôm nay!');
+                return;
+            }
+            
+            const checkOutTime = new Date();
+            existing.checkOut = checkOutTime.toISOString();
+            
+            // Tính giờ làm việc
+            const workHours = (new Date(existing.checkOut) - new Date(existing.checkIn)) / (1000 * 60 * 60);
+            existing.workHours = workHours.toFixed(2);
+            
+            setAttendances(attendances);
+            loadTodayStatus();
+            alert(`Check out thành công lúc ${checkOutTime.toLocaleTimeString('vi-VN')}\nTổng giờ làm: ${workHours.toFixed(2)} giờ`);
+        };
+
+        // Load trạng thái hôm nay
+        function loadTodayStatus() {
+            const attendances = getAttendances();
+            const today = new Date().toDateString();
+            const todayRecord = attendances.find(a => new Date(a.date).toDateString() === today && a.employeeId === getCurrentEmployeeId());
+            
+            const statusElement = document.getElementById('todayStatus');
+            if (statusElement) {
+                const statusHtml = todayRecord ? `
+                    <p><strong>Check in:</strong> ${todayRecord.checkIn ? new Date(todayRecord.checkIn).toLocaleTimeString('vi-VN') : 'Chưa check in'}</p>
+                    <p><strong>Check out:</strong> ${todayRecord.checkOut ? new Date(todayRecord.checkOut).toLocaleTimeString('vi-VN') : 'Chưa check out'}</p>
+                    <p><strong>Giờ làm:</strong> ${todayRecord.workHours || '0'} giờ</p>
+                ` : '<p class="text-muted">Chưa có dữ liệu hôm nay</p>';
+                
+                statusElement.innerHTML = statusHtml;
+            }
+        }
+
+        // Load dữ liệu chấm công
+        function loadTimesheetData() {
+            loadTodayStatus();
+            loadAttendanceHistory();
+            updateMonthlyStats();
+        }
+
+        // Cập nhật thống kê tháng
+        function updateMonthlyStats() {
+            const attendances = getAttendances().filter(a => a.employeeId === getCurrentEmployeeId());
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            
+            const monthlyData = attendances.filter(a => {
+                const date = new Date(a.date);
+                return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+            });
+
+            const totalWorkDays = monthlyData.filter(a => a.checkIn && a.checkOut).length;
+            const totalWorkHours = monthlyData.reduce((sum, a) => sum + (parseFloat(a.workHours) || 0), 0);
+            const avgWorkHours = totalWorkDays > 0 ? (totalWorkHours / totalWorkDays).toFixed(1) : 0;
+            
+            const overtimes = getOvertimes().filter(o => o.employeeId === getCurrentEmployeeId());
+            const monthlyOvertimes = overtimes.filter(o => {
+                const date = new Date(o.date);
+                return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+            });
+            const totalOvertimeHours = monthlyOvertimes.reduce((sum, o) => sum + (parseFloat(o.hours) || 0), 0);
+
+            document.getElementById('totalWorkDays').textContent = totalWorkDays;
+            document.getElementById('totalWorkHours').textContent = totalWorkHours.toFixed(1);
+            document.getElementById('avgWorkHours').textContent = avgWorkHours;
+            document.getElementById('totalOvertimeHours').textContent = totalOvertimeHours.toFixed(1);
+        }
+
+        // Load lịch sử chấm công
+        function loadAttendanceHistory() {
+            const attendances = getAttendances().filter(a => a.employeeId === getCurrentEmployeeId()).slice(-7);
+            const historyElement = document.getElementById('attendanceHistory');
+            if (historyElement) {
+                historyElement.innerHTML = `
+                    <h6>Lịch sử 7 ngày gần nhất</h6>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Ngày</th>
+                                    <th>Check In</th>
+                                    <th>Check Out</th>
+                                    <th>Giờ làm</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${attendances.map(record => `
+                                    <tr>
+                                        <td>${new Date(record.date).toLocaleDateString('vi-VN')}</td>
+                                        <td>${record.checkIn ? new Date(record.checkIn).toLocaleTimeString('vi-VN') : '-'}</td>
+                                        <td>${record.checkOut ? new Date(record.checkOut).toLocaleTimeString('vi-VN') : '-'}</td>
+                                        <td>${record.workHours || '0'} giờ</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+        }
+
+        // Các hàm helper cho localStorage
+        function getJobPostings() { return JSON.parse(localStorage.getItem('jobPostings') || '[]'); }
+        function setJobPostings(data) { localStorage.setItem('jobPostings', JSON.stringify(data)); }
+        function getApplications() { return JSON.parse(localStorage.getItem('applications') || '[]'); }
+        function setApplications(data) { localStorage.setItem('applications', JSON.stringify(data)); }
+        function getAttendances() { return JSON.parse(localStorage.getItem('attendances') || '[]'); }
+        function setAttendances(data) { localStorage.setItem('attendances', JSON.stringify(data)); }
+        function getOvertimes() { return JSON.parse(localStorage.getItem('overtimes') || '[]'); }
+        function setOvertimes(data) { localStorage.setItem('overtimes', JSON.stringify(data)); }
+        function getSchedules() { return JSON.parse(localStorage.getItem('workSchedules') || '[]'); }
+        function setSchedules(data) { localStorage.setItem('workSchedules', JSON.stringify(data)); }
+        function getCurrentEmployeeId() { return 1; } // ID nhân viên hiện tại
+        function getStatusColor(status) {
+            const colors = {
+                'Mới': 'primary',
+                'Đang xét duyệt': 'info', 
+                'Phỏng vấn': 'warning',
+                'Trúng tuyển': 'success',
+                'Không trúng tuyển': 'danger'
+            };
+            return colors[status] || 'secondary';
+        }
+
+        // Các hàm placeholder cho tuyển dụng
+        window.viewJobDetails = function(jobId) {
+            const job = getJobPostings().find(j => j.id === jobId);
+            if (job) {
+                alert(`Vị trí: ${job.position}\nYêu cầu: ${job.requirements}\nHạn nộp: ${new Date(job.deadline).toLocaleDateString('vi-VN')}`);
+            }
+        };
+
+        window.editJobPosting = function(jobId) {
+            alert('Chức năng chỉnh sửa tin tuyển dụng sẽ được phát triển');
+        };
+
+        window.scheduleInterview = function() {
+            alert('Chức năng lên lịch phỏng vấn sẽ được phát triển');
+        };
+
+        window.viewApplication = function(appId) {
+            alert('Chức năng xem hồ sơ ứng viên sẽ được phát triển');
+        };
+
+        window.approveApplication = function(appId) {
+            alert('Đã duyệt hồ sơ ứng viên');
+        };
+
+        window.rejectApplication = function(appId) {
+            alert('Đã từ chối hồ sơ ứng viên');
+        };
+
+        // Các hàm chức năng cho lịch làm việc và tăng ca
+        window.createSchedule = function() {
+            // Đảm bảo modal hiển thị đúng z-index
+            const modal = document.getElementById('createScheduleModal');
+            if (modal) {
+                modal.style.zIndex = '1060';
+                bootstrap.Modal.getOrCreateInstance(modal).show();
+            }
+        };
+
+        window.addOvertime = function() {
+            // Đảm bảo modal hiển thị đúng z-index
+            const modal = document.getElementById('addOvertimeModal');
+            if (modal) {
+                modal.style.zIndex = '1060';
+                bootstrap.Modal.getOrCreateInstance(modal).show();
+            }
+        };
+
+        // Form handlers cho modal
+        document.addEventListener('DOMContentLoaded', function() {
+            // Xử lý z-index cho modal
+            document.addEventListener('show.bs.modal', function (event) {
+                const modalId = event.target.id;
+                if (modalId === 'createScheduleModal' || modalId === 'addOvertimeModal') {
+                    event.target.style.zIndex = '1060';
+                    setTimeout(() => {
+                        const backdrop = document.querySelector('.modal-backdrop:last-child');
+                        if (backdrop) {
+                            backdrop.style.zIndex = '1055';
+                        }
+                    }, 100);
+                }
+            });
+            
+            // Form tạo lịch làm việc
+            document.getElementById('createScheduleForm').onsubmit = function(e) {
+                e.preventDefault();
+                const date = document.getElementById('scheduleDate').value;
+                const shift = document.getElementById('scheduleShift').value;
+                const startTime = document.getElementById('scheduleStartTime').value;
+                const endTime = document.getElementById('scheduleEndTime').value;
+                
+                if (date && shift && startTime && endTime) {
+                    const schedules = getSchedules();
+                    schedules.push({
+                        id: Date.now(),
+                        employeeId: getCurrentEmployeeId(),
+                        date, shift, startTime, endTime,
+                        status: 'Chưa bắt đầu',
+                        createdAt: new Date().toISOString()
+                    });
+                    setSchedules(schedules);
+                    loadWorkSchedule();
+                    this.reset();
+                    bootstrap.Modal.getOrCreateInstance(document.getElementById('createScheduleModal')).hide();
+                    alert('Tạo lịch làm việc thành công!');
+                }
+            };
+
+            // Form đăng ký tăng ca
+            document.getElementById('addOvertimeForm').onsubmit = function(e) {
+                e.preventDefault();
+                const date = document.getElementById('overtimeDate').value;
+                const startTime = document.getElementById('overtimeStartTime').value;
+                const endTime = document.getElementById('overtimeEndTime').value;
+                const reason = document.getElementById('overtimeReason').value;
+                
+                if (date && startTime && endTime && reason) {
+                    // Tính số giờ tăng ca
+                    const start = new Date(`${date} ${startTime}`);
+                    const end = new Date(`${date} ${endTime}`);
+                    const hours = (end - start) / (1000 * 60 * 60);
+                    
+                    if (hours <= 0) {
+                        alert('Giờ kết thúc phải sau giờ bắt đầu!');
+                        return;
+                    }
+                    
+                    const overtimes = getOvertimes();
+                    overtimes.push({
+                        id: Date.now(),
+                        employeeId: getCurrentEmployeeId(),
+                        date, startTime, endTime, reason,
+                        hours: hours.toFixed(2),
+                        status: 'Chờ duyệt',
+                        createdAt: new Date().toISOString()
+                    });
+                    setOvertimes(overtimes);
+                    loadOvertimeList();
+                    this.reset();
+                    bootstrap.Modal.getOrCreateInstance(document.getElementById('addOvertimeModal')).hide();
+                    alert('Đăng ký tăng ca thành công!');
+                }
+            };
+        });
+
+        window.exportAttendance = function() {
+            const fromDate = document.getElementById('reportFromDate')?.value;
+            const toDate = document.getElementById('reportToDate')?.value;
+            
+            if (!fromDate || !toDate) {
+                alert('Vui lòng chọn khoảng thời gian để xuất báo cáo!');
+                return;
+            }
+            
+            const attendances = getAttendances().filter(a => {
+                const attendanceDate = new Date(a.date).toISOString().split('T')[0];
+                return attendanceDate >= fromDate && attendanceDate <= toDate && a.employeeId === getCurrentEmployeeId();
+            });
+            
+            // Tạo CSV data
+            let csvContent = "Ngày,Check In,Check Out,Giờ làm việc\\n";
+            attendances.forEach(record => {
+                const date = new Date(record.date).toLocaleDateString('vi-VN');
+                const checkIn = record.checkIn ? new Date(record.checkIn).toLocaleTimeString('vi-VN') : '-';
+                const checkOut = record.checkOut ? new Date(record.checkOut).toLocaleTimeString('vi-VN') : '-';
+                const workHours = record.workHours || '0';
+                csvContent += `${date},${checkIn},${checkOut},${workHours}\\n`;
+            });
+            
+            // Download file
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `cham-cong-${fromDate}-${toDate}.csv`;
+            link.click();
+            
+            alert('Báo cáo đã được xuất thành công!');
+        };
+
+        window.exportPDF = function() {
+            alert('Chức năng xuất PDF đang được phát triển. Hiện tại hãy sử dụng xuất Excel.');
+        };
+
+        function loadInterviews() {
+            // Placeholder function
+        }
+
+        function loadEvaluations() {
+            // Placeholder function
+        }
+
+        function loadWorkSchedule() {
+            const schedules = getSchedules().filter(s => s.employeeId === getCurrentEmployeeId());
+            const tbody = document.getElementById('scheduleTableBody');
+            if (tbody) {
+                tbody.innerHTML = schedules.map(schedule => `
+                    <tr>
+                        <td>${new Date(schedule.date).toLocaleDateString('vi-VN')}</td>
+                        <td>${schedule.shift}</td>
+                        <td>${schedule.startTime}</td>
+                        <td>${schedule.endTime}</td>
+                        <td><span class="badge bg-${schedule.status === 'Hoàn thành' ? 'success' : schedule.status === 'Đang thực hiện' ? 'primary' : 'secondary'}">${schedule.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" onclick="deleteSchedule(${schedule.id})" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        function loadOvertimeList() {
+            const overtimes = getOvertimes().filter(o => o.employeeId === getCurrentEmployeeId());
+            const tbody = document.getElementById('overtimeTableBody');
+            if (tbody) {
+                tbody.innerHTML = overtimes.map(overtime => `
+    <tr>
+        <td>${new Date(overtime.date).toLocaleDateString('vi-VN')}</td>
+        <td>${overtime.startTime}</td>
+        <td>${overtime.endTime}</td>
+        <td>${overtime.hours}h</td>
+        <td>${overtime.reason}</td>
+        <td><span class="badge bg-${overtime.status === 'Đã duyệt' ? 'success' : overtime.status === 'Từ chối' ? 'danger' : 'warning'}">${overtime.status}</span></td>
+        <td>
+            <button class="btn btn-sm btn-success me-1" onclick="approveOvertime(${overtime.id})" ${overtime.status !== 'Chờ duyệt' ? 'disabled' : ''}>Duyệt</button>
+            <button class="btn btn-sm btn-danger me-1" onclick="rejectOvertime(${overtime.id})" ${overtime.status !== 'Chờ duyệt' ? 'disabled' : ''}>Từ chối</button>
+            <button class="btn btn-sm btn-secondary" onclick="deleteOvertime(${overtime.id})" title="Xóa">
+                <i class="fas fa-trash"></i>
+            </button>
+        </td>
+    </tr>
+`).join('');
+            }
+        }
+        window.approveOvertime = function(overtimeId) {
+    const overtimes = getOvertimes();
+    const overtime = overtimes.find(o => o.id === overtimeId);
+    if (overtime && overtime.status === 'Chờ duyệt') {
+        overtime.status = 'Đã duyệt';
+        setOvertimes(overtimes);
+        loadOvertimeList();
+        alert('Đã duyệt đăng ký tăng ca!');
+    }
+};
+
+window.rejectOvertime = function(overtimeId) {
+    const overtimes = getOvertimes();
+    const overtime = overtimes.find(o => o.id === overtimeId);
+    if (overtime && overtime.status === 'Chờ duyệt') {
+        overtime.status = 'Từ chối';
+        setOvertimes(overtimes);
+        loadOvertimeList();
+        alert('Đã từ chối đăng ký tăng ca!');
+    }
+};
+
+        function loadAttendanceReports() {
+            updateMonthlyStats();
+            // Set default dates
+            const now = new Date();
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+            const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            
+            const fromDateInput = document.getElementById('reportFromDate');
+            const toDateInput = document.getElementById('reportToDate');
+            
+            if (fromDateInput && toDateInput) {
+                fromDateInput.value = firstDay.toISOString().split('T')[0];
+                toDateInput.value = lastDay.toISOString().split('T')[0];
+            }
+        }
+
+        // Thêm các hàm xóa
+        window.deleteSchedule = function(scheduleId) {
+            if (confirm('Bạn có chắc muốn xóa lịch làm việc này?')) {
+                const schedules = getSchedules();
+                const updatedSchedules = schedules.filter(s => s.id !== scheduleId);
+                setSchedules(updatedSchedules);
+                loadWorkSchedule();
+            }
+        };
+
+        window.deleteOvertime = function(overtimeId) {
+            if (confirm('Bạn có chắc muốn xóa đăng ký tăng ca này?')) {
+                const overtimes = getOvertimes();
+                const updatedOvertimes = overtimes.filter(o => o.id !== overtimeId);
+                setOvertimes(updatedOvertimes);
+                loadOvertimeList();
+            }
+        };
+
+        // Cập nhật các hàm showRecruitment và showTimesheet đã có
+        // (Ghi đè các hàm alert đơn giản trước đó)
+
+        // ...existing code continues...
 
         window.exportData = function() {
             const officers = getOfficers();

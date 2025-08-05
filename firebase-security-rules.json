@@ -872,6 +872,21 @@
         },
         "permissions": {
           ".validate": "!newData.exists() || newData.isString()"
+        },
+        "department": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "location": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "requirements": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "updatedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
         }
       }
     },
@@ -988,8 +1003,8 @@
       }
     },
     "departments": {
-      ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.uid === 'C0KP03RRSFahajSy8RnQhWyV1T82')",
-      ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.uid === 'C0KP03RRSFahajSy8RnQhWyV1T82')",
+      ".read": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
       "$departmentId": {
         ".validate": "newData.hasChildren(['name', 'code', 'status'])",
         "name": {
@@ -1036,9 +1051,9 @@
         "name",
         "createdAt"
       ],
+      ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
       "$partnerId": {
-        ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.role === 'affiliate-manager')",
-        ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.role === 'affiliate-manager')",
         "name": {
           ".validate": "newData.isString()"
         },
@@ -1067,7 +1082,194 @@
           ".validate": "newData.isString()"
         }
       }
+    },
+    "affiliateCampaigns": {
+      ".indexOn": [
+        "status",
+        "partner",
+        "createdAt",
+        "startDate",
+        "endDate"
+      ],
+      ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      "$campaignId": {
+        "name": {
+          ".validate": "newData.isString()"
+        },
+        "partner": {
+          ".validate": "newData.isString()"
+        },
+        "startDate": {
+          ".validate": "newData.isString()"
+        },
+        "endDate": {
+          ".validate": "newData.isString()"
+        },
+        "commission": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+        },
+        "target": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "clicks": {
+          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0)"
+        },
+        "bookings": {
+          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0)"
+        },
+        "revenue": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'Đang chạy' || newData.val() === 'Tạm dừng' || newData.val() === 'Kết thúc')"
+        },
+        "description": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+    "affiliateCommissions": {
+      ".indexOn": [
+        "status",
+        "partner",
+        "month",
+        "createdAt"
+      ],
+      ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      "$commissionId": {
+        "partner": {
+          ".validate": "newData.isString()"
+        },
+        "month": {
+          ".validate": "newData.isString()"
+        },
+        "revenue": {
+          ".validate": "newData.isString()"
+        },
+        "commission": {
+          ".validate": "newData.isString()"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'Chờ thanh toán' || newData.val() === 'Đã thanh toán')"
+        },
+        "paymentDate": {
+          ".validate": "!newData.exists() || newData.isString() || newData.val() === null"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+        "updatedAt": {
+          ".validate": "!newData.exists() || newData.isString()"
+        }
+      }
+    },
+    "affiliateSupport": {
+      ".indexOn": [
+        "status",
+        "partner",
+        "type",
+        "priority",
+        "createdAt"
+      ],
+      ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      "$supportId": {
+        "partner": {
+          ".validate": "newData.isString()"
+        },
+        "type": {
+          ".validate": "newData.isString() && (newData.val() === 'API' || newData.val() === 'Tracking' || newData.val() === 'Payment' || newData.val() === 'Technical' || newData.val() === 'Other')"
+        },
+        "title": {
+          ".validate": "newData.isString()"
+        },
+        "content": {
+          ".validate": "newData.isString()"
+        },
+        "priority": {
+          ".validate": "newData.isString() && (newData.val() === 'Low' || newData.val() === 'Medium' || newData.val() === 'High' || newData.val() === 'Urgent')"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'Chờ xử lý' || newData.val() === 'Đang xử lý' || newData.val() === 'Đã phản hồi' || newData.val() === 'Đã đóng')"
+        },
+        "email": {
+          ".validate": "newData.isString()"
+        },
+        "response": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+    "staffAccess": {
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      ".read": "auth != null",
+      "$email": {
+        ".validate": "newData.isString() && (newData.val() === 'affiliate-manager' || newData.val() === 'booking-moderator' || newData.val() === 'content-admin' || newData.val() === 'customer-support' || newData.val() === 'data-analyst' || newData.val() === 'finance-manager' || newData.val() === 'marketing-seo' || newData.val() === 'web-developer')"
+      }
+    },
+    "leaveRequests": {
+      ".indexOn": ["employeeId"],
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$requestId": {
+        ".validate": "newData.hasChildren(['employeeId', 'startDate', 'endDate', 'reason', 'status', 'createdAt'])",
+        "employeeId": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "startDate": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "endDate": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "reason": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'approved' || newData.val() === 'rejected')"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "note": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "type": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "employeeName": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "approver": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "approvedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "rejectedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "rejectionReason": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
     }
   }
 }
-

@@ -7,10 +7,13 @@
     <!-- Bootstrap, FontAwesome, Chart.js -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <style>
         :root {
             --main-bg: #181c2f;
@@ -195,10 +198,93 @@
             background: var(--accent2);
         }
         .sidebar .nav-item.booking { color: #ffb300; }
+        
+        /* Booking status badges */
+        .status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-confirmed {
+            background: #d1edff;
+            color: #0c5460;
+        }
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
         .sidebar .nav-item.checkin { color: #00eaff; }
         .sidebar .nav-item.housekeeping { color: #7c3aed; }
         .sidebar .nav-item.feedback { color: #ff4081; }
         .sidebar .nav-item.stats { color: #00e676; }
+
+        /* CSS cho modal chấm công */
+        .modal-content {
+            background-color: var(--card-bg) !important;
+            border: 1px solid var(--border) !important;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid var(--border) !important;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid var(--border) !important;
+        }
+        
+        .modal-title {
+            color: var(--accent2) !important;
+        }
+        
+        .btn-close {
+            filter: invert(1);
+        }
+        
+        .modal { z-index: 1050; }
+        .modal-backdrop { z-index: 1040; }
+        
+        #timesheetModal { z-index: 1055; }
+        #timesheetModal .modal-backdrop { z-index: 1050; }
+        
+        #createScheduleModal, #addOvertimeModal { z-index: 1060 !important; }
+        #createScheduleModal .modal-backdrop, #addOvertimeModal .modal-backdrop { z-index: 1055 !important; }
+        
+        .modal.show { z-index: 1060 !important; }
+        .modal.show .modal-backdrop { z-index: 1055 !important; }
+        
+        .card {
+            background-color: var(--card-bg) !important;
+            border: 1px solid var(--border) !important;
+            color: var(--text) !important;
+        }
+        
+        .card-header {
+            background-color: rgba(124, 58, 237, 0.1) !important;
+            border-bottom: 1px solid var(--border) !important;
+            color: var(--accent2) !important;
+        }
+        
+        .list-group-item {
+            background-color: var(--card-bg) !important;
+            border-color: var(--border) !important;
+            color: var(--text) !important;
+        }
+        
+        .list-group-item.active {
+            background-color: var(--accent) !important;
+            border-color: var(--accent) !important;
+        }
 
         @media (max-width: 900px) {
             .sidebar { width: 80px; }
@@ -224,11 +310,9 @@
         <a href="#profile" class="nav-item active" onclick="showSection('profile')"><i class="fas fa-id-badge"></i> Hồ sơ cá nhân</a>
         <a href="#attendance" class="nav-item" onclick="showSection('attendance')"><i class="fas fa-calendar-check"></i> Chấm công</a>
         <a href="#leave" class="nav-item" onclick="showSection('leave')"><i class="fas fa-plane-departure"></i> Xin nghỉ phép</a>
-        <a href="#booking" class="nav-item booking" onclick="showSection('booking')"><i class="fas fa-bed"></i> Quản lý đặt phòng</a>
-        <a href="#checkin" class="nav-item checkin" onclick="showSection('checkin')"><i class="fas fa-sign-in-alt"></i> Check-in/Check-out</a>
-        <a href="#housekeeping" class="nav-item housekeeping" onclick="showSection('housekeeping')"><i class="fas fa-broom"></i> Giao việc buồng phòng</a>
-        <a href="#feedback" class="nav-item feedback" onclick="showSection('feedback')"><i class="fas fa-comment-dots"></i> Phản hồi khách</a>
-        <a href="#stats" class="nav-item stats" onclick="showSection('stats')"><i class="fas fa-chart-bar"></i> Thống kê cá nhân</a>
+        <a href="#booking" class="nav-item booking" onclick="showSection('booking')"><i class="fas fa-bed"></i> Đặt phòng</a>
+        <a href="#feedback" class="nav-item feedback" onclick="showSection('feedback')"><i class="fas fa-comment-dots"></i> Phản hồi</a>
+        <a href="#stats" class="nav-item stats" onclick="showSection('stats')"><i class="fas fa-chart-bar"></i> Thống kê</a>
         <div class="sidebar-footer">
             <button class="btn" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</button>
         </div>
@@ -239,34 +323,16 @@
         <header class="main-header">
             <h1 class="h4 mb-0" style="color:var(--accent2);">Dashboard Nhân viên</h1>
             <div class="user-info">
-                <img src="images/z6704204165630_f126462fb6b33e841e82b706ba2e582c.jpg" alt="Avatar">
+                <img src="../images/z6704204165630_f126462fb6b33e841e82b706ba2e582c.jpg" alt="Avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiM3YzNhZWQiLz4KPHN2ZyB4PSIxMiIgeT0iMTIiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+CjxwYXRoIGQ9Ik0xMiAxMmMyLjIxIDAgNC0xLjc5IDQtNHMtMS43OS00LTQtNC00IDEuNzktNCA0IDEuNzkgNCA0IDR6bTAgMmMtMi42NyAwLTggMS4zNC04IDR2MmgxNnYtMmMwLTIuNjYtNS4zMy00LTgtNHoiLz4KPC9zdmc+Cjwvc3ZnPgo='">
                 <span><strong>Nguyễn Văn A</strong></span>
             </div>
         </header>
         <main class="content-wrapper">
-            <!-- Stat cards (demo) -->
-            <div class="stat-cards">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
-                    <div class="stat-label">Ngày làm việc tháng này</div>
-                    <div class="stat-value" id="stat-workdays">22</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-user-clock"></i></div>
-                    <div class="stat-label">Số lần đi muộn</div>
-                    <div class="stat-value" id="stat-late">2</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-plane-departure"></i></div>
-                    <div class="stat-label">Ngày nghỉ phép</div>
-                    <div class="stat-value" id="stat-leave">1</div>
-                </div>
-            </div>
             <!-- Hồ sơ cá nhân -->
             <section id="profile-section">
                 <div class="card-modern mb-4">
                     <div class="card-body profile-info">
-                        <img src="images/z6704204165630_f126462fb6b33e841e82b706ba2e582c.jpg" alt="Avatar">
+                        <img src="../images/z6704204165630_f126462fb6b33e841e82b706ba2e582c.jpg" alt="Avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjUwIiBmaWxsPSIjN2MzYWVkIi8+CjxzdmcgeD0iMzAiIHk9IjMwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPgo8cGF0aCBkPSJNMTIgMTJjMi4yMSAwIDQtMS43OSA0LTQtMS43OS00LTQtNC00IDQgMCAyLjIxIDEuNzkgNCA0IDR6bTAgMmMtMi42NyAwLTggMS4zNC04IDR2MmgxNnYtMmMwLTIuNjYtNS4zMy00LTgtNHoiLz4KPC9zdmc+Cjwvc3ZnPgo='">
                         <div class="info">
                             <h4 class="mb-1" style="color:var(--accent2);">Nguyễn Văn A</h4>
                             <div><i class="fas fa-envelope me-2"></i> nguyenvana@email.com</div>
@@ -275,7 +341,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Biểu đồ chấm công (demo) -->
                 <div class="card-modern mb-4">
                     <div class="card-body">
                         <div class="card-title">Biểu đồ chấm công tháng này</div>
@@ -289,88 +354,53 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="card-title">Chấm công hôm nay</div>
+                            <button class="btn btn-primary" onclick="showTimesheet()">
+                                <i class="fas fa-clock me-2"></i>Hệ thống chấm công
+                            </button>
                         </div>
-                        <form id="workplace-form" class="mb-4">
-                            <label class="mb-2">Hôm nay bạn làm việc ở đâu?</label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="workplace" id="office" value="office">
-                                <label class="form-check-label" for="office">Văn phòng</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="workplace" id="home" value="home">
-                                <label class="form-check-label" for="home">Tại nhà</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="workplace" id="outside" value="outside">
-                                <label class="form-check-label" for="outside">Công tác bên ngoài</label>
-                            </div>
-                        </form>
-                        <!-- Văn phòng: chỉ trưởng phòng điểm danh -->
-                        <div id="office-info" class="alert alert-info" style="display:none; background:#23244a; color:#7c3aed; border:none;">
-                            Chỉ trưởng phòng mới được điểm danh cho bạn.
-                        </div>
-                        <!-- Tại nhà: form báo cáo công việc -->
-                        <form id="home-form" style="display:none;" class="mb-4" enctype="multipart/form-data">
-                            <div class="mb-2">
-                                <label class="form-label">Làm việc gì?</label>
-                                <input type="text" class="form-control" id="home-task" required>
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label">Gặp khách hàng nào?</label>
-                                <input type="text" class="form-control" id="home-client">
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label">Kết quả?</label>
-                                <input type="text" class="form-control" id="home-result">
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label">Gửi ảnh/chứng từ (nếu có)</label>
-                                <input type="file" class="form-control" id="home-file" accept="image/*,application/pdf">
-                            </div>
-                            <button type="submit" class="btn btn-success mt-2">Gửi báo cáo công việc</button>
-                        </form>
-                        <!-- Công tác bên ngoài: GPS + nhật ký -->
-                        <div id="outside-form" style="display:none;">
-                            <button class="btn btn-primary mb-3" type="button" onclick="sendGPS()"><i class="fas fa-map-marker-alt me-1"></i> Gửi vị trí GPS</button>
-                            <form id="outside-log-form" class="mb-2">
-                                <div class="mb-2">
-                                    <label class="form-label">Nhật ký công việc (từng buổi)</label>
-                                    <textarea class="form-control" id="outside-log" rows="2" required></textarea>
+                        
+                        <!-- Quick check in/out -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h5>Check In</h5>
+                                        <p class="h4" id="checkinTime">--:--</p>
+                                        <button class="btn btn-success" onclick="quickCheckIn()">Check In</button>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-success">Gửi báo cáo công việc</button>
-                            </form>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h5>Check Out</h5>
+                                        <p class="h4" id="checkoutTime">--:--</p>
+                                        <button class="btn btn-danger" onclick="quickCheckOut()">Check Out</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="card-title mb-2">Trạng thái hôm nay</div>
+                        <div id="todayStatus" class="mb-3">
+                            <p class="text-muted">Chưa có dữ liệu hôm nay</p>
+                        </div>
+
                         <hr style="border-color:var(--border);">
-                        <div class="card-title mb-2">Lịch sử chấm công/báo cáo</div>
+                        <div class="card-title mb-2">Lịch sử chấm công</div>
                         <div class="table-responsive">
                             <table class="table table-modern table-hover align-middle">
                                 <thead>
                                     <tr>
                                         <th>Ngày</th>
-                                        <th>Địa điểm</th>
-                                        <th>Báo cáo/Nhật ký</th>
-                                        <th>File/GPS</th>
+                                        <th>Check In</th>
+                                        <th>Check Out</th>
+                                        <th>Giờ làm việc</th>
                                         <th>Trạng thái</th>
-                                        <th>Người duyệt</th>
                                     </tr>
                                 </thead>
                                 <tbody id="attendance-body">
-                                    <tr>
-                                        <td>2024-06-01</td>
-                                        <td>Văn phòng</td>
-                                        <td>Đã chấm công</td>
-                                        <td>--</td>
-                                        <td>Đã duyệt</td>
-                                        <td>--</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2024-05-31</td>
-                                        <td>Văn phòng</td>
-                                        <td>Đã chấm công</td>
-                                        <td>--</td>
-                                        <td>Đã duyệt</td>
-                                        <td>--</td>
-                                    </tr>
+                                    <!-- Dữ liệu sẽ được load bằng JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -381,7 +411,12 @@
             <section id="leave-section" style="display:none;">
                 <div class="card-modern mb-4">
                     <div class="card-body">
-                        <div class="card-title">Xin nghỉ phép</div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="card-title">Xin nghỉ phép</div>
+                            <button class="btn btn-info btn-sm" onclick="loadLeaveHistory()" title="Làm mới dữ liệu">
+                                <i class="fas fa-sync-alt me-1"></i> Làm mới
+                            </button>
+                        </div>
                         <form class="row g-2 align-items-end mb-3" onsubmit="requestLeave(event)">
                             <div class="col-md-3">
                                 <label class="form-label">Ngày nghỉ</label>
@@ -394,16 +429,52 @@
                                     <option value="Nghỉ phép năm">Nghỉ phép năm</option>
                                     <option value="Nghỉ ốm">Nghỉ ốm</option>
                                     <option value="Nghỉ việc riêng">Nghỉ việc riêng</option>
+                                    <option value="Nghỉ thai sản">Nghỉ thai sản</option>
+                                    <option value="Nghỉ tang lễ">Nghỉ tang lễ</option>
+                                    <option value="Nghỉ khẩn cấp">Nghỉ khẩn cấp</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Lý do</label>
-                                <input type="text" id="leave-reason" class="form-control" placeholder="Lý do" required>
+                                <input type="text" id="leave-reason" class="form-control" placeholder="Nhập lý do nghỉ..." required>
                             </div>
                             <div class="col-md-2">
                                 <button class="btn btn-success w-100" type="submit"><i class="fas fa-paper-plane me-1"></i> Gửi yêu cầu</button>
                             </div>
                         </form>
+                        
+                        <!-- Thông tin số ngày phép còn lại -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <div class="card text-center" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                                    <div class="card-body">
+                                        <h5 class="text-white">Phép năm còn lại</h5>
+                                        <p class="h3 text-white" id="remainingAnnualLeave">12</p>
+                                        <small class="text-white">ngày</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-center" style="background: linear-gradient(135deg, #ffc107, #fd7e14);">
+                                    <div class="card-body">
+                                        <h5 class="text-white">Đã sử dụng</h5>
+                                        <p class="h3 text-white" id="usedLeave">3</p>
+                                        <small class="text-white">ngày</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-center" style="background: linear-gradient(135deg, #6f42c1, #e83e8c);">
+                                    <div class="card-body">
+                                        <h5 class="text-white">Tổng phép năm</h5>
+                                        <p class="h3 text-white" id="totalAnnualLeave">15</p>
+                                        <small class="text-white">ngày</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-title mb-2">Lịch sử xin nghỉ phép</div>
                         <div class="table-responsive">
                             <table class="table table-modern table-hover align-middle">
                                 <thead>
@@ -413,23 +484,11 @@
                                         <th>Lý do</th>
                                         <th>Trạng thái</th>
                                         <th>Người duyệt</th>
+                                        <th>Ngày gửi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="leave-body">
-                                    <tr>
-                                        <td>2024-05-28</td>
-                                        <td>Nghỉ phép năm</td>
-                                        <td>Về quê</td>
-                                        <td>Đã duyệt</td>
-                                        <td>--</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2024-05-15</td>
-                                        <td>Nghỉ ốm</td>
-                                        <td>Cảm cúm</td>
-                                        <td>Đã duyệt</td>
-                                        <td>--</td>
-                                    </tr>
+                                    <!-- Dữ liệu sẽ được load bằng JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -437,39 +496,63 @@
                 </div>
             </section>
 
+            <!-- Check-in/out -->
+            <section id="checkin-section" style="display:none;">
+                <!-- ...giữ nguyên nội dung check-in/out... -->
+            </section>
+            <!-- Buồng phòng -->
+            <section id="housekeeping-section" style="display:none;">
+                <!-- ...giữ nguyên nội dung buồng phòng... -->
+            </section>
+            <!-- Phản hồi -->
+            <section id="feedback-section" style="display:none;">
+                <!-- ...giữ nguyên nội dung phản hồi... -->
+            </section>
+            <!-- Thống kê -->
+            <section id="stats-section" style="display:none;">
+                <!-- ...giữ nguyên nội dung thống kê... -->
+            </section>
+
             <!-- Section: Quản lý đặt phòng -->
             <section id="booking-section" style="display:none;">
                 <div class="card-modern mb-4">
                     <div class="card-body">
-                        <div class="card-title"><i class="fas fa-bed me-2"></i>Quản lý đặt phòng</div>
+                        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                            <div class="card-title mb-0"><i class="fas fa-bed me-2"></i>Quản lý đặt phòng</div>
+                            <div class="d-flex gap-2">
+                                <select id="bookingStatusFilter" class="form-select form-select-sm" style="max-width: 200px;">
+                                    <option value="all" selected>Tất cả trạng thái</option>
+                                    <option value="pending">Chờ xác nhận</option>
+                                    <option value="confirmed">Đã xác nhận</option>
+                                    <option value="cancelled">Đã hủy</option>
+                                    <option value="completed">Hoàn thành</option>
+                                </select>
+                                <input type="text" id="bookingSearchInput" class="form-control form-control-sm" style="max-width: 250px;" placeholder="Tìm kiếm booking...">
+                                <button class="btn btn-primary btn-sm" onclick="showAddBookingModal()">
+                                    <i class="fas fa-plus-circle me-1"></i> Thêm đặt phòng
+                                </button>
+                            </div>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-modern table-hover align-middle">
                                 <thead>
                                     <tr>
-                                        <th>Mã booking</th>
+                                        <th>ID</th>
                                         <th>Khách hàng</th>
-                                        <th>Ngày đến</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Khách sạn</th>
+                                        <th>Dịch vụ</th>
+                                        <th>Check-in</th>
+                                        <th>Check-out</th>
+                                        <th>Số khách</th>
                                         <th>Trạng thái</th>
-                                        <th>Phân công</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody id="booking-table-body">
                                     <tr>
-                                        <td>BK001</td>
-                                        <td>Nguyễn Văn B</td>
-                                        <td>2024-06-10</td>
-                                        <td><span class="badge bg-warning">Chờ xử lý</span></td>
-                                        <td>Lễ tân</td>
-                                        <td><button class="btn btn-sm btn-primary">Nhận xử lý</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>BK002</td>
-                                        <td>Trần Thị C</td>
-                                        <td>2024-06-11</td>
-                                        <td><span class="badge bg-success">Đã xác nhận</span></td>
-                                        <td>Lễ tân</td>
-                                        <td><button class="btn btn-sm btn-secondary" disabled>Đã nhận</button></td>
+                                        <td colspan="11" class="text-center py-5">Đang tải dữ liệu...</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -572,18 +655,7 @@
                                 </thead>
                                 <tbody id="feedback-table-body">
                                     <tr>
-                                        <td>Nguyễn Văn B</td>
-                                        <td>101</td>
-                                        <td>Phòng có mùi lạ</td>
-                                        <td><span class="badge bg-warning">Chờ xử lý</span></td>
-                                        <td><button class="btn btn-sm btn-primary">Đánh dấu đã xử lý</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Trần Thị C</td>
-                                        <td>102</td>
-                                        <td>Điều hòa yếu</td>
-                                        <td><span class="badge bg-success">Đã xử lý</span></td>
-                                        <td><button class="btn btn-sm btn-secondary" disabled>Đã xử lý</button></td>
+                                        <td colspan="5" class="text-center py-4 text-muted">Chưa có phản hồi nào từ khách hàng.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -602,33 +674,264 @@
                                 <div class="stat-card">
                                     <div class="stat-icon"><i class="fas fa-bed"></i></div>
                                     <div class="stat-label">Đặt phòng đã xử lý</div>
-                                    <div class="stat-value">12</div>
+                                    <div class="stat-value">0</div>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="stat-card">
                                     <div class="stat-icon"><i class="fas fa-sign-in-alt"></i></div>
                                     <div class="stat-label">Check-in/out đã hỗ trợ</div>
-                                    <div class="stat-value">8</div>
+                                    <div class="stat-value">0</div>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="stat-card">
                                     <div class="stat-icon"><i class="fas fa-comment-dots"></i></div>
                                     <div class="stat-label">Phản hồi khách đã xử lý</div>
-                                    <div class="stat-value">5</div>
+                                    <div class="stat-value">0</div>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-4">
                             <canvas id="personalStatsChart" height="80"></canvas>
+                            <div class="text-center text-muted mt-3" id="stats-empty-message">
+                                Chưa có dữ liệu thống kê cá nhân.
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
         </main>
     </div>
+
+    <!-- Modal Hệ thống chấm công -->
+    <div class="modal fade" id="timesheetModal" tabindex="-1" aria-labelledby="timesheetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="timesheetModalLabel">Hệ thống Chấm công</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="list-group" role="tablist">
+                                <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#timesheet-overview" role="tab">
+                                    <i class="fas fa-calendar-alt me-2"></i>Lịch làm việc tháng này
+                                </a>
+                               
+                                <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#timesheet-schedule" role="tab">
+                                    <i class="fas fa-calendar-plus me-2"></i>Lịch làm việc
+                                </a>
+                                <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#timesheet-report" role="tab">
+                                    <i class="fas fa-chart-line me-2"></i>Báo cáo chấm công
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="tab-content">
+                                <!-- Tab Lịch làm việc tháng này -->
+                                <div class="tab-pane fade show active" id="timesheet-overview" role="tabpanel">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6>Lịch làm việc tháng này</h6>
+                                        <button class="btn btn-primary btn-sm" onclick="showCreateScheduleModal()">
+                                            <i class="fas fa-plus"></i> Tạo lịch
+                                        </button>
+                                    </div>
+                                    <table class="table table-modern table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Ngày</th>
+                                                <th>Ca làm việc</th>
+                                                <th>Giờ bắt đầu</th>
+                                                <th>Giờ kết thúc</th>
+                                                <th>Trạng thái</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="scheduleTableBody">
+                                            <tr>
+                                                <td>01/08/2025</td>
+                                                <td>Ca sáng</td>
+                                                <td>08:00</td>
+                                                <td>17:00</td>
+                                                <td><span class="badge bg-success">Đã hoàn thành</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>02/08/2025</td>
+                                                <td>Ca sáng</td>
+                                                <td>08:00</td>
+                                                <td>17:00</td>
+                                                <td><span class="badge bg-primary">Đang làm việc</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>04/08/2025</td>
+                                                <td>Ca sáng</td>
+                                                <td>08:00</td>
+                                                <td>17:00</td>
+                                                <td><span class="badge bg-info">Hôm nay</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <!-- Tab Check in/out -->
+                                <div class="tab-pane fade" id="checkin-checkout" role="tabpanel">
+                                    <h6>Check in/out hôm nay</h6>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-body text-center">
+                                                    <h5>Check In</h5>
+                                                    <p class="h4" id="modalCheckinTime">--:--</p>
+                                                    <button class="btn btn-success" onclick="checkIn()">Check In</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-body text-center">
+                                                    <h5>Check Out</h5>
+                                                    <p class="h4" id="modalCheckoutTime">--:--</p>
+                                                    <button class="btn btn-danger" onclick="checkOut()">Check Out</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="modalTodayStatus">
+                                        <p class="text-muted">Chưa có dữ liệu hôm nay</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Tab Lịch làm việc -->
+                                <div class="tab-pane fade" id="timesheet-schedule" role="tabpanel">
+                                    <h6>Quản lý lịch làm việc</h6>
+                                    <div class="mb-3">
+                                        <button class="btn btn-primary" onclick="showCreateScheduleModal()">
+                                            <i class="fas fa-plus"></i> Tạo lịch mới
+                                        </button>
+                                    </div>
+                                    <table class="table table-modern table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Tuần</th>
+                                                <th>Ngày bắt đầu</th>
+                                                <th>Ngày kết thúc</th>
+                                                <th>Tổng giờ</th>
+                                                <th>Trạng thái</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Tuần 31</td>
+                                                <td>29/07/2025</td>
+                                                <td>02/08/2025</td>
+                                                <td>40 giờ</td>
+                                                <td><span class="badge bg-success">Hoàn thành</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tuần 32</td>
+                                                <td>03/08/2025</td>
+                                                <td>09/08/2025</td>
+                                                <td>40 giờ</td>
+                                                <td><span class="badge bg-warning">Đang thực hiện</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <!-- Tab Báo cáo -->
+                                <div class="tab-pane fade" id="timesheet-report" role="tabpanel">
+                                    <h6>Báo cáo chấm công</h6>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <div class="card text-center">
+                                                <div class="card-body">
+                                                    <h5 style="color: var(--accent2);" id="totalWorkHours">160</h5>
+                                                    <p class="mb-0">Tổng giờ tháng này</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card text-center">
+                                                <div class="card-body">
+                                                    <h5 style="color: #28a745;" id="totalWorkDays">22</h5>
+                                                    <p class="mb-0">Ngày làm việc</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card text-center">
+                                                <div class="card-body">
+                                                    <h5 style="color: #ffc107;" id="attendanceRate">95%</h5>
+                                                    <p class="mb-0">Tỷ lệ chấm công</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tạo lịch làm việc -->
+    <div class="modal fade" id="createScheduleModal" tabindex="-1" aria-labelledby="createScheduleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" id="createScheduleForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createScheduleModalLabel">Tạo lịch làm việc</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="scheduleDate" class="form-label">Ngày làm việc</label>
+                        <input type="date" class="form-control" id="scheduleDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="scheduleShift" class="form-label">Ca làm việc</label>
+                        <select class="form-control" id="scheduleShift" required>
+                            <option value="Sáng">Ca sáng (08:00 - 12:00)</option>
+                            <option value="Chiều">Ca chiều (13:00 - 17:00)</option>
+                            <option value="Tối">Ca tối (18:00 - 22:00)</option>
+                            <option value="Toàn thời gian">Toàn thời gian (08:00 - 17:00)</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="scheduleStartTime" class="form-label">Giờ bắt đầu</label>
+                                <input type="time" class="form-control" id="scheduleStartTime" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="scheduleEndTime" class="form-label">Giờ kết thúc</label>
+                                <input type="time" class="form-control" id="scheduleEndTime" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Tạo lịch</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase App (core) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <!-- Firebase Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script>
         // Phân quyền mẫu
         // Các giá trị: 'receptionist', 'manager', 'housekeeping', 'marketing', ...
@@ -674,9 +977,14 @@
             } else if (section === 'leave') {
                 document.getElementById('leave-section').style.display = '';
                 document.querySelector('.sidebar .nav-item[href="#leave"]').classList.add('active');
+                loadLeaveHistory(); // Load dữ liệu khi vào trang nghỉ phép
             } else if (section === 'booking') {
-                document.getElementById('booking-section').style.display = '';
+                console.log('🎯 Showing booking section...');
+                const bookingSection = document.getElementById('booking-section');
+                bookingSection.style.display = '';
+                console.log('📋 Booking section display style:', bookingSection.style.display);
                 document.querySelector('.sidebar .nav-item.booking').classList.add('active');
+                loadBookings(); // Load dữ liệu khi vào trang đặt phòng
             } else if (section === 'checkin') {
                 document.getElementById('checkin-section').style.display = '';
                 document.querySelector('.sidebar .nav-item.checkin').classList.add('active');
@@ -686,15 +994,28 @@
             } else if (section === 'feedback') {
                 document.getElementById('feedback-section').style.display = '';
                 document.querySelector('.sidebar .nav-item.feedback').classList.add('active');
+                loadFeedbackData(); // Load dữ liệu phản hồi từ Firebase
             } else if (section === 'stats') {
                 document.getElementById('stats-section').style.display = '';
                 document.querySelector('.sidebar .nav-item.stats').classList.add('active');
+                loadStatisticsData(); // Load dữ liệu thống kê từ Firebase
             }
         }
+
+        // ...existing code...
 
         // Ẩn/hiện form chấm công theo lựa chọn địa điểm
         document.addEventListener('DOMContentLoaded', function() {
             showSection('profile');
+            loadTodayStatusMain();
+            
+            // Kiểm tra định kỳ cập nhật trạng thái nghỉ phép từ admin (mỗi 10 giây)
+            setInterval(() => {
+                if (document.getElementById('leave-section').style.display !== 'none') {
+                    loadLeaveHistory();
+                }
+            }, 10000);
+            
             // Attendance chart demo
             const ctx = document.getElementById('attendanceChart').getContext('2d');
             new Chart(ctx, {
@@ -728,108 +1049,29 @@
                 }
             });
 
-            // Chấm công logic
-            const workplaceForm = document.getElementById('workplace-form');
-            const officeInfo = document.getElementById('office-info');
-            const homeForm = document.getElementById('home-form');
-            const outsideForm = document.getElementById('outside-form');
-            const attendanceBody = document.getElementById('attendance-body');
-            // Lắng nghe thay đổi radio
-            workplaceForm.addEventListener('change', function(e) {
-                const val = workplaceForm.querySelector('input[name="workplace"]:checked')?.value;
-                officeInfo.style.display = 'none';
-                homeForm.style.display = 'none';
-                outsideForm.style.display = 'none';
-                if (val === 'office') {
-                    // Chỉ trưởng phòng mới được điểm danh
-                    if (userRole === 'manager') {
-                        officeInfo.textContent = 'Bạn là trưởng phòng, có thể điểm danh cho nhân viên.';
-                    } else {
-                        officeInfo.textContent = 'Chỉ trưởng phòng mới được điểm danh cho bạn.';
+            // Thống kê cá nhân Chart.js
+            if (document.getElementById('personalStatsChart')) {
+                window.personalStatsChart = new Chart(document.getElementById('personalStatsChart').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Đặt phòng', 'Check-in/out', 'Phản hồi'],
+                        datasets: [{
+                            label: 'Số lượt xử lý',
+                            data: [0, 0, 0], // Sẽ được cập nhật từ Firebase
+                            backgroundColor: [
+                                '#ffb300', '#00eaff', '#ff4081'
+                            ]
+                        }]
+                    },
+                    options: {
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { ticks: { color: '#fff' }, grid: { color: '#2e325a' } },
+                            y: { ticks: { color: '#fff' }, grid: { color: '#2e325a' } }
+                        }
                     }
-                    officeInfo.style.display = '';
-                } else if (val === 'home') {
-                    homeForm.style.display = '';
-                } else if (val === 'outside') {
-                    outsideForm.style.display = '';
-                }
-            });
-            // Gửi báo cáo tại nhà
-            homeForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const task = document.getElementById('home-task').value;
-                const client = document.getElementById('home-client').value;
-                const result = document.getElementById('home-result').value;
-                const fileInput = document.getElementById('home-file');
-                let fileName = '';
-                if (fileInput.files.length > 0) {
-                    fileName = fileInput.files[0].name;
-                }
-                const today = new Date();
-                const dateStr = today.toISOString().slice(0,10);
-                attendanceBody.insertAdjacentHTML('afterbegin', `
-                    <tr>
-                        <td>${dateStr}</td>
-                        <td>Tại nhà</td>
-                        <td>
-                            <div><b>Làm việc:</b> ${task}</div>
-                            <div><b>Khách hàng:</b> ${client}</div>
-                            <div><b>Kết quả:</b> ${result}</div>
-                        </td>
-                        <td>${fileName ? `<span class='badge bg-info'>${fileName}</span>` : '--'}</td>
-                        <td>Chờ duyệt</td>
-                        <td>--</td>
-                    </tr>
-                `);
-                homeForm.reset();
-                alert('Đã gửi báo cáo công việc tại nhà!');
-            });
-            // Gửi GPS bên ngoài
-            window.sendGPS = function() {
-                if (!navigator.geolocation) {
-                    alert('Trình duyệt không hỗ trợ GPS!');
-                    return;
-                }
-                navigator.geolocation.getCurrentPosition(function(pos) {
-                    const lat = pos.coords.latitude.toFixed(5);
-                    const lng = pos.coords.longitude.toFixed(5);
-                    const today = new Date();
-                    const dateStr = today.toISOString().slice(0,10);
-                    attendanceBody.insertAdjacentHTML('afterbegin', `
-                        <tr>
-                            <td>${dateStr}</td>
-                            <td>Công tác bên ngoài</td>
-                            <td>Gửi vị trí GPS</td>
-                            <td><span class='badge bg-success'>${lat}, ${lng}</span></td>
-                            <td>Chờ duyệt</td>
-                            <td>--</td>
-                        </tr>
-                    `);
-                    alert('Đã gửi vị trí GPS!');
-                }, function() {
-                    alert('Không lấy được vị trí GPS!');
                 });
             }
-            // Gửi nhật ký công việc bên ngoài
-            const outsideLogForm = document.getElementById('outside-log-form');
-            outsideLogForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const log = document.getElementById('outside-log').value;
-                const today = new Date();
-                const dateStr = today.toISOString().slice(0,10);
-                attendanceBody.insertAdjacentHTML('afterbegin', `
-                    <tr>
-                        <td>${dateStr}</td>
-                        <td>Công tác bên ngoài</td>
-                        <td>${log}</td>
-                        <td>--</td>
-                        <td>Chờ duyệt</td>
-                        <td>--</td>
-                    </tr>
-                `);
-                outsideLogForm.reset();
-                alert('Đã gửi nhật ký công việc!');
-            });
         });
         
         // Firebase configuration
@@ -844,8 +1086,28 @@
             measurementId: "G-RC61EXTZH7"
         };
         
-        // Khởi tạo Firebase
+        // Khởi tạo Firebase (chỉ nếu chưa được khởi tạo)
+        if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
+        }
+        
+        // Đăng nhập tự động khi trang load (demo)
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (!user) {
+                // Nếu chưa đăng nhập, tạo user ẩn danh hoặc đăng nhập demo
+                firebase.auth().signInAnonymously().then(() => {
+                    console.log('Đăng nhập ẩn danh thành công');
+                }).catch((error) => {
+                    console.error('Lỗi đăng nhập ẩn danh:', error);
+                    // Fallback: đăng nhập với email demo
+                    firebase.auth().signInWithEmailAndPassword('staff@demo.com', 'password123').catch(() => {
+                        console.warn('Không thể đăng nhập Firebase Auth');
+                    });
+                });
+            } else {
+                console.log('User đã đăng nhập:', user.uid);
+            }
+        });
         
         // Đăng xuất với Firebase Auth
         function logout() {
@@ -867,31 +1129,1223 @@
             }
         }
 
-        // Thống kê cá nhân Chart.js
-        document.addEventListener('DOMContentLoaded', function() {
-            if (document.getElementById('personalStatsChart')) {
-                new Chart(document.getElementById('personalStatsChart').getContext('2d'), {
-                    type: 'bar',
-                    data: {
-                        labels: ['Đặt phòng', 'Check-in/out', 'Phản hồi'],
-                        datasets: [{
-                            label: 'Số lượt xử lý',
-                            data: [12, 8, 5],
-                            backgroundColor: [
-                                '#ffb300', '#00eaff', '#ff4081'
-                            ]
-                        }]
-                    },
-                    options: {
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            x: { ticks: { color: '#fff' }, grid: { color: '#2e325a' } },
-                            y: { ticks: { color: '#fff' }, grid: { color: '#2e325a' } }
+        // === CHỨC NĂNG XIN NGHỈ PHÉP ===
+        
+        // Dữ liệu nghỉ phép (Local Storage)
+        function getLeaveRequests() {
+            return JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+        }
+        
+        function setLeaveRequests(requests) {
+            localStorage.setItem('leaveRequests', JSON.stringify(requests));
+        }
+        
+        // Xử lý form xin nghỉ phép
+        window.requestLeave = function(event) {
+            // Kiểm tra đăng nhập Firebase
+            const currentUser = firebase.auth().currentUser;
+            if (!currentUser) {
+                alert('Bạn cần đăng nhập lại để sử dụng chức năng này!');
+                return;
+            }
+            event.preventDefault();
+            const date = document.getElementById('leave-date').value;
+            const type = document.getElementById('leave-type').value;
+            const reason = document.getElementById('leave-reason').value;
+            if (!date || !type || !reason) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+            // Kiểm tra ngày nghỉ phải từ hôm nay trở đi
+            const selectedDate = new Date(date);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            if (selectedDate < today) {
+                alert('Ngày nghỉ phải từ hôm nay trở đi!');
+                return;
+            }
+            // Tạo yêu cầu nghỉ phép mới (đúng định dạng rule Firebase)
+            const newRequest = {
+                employeeId: getCurrentEmployeeId(),
+                startDate: date,
+                endDate: date, // Nếu chỉ nghỉ 1 ngày, startDate = endDate
+                reason: reason,
+                status: 'pending', // Rule chỉ cho phép 'pending', 'approved', 'rejected'
+                createdAt: Date.now(),
+                // Các trường phụ không bắt buộc, giữ lại nếu muốn
+                type: type,
+                employeeName: userName
+            };
+            
+            console.log('📝 Creating new leave request:', newRequest);
+            // Lưu localStorage (giữ lại cho tương thích cũ)
+            const requests = getLeaveRequests();
+            requests.push(newRequest);
+            setLeaveRequests(requests);
+            // Lưu lên Firebase
+            firebase.database().ref('leaveRequests').push(newRequest, function(error) {
+                if (error) {
+                    alert('Lỗi khi gửi yêu cầu lên hệ thống!');
+                } else {
+                    // Thêm vào bảng
+                    addLeaveRequestToTable(newRequest);
+                    // Reset form
+                    document.getElementById('leave-date').value = '';
+                    document.getElementById('leave-type').value = '';
+                    document.getElementById('leave-reason').value = '';
+                    // Hiển thị thông báo
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Gửi yêu cầu thành công!',
+                            text: 'Yêu cầu nghỉ phép đã được gửi đến quản lý. Bạn sẽ nhận được phản hồi trong vòng 24 giờ.',
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        alert('Đã gửi yêu cầu nghỉ phép thành công!\nYêu cầu sẽ được xem xét trong vòng 24 giờ.');
+                    }
+                }
+            });
+        };
+        
+        // Thêm yêu cầu nghỉ phép vào bảng
+        function addLeaveRequestToTable(request) {
+            const tbody = document.getElementById('leave-body');
+            const row = document.createElement('tr');
+            
+            // Map status từ Firebase sang tiếng Việt
+            const statusMap = {
+                'pending': 'Chờ duyệt',
+                'approved': 'Đã duyệt', 
+                'rejected': 'Từ chối'
+            };
+            
+            const displayStatus = statusMap[request.status] || request.status;
+            const statusClass = 
+                request.status === 'approved' ? 'bg-success' :
+                request.status === 'rejected' ? 'bg-danger' : 'bg-warning';
+            
+            // Sử dụng startDate thay vì date
+            const displayDate = request.startDate || request.date || '';
+            const submittedDate = request.createdAt ? new Date(request.createdAt).toLocaleDateString('vi-VN') : 
+                                 request.submittedDate ? new Date(request.submittedDate).toLocaleDateString('vi-VN') : '';
+            
+            row.innerHTML = `
+                <td>${displayDate ? new Date(displayDate).toLocaleDateString('vi-VN') : '--'}</td>
+                <td>${request.type || '--'}</td>
+                <td>${request.reason || '--'}</td>
+                <td><span class="badge ${statusClass}">${displayStatus}</span></td>
+                <td>${request.approver || '--'}</td>
+                <td>${submittedDate}</td>
+            `;
+            
+            tbody.insertAdjacentElement('afterbegin', row);
+        }
+        
+        // Load lịch sử xin nghỉ phép với real-time updates
+        function loadLeaveHistory() {
+            const tbody = document.getElementById('leave-body');
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-3 text-muted">Đang tải dữ liệu...</td></tr>';
+            
+            const currentEmployeeId = getCurrentEmployeeId();
+            console.log('🔍 Loading leave history for employee:', currentEmployeeId);
+            
+            // Lắng nghe thay đổi real-time từ Firebase
+            firebase.database().ref('leaveRequests').orderByChild('employeeId').equalTo(currentEmployeeId).on('value', function(snapshot) {
+                const requests = [];
+                snapshot.forEach(function(child) {
+                    requests.push({ ...child.val(), firebaseKey: child.key });
+                });
+                
+                // Xóa dữ liệu cũ
+                tbody.innerHTML = '';
+                if (requests.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-3 text-muted">Chưa có yêu cầu nghỉ phép nào</td></tr>';
+                    updateLeaveStats([]);
+                    return;
+                }
+                
+                // Sắp xếp theo ngày tạo mới nhất
+                requests.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                requests.forEach(request => {
+                    addLeaveRequestToTable(request);
+                });
+                updateLeaveStats(requests);
+                checkForLeaveStatusUpdates(requests);
+            }, function(error) {
+                console.error('Error loading leave requests:', error);
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-3 text-danger">Lỗi tải dữ liệu!</td></tr>';
+            });
+        }
+        
+        // Kiểm tra cập nhật trạng thái từ admin
+        function checkForLeaveStatusUpdates(requests) {
+            const lastChecked = localStorage.getItem('lastLeaveCheck');
+            const currentTime = new Date().getTime();
+            
+            console.log('🔍 Checking for updates:', {
+                lastChecked: lastChecked,
+                currentTime: currentTime,
+                requests: requests
+            });
+            
+            if (lastChecked) {
+                const newlyProcessed = requests.filter(r => {
+                    // Sử dụng approvedAt hoặc rejectedAt từ Firebase
+                    const processedTime = r.approvedAt ? r.approvedAt : (r.rejectedAt ? r.rejectedAt : 0);
+                    const isNewlyProcessed = processedTime > parseInt(lastChecked) && r.status !== 'pending';
+                    
+                    console.log('🧐 Request check:', {
+                        firebaseKey: r.firebaseKey,
+                        status: r.status,
+                        approvedAt: r.approvedAt,
+                        rejectedAt: r.rejectedAt,
+                        processedTime: processedTime,
+                        lastChecked: parseInt(lastChecked),
+                        isNewlyProcessed: isNewlyProcessed
+                    });
+                    
+                    return isNewlyProcessed;
+                });
+                
+                console.log('🆕 Newly processed requests:', newlyProcessed);
+                
+                newlyProcessed.forEach(request => {
+                    if (typeof Swal !== 'undefined') {
+                        const icon = request.status === 'approved' ? 'success' : 'error';
+                        const title = request.status === 'approved' ? '✅ Yêu cầu được duyệt!' : '❌ Yêu cầu bị từ chối';
+                        let text = `Yêu cầu nghỉ ${request.type || 'phép'} từ ngày ${request.startDate ? new Date(request.startDate).toLocaleDateString('vi-VN') : '--'} đã được ${request.status === 'approved' ? 'duyệt' : 'từ chối'}.`;
+                        
+                        if (request.rejectionReason) {
+                            text += `\n\nLý do từ chối: ${request.rejectionReason}`;
                         }
+                        
+                        if (request.approver) {
+                            text += `\n\nNgười duyệt: ${request.approver}`;
+                        }
+                        
+                        Swal.fire({
+                            icon: icon,
+                            title: title,
+                            text: text,
+                            timer: 10000,
+                            showConfirmButton: true,
+                            confirmButtonText: 'Đã hiểu'
+                        });
+                    } else {
+                        // Fallback alert nếu không có SweetAlert
+                        const message = request.status === 'approved' ? 
+                            `✅ Yêu cầu nghỉ phép đã được duyệt!\nNgày: ${request.startDate ? new Date(request.startDate).toLocaleDateString('vi-VN') : '--'}\nLoại: ${request.type || 'phép'}` :
+                            `❌ Yêu cầu nghỉ phép bị từ chối!\nNgày: ${request.startDate ? new Date(request.startDate).toLocaleDateString('vi-VN') : '--'}\nLoại: ${request.type || 'phép'}${request.rejectionReason ? '\nLý do: ' + request.rejectionReason : ''}`;
+                        alert(message);
                     }
                 });
             }
+            
+            localStorage.setItem('lastLeaveCheck', currentTime.toString());
+        }
+        
+        // Cập nhật thống kê phép
+        function updateLeaveStats(requests) {
+            const currentYear = new Date().getFullYear();
+            const approvedRequests = requests.filter(r => 
+                r.status === 'approved' && 
+                r.startDate && new Date(r.startDate).getFullYear() === currentYear &&
+                (r.type === 'Nghỉ phép năm' || !r.type || r.type.includes('phép'))
+            );
+            
+            const usedDays = approvedRequests.length;
+            const totalDays = 15; // Tổng số ngày phép năm
+            const remainingDays = totalDays - usedDays;
+            
+            const usedElement = document.getElementById('usedLeave');
+            const remainingElement = document.getElementById('remainingAnnualLeave');
+            const totalElement = document.getElementById('totalAnnualLeave');
+            
+            if (usedElement) usedElement.textContent = usedDays;
+            if (remainingElement) remainingElement.textContent = Math.max(0, remainingDays);
+            if (totalElement) totalElement.textContent = totalDays;
+        }
+
+        // === CHỨC NĂNG CHẤM CÔNG ===
+        
+        // Dữ liệu chấm công (Local Storage)
+        function getAttendances() {
+            return JSON.parse(localStorage.getItem('attendances') || '[]');
+        }
+        
+        function setAttendances(attendances) {
+            localStorage.setItem('attendances', JSON.stringify(attendances));
+        }
+        
+        function getCurrentEmployeeId() {
+            // Return a fixed employee ID for demo purposes
+            // In production, this should be the actual employee ID from user profile
+            return 'NV001'; // Fixed ID for demo
+        }
+        
+        // Hiển thị modal chấm công
+        window.showTimesheet = function() {
+            const timesheetModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('timesheetModal'));
+            timesheetModal.show();
+            loadTimesheetData();
+        };
+        
+        // Quick check in/out cho trang chính
+        window.quickCheckIn = function() {
+            checkIn();
+            loadTodayStatusMain();
+        };
+        
+        window.quickCheckOut = function() {
+            checkOut();
+            loadTodayStatusMain();
+        };
+        
+        // Check in
+        window.checkIn = function() {
+            const attendances = getAttendances();
+            const today = new Date().toDateString();
+            const existing = attendances.find(a => new Date(a.date).toDateString() === today && a.employeeId === getCurrentEmployeeId());
+            
+            if (existing && existing.checkIn) {
+                alert('Bạn đã check in hôm nay!');
+                return;
+            }
+            
+            const checkInTime = new Date();
+            if (existing) {
+                existing.checkIn = checkInTime.toISOString();
+            } else {
+                attendances.push({
+                    id: Date.now(),
+                    employeeId: getCurrentEmployeeId(),
+                    date: checkInTime.toISOString(),
+                    checkIn: checkInTime.toISOString()
+                });
+            }
+            
+            setAttendances(attendances);
+            loadTodayStatusMain();
+            loadTodayStatusModal();
+            alert(`Check in thành công lúc ${checkInTime.toLocaleTimeString('vi-VN')}`);
+        };
+        
+        // Check out
+        window.checkOut = function() {
+            const attendances = getAttendances();
+            const today = new Date().toDateString();
+            const existing = attendances.find(a => new Date(a.date).toDateString() === today && a.employeeId === getCurrentEmployeeId());
+            
+            if (!existing || !existing.checkIn) {
+                alert('Bạn chưa check in hôm nay!');
+                return;
+            }
+            
+            if (existing.checkOut) {
+                alert('Bạn đã check out hôm nay!');
+                return;
+            }
+            
+            const checkOutTime = new Date();
+            existing.checkOut = checkOutTime.toISOString();
+            
+            // Tính giờ làm việc
+            const workHours = (new Date(existing.checkOut) - new Date(existing.checkIn)) / (1000 * 60 * 60);
+            existing.workHours = workHours.toFixed(2);
+            
+            setAttendances(attendances);
+            loadTodayStatusMain();
+            loadTodayStatusModal();
+            alert(`Check out thành công lúc ${checkOutTime.toLocaleTimeString('vi-VN')}\nTổng giờ làm: ${workHours.toFixed(2)} giờ`);
+        };
+        
+        // Load trạng thái hôm nay (trang chính)
+        function loadTodayStatusMain() {
+            const attendances = getAttendances();
+            const today = new Date().toDateString();
+            const todayRecord = attendances.find(a => new Date(a.date).toDateString() === today && a.employeeId === getCurrentEmployeeId());
+            
+            const checkinTimeEl = document.getElementById('checkinTime');
+            const checkoutTimeEl = document.getElementById('checkoutTime');
+            const statusEl = document.getElementById('todayStatus');
+            
+            if (checkinTimeEl) {
+                checkinTimeEl.textContent = todayRecord && todayRecord.checkIn ? 
+                    new Date(todayRecord.checkIn).toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'}) : '--:--';
+            }
+            
+            if (checkoutTimeEl) {
+                checkoutTimeEl.textContent = todayRecord && todayRecord.checkOut ? 
+                    new Date(todayRecord.checkOut).toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'}) : '--:--';
+            }
+            
+            if (statusEl) {
+                const statusHtml = todayRecord ? `
+                    <p><strong>Check in:</strong> ${todayRecord.checkIn ? new Date(todayRecord.checkIn).toLocaleTimeString('vi-VN') : 'Chưa check in'}</p>
+                    <p><strong>Check out:</strong> ${todayRecord.checkOut ? new Date(todayRecord.checkOut).toLocaleTimeString('vi-VN') : 'Chưa check out'}</p>
+                    <p><strong>Giờ làm:</strong> ${todayRecord.workHours || '0'} giờ</p>
+                ` : '<p class="text-muted">Chưa có dữ liệu hôm nay</p>';
+                
+                statusEl.innerHTML = statusHtml;
+            }
+            
+            loadAttendanceHistory();
+        }
+        
+        // Load trạng thái hôm nay (modal)
+        function loadTodayStatusModal() {
+            const attendances = getAttendances();
+            const today = new Date().toDateString();
+            const todayRecord = attendances.find(a => new Date(a.date).toDateString() === today && a.employeeId === getCurrentEmployeeId());
+            
+            const modalCheckinTimeEl = document.getElementById('modalCheckinTime');
+            const modalCheckoutTimeEl = document.getElementById('modalCheckoutTime');
+            const modalStatusEl = document.getElementById('modalTodayStatus');
+            
+            if (modalCheckinTimeEl) {
+                modalCheckinTimeEl.textContent = todayRecord && todayRecord.checkIn ? 
+                    new Date(todayRecord.checkIn).toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'}) : '--:--';
+            }
+            
+            if (modalCheckoutTimeEl) {
+                modalCheckoutTimeEl.textContent = todayRecord && todayRecord.checkOut ? 
+                    new Date(todayRecord.checkOut).toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'}) : '--:--';
+            }
+            
+            if (modalStatusEl) {
+                const statusHtml = todayRecord ? `
+                    <p><strong>Check in:</strong> ${todayRecord.checkIn ? new Date(todayRecord.checkIn).toLocaleTimeString('vi-VN') : 'Chưa check in'}</p>
+                    <p><strong>Check out:</strong> ${todayRecord.checkOut ? new Date(todayRecord.checkOut).toLocaleTimeString('vi-VN') : 'Chưa check out'}</p>
+                    <p><strong>Giờ làm:</strong> ${todayRecord.workHours || '0'} giờ</p>
+                ` : '<p class="text-muted">Chưa có dữ liệu hôm nay</p>';
+                
+                modalStatusEl.innerHTML = statusHtml;
+            }
+        }
+        
+        // Load lịch sử chấm công
+        function loadAttendanceHistory() {
+            const attendances = getAttendances().filter(a => a.employeeId === getCurrentEmployeeId());
+            const tbody = document.getElementById('attendance-body');
+            
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            // Sắp xếp theo ngày mới nhất
+            attendances.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            attendances.slice(0, 10).forEach(record => {
+                const row = document.createElement('tr');
+                const date = new Date(record.date);
+                const status = record.checkIn && record.checkOut ? 'Hoàn thành' : 
+                             record.checkIn ? 'Đang làm việc' : 'Chưa check in';
+                const statusClass = record.checkIn && record.checkOut ? 'bg-success' : 
+                                  record.checkIn ? 'bg-primary' : 'bg-secondary';
+                
+                row.innerHTML = `
+                    <td>${date.toLocaleDateString('vi-VN')}</td>
+                    <td>${record.checkIn ? new Date(record.checkIn).toLocaleTimeString('vi-VN') : '--'}</td>
+                    <td>${record.checkOut ? new Date(record.checkOut).toLocaleTimeString('vi-VN') : '--'}</td>
+                    <td>${record.workHours || '0'} giờ</td>
+                    <td><span class="badge ${statusClass}">${status}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Load dữ liệu chấm công cho modal
+        function loadTimesheetData() {
+            loadTodayStatusModal();
+            updateMonthlyStats();
+        }
+        
+        // Cập nhật thống kê tháng
+        function updateMonthlyStats() {
+            const attendances = getAttendances().filter(a => a.employeeId === getCurrentEmployeeId());
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            
+            const monthlyData = attendances.filter(a => {
+                const date = new Date(a.date);
+                return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+            });
+
+            const totalWorkDays = monthlyData.filter(a => a.checkIn && a.checkOut).length;
+            const totalWorkHours = monthlyData.reduce((sum, a) => sum + (parseFloat(a.workHours) || 0), 0);
+            const attendanceRate = totalWorkDays > 0 ? ((totalWorkDays / new Date().getDate()) * 100).toFixed(0) : 0;
+            
+            const totalWorkHoursEl = document.getElementById('totalWorkHours');
+            const totalWorkDaysEl = document.getElementById('totalWorkDays');
+            const attendanceRateEl = document.getElementById('attendanceRate');
+            
+            if (totalWorkHoursEl) totalWorkHoursEl.textContent = totalWorkHours.toFixed(0);
+            if (totalWorkDaysEl) totalWorkDaysEl.textContent = totalWorkDays;
+            if (attendanceRateEl) attendanceRateEl.textContent = attendanceRate + '%';
+        }
+        
+        // Hiển thị modal tạo lịch làm việc
+        window.showCreateScheduleModal = function() {
+            const createScheduleModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('createScheduleModal'));
+            createScheduleModal.show();
+        };
+
+        // ===== BOOKING MANAGEMENT FUNCTIONS =====
+        let allBookings = [];
+
+            // Load bookings data from Firebase
+            function loadBookings() {
+                console.log('🔄 Loading bookings data...');
+                const bookingsRef = firebase.database().ref('bookings');
+                bookingsRef.on('value', (snapshot) => {
+                    allBookings = [];
+                    if (snapshot.exists()) {
+                        snapshot.forEach((childSnapshot) => {
+                            const booking = childSnapshot.val();
+                            booking.id = childSnapshot.key;
+                            allBookings.push(booking);
+                            console.log('📋 Loaded booking:', booking.id, booking.type, booking.bookingType, booking.customerName);
+                        });
+                        allBookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sort by most recent
+                    }
+                    console.log('📊 All loaded bookings:', allBookings);
+                    filterAndDisplayBookings();
+                    console.log('✅ Loaded', allBookings.length, 'bookings');
+                }, (error) => {
+                    console.error("❌ Error loading bookings:", error);
+                    Swal.fire('Lỗi', 'Không thể tải danh sách đặt phòng.', 'error');
+                });
+            }
+
+        // Filter and display bookings
+        function filterAndDisplayBookings() {
+            let filteredBookings = [...allBookings];
+            console.log('🔍 Starting filter with', allBookings.length, 'bookings');
+
+            // Search filter
+            const searchTerm = document.getElementById('bookingSearchInput').value.toLowerCase().trim();
+            if (searchTerm) {
+                filteredBookings = filteredBookings.filter(b => 
+                    (b.id && b.id.toLowerCase().includes(searchTerm)) ||
+                    (b.customerName && b.customerName.toLowerCase().includes(searchTerm)) ||
+                    (b.customerEmail && b.customerEmail.toLowerCase().includes(searchTerm)) ||
+                    (b.customerPhone && b.customerPhone.includes(searchTerm)) ||
+                    (b.hotelName && b.hotelName.toLowerCase().includes(searchTerm))
+                );
+                console.log('🔍 After search filter:', filteredBookings.length, 'bookings');
+            }
+
+            // Status filter
+            const statusFilter = document.getElementById('bookingStatusFilter').value;
+            if (statusFilter !== 'all') {
+                filteredBookings = filteredBookings.filter(b => b.status === statusFilter);
+                console.log('🔍 After status filter:', filteredBookings.length, 'bookings');
+            }
+
+            // Filter only hotel bookings (exclude tours)
+            const beforeHotelFilter = filteredBookings.length;
+            filteredBookings = filteredBookings.filter(b => {
+                const isHotel = (!b.type && !b.bookingType) || 
+                               b.type === 'hotel' || 
+                               b.bookingType === 'hotel';
+                if (!isHotel) {
+                    console.log('🚫 Filtered out non-hotel booking:', b.id, 'type:', b.type, 'bookingType:', b.bookingType);
+                }
+                return isHotel;
+            });
+            console.log('🔍 After hotel filter:', filteredBookings.length, 'bookings (removed', beforeHotelFilter - filteredBookings.length, ')');
+
+            console.log('📊 Final filtered bookings:', filteredBookings);
+            renderBookingsTable(filteredBookings);
+        }
+
+                        // Render bookings table
+                function renderBookingsTable(bookings) {
+                    console.log('🎨 Rendering table with', bookings.length, 'bookings');
+                    const tableBody = document.getElementById('booking-table-body');
+                    if (!tableBody) {
+                        console.error('❌ Table body element not found!');
+                        return;
+                    }
+                    console.log('✅ Table body found:', tableBody);
+                    tableBody.innerHTML = '';
+
+                    if (bookings.length === 0) {
+                        console.log('📭 No bookings to display');
+                        tableBody.innerHTML = '<tr><td colspan="11" class="text-center py-5">Không tìm thấy dữ liệu phù hợp.</td></tr>';
+                        return;
+                    }
+
+            bookings.forEach(booking => {
+                const row = document.createElement('tr');
+                
+                // Status Badge
+                const statusBadge = `<span class="status status-${booking.status || 'pending'}">${getStatusText(booking.status)}</span>`;
+                
+                // Service Details
+                let serviceDetails = '';
+                if (booking.type === 'hotel' || booking.roomId || booking.roomName) {
+                    serviceDetails = `
+                        <strong title="${booking.hotelName || ''}">${booking.hotelName || 'N/A'}</strong><br>
+                        <small class="text-muted" title="${booking.roomId || booking.roomName || ''}">${booking.roomId || booking.roomName || 'N/A'}</small>
+                    `;
+                } else if (booking.type === 'tour') {
+                    serviceDetails = `
+                        <strong title="${booking.tourName || ''}">${booking.tourName || 'Tour'}</strong><br>
+                        <small class="text-muted">Tour</small>
+                    `;
+                } else {
+                    serviceDetails = 'Không xác định';
+                }
+
+                row.innerHTML = `
+                    <td title="${booking.id}">${booking.id}</td>
+                    <td title="${booking.customerName || ''}">${booking.customerName || 'N/A'}</td>
+                    <td title="${booking.customerEmail || ''}">${booking.customerEmail || 'N/A'}</td>
+                    <td title="${booking.customerPhone || ''}">${booking.customerPhone || 'N/A'}</td>
+                    <td title="${booking.hotelName || ''}">${booking.hotelName || 'N/A'}</td>
+                    <td>${serviceDetails}</td>
+                    <td title="${booking.checkIn ? new Date(booking.checkIn).toLocaleDateString('vi-VN') : ''}">${booking.checkIn ? new Date(booking.checkIn).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                    <td title="${booking.checkOut ? new Date(booking.checkOut).toLocaleDateString('vi-VN') : ''}">${booking.checkOut ? new Date(booking.checkOut).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                    <td title="${booking.guests || ''}">${booking.guests || 'N/A'}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <button class="btn btn-sm btn-info" onclick="viewBookingDetails('${booking.id}')" title="Xem chi tiết">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-success" onclick="updateBookingStatus('${booking.id}', 'confirmed')" title="Xác nhận" ${booking.status === 'confirmed' ? 'disabled' : ''}>
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning" onclick="updateBookingStatus('${booking.id}', 'pending')" title="Chờ xử lý" ${booking.status === 'pending' ? 'disabled' : ''}>
+                            <i class="fas fa-clock"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+                console.log('📝 Added row for booking:', booking.id);
+            });
+            console.log('✅ Table rendering completed. Total rows:', tableBody.children.length);
+        }
+
+        // Get status text in Vietnamese
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'Chờ xác nhận',
+                'confirmed': 'Đã xác nhận',
+                'cancelled': 'Đã hủy',
+                'completed': 'Hoàn thành'
+            };
+            return statusMap[status] || 'Chờ xác nhận';
+        }
+
+        // View booking details
+        window.viewBookingDetails = function(bookingId) {
+            const booking = allBookings.find(b => b.id === bookingId);
+            if (!booking) {
+                Swal.fire('Lỗi', 'Không tìm thấy thông tin đặt phòng.', 'error');
+                return;
+            }
+
+            const detailsHtml = `
+                <div class="text-start">
+                    <p><strong>ID:</strong> ${booking.id}</p>
+                    <p><strong>Khách hàng:</strong> ${booking.customerName || 'N/A'}</p>
+                    <p><strong>Email:</strong> ${booking.customerEmail || 'N/A'}</p>
+                    <p><strong>Số điện thoại:</strong> ${booking.customerPhone || 'N/A'}</p>
+                    <p><strong>Khách sạn:</strong> ${booking.hotelName || 'N/A'}</p>
+                    <p><strong>Phòng:</strong> ${booking.roomId || booking.roomName || 'N/A'}</p>
+                    <p><strong>Check-in:</strong> ${booking.checkIn ? new Date(booking.checkIn).toLocaleDateString('vi-VN') : 'N/A'}</p>
+                    <p><strong>Check-out:</strong> ${booking.checkOut ? new Date(booking.checkOut).toLocaleDateString('vi-VN') : 'N/A'}</p>
+                    <p><strong>Số khách:</strong> ${booking.guests || 'N/A'}</p>
+                    <p><strong>Trạng thái:</strong> ${getStatusText(booking.status)}</p>
+                    <p><strong>Ngày tạo:</strong> ${booking.createdAt ? new Date(booking.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</p>
+                </div>
+            `;
+
+            Swal.fire({
+                title: 'Chi tiết đặt phòng',
+                html: detailsHtml,
+                icon: 'info',
+                confirmButtonText: 'Đóng'
+            });
+        };
+
+        // Update booking status
+        window.updateBookingStatus = function(bookingId, newStatus) {
+            const booking = allBookings.find(b => b.id === bookingId);
+            if (!booking) {
+                Swal.fire('Lỗi', 'Không tìm thấy thông tin đặt phòng.', 'error');
+                return;
+            }
+
+            const statusText = getStatusText(newStatus);
+            
+            Swal.fire({
+                title: 'Xác nhận thay đổi',
+                text: `Bạn có chắc muốn thay đổi trạng thái đặt phòng ${bookingId} thành "${statusText}"?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Xác nhận',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const bookingRef = firebase.database().ref(`bookings/${bookingId}`);
+                    const updateData = {
+                        status: newStatus,
+                        updatedAt: Date.now(),
+                        updatedBy: getCurrentEmployeeId()
+                    };
+
+                    bookingRef.update(updateData).then(() => {
+                        Swal.fire('Thành công', `Đã cập nhật trạng thái đặt phòng thành "${statusText}"`, 'success');
+                    }).catch((error) => {
+                        console.error('Error updating booking status:', error);
+                        Swal.fire('Lỗi', 'Không thể cập nhật trạng thái đặt phòng.', 'error');
+                    });
+                }
+            });
+        };
+        
+        // Xử lý form tạo lịch làm việc
+        document.getElementById('createScheduleForm').onsubmit = function(e) {
+            e.preventDefault();
+            const date = document.getElementById('scheduleDate').value;
+            const shift = document.getElementById('scheduleShift').value;
+            const startTime = document.getElementById('scheduleStartTime').value;
+            const endTime = document.getElementById('scheduleEndTime').value;
+
+            if (!date || !shift || !startTime || !endTime) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+
+            // Thêm lịch làm việc mới vào bảng
+            const tableBody = document.getElementById('scheduleTableBody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${new Date(date).toLocaleDateString('vi-VN')}</td>
+                <td>${shift}</td>
+                <td>${startTime}</td>
+                <td>${endTime}</td>
+                <td><span class="badge bg-info">Đã lên lịch</span></td>
+            `;
+            tableBody.appendChild(newRow);
+
+            // Đóng modal và reset form
+            bootstrap.Modal.getInstance(document.getElementById('createScheduleModal')).hide();
+            this.reset();
+            alert('Đã tạo lịch làm việc thành công!');
+        };
+
+        // Khởi tạo dữ liệu khi trang load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTodayStatusMain();
+            loadLeaveHistory(); // Load ngay khi trang khởi động
+            loadBookings(); // Load booking data
+            
+            // Thêm event listeners cho booking filters
+            const bookingStatusFilter = document.getElementById('bookingStatusFilter');
+            const bookingSearchInput = document.getElementById('bookingSearchInput');
+            if (bookingStatusFilter) bookingStatusFilter.addEventListener('change', filterAndDisplayBookings);
+            if (bookingSearchInput) bookingSearchInput.addEventListener('input', filterAndDisplayBookings);
+            
+            // Test load statistics khi trang load (để debug)
+            console.log('🧪 Testing statistics load on page load...');
+            setTimeout(() => {
+                loadStatisticsData();
+            }, 2000); // Load sau 2 giây để Firebase có thời gian khởi tạo
+            
+            // Thêm test function vào console để debug
+            window.testLeaveRequest = function() {
+                console.log('🧪 Testing leave request creation...');
+                const testRequest = {
+                    employeeId: 'NV001',
+                    startDate: '2024-12-25',
+                    endDate: '2024-12-25',
+                    reason: 'Test nghỉ phép',
+                    status: 'pending',
+                    createdAt: Date.now(),
+                    type: 'Nghỉ phép năm',
+                    employeeName: 'Nguyễn Văn A'
+                };
+                
+                firebase.database().ref('leaveRequests').push(testRequest).then((ref) => {
+                    console.log('✅ Test request created with ID:', ref.key);
+                    alert('Test request created successfully!');
+                }).catch((error) => {
+                    console.error('❌ Error creating test request:', error);
+                    alert('Error creating test request: ' + error.message);
+                });
+            };
+            
+            // Test function để test stats manually
+            window.testStatistics = function() {
+                console.log('🧪 Testing statistics manually...');
+                showSection('stats');
+            };
         });
+
+        // Show add booking modal - using SweetAlert2 like admin
+        window.showAddBookingModal = function() {
+            // Lấy danh sách khách sạn từ Firebase
+            firebase.database().ref('location').once('value').then(snapshot => {
+                let hotelOptions = '';
+                let hotelsData = [];
+                snapshot.forEach(locationSnap => {
+                    const location = locationSnap.val();
+                    if (location.hotels) {
+                        Object.entries(location.hotels).forEach(([hotelKey, hotel]) => {
+                            hotelsData.push({
+                                id: hotelKey,
+                                name: hotel.tenKhachSan,
+                                rooms: hotel.chiTiet && hotel.chiTiet.rooms ? hotel.chiTiet.rooms : [],
+                                locationId: locationSnap.key
+                            });
+                            hotelOptions += `<option value="${locationSnap.key}__${hotelKey}">${hotel.tenKhachSan}</option>`;
+                        });
+                    }
+                });
+                
+                Swal.fire({
+                    title: 'Thêm đặt phòng mới',
+                    html: `
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <input id="add-customerName" class="swal2-input" placeholder="Tên khách *">
+                            <input id="add-customerEmail" class="swal2-input" placeholder="Email">
+                            <input id="add-customerPhone" class="swal2-input" placeholder="Số điện thoại *">
+                            <select id="add-hotelSelect" class="swal2-input" style="width: 100%"><option value="">Chọn khách sạn *</option>${hotelOptions}</select>
+                            <select id="add-roomSelect" class="swal2-input" style="width: 100%" disabled><option value="">Chọn phòng</option></select>
+                            <input id="add-checkIn" class="swal2-input" type="date" placeholder="Ngày check-in *">
+                            <input id="add-checkOut" class="swal2-input" type="date" placeholder="Ngày check-out *">
+                            <input id="add-guests" class="swal2-input" type="number" min="1" placeholder="Số khách *" value="1">
+                            <select id="add-status" class="swal2-input" style="width: 100%">
+                                <option value="pending">Chờ xác nhận</option>
+                                <option value="confirmed">Đã xác nhận</option>
+                                <option value="cancelled">Đã hủy</option>
+                                <option value="completed">Hoàn thành</option>
+                            </select>
+                            <input id="add-totalPrice" class="swal2-input" type="number" min="0" placeholder="Tổng tiền (VNĐ)">
+                            <textarea id="add-notes" class="swal2-input" placeholder="Ghi chú" rows="2"></textarea>
+                        </div>
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Lưu',
+                    cancelButtonText: 'Hủy',
+                    didOpen: () => {
+                        const hotelSelect = document.getElementById('add-hotelSelect');
+                        const roomSelect = document.getElementById('add-roomSelect');
+                        hotelSelect.addEventListener('change', function() {
+                            const value = this.value;
+                            roomSelect.innerHTML = '<option value="">Chọn phòng</option>';
+                            roomSelect.disabled = true;
+                            if (!value) return;
+                            const [locationId, hotelKey] = value.split('__');
+                            const hotel = hotelsData.find(h => h.id === hotelKey && h.locationId === locationId);
+                            if (hotel && Array.isArray(hotel.rooms)) {
+                                hotel.rooms.forEach(room => {
+                                    if (room && room.name) {
+                                        const option = document.createElement('option');
+                                        option.value = room.name;
+                                        option.textContent = room.name;
+                                        roomSelect.appendChild(option);
+                                    }
+                                });
+                                roomSelect.disabled = false;
+                            }
+                        });
+                    },
+                    preConfirm: () => {
+                        const customerName = document.getElementById('add-customerName').value.trim();
+                        const customerPhone = document.getElementById('add-customerPhone').value.trim();
+                        const hotelSelect = document.getElementById('add-hotelSelect');
+                        const checkIn = document.getElementById('add-checkIn').value;
+                        const checkOut = document.getElementById('add-checkOut').value;
+                        const guests = document.getElementById('add-guests').value;
+
+                        if (!customerName || !customerPhone || !hotelSelect.value || !checkIn || !checkOut || !guests) {
+                            Swal.showValidationMessage('Vui lòng điền đầy đủ thông tin bắt buộc!');
+                            return false;
+                        }
+
+                        if (new Date(checkIn) >= new Date(checkOut)) {
+                            Swal.showValidationMessage('Ngày check-out phải sau ngày check-in!');
+                            return false;
+                        }
+
+                        const hotelValue = hotelSelect.value;
+                        const [locationId, hotelKey] = hotelValue.split('__');
+                        const hotel = hotelsData.find(h => h.id === hotelKey && h.locationId === locationId);
+                        
+                        return {
+                            customerName: customerName,
+                            customerEmail: document.getElementById('add-customerEmail').value.trim(),
+                            customerPhone: customerPhone,
+                            hotelName: hotel ? hotel.name : '',
+                            roomName: document.getElementById('add-roomSelect').value,
+                            guests: parseInt(guests),
+                            checkIn: new Date(checkIn).getTime(),
+                            checkOut: new Date(checkOut).getTime(),
+                            status: document.getElementById('add-status').value,
+                            totalPrice: document.getElementById('add-totalPrice').value ? parseInt(document.getElementById('add-totalPrice').value) : 0,
+                            notes: document.getElementById('add-notes').value.trim(),
+                            type: 'hotel',
+                            bookingType: 'hotel',
+                            createdAt: Date.now(),
+                            createdBy: getCurrentEmployeeId()
+                        };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        firebase.database().ref('bookings').push(result.value).then(() => {
+                            Swal.fire('Thành công', 'Đã thêm đặt phòng mới!', 'success');
+                            loadBookings();
+                        }).catch((error) => {
+                            console.error('Error creating booking:', error);
+                            Swal.fire('Lỗi', 'Không thể thêm đặt phòng.', 'error');
+                        });
+                    }
+                });
+            });
+        };
+
+        // ===== PHẢN HỒI VÀ THỐNG KÊ TỪ FIREBASE =====
+
+        // Load dữ liệu phản hồi từ Firebase
+        function loadFeedbackData() {
+            console.log('🔄 Loading feedback data from Firebase...');
+            const tableBody = document.getElementById('feedback-table-body');
+            if (!tableBody) {
+                console.error('❌ Feedback table body not found!');
+                return;
+            }
+
+            // Hiển thị loading state
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-3">Đang tải dữ liệu phản hồi...</td></tr>';
+
+            // Load reviews (đánh giá khách sạn)
+            firebase.database().ref('reviews').once('value').then((snapshot) => {
+                let feedbackData = [];
+                
+                console.log('📋 Reviews snapshot:', snapshot.val());
+                snapshot.forEach((childSnapshot) => {
+                    const review = childSnapshot.val();
+                    if (review && typeof review === 'object') {
+                        review.id = childSnapshot.key;
+                        review.type = 'review';
+                        feedbackData.push(review);
+                    }
+                });
+
+                console.log('📊 Reviews loaded:', feedbackData.length);
+
+                // Load guide comments (bình luận cẩm nang)
+                return firebase.database().ref('guideComments').once('value').then((guideSnapshot) => {
+                    console.log('📋 Guide comments snapshot:', guideSnapshot.val());
+                    guideSnapshot.forEach((guideChildSnapshot) => {
+                        const guideId = guideChildSnapshot.key;
+                        if (guideChildSnapshot.val() && typeof guideChildSnapshot.val() === 'object') {
+                            Object.entries(guideChildSnapshot.val()).forEach(([commentId, comment]) => {
+                                if (comment && typeof comment === 'object') {
+                                    comment.id = commentId;
+                                    comment.guideId = guideId;
+                                    comment.type = 'guide_comment';
+                                    feedbackData.push(comment);
+                                }
+                            });
+                        }
+                    });
+
+                    console.log('📊 Guide comments loaded, total feedback:', feedbackData.length);
+
+                    // Load guide ratings (đánh giá cẩm nang)
+                    return firebase.database().ref('guideRatings').once('value').then((ratingSnapshot) => {
+                        console.log('📋 Guide ratings snapshot:', ratingSnapshot.val());
+                        ratingSnapshot.forEach((ratingChildSnapshot) => {
+                            const guideId = ratingChildSnapshot.key;
+                            if (ratingChildSnapshot.val() && typeof ratingChildSnapshot.val() === 'object') {
+                                Object.entries(ratingChildSnapshot.val()).forEach(([ratingId, rating]) => {
+                                    if (rating && typeof rating === 'object') {
+                                        rating.id = ratingId;
+                                        rating.guideId = guideId;
+                                        rating.type = 'guide_rating';
+                                        feedbackData.push(rating);
+                                    }
+                                });
+                            }
+                        });
+
+                        console.log('📊 All feedback loaded, total:', feedbackData.length);
+                        
+                        // Sort by timestamp (newest first)
+                        feedbackData.sort((a, b) => (b.timestamp || b.date || 0) - (a.timestamp || a.date || 0));
+                        
+                        console.log('📊 Loaded feedback data:', feedbackData);
+                        renderFeedbackTable(feedbackData);
+                    });
+                });
+            }).catch((error) => {
+                console.error('❌ Error loading feedback data:', error);
+                tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-3 text-danger">Lỗi tải dữ liệu phản hồi!</td></tr>';
+                Swal.fire('Lỗi', 'Không thể tải dữ liệu phản hồi: ' + error.message, 'error');
+            });
+        }
+
+        // Render bảng phản hồi
+        function renderFeedbackTable(feedbackData) {
+            const tableBody = document.getElementById('feedback-table-body');
+            tableBody.innerHTML = '';
+
+            if (feedbackData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-5">Chưa có phản hồi nào.</td></tr>';
+                return;
+            }
+
+            console.log('🎨 Rendering feedback table with data:', feedbackData);
+
+            feedbackData.forEach((feedback) => {
+                const row = document.createElement('tr');
+
+                let customerName = feedback.userName || 'Khách';
+                let content = '';
+                let room = '';
+                let status = 'pending';
+                let statusText = 'Chờ xử lý';
+
+                if (feedback.type === 'review') {
+                    content = feedback.comment || 'Không có nội dung';
+                    room = feedback.room ? feedback.room : '';
+                    status = feedback.processed ? 'processed' : 'pending';
+                    statusText = feedback.processed ? 'Đã xử lý' : 'Chờ xử lý';
+                } else if (feedback.type === 'guide_comment') {
+                    content = feedback.text || 'Không có nội dung';
+                    room = '';
+                    status = feedback.processed ? 'processed' : 'pending';
+                    statusText = feedback.processed ? 'Đã xử lý' : 'Chờ xử lý';
+                } else if (feedback.type === 'guide_rating') {
+                    content = `${feedback.comment || 'Không có bình luận'} (${feedback.rating}/5 sao)`;
+                    room = '';
+                    status = feedback.processed ? 'processed' : 'pending';
+                    statusText = feedback.processed ? 'Đã xử lý' : 'Chờ xử lý';
+                }
+
+                const statusBadge = status === 'processed' 
+                    ? '<span class="badge bg-success">Đã xử lý</span>'
+                    : '<span class="badge bg-warning">Chờ xử lý</span>';
+
+                const actionButton = status === 'processed'
+                    ? '<button class="btn btn-sm btn-secondary" disabled>Đã xử lý</button>'
+                    : `<button class="btn btn-sm btn-primary" onclick="markFeedbackProcessed('${feedback.type}', '${feedback.id}', '${feedback.guideId || ''}')">Đánh dấu đã xử lý</button>`;
+
+                row.innerHTML = `
+                    <td>${customerName}</td>
+                    <td>${room}</td>
+                    <td>${content}</td>
+                    <td>${statusBadge}</td>
+                    <td>${actionButton}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Load dữ liệu thống kê từ Firebase
+        function loadStatisticsData() {
+            console.log('📊 Loading statistics data from Firebase...');
+            
+            // Load booking statistics
+            firebase.database().ref('bookings').once('value').then((bookingSnapshot) => {
+                let processedBookings = 0;
+                let totalBookings = 0;
+                
+                console.log('📋 Bookings snapshot:', bookingSnapshot.val());
+                bookingSnapshot.forEach((childSnapshot) => {
+                    const booking = childSnapshot.val();
+                    if (booking && typeof booking === 'object') {
+                        totalBookings++;
+                        if (booking.status === 'confirmed' || booking.status === 'completed') {
+                            processedBookings++;
+                        }
+                    }
+                });
+
+                console.log('📊 Booking stats:', { processedBookings, totalBookings });
+
+                // Load feedback statistics
+                return firebase.database().ref('reviews').once('value').then((reviewSnapshot) => {
+                    let processedFeedback = 0;
+                    let totalFeedback = 0;
+                    
+                    console.log('📋 Reviews for stats snapshot:', reviewSnapshot.val());
+                    reviewSnapshot.forEach((childSnapshot) => {
+                        const review = childSnapshot.val();
+                        if (review && typeof review === 'object') {
+                            totalFeedback++;
+                            if (review.processed) {
+                                processedFeedback++;
+                            }
+                        }
+                    });
+
+                    console.log('📊 Review stats:', { processedFeedback, totalFeedback });
+
+                    // Load guide comments statistics
+                    return firebase.database().ref('guideComments').once('value').then((commentSnapshot) => {
+                        console.log('📋 Guide comments for stats snapshot:', commentSnapshot.val());
+                        commentSnapshot.forEach((guideChildSnapshot) => {
+                            if (guideChildSnapshot.val() && typeof guideChildSnapshot.val() === 'object') {
+                                Object.values(guideChildSnapshot.val()).forEach((comment) => {
+                                    if (comment && typeof comment === 'object') {
+                                        totalFeedback++;
+                                        if (comment.processed) {
+                                            processedFeedback++;
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
+                        console.log('📊 After guide comments stats:', { processedFeedback, totalFeedback });
+
+                        // Load guide ratings statistics
+                        return firebase.database().ref('guideRatings').once('value').then((ratingSnapshot) => {
+                            console.log('📋 Guide ratings for stats snapshot:', ratingSnapshot.val());
+                            ratingSnapshot.forEach((ratingChildSnapshot) => {
+                                if (ratingChildSnapshot.val() && typeof ratingChildSnapshot.val() === 'object') {
+                                    Object.values(ratingChildSnapshot.val()).forEach((rating) => {
+                                        if (rating && typeof rating === 'object') {
+                                            totalFeedback++;
+                                            if (rating.processed) {
+                                                processedFeedback++;
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+
+                            console.log('📊 Final stats:', { processedBookings, totalBookings, processedFeedback, totalFeedback });
+
+                            // Update statistics display
+                            updateStatisticsDisplay(processedBookings, totalBookings, processedFeedback, totalFeedback);
+                        });
+                    });
+                });
+            }).catch((error) => {
+                console.error('❌ Error loading statistics:', error);
+                Swal.fire('Lỗi', 'Không thể tải dữ liệu thống kê: ' + error.message, 'error');
+                
+                // Hiển thị dữ liệu mặc định để không để trống
+                updateStatisticsDisplay(0, 0, 0, 0);
+            });
+        }
+
+        // Cập nhật hiển thị thống kê
+        function updateStatisticsDisplay(processedBookings, totalBookings, processedFeedback, totalFeedback) {
+            console.log('📊 Updating statistics display:', { processedBookings, totalBookings, processedFeedback, totalFeedback });
+            
+            // Kiểm tra xem stats section có tồn tại không
+            const statsSection = document.getElementById('stats-section');
+            if (!statsSection) {
+                console.log('📊 Stats section not found');
+                return;
+            }
+            
+            // Get all stat values (backup method)
+            const allStatValues = document.querySelectorAll('#stats-section .stat-value');
+            console.log('🔍 Found stat value elements:', allStatValues.length);
+            
+            // Update booking statistics (first stat-card)
+            let bookingValueElement = document.querySelector('#stats-section .col-md-4:nth-child(1) .stat-value');
+            if (!bookingValueElement && allStatValues.length >= 1) {
+                bookingValueElement = allStatValues[0]; // Fallback to first element
+            }
+            if (bookingValueElement) {
+                bookingValueElement.textContent = processedBookings;
+                console.log('✅ Updated booking stats:', processedBookings);
+            } else {
+                console.error('❌ Booking value element not found');
+            }
+
+            // Update check-in/out statistics (second stat-card)
+            let checkinValueElement = document.querySelector('#stats-section .col-md-4:nth-child(2) .stat-value');
+            if (!checkinValueElement && allStatValues.length >= 2) {
+                checkinValueElement = allStatValues[1]; // Fallback to second element
+            }
+            if (checkinValueElement) {
+                const checkinValue = Math.floor(processedBookings * 0.7);
+                checkinValueElement.textContent = checkinValue;
+                console.log('✅ Updated checkin stats:', checkinValue);
+            } else {
+                console.error('❌ Checkin value element not found');
+            }
+
+            // Update feedback statistics (third stat-card)
+            let feedbackValueElement = document.querySelector('#stats-section .col-md-4:nth-child(3) .stat-value');
+            if (!feedbackValueElement && allStatValues.length >= 3) {
+                feedbackValueElement = allStatValues[2]; // Fallback to third element
+            }
+            if (feedbackValueElement) {
+                feedbackValueElement.textContent = processedFeedback;
+                console.log('✅ Updated feedback stats:', processedFeedback);
+            } else {
+                console.error('❌ Feedback value element not found');
+            }
+
+            // Update chart data
+            updateStatisticsChart(processedBookings, Math.floor(processedBookings * 0.7), processedFeedback);
+        }
+
+        // Cập nhật biểu đồ thống kê
+        function updateStatisticsChart(bookings, checkins, feedback) {
+            const chartCanvas = document.getElementById('personalStatsChart');
+            if (chartCanvas && window.personalStatsChart) {
+                console.log('📈 Updating chart with data:', { bookings, checkins, feedback });
+                window.personalStatsChart.data.datasets[0].data = [bookings, checkins, feedback];
+                window.personalStatsChart.update();
+                console.log('✅ Chart updated successfully');
+            } else {
+                console.error('❌ Chart canvas or chart instance not found');
+                console.log('Canvas exists:', !!chartCanvas);
+                console.log('Chart instance exists:', !!window.personalStatsChart);
+            }
+        }
+
+        // Đánh dấu phản hồi đã xử lý với error handling tốt hơn
+        window.markFeedbackProcessed = function(type, id, guideId = '') {
+            console.log('🔧 Marking feedback as processed:', { type, id, guideId });
+            
+            let ref;
+            if (type === 'review') {
+                ref = firebase.database().ref(`reviews/${id}`);
+            } else if (type === 'guide_comment') {
+                ref = firebase.database().ref(`guideComments/${guideId}/${id}`);
+            } else if (type === 'guide_rating') {
+                ref = firebase.database().ref(`guideRatings/${guideId}/${id}`);
+            }
+
+            if (ref) {
+                ref.update({
+                    processed: true,
+                    processedAt: Date.now(),
+                    processedBy: getCurrentEmployeeId()
+                }).then(() => {
+                    console.log('✅ Feedback marked as processed successfully');
+                    Swal.fire('Thành công', 'Đã đánh dấu phản hồi đã xử lý!', 'success');
+                    loadFeedbackData(); // Reload data
+                }).catch((error) => {
+                    console.error('❌ Error marking feedback as processed:', error);
+                    Swal.fire('Lỗi', 'Không thể cập nhật trạng thái phản hồi.', 'error');
+                });
+            } else {
+                console.error('❌ Invalid feedback reference');
+                Swal.fire('Lỗi', 'Tham chiếu phản hồi không hợp lệ.', 'error');
+            }
+        };
+
+
     </script>
+
+
 </body>
 </html>
