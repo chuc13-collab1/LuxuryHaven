@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxuryHavenTravel - Đặt Phòng Khách Sạn Trực Tuyến</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+    <link rel="stylesheet" href="css\index.css">
+    <link rel="stylesheet" href="css\mobile.css">
+    <link rel="stylesheet" href="css\chatbox.css">
+    <script type="module" src="js/search.js"></script>
+    <link rel="stylesheet" href="css\loading.css">
+    <style>
+        @font-face {
+            font-family: 'Nautica Script Bold';
+            src: url('fonts/nautica-bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        .nautica-script {
+            font-family: 'Nautica Script Bold', cursive;
+            font-size: 3em;
+            font-weight: bold;
+            color: #cddae6;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <dotlottie-wc 
+            src="https://lottie.host/22866d75-292a-42dc-ae8a-72f6f903386d/dwhv5hvZ72.lottie" 
+            style="width: 300px; height: 300px" 
+            speed="1" 
+            autoplay 
+            loop>
+        </dotlottie-wc>
+        <div class="loading-text">LuxuryHavenTravel</div>
+        <div class="loading-subtext">Đang tải nội dung...</div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-flex">
+                <!-- Logo -->
+                <a class="navbar-brand" href="#">
+                    <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
+                </a> <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <!-- Search Box -->
+                <div class="nav-search">
+                    <div class="search-input-group">
+                        <input type="text" placeholder="Tìm kiếm..." id="main-search-input" autocomplete="off">
+                        <button type="button" id="main-search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <ul class="nav-links" id="nav-links">
+                        <li><a href="index.html" class="active">Trang chủ</a></li>
+                        <li><a href="hotel.html">Khách sạn</a></li>
+
+                        <li class="dropdown"><a href="tours.html">Tours</a></li>
+
+                        <li class="dropdown"><a href="prioritize.html">Ưu đãi</a></li>
+                        <li class="dropdown"><a href="travel_guide.html">Cẩm nang du lịch</a></li>
+                        <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
+                        <!-- <li class="dropdown"><a href="vuichoi.html">🌐</a></li> -->
+
+                        <li>
+                            <div class="d-flex align-items-center">
+                                <div class="dropdown" id="user-dropdown" style="display:none;">
+                                    <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                                        id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-user"></i> <span id="user-name"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="member.html"><i
+                                                    class="fas fa-user-circle"></i> Tài khoản</a></li>
+                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i
+                                                    class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                                    </ul>
+                                </div>
+                                <a href="auth.html" class="btn btn-outline-primary me-2" id="open-login-modal">
+  <i class="fas fa-user"></i> Đăng nhập
+</a>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Search -->
+    <section class="hero-section hero-slider">
+        <div class="hero-slide hero-slide-1 active">
+            <div class="hero-overlay"></div>
+            <div class="hero-content-wrapper">
+                <p class="nautica-script">LuxuryHavenTravel</p>
+                <div class="hero-content">
+                    <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
+                    <p>Đặt phòng khách sạn, tour du lịch, ưu đãi với giá tốt nhất</p>
+                </div>
+            </div>
+        </div>
+        <div class="hero-slide hero-slide-2">
+            <div class="hero-overlay"></div>
+            <div class="hero-content-wrapper">
+                <p class="nautica-script">LuxuryHavenTravel</p>
+                <div class="hero-content">
+                    <h1>Khám phá những kỳ nghỉ tuyệt vời</h1>
+                    <p>Đặt phòng khách sạn, tour du lịch, ưu đãi với giá tốt nhất</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tầm nhìn & Sứ mệnh -->
+    <section class="vision-mission-section animate-on-scroll">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="section-title">Tầm nhìn & Sứ mệnh</h2>
+                    <div class="vision-mission-box mx-auto">
+                        <h4><i class="fas fa-eye"></i> Tầm nhìn</h4>
+                        <p>Trở thành nền tảng đặt phòng khách sạn và du lịch hàng đầu Việt Nam, mang đến trải nghiệm
+                            tiện lợi, an toàn và đẳng cấp cho mọi khách hàng.</p>
+                        <h4><i class="fas fa-bullseye"></i> Sứ mệnh</h4>
+                        <p>LuxuryHavenTravel cam kết kết nối khách hàng với những dịch vụ lưu trú, nghỉ dưỡng và giải
+                            trí chất lượng nhất, lấy sự hài lòng và tin tưởng của khách hàng làm trung tâm cho mọi hoạt
+                            động.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><br>
+
+    <!-- Popular Destinations -->
+    <section class="popular-destinations py-5">
+        <div class="container">
+            <div class="row align-items-center flex-lg-row flex-column-reverse">
+                <div class="col-lg-6 col-12 mb-4 mb-lg-0">
+                    <h2 class="section-title mb-3" style="text-align:left">LuxuryHavenTravel – Đặt phòng khách sạn & du lịch tiện lợi</h2>
+                    <p style="color:#555; font-size:1.1rem; line-height:1.7;">LuxuryHavenTravel là nền tảng đặt phòng khách sạn và tour du lịch trực tuyến hàng đầu, giúp bạn dễ dàng lên kế hoạch cho mọi chuyến đi. Chúng tôi kết nối bạn với hàng nghìn khách sạn, resort, homestay và các tour trải nghiệm đa dạng trên khắp Việt Nam, mang đến nhiều lựa chọn phù hợp với mọi nhu cầu và ngân sách. Giao diện thân thiện, thao tác đặt phòng nhanh chóng, thanh toán an toàn và đội ngũ hỗ trợ 24/7 là những điểm mạnh giúp bạn yên tâm khi sử dụng dịch vụ. LuxuryHavenTravel thường xuyên cập nhật các chương trình ưu đãi, combo nghỉ dưỡng, tour trọn gói với giá tốt, giúp bạn tiết kiệm chi phí mà vẫn tận hưởng trọn vẹn kỳ nghỉ. Hãy để LuxuryHavenTravel đồng hành cùng bạn, biến mỗi chuyến đi thành một trải nghiệm đáng nhớ và dễ dàng hơn bao giờ hết.</p>
+                    <!-- <a href="#" class="btn btn-outline-primary mt-3" style="font-weight:700; font-size:1.15rem; border-radius:24px; padding:10px 32px; border:2px solid #a67c52; color:#a67c52;">Khám phá ngay</a> -->
+                </div>
+                <div class="col-lg-6 col-12 d-flex justify-content-center">
+                    <video src="images/1303-145340146_small.mp4" autoplay loop muted playsinline style="max-width:100%; border-radius:24px; box-shadow:0 4px 32px rgba(0,0,0,0.10); object-fit:cover; min-height:320px; background:#eee;"></video>
+                </div>
+            </div>
+        </div>
+    </section><br>
+
+    <!-- Khách sạn nổi bật -->
+    <section class="featured-hotels">
+        <div class="container">
+            <h2 class="section-title text-center">Khách sạn nổi bật</h2>
+            <div class="row g-4" id="featured-hotels-list">
+                <!-- Khách sạn sẽ được load động từ Firebase -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner giảm giá -->
+    <h2 class="section-title">Ưu đãi đặc biệt</h2>
+    <p class="combo-center-text">Đặt phòng hôm nay để tận hưởng ưu đãi có hạn tại các điểm đến hấp dẫn.</p>
+<div class="container">
+  <div class="row g-4" id="special-tours-list"></div>
+</div>
+<!-- ... các phần khác ... -->
+<!-- Chỉ giữ lại 1 đoạn script type="module" ở cuối file -->
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js";
+
+// Khởi tạo Firebase app và db chỉ 1 lần
+let app;
+if (!getApps().length) {
+    const firebaseConfig = {
+        apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+        authDomain: "websitedatphongkhachsan.firebaseapp.com",
+        databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+        projectId: "websitedatphongkhachsan",
+        storageBucket: "websitedatphongkhachsan.appspot.com",
+        messagingSenderId: "732884739524",
+        appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+        measurementId: "G-RC61EXTZH7"
+    };
+    app = initializeApp(firebaseConfig);
+} else {
+    app = getApps()[0];
+}
+const db = getDatabase(app);
+
+// --- Khách sạn nổi bật ---
+function createHotelCard(hotel) {
+    const defaultHotelImage = 'images/default-hotel.jpg';
+    const image = hotel.chiTiet?.image || hotel.image || defaultHotelImage;
+    const name = hotel.tenKhachSan || hotel.name || 'Không có tên';
+    const address = hotel.diaChi || hotel.location || '';
+    const star = hotel.xepHangSao || hotel.star || '';
+    let starHtml = '';
+    if (star) {
+        for (let i = 0; i < star; i++) {
+            starHtml += '<i class="fas fa-star" style="color:#ffd700;font-size:1.1rem"></i>';
+        }
+    }
+    return `
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 shadow hotel-card">
+                <img src="${image}" class="card-img-top" alt="${name}" loading="lazy" onerror="this.src='${defaultHotelImage}'">
+                <div class="card-body">
+                    <h5 class="card-title">${name}</h5>
+                    <div class="hotel-rating mb-2">${starHtml}</div>
+                    <p class="card-text hotel-address"><i class="fas fa-map-marker-alt" style="color:#e67e22;margin-right:6px;"></i>${address}</p>
+                    <a href="hotel-detail.html?id=${hotel.id}" class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
+                    </div>
+                        </div>
+                    </div>
+    `;
+}
+
+async function loadFeaturedHotels() {
+    const container = document.getElementById('featured-hotels-list');
+    if (!container) return;
+    container.innerHTML = '<div class="text-center w-100 py-5">Đang tải...</div>';
+    const snapshot = await get(ref(db, 'location'));
+    let allHotels = [];
+    if (snapshot.exists()) {
+        const data = snapshot.val();
+        Object.keys(data).forEach(cityKey => {
+            const hotels = data[cityKey]?.hotels;
+            if (hotels) {
+                if (Array.isArray(hotels)) {
+                    hotels.forEach((hotel, idx) => {
+                        allHotels.push({ ...hotel, id: `${cityKey}_${idx}` });
+                    });
+                } else {
+                    Object.entries(hotels).forEach(([key, value]) => {
+                        allHotels.push({ ...value, id: key });
+                    });
+                }
+            }
+        });
+    }
+    // Lấy 4 khách sạn ngẫu nhiên
+    const featured = allHotels.sort(() => 0.5 - Math.random()).slice(0, 4);
+    if (featured.length) {
+        container.innerHTML = featured.map(createHotelCard).join('');
+    } else {
+        container.innerHTML = '<div class="text-danger">Không có khách sạn nổi bật để hiển thị.</div>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadFeaturedHotels);
+
+// --- Ưu đãi đặc biệt (Tour) ---
+function createTourCard(tour) {
+    const defaultTourImage = 'images/default-tour.jpg';
+    const image = tour.image || defaultTourImage;
+    const name = tour.name || 'Không có tên';
+    const desc = tour.description || '';
+    const price = tour.price ? tour.price.toLocaleString('vi-VN') + 'đ' : '';
+    return `
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 shadow tour-card">
+                <img src="${image}" class="card-img-top" alt="${name}" loading="lazy" onerror="this.src='${defaultTourImage}'">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">${name}</h5>
+                    <p class="card-text tour-desc">${desc}</p>
+                    <div class="tour-price mb-2 fw-bold text-danger">${price}</div>
+                    <a href="tour-detail.html?id=${tour.id}${tour.category ? `&category=${tour.category}` : ''}" class="btn btn-outline-primary btn-sm w-100">Xem chi tiết</a>
+                    </div>
+                        </div>
+                    </div>
+    `;
+}
+
+async function loadSpecialTours() {
+    const container = document.getElementById('special-tours-list');
+    if (!container) return;
+    container.innerHTML = '<div class="text-center w-100 py-5">Đang tải...</div>';
+    const snapshot = await get(ref(db, 'specialTours'));
+    let allTours = [];
+    if (snapshot.exists()) {
+        const data = snapshot.val();
+        Object.keys(data).forEach(categoryKey => {
+            const tours = data[categoryKey];
+            if (tours) {
+                Object.entries(tours).forEach(([key, value]) => {
+                    allTours.push({ ...value, id: key, category: categoryKey });
+                });
+            }
+        });
+    }
+    // Lấy 4 tour ngẫu nhiên
+    const featured = allTours.sort(() => 0.5 - Math.random()).slice(0, 4);
+    if (featured.length) {
+        container.innerHTML = featured.map(createTourCard).join('');
+    } else {
+        container.innerHTML = '<div class="text-danger">Không có ưu đãi tour để hiển thị.</div>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadSpecialTours);
+
+// --- Ưu đãi mùa hè (Summer Sale) lấy từ specialOffers ---
+function createSummerOfferCard(offer) {
+    const defaultOfferImage = 'images/default-tour.jpg';
+    const image = offer.image || defaultOfferImage;
+    const title = offer.title || 'Không có tiêu đề';
+    const desc = offer.desc || '';
+    const oldPrice = offer.oldPrice ? `<span class='text-decoration-line-through text-muted me-2'>${offer.oldPrice.toLocaleString('vi-VN')}đ</span>` : '';
+    const newPrice = offer.newPrice ? `<span class='fw-bold text-danger'>${offer.newPrice.toLocaleString('vi-VN')}đ</span>` : '';
+    const quantity = offer.quantity ? `<div class='text-success small mb-1'>Còn lại: ${offer.quantity}</div>` : '';
+    return `
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 shadow tour-card">
+                <img src="${image}" class="card-img-top" alt="${title}" loading="lazy" onerror="this.src='${defaultOfferImage}'">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title mb-2">${title}</h5>
+                    <div class="summer-offer-desc mb-2">${desc}</div>
+                    ${quantity}
+                    <div class="mb-2">${oldPrice}${newPrice}</div>
+                    <a href="prioritize.html" class="btn btn-outline-primary mt-auto">Đặt ngay</a>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+async function loadSummerOffers() {
+    const list = document.getElementById('summer-sale-list');
+    if (!list) return;
+    try {
+        const snapshot = await get(ref(db, 'specialOffers'));
+        if (snapshot.exists()) {
+            const offers = Object.values(snapshot.val() || {});
+            // Lấy ngẫu nhiên 4 ưu đãi
+            const shuffled = offers.sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 4);
+            list.innerHTML = selected.map(createSummerOfferCard).join('');
+        } else {
+            list.innerHTML = '<div class="col-12 text-center text-muted">Chưa có ưu đãi nào.</div>';
+        }
+    } catch (e) {
+        list.innerHTML = '<div class="col-12 text-danger">Lỗi tải ưu đãi.</div>';
+    }
+}
+
+// Gọi hàm khi trang tải xong
+loadSummerOffers();
+
+// --- Điểm đến yêu thích (Favorite Destinations) từ travelGuides ---
+function createGuideCard(guide, idx) {
+    // Xác định class cho layout spiral
+    let cardClass = 'destination-card small';
+    if (idx === 0) cardClass = 'destination-card large';
+    else if (idx === 1) cardClass = 'destination-card medium';
+    const defaultImg = 'images/default-destination.jpg';
+    return `
+        <div class="${cardClass}" onclick="window.location.href='destination_detail.html?slug=${guide.slug}'">
+            <img src="${guide.main_image || defaultImg}" alt="${guide.title}" loading="lazy" onerror="this.src='${defaultImg}'">
+            <div class="destination-info">
+                <h3>${guide.title}</h3>
+                <p>${guide.excerpt || ''}</p>
+            </div>
+        </div>
+    `;
+}
+
+async function loadFavoriteDestinations() {
+    const list = document.getElementById('favorite-destinations-list');
+    if (!list) return;
+    try {
+        const snapshot = await get(ref(db, 'travelGuides'));
+        if (snapshot.exists()) {
+            const guides = Object.values(snapshot.val() || {}).filter(g => g.is_featured_on_homepage);
+            const selected = guides.slice(0, 5);
+            list.innerHTML = selected.map(createGuideCard).join('');
+        } else {
+            list.innerHTML = '<div class="col-12 text-center text-muted">Chưa có điểm đến nào.</div>';
+        }
+    } catch (e) {
+        list.innerHTML = '<div class="col-12 text-danger">Lỗi tải điểm đến.</div>';
+    }
+}
+
+// Gọi hàm khi trang tải xong
+loadFavoriteDestinations();
+
+// --- Tin tức mới nhất (News) từ blogs ---
+function createNewsCard(news) {
+    // Nếu có ảnh thì render thẻ img, nếu không thì bỏ qua
+    const imgTag = news.image ? `<img src="${news.image}" alt="${news.title}" class="news-image" loading="lazy" onerror="this.style.display='none'">` : '';
+    return `
+      <div class="col-md-4 col-sm-6">
+        <div class="news-card h-100 shadow">
+          ${imgTag}
+          <div class="news-content d-flex flex-column">
+            <h3 class="news-title mb-2">${news.title}</h3>
+            <p class="news-excerpt mb-2">${news.excerpt || ''}</p>
+            <a href="footer/news.html?id=${news.id}" class="btn btn-outline-primary mt-auto">Xem chi tiết</a>
+          </div>
+        </div>
+      </div>
+    `;
+}
+
+async function loadLatestNews() {
+    const list = document.getElementById('latest-news-list');
+    if (!list) return;
+    try {
+        const snapshot = await get(ref(db, 'blogs'));
+        if (snapshot.exists()) {
+            const blogs = Object.values(snapshot.val() || {});
+            // Sắp xếp theo ngày hoặc id giảm dần, lấy 3 bài mới nhất
+            const sorted = blogs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+            const selected = sorted.slice(0, 3);
+            list.innerHTML = selected.map(createNewsCard).join('');
+        } else {
+            list.innerHTML = '<div class="col-12 text-center text-muted">Chưa có tin tức nào.</div>';
+        }
+    } catch (e) {
+        list.innerHTML = '<div class="col-12 text-danger">Lỗi tải tin tức.</div>';
+    }
+}
+
+// Gọi hàm khi trang tải xong
+loadLatestNews();
+</script>
+
+    <!-- Ưu đãi mùa hè rực rỡ -->
+    <section class="summer-sale">
+      <div class="container">
+        <h2 class="section-title text-center mb-3">Ưu Đãi Mùa Hè Rực Rỡ – Đặt Tour, Nhận Quà Ngay!</h2>
+        <p class="combo-center-text text-center mb-4">Săn deal du lịch cực chất, chỉ có trong tháng 6! Số lượng có hạn.</p>
+        <div class="row g-4" id="summer-sale-list"></div>
+        <div class="text-center mt-3">
+          <!-- <a href="tours.html" class="btn btn-gradient" style="padding: 12px 36px; font-size: 1.1rem; border-radius: 24px;">Khám phá tất cả ưu đãi</a> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Điểm đến yêu thích -->
+    <section class="favorite-destinations">
+        <div class="container">
+            <h2 class="section-title">Điểm đến yêu thích</h2>
+            <p class="combo-center-text">Khám phá những điểm đến tuyệt đẹp của Việt Nam!</p>
+            <div class="golden-spiral-grid" id="favorite-destinations-list"></div>
+        </div>
+    </section>
+
+    <!-- Tin tức mới nhất -->
+    <section class="latest-news-section">
+      <div class="container">
+        <h2 class="section-title text-center mb-3">Tin tức mới nhất</h2>
+        <div class="row g-4" id="latest-news-list"></div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-choose-us py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">Tại sao chọn chúng tôi?</h2>
+            <div class="row g-4">
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="feature-card text-center p-4 h-100 shadow-sm rounded-3">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-shield-alt fa-2x text-primary" aria-label="Đặt phòng an toàn"></i>
+                        </div>
+                        <h3 class="h5 mb-2 fw-bold">Đặt phòng an toàn</h3>
+                        <p class="mb-0 text-muted">Thanh toán bảo mật, hủy phòng linh hoạt</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="feature-card text-center p-4 h-100 shadow-sm rounded-3">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-tag fa-2x text-success" aria-label="Giá tốt nhất"></i>
+                        </div>
+                        <h3 class="h5 mb-2 fw-bold">Giá tốt nhất</h3>
+                        <p class="mb-0 text-muted">Cam kết giá tốt nhất cho mọi đặt phòng</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="feature-card text-center p-4 h-100 shadow-sm rounded-3">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-headset fa-2x text-warning" aria-label="Hỗ trợ 24/7"></i>
+                        </div>
+                        <h3 class="h5 mb-2 fw-bold">Hỗ trợ 24/7</h3>
+                        <p class="mb-0 text-muted">Đội ngũ hỗ trợ luôn sẵn sàng giúp đỡ</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="feature-card text-center p-4 h-100 shadow-sm rounded-3">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-star fa-2x text-danger" aria-label="Đánh giá thực"></i>
+                        </div>
+                        <h3 class="h5 mb-2 fw-bold">Đánh giá thực</h3>
+                        <p class="mb-0 text-muted">Đánh giá từ khách hàng thực tế</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section py-5 bg-white">
+        <div class="container">
+            <div class="row g-4 align-items-center justify-content-center">
+                <div
+                    class="col-12 col-lg-5 d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start">
+                    <h2 class="section-title mb-3 w-100 text-center">Liên hệ với chúng tôi</h2>
+                    <p class="mb-4 text-muted w-100 text-center">LuxuryHavenTravel luôn sẵn sàng hỗ trợ bạn 24/7. Hãy
+                        liên hệ với chúng tôi nếu bạn có bất kỳ thắc mắc hoặc yêu cầu nào!</p>
+                    <ul class="list-unstyled mb-4 w-100" style="max-width:400px;margin:0 auto;">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-primary" aria-label="Địa chỉ"></i>
+                            Lầu 5, Tòa nhà ABC, 456 Đường Lê Lai, Phường Bến Thành, Quận 1, TP. Hồ Chí Minh, Việt Nam
+</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2 text-primary" aria-label="Email"></i>
+                            LuxuryHavenTravel@gmail.com</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2 text-primary" aria-label="Điện thoại"></i> 0837 918 274  -
+0912 38 4956 </li>
+                        <li><i class="fas fa-clock me-2 text-primary" aria-label="Giờ làm việc"></i> 08:00 - 22:00 (Thứ
+                            2 - Chủ nhật)</li>
+                    </ul>
+                </div>
+                <div class="col-12 col-lg-7">
+                    <div class="card shadow-sm border-0 p-4">
+                        <form id="contact-form">
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label for="contact-name" class="form-label">Họ và tên</label>
+                                    <input type="text" class="form-control" id="contact-name"
+                                        placeholder="Nhập họ và tên" required>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="contact-email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="contact-email" placeholder="Nhập email"
+                                        required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="contact-message" class="form-label">Nội dung liên hệ</label>
+                                    <textarea class="form-control" id="contact-message" rows="4"
+                                        placeholder="Nhập nội dung liên hệ" required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary px-4">Gửi liên hệ</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Contact Section -->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h4>Về LuxuryHavenTravel</h4>
+                    <ul>
+                        <li><a href="about_us.html">Giới thiệu</a></li>
+                        <li><a href="footer\recruitment.html">Tuyển dụng</a></li>
+                        <li><a href="footer\news.html">Tin tức</a></li>
+                        <li><a href="footer\contact.html">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Hỗ trợ</h4>
+                    <ul>
+                        <li><a href="footer\help-center.html">Trung tâm trợ giúp</a></li>
+                        <li><a href="footer\privacy-policy.html">Chính sách bảo mật</a></li>
+                        <li><a href="footer\terms.html">Điều khoản sử dụng</a></li>
+                        <li><a href="footer\cookie-policy.html">Chính sách cookie</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Đối tác</h4>
+                    <ul>
+                        <li><a href="footer\partner.html">Đăng ký làm đối tác</a></li>
+                        <li><a href="footer\marketing.html">Chương trình tiếp thị</a></li>
+                        <li><a href="footer\affiliate.html">Affiliate</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h4>Theo dõi chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="https://facebook.com/100083035936090"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 LuxuryHavenTravel. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <!-- <div id="auth-modal" class="modal">
+        <div class="modal-content"
+            style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
+            <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
+
+            <div id="auth-forms">
+                <form id="login-form" class="auth-form" style="text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Đăng nhập</button>
+                    <div class="login-links">
+                        <a href="#" id="to-register">Không có tài khoản?</a>
+                        <a href="#" id="to-forgot">Quên mật khẩu?</a>
+                    </div>
+                </form>
+
+                <form id="register-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu"
+                                required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Đăng ký</button>
+                    <div class="login-links">
+                        <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
+                    </div>
+                </form>
+
+                <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="forgot-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
+                    <div class="login-links">
+                        <a href="#" id="back-to-login">Quay lại đăng nhập</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="module" src="js/search.js"></script>
+    <script src="js/mobile.js"></script>
+    <script>
+        // Firebase config và xử lý xác thực
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Đợi DOM load xong
+        document.addEventListener('DOMContentLoaded', function () {
+            // Lấy các elements
+            const userDropdown = document.getElementById('user-dropdown');
+            const userName = document.getElementById('user-name');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // Theo dõi trạng thái đăng nhập
+            firebase.auth().onAuthStateChanged(function (user) {
+                const loginBtn = document.getElementById('open-login-modal');
+                if (user) {
+                    if (loginBtn) loginBtn.style.display = 'none';
+                    if (userDropdown) userDropdown.style.display = 'block';
+                    if (userName) userName.textContent = user.displayName || user.email;
+                } else {
+                    if (loginBtn) loginBtn.style.display = 'block';
+                    if (userDropdown) userDropdown.style.display = 'none';
+                }
+            });
+
+            // Xử lý đăng xuất
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    firebase.auth().signOut().then(() => {
+                        Swal.fire({
+                            title: 'Đăng xuất thành công!',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    }).catch((error) => {
+                        Swal.fire({
+                            title: 'Lỗi đăng xuất!',
+                            text: error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                    });
+                });
+            }
+        });
+
+        // Khởi tạo EmailJS với public key
+        (function () {
+            emailjs.init("yI6xhpzYSnD3AGzbX");
+        })();
+
+        // Xử lý form liên hệ
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Lấy thông tin từ form
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            // Hiển thị loading
+            Swal.fire({
+                title: 'Đang gửi...',
+                text: 'Vui lòng đợi trong giây lát',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Gửi email
+            emailjs.send("service_6spwxxw", "template_vcjlg02", {
+                to_email: "quantrikhachsan001@gmail.com",
+                from_name: name,
+                from_email: email,
+                message: message
+            })
+                .then(function () {
+                    // Thành công
+                    Swal.fire({
+                        title: 'Gửi thành công!',
+                        text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.',
+                        icon: 'success',
+                        confirmButtonColor: '#e67e22'
+                    });
+                    // Reset form
+                    document.getElementById('contact-form').reset();
+                })
+                .catch(function (error) {
+                    // Thất bại
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Không thể gửi email. Vui lòng thử lại sau.',
+                        icon: 'error',
+                        confirmButtonColor: '#e67e22'
+                    });
+                    console.error("Error sending email:", error);
+                });
+        });
+
+        let autoSlideInterval;
+        let currentSlideIndex = 0;
+
+        function startAutoSlide() {
+            stopAutoSlide(); // Clear any existing interval
+            autoSlideInterval = setInterval(() => {
+                document.querySelectorAll('.slider-container').forEach(container => {
+                    const nextBtn = container.querySelector('.next');
+                    if (nextBtn) nextSlide(nextBtn);
+                });
+            }, 4000); // Chuyển slide mỗi 4 giây
+        }
+
+        function stopAutoSlide() {
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+            }
+        }
+
+        function nextSlide(btn) {
+            const container = btn.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+            const slides = container.querySelectorAll('.slide');
+
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            updateSlider(slider, dots, currentSlideIndex);
+        }
+
+        function prevSlide(btn) {
+            const container = btn.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+            const slides = container.querySelectorAll('.slide');
+
+            currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+            updateSlider(slider, dots, currentSlideIndex);
+        }
+
+        function currentSlide(dot, index) {
+            const container = dot.closest('.slider-container');
+            const slider = container.querySelector('.slider');
+            const dots = container.querySelectorAll('.dot');
+
+            currentSlideIndex = index;
+            updateSlider(slider, dots, index);
+        }
+
+        function updateSlider(slider, dots, index) {
+            const sliderWidth = slider.offsetWidth;
+            slider.style.transform = `translateX(${-index * sliderWidth}px)`;
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        // Khởi động auto slide và xử lý các sự kiện khi trang load xong
+        document.addEventListener('DOMContentLoaded', () => {
+            startAutoSlide();
+
+            // Thêm sự kiện hover để dừng/tiếp tục auto slide
+            document.querySelectorAll('.slider-container').forEach(container => {
+                container.addEventListener('mouseenter', stopAutoSlide);
+                container.addEventListener('mouseleave', startAutoSlide);
+            });
+        });
+
+        // Hàm tạo thông báo cho admin
+        function generateNotification(icon, color, text, link = '#') {
+            const newNotif = {
+                icon: icon,
+                color: color,
+                text: text,
+                link: link,
+                read: false,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+            firebase.database().ref('notifications').push(newNotif);
+        }
+
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const navLinks = document.getElementById('nav-links');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenuBtn.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                });
+
+                // Close mobile menu when clicking on a link
+                const navLinksItems = navLinks.querySelectorAll('a');
+                navLinksItems.forEach(link => {
+                    link.addEventListener('click', function() {
+                        mobileMenuBtn.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    });
+                });
+
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!mobileMenuBtn.contains(event.target) && !navLinks.contains(event.target)) {
+                        mobileMenuBtn.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    }
+                });
+            }
+        });
+
+        // Banner Slider Functions
+        let currentBannerSlideIndex = 0;
+        const bannerSlides = document.querySelectorAll('.banner-slide');
+        const bannerDots = document.querySelectorAll('.banner-dot');
+
+        function showBannerSlide(index) {
+            // Hide all slides
+            bannerSlides.forEach(slide => slide.classList.remove('active'));
+            bannerDots.forEach(dot => dot.classList.remove('active'));
+
+            // Show current slide
+            if (bannerSlides[index]) {
+                bannerSlides[index].classList.add('active');
+            }
+            if (bannerDots[index]) {
+                bannerDots[index].classList.add('active');
+            }
+
+            currentBannerSlideIndex = index;
+        }
+
+        function changeBannerSlide(direction) {
+            let newIndex = currentBannerSlideIndex + direction;
+            
+            if (newIndex >= bannerSlides.length) {
+                newIndex = 0;
+            } else if (newIndex < 0) {
+                newIndex = bannerSlides.length - 1;
+            }
+
+            showBannerSlide(newIndex);
+        }
+
+        function currentBannerSlide(index) {
+            showBannerSlide(index);
+        }
+
+        // Auto slide banner
+        let bannerAutoSlideInterval;
+
+        function startBannerAutoSlide() {
+            bannerAutoSlideInterval = setInterval(() => {
+                changeBannerSlide(1);
+            }, 5000); // Change slide every 5 seconds
+        }
+
+        function stopBannerAutoSlide() {
+            if (bannerAutoSlideInterval) {
+                clearInterval(bannerAutoSlideInterval);
+            }
+        }
+
+        // Initialize banner slider
+        document.addEventListener('DOMContentLoaded', function() {
+            if (bannerSlides.length > 0) {
+                showBannerSlide(0);
+                startBannerAutoSlide();
+
+                // Pause auto slide on hover
+                const bannerSlider = document.querySelector('.banner-slider');
+                if (bannerSlider) {
+                    bannerSlider.addEventListener('mouseenter', stopBannerAutoSlide);
+                    bannerSlider.addEventListener('mouseleave', startBannerAutoSlide);
+                }
+            }
+        });
+
+        // Hero slider auto change
+        let heroCurrent = 0;
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        function showHeroSlide(idx) {
+            heroSlides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === idx);
+            });
+        }
+        function nextHeroSlide() {
+            heroCurrent = (heroCurrent + 1) % heroSlides.length;
+            showHeroSlide(heroCurrent);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            showHeroSlide(0);
+            setInterval(nextHeroSlide, 5000);
+        });
+
+        // Loading Overlay Management
+        window.addEventListener('load', function() {
+            // Đảm bảo loading hiển thị ít nhất 2 giây
+            setTimeout(function() {
+                const loadingOverlay = document.getElementById('loading-overlay');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('hidden');
+                    // Xóa element sau khi animation hoàn tất
+                    setTimeout(function() {
+                        loadingOverlay.remove();
+                    }, 500);
+                }
+            }, 2000);
+        });
+
+        // Hiển thị loading khi chuyển trang
+        document.addEventListener('DOMContentLoaded', function() {
+            // Thêm loading cho các link navigation
+            const navLinks = document.querySelectorAll('a[href]:not([href^="#"]):not([href^="javascript:"]):not([target="_blank"])');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Chỉ hiển thị loading nếu không phải là link trong trang hiện tại
+                    if (this.hostname === window.location.hostname && this.pathname !== window.location.pathname) {
+                        showPageLoading();
+                    }
+                });
+            });
+        });
+
+        function showPageLoading() {
+            // Tạo loading overlay mới cho chuyển trang
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.id = 'page-loading-overlay';
+            loadingOverlay.innerHTML = `
+                <dotlottie-wc 
+                    src="https://lottie.host/22866d75-292a-42dc-ae8a-72f6f903386d/dwhv5hvZ72.lottie" 
+                    style="width: 200px; height: 200px" 
+                    speed="1.5" 
+                    autoplay 
+                    loop>
+                </dotlottie-wc>
+                <div class="loading-text" style="font-size: 1.5rem;">Đang chuyển trang...</div>
+            `;
+            loadingOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            `;
+            document.body.appendChild(loadingOverlay);
+            
+            // Hiển thị loading
+            setTimeout(() => {
+                loadingOverlay.style.opacity = '1';
+            }, 10);
+        }
+    </script>
+
+    <!-- Nút mở modal đánh giá -->
+    <button id="open-review-modal" class="btn btn-primary"
+        style="position: fixed; bottom: 20px; right: 20px; z-index: 999; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-star" style="font-size: 24px;"></i>
+    </button>
+
+    <!-- Modal đánh giá -->
+    <div id="review-modal" class="modal"
+        style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+        <div class="modal-content"
+            style="background-color: #fff; margin: 15% auto; padding: 20px; border-radius: 12px; max-width: 500px; position: relative;">
+            <span class="close-review-modal"
+                style="position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer;">&times;</span>
+            <h2 style="color: #003366; margin-bottom: 20px;">Đánh giá của bạn</h2>
+            <form id="review-form">
+                <div class="rating" style="margin-bottom: 20px; text-align: center;">
+                    <i class="far fa-star star" data-rating="1"
+                        style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="2"
+                        style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="3"
+                        style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="4"
+                        style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                    <i class="far fa-star star" data-rating="5"
+                        style="font-size: 24px; color: #ffd700; cursor: pointer; margin: 0 5px;"></i>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="review-title" style="display: block; margin-bottom: 5px;">Tiêu đề</label>
+                    <input type="text" id="review-title" class="form-control" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="review-content" style="display: block; margin-bottom: 5px;">Nội dung đánh giá</label>
+                    <textarea id="review-content" class="form-control" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 10px; background: linear-gradient(45deg, #1a237e, #0d47a1); border: none;">Gửi
+                    đánh giá</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const reviewModal = document.getElementById('review-modal');
+            const openReviewBtn = document.getElementById('open-review-modal');
+            const closeReviewBtn = document.querySelector('.close-review-modal');
+            const reviewForm = document.getElementById('review-form');
+            const stars = document.querySelectorAll('.star');
+            let currentRating = 0;
+
+            // Mở modal
+            openReviewBtn.addEventListener('click', () => {
+                reviewModal.style.display = 'block';
+            });
+
+            // Đóng modal
+            closeReviewBtn.addEventListener('click', () => {
+                reviewModal.style.display = 'none';
+            });
+
+            // Đóng modal khi click ngoài modal
+            window.addEventListener('click', (event) => {
+                if (event.target == reviewModal) {
+                    reviewModal.style.display = 'none';
+                }
+            });
+
+            // Xử lý hover và click cho sao
+            stars.forEach(star => {
+                // Hover effect
+                star.addEventListener('mouseover', function () {
+                    const rating = this.getAttribute('data-rating');
+                    highlightStars(rating);
+                });
+
+                // Click event
+                star.addEventListener('click', function () {
+                    currentRating = this.getAttribute('data-rating');
+                    highlightStars(currentRating);
+                });
+            });
+
+            // Reset stars khi mouse out khỏi container
+            document.querySelector('.rating').addEventListener('mouseleave', () => {
+                highlightStars(currentRating);
+            });
+
+            // Hàm highlight sao
+            function highlightStars(rating) {
+                stars.forEach(star => {
+                    const starRating = star.getAttribute('data-rating');
+                    if (starRating <= rating) {
+                        star.classList.remove('far');
+                        star.classList.add('fas');
+                    } else {
+                        star.classList.remove('fas');
+                        star.classList.add('far');
+                    }
+                });
+            }
+
+            // Xử lý submit form
+            reviewForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                if (currentRating === 0) {
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Vui lòng chọn số sao đánh giá',
+                        icon: 'error',
+                        confirmButtonColor: '#e67e22'
+                    });
+                    return;
+                }
+
+                // Kiểm tra đăng nhập
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    Swal.fire({
+                        title: 'Yêu cầu đăng nhập',
+                        text: 'Vui lòng đăng nhập để gửi đánh giá',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Đăng nhập',
+                        cancelButtonText: 'Hủy',
+                        confirmButtonColor: '#1a237e',
+                        cancelButtonColor: '#d33'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Chuyển hướng đến trang đăng nhập
+                            window.location.href = 'auth.html';
+                        }
+                    });
+                    return;
+                }
+
+                const reviewData = {
+                    rating: currentRating,
+                    title: document.getElementById('review-title').value,
+                    content: document.getElementById('review-content').value,
+                    timestamp: new Date().toISOString(),
+                    userId: user.uid,
+                    userEmail: user.email,
+                    userName: user.displayName || user.email
+                };
+
+
+
+                // Hiển thị loading
+                Swal.fire({
+                    title: 'Đang gửi...',
+                    text: 'Vui lòng đợi trong giây lát',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Lưu đánh giá vào Firebase và gửi qua EmailJS
+                Promise.all([
+                    // Lưu vào Firebase
+                    firebase.database().ref('reviews').push({
+                        userId: reviewData.userId,
+                        hotelId: "general", // Đánh giá chung
+                        rating: parseInt(reviewData.rating),
+                        comment: reviewData.content,
+                        date: Date.now(),
+                        userName: reviewData.userName,
+                        title: reviewData.title
+                    }),
+
+                    // Gửi qua EmailJS
+                    emailjs.send("service_6spwxxw", "template_vcjlg02", {
+                        to_email: "quantrikhachsan001@gmail.com",
+                        from_name: reviewData.userId || "Khách vãng lai",
+                        rating: reviewData.rating + " sao",
+                        title: reviewData.title,
+                        message: reviewData.content,
+                        timestamp: new Date().toLocaleString('vi-VN')
+                    })
+                ])
+                    .then(() => {
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Cảm ơn bạn đã gửi đánh giá',
+                            icon: 'success',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        reviewModal.style.display = 'none';
+                        reviewForm.reset();
+                        currentRating = 0;
+                        highlightStars(0);
+                    })
+                    .catch((error) => {
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Không thể gửi đánh giá. Vui lòng thử lại sau.',
+                            icon: 'error',
+                            confirmButtonColor: '#e67e22'
+                        });
+                        console.error("Error sending review: ", error);
+                    });
+            });
+
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const navLinks = document.getElementById('nav-links');
+
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                });
+
+                // Close mobile menu when clicking on links
+                navLinks.addEventListener('click', function (e) {
+                    if (e.target.tagName === 'A') {
+                        mobileMenuBtn.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    }
+                });
+
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+                        mobileMenuBtn.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    }
+                });
+            }
+
+            // Script lấy khách sạn nổi bật từ Firebase
+            function loadFeaturedHotels() {
+                const featuredHotelsContainer = document.querySelector('.featured-hotels .row');
+                if (!featuredHotelsContainer) return;
+
+                // Hiển thị loading
+                featuredHotelsContainer.innerHTML = `
+                    <div class="col-12 text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Đang tải...</span>
+                        </div>
+                        <p class="mt-2">Đang tải khách sạn nổi bật...</p>
+                    </div>
+                `;
+
+                // Lấy dữ liệu khách sạn từ Firebase (hỗ trợ cả object và array)
+                firebase.database().ref('location').once('value')
+                    .then((snapshot) => {
+                        const hotels = [];
+                        if (snapshot.exists()) {
+                            const locations = snapshot.val();
+                            Object.entries(locations).forEach(([cityKey, cityData]) => {
+                                if (cityData.hotels) {
+                                    if (Array.isArray(cityData.hotels)) {
+                                        cityData.hotels.forEach((hotel, idx) => {
+                                            if (hotel) hotels.push({ ...hotel, id: `${cityKey}_${idx}`, cityKey });
+                                        });
+                                    } else {
+                                        Object.entries(cityData.hotels).forEach(([hotelKey, hotel]) => {
+                                            hotels.push({ ...hotel, id: `${cityKey}_${hotelKey}`, cityKey });
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                        // Lấy đúng 3 khách sạn đầu tiên
+                        const featuredHotels = hotels.slice(0, 3);
+                        // Render khách sạn nổi bật
+                        if (featuredHotels.length > 0) {
+                            featuredHotelsContainer.innerHTML = featuredHotels.map(hotel => {
+                                // Ưu tiên lấy thông tin từ chiTiet nếu có
+                                const detail = hotel.chiTiet || {};
+                                const name = hotel.tenKhachSan || hotel.name || detail.tenKhachSan || detail.name || 'Khách sạn';
+                                const img = hotel.anhDaiDien || hotel.image || detail.anhDaiDien || detail.image || (hotel.anhKhachSan && hotel.anhKhachSan[0]) || (detail.anhKhachSan && detail.anhKhachSan[0]) || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80';
+                                const desc = hotel.moTa || hotel.diaChi || hotel.location || detail.moTa || detail.diaChi || detail.location || 'Khách sạn chất lượng cao';
+                                const price = hotel.giaThapNhat || hotel.price || detail.giaThapNhat || detail.price;
+                                return `
+                                    <div class="col-12 col-md-4">
+                                        <div class="hotel-card h-100 shadow-sm rounded-4 p-3 text-center">
+                                            <img src="${img}" alt="${name}" class="img-fluid rounded-4 mb-3" style="height:210px; object-fit:cover; width:100%;" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80'">
+                                            <h3 class="fw-bold mb-2">${name}</h3>
+                                            <p class="text-muted mb-2">${desc}</p>
+                                            <div class="hotel-price mb-2">
+                                                ${price ? `Từ <b>${parseInt(price).toLocaleString('vi-VN')}đ/đêm</b>` : 'Liên hệ để biết giá'}
+                                            </div>
+                                            <a href="hotel-detail.html?id=${hotel.id}&city=${hotel.cityKey}" class="btn btn-outline-primary">Xem chi tiết</a>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('');
+                        } else {
+                            // Hiển thị thông báo nếu không có khách sạn
+                            featuredHotelsContainer.innerHTML = `
+                                <div class="col-12 text-center">
+                                    <p class="text-muted">Chưa có khách sạn nổi bật. Vui lòng thử lại sau.</p>
+                                </div>
+                            `;
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Lỗi khi tải khách sạn nổi bật:', error);
+                        featuredHotelsContainer.innerHTML = `
+                            <div class="col-12 text-center">
+                                <p class="text-danger">Không thể tải khách sạn nổi bật. Vui lòng thử lại sau.</p>
+                            </div>
+                        `;
+                    });
+            }
+
+            // Gọi hàm khi trang đã load xong
+            document.addEventListener('DOMContentLoaded', function() {
+                // Đợi Firebase auth state thay đổi xong rồi mới load khách sạn
+                firebase.auth().onAuthStateChanged(function(user) {
+                    // Load khách sạn nổi bật
+                    loadFeaturedHotels();
+                });
+            });
+        });
+    </script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/684e312c6b65fa190ea6f4dd/1iton06be';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+
+    <!-- Bottom Navigation Bar for Mobile -->
+    <nav class="bottom-nav d-md-none d-lg-none">
+        <a href="index.html" class="bottom-nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Trang chủ</span>
+        </a>
+        <a href="hotel.html" class="bottom-nav-item">
+            <i class="fas fa-hotel"></i>
+            <span>Khách sạn</span>
+        </a>
+        <a href="tours.html" class="bottom-nav-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Tours</span>
+        </a>
+        <a href="prioritize.html" class="bottom-nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Ưu đãi</span>
+        </a>
+        <a href="travel_guide.html" class="bottom-nav-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Cẩm nang</span>
+        <a href="about_us.html" class="bottom-nav-item">
+            <i class="fas fa-phone"></i>
+            <span>Liên hệ</span>
+        </a>
+        <a href="member.html" class="bottom-nav-item">
+            <i class="fas fa-user"></i>
+            <span>Tài khoản</span>
+        </a>
+        
+        </a>
+    </nav>
+</body>
+
+</html>

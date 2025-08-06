@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng nhập - LuxuryHavenTravel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="css/loading.css">
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+    <script src="js/loading.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    .auth-container {
+      display: flex;
+      height: 100vh;
+    }
+    
+    .auth-left {
+      flex: 1;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+    }
+    
+    .auth-right {
+      flex: 1;
+      background: linear-gradient(45deg, rgba(26, 188, 156, 0.8), rgba(52, 152, 219, 0.8)), 
+                  url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+    }
+    
+    .auth-form-container {
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .auth-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 15px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 50px;
+      font-size: 16px;
+      background: #f8f9fa;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: #1abc9c;
+      background: white;
+      box-shadow: 0 0 10px rgba(26, 188, 156, 0.1);
+    }
+    
+    .form-control:invalid {
+      border-color: #e74c3c;
+    }
+    
+    .form-control:valid {
+      border-color: #27ae60;
+    }
+    
+    .form-control::placeholder {
+      color: #95a5a6;
+    }
+    
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(45deg, #1abc9c, #3498db);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(26, 188, 156, 0.3);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .auth-switch {
+      color: #1abc9c;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .auth-switch:hover {
+      color: #16a085;
+      text-decoration: underline;
+    }
+    
+    .social-buttons {
+      display: flex;
+      gap: 15px;
+      margin: 20px 0;
+      justify-content: center;
+    }
+    
+    .social-btn {
+      padding: 12px 24px;
+      border: 2px solid #e0e0e0;
+      border-radius: 50px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 500;
+      min-width: 200px;
+      white-space: nowrap;
+    }
+    
+    .social-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border-color: #dd4b39;
+    }
+    
+    .social-btn.google { 
+      color: #dd4b39;
+    }
+    
+    .social-btn.google:hover {
+      background: #dd4b39;
+      color: white;
+    }
+    
+    .terms-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0;
+      font-size: 14px;
+      color: #7f8c8d;
+    }
+    
+    .terms-checkbox input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .terms-link {
+      color: #1abc9c;
+      text-decoration: none;
+    }
+    
+    .terms-link:hover {
+      text-decoration: underline;
+    }
+    
+    .hero-content {
+      z-index: 2;
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    
+    .logo {
+      max-width: 150px;
+      margin-bottom: 30px;
+    }
+    
+    .alert {
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+    }
+    
+    .alert-info {
+      color: #0c5460;
+      background-color: #d1ecf1;
+      border-color: #bee5eb;
+    }
+    
+    @media (max-width: 768px) {
+      .auth-container {
+        flex-direction: column;
+      }
+      
+      .auth-right {
+        display: none;
+      }
+      
+      .auth-left {
+        padding: 30px;
+      }
+      
+      .auth-title {
+        font-size: 2rem;
+        text-align: center;
+      }
+      
+      .social-btn {
+        min-width: 100%;
+        font-size: 14px;
+      }
+      
+      .social-btn span {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <dotlottie-wc 
+            src="https://lottie.host/22866d75-292a-42dc-ae8a-72f6f903386d/dwhv5hvZ72.lottie" 
+            style="width: 300px; height: 300px" 
+            speed="1" 
+            autoplay 
+            loop>
+        </dotlottie-wc>
+        <div class="loading-text">LuxuryHavenTravel</div>
+        <div class="loading-subtext">Đang tải nội dung...</div>
+    </div>
+
+  <div class="auth-container">
+    <!-- Left Side - Form -->
+    <div class="auth-left">
+      <div class="auth-form-container">
+        <!-- Logo -->
+        <div class="text-center mb-4">
+          <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo" class="logo">
+        </div>
+
+        <!-- Thông báo cấu hình Google (sẽ ẩn sau khi cấu hình xong) -->
+        <div id="google-config-notice" class="alert alert-info mb-3" style="display: block; border-radius: 15px; font-size: 14px;">
+          <i class="fas fa-info-circle me-2"></i>
+          <strong>Hướng dẫn cấu hình Google OAuth:</strong>
+          <ol style="margin: 10px 0 0 20px; font-size: 13px;">
+            <li>Vào <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a></li>
+            <li>Chọn <strong>Authentication → Settings → Authorized domains</strong></li>
+            <li>Thêm domain: <strong>127.0.0.1:5500</strong></li>
+            <li>Vào <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
+            <li>Cấu hình OAuth 2.0 Client ID với domain tương ứng</li>
+          </ol>
+          <button onclick="testGoogleConfig()" class="btn btn-sm btn-outline-info mt-2">
+            <i class="fas fa-check-circle me-1"></i>Kiểm tra cấu hình
+          </button>
+        </div>
+
+        <!-- Form Đăng nhập -->
+        <div id="login-form-container">
+          <h2 class="auth-title">ĐĂNG NHẬP</h2>
+          <form id="login-form">
+            <div class="form-group">
+              <input type="email" class="form-control" id="login-email" required placeholder="Email">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" id="login-password" required placeholder="Mật khẩu">
+            </div>
+            <button type="submit" class="btn-primary">
+              ĐĂNG NHẬP
+            </button>
+            
+            <!-- Social Login -->
+            <div class="social-buttons">
+              <div class="social-btn google" title="Đăng nhập với Google">
+                <i class="fab fa-google me-2"></i>
+                <span>Đăng nhập với Google</span>
+              </div>
+            </div>
+            
+            <div class="text-center mt-3">
+              <p class="mb-2">
+                <a href="#" class="auth-switch" id="show-register">Chưa có tài khoản? Đăng ký</a>
+              </p>
+              <p class="mb-2">
+                <a href="#" class="auth-switch" id="show-forgot">Quên mật khẩu?</a>
+              </p>
+              <a href="index.html" class="text-muted text-decoration-none">
+                <i class="fas fa-arrow-left me-2"></i>Quay về trang chủ
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Form Đăng ký -->
+        <div id="register-form-container" style="display: none;">
+          <h2 class="auth-title">ĐĂNG KÝ</h2>
+          <form id="register-form">
+            <div class="form-group">
+              <input type="text" class="form-control" id="register-username" required placeholder="Họ và tên">
+            </div>
+            <div class="form-group">
+              <input type="email" class="form-control" id="register-email" required placeholder="Email">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" id="register-password" required placeholder="Mật khẩu">
+            </div>
+            
+            <div class="terms-checkbox">
+              <input type="checkbox" id="terms-agree" required>
+              <label for="terms-agree">Tôi đồng ý với tất cả các điều khoản trong <a href="footer/terms.html" class="terms-link">điều khoản dịch vụ</a></label>
+            </div>
+            
+            <button type="submit" class="btn-primary">
+              ĐĂNG KÝ
+            </button>
+            
+            <!-- Social Login -->
+            <div class="social-buttons">
+              <div class="social-btn google" title="Đăng ký với Google">
+                <i class="fab fa-google me-2"></i>
+                <span>Đăng ký với Google</span>
+              </div>
+            </div>
+            
+            <div class="text-center mt-3">
+              <p class="mb-2">
+                <a href="#" class="auth-switch" id="show-login">Đã có tài khoản? Đăng nhập</a>
+              </p>
+              <a href="index.html" class="text-muted text-decoration-none">
+                <i class="fas fa-arrow-left me-2"></i>Quay về trang chủ
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Form Quên mật khẩu -->
+        <div id="forgot-form-container" style="display: none;">
+          <h2 class="auth-title">KHÔI PHỤC MẬT KHẨU</h2>
+          <p class="text-muted mb-4">Nhập email của bạn để nhận liên kết khôi phục mật khẩu</p>
+          <form id="forgot-form">
+            <div class="form-group">
+              <input type="email" class="form-control" id="forgot-email" required placeholder="Email">
+            </div>
+            <button type="submit" class="btn-primary">
+              GỬI LIÊN KẾT KHÔI PHỤC
+            </button>
+            <div class="text-center mt-3">
+              <p class="mb-3">
+                <a href="#" class="auth-switch" id="back-to-login">Quay lại đăng nhập</a>
+              </p>
+              <a href="index.html" class="text-muted text-decoration-none">
+                <i class="fas fa-arrow-left me-2"></i>Quay về trang chủ
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side - Hero Image -->
+    <div class="auth-right">
+      <div class="hero-content">
+        <h1 class="hero-title">LUXURYHAVEN</h1>
+        <p class="hero-subtitle">DU LỊCH SANG TRỌNG</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    // Firebase cấu hình
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+      authDomain: "websitedatphongkhachsan.firebaseapp.com",
+      databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+      projectId: "websitedatphongkhachsan",
+      storageBucket: "websitedatphongkhachsan.appspot.com",
+      messagingSenderId: "732884739524",
+      appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+      measurementId: "G-RC61EXTZH7"
+    };
+
+    // Khởi tạo Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Khởi tạo Google Auth Provider
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    googleProvider.addScope('email');
+    googleProvider.addScope('profile');
+
+    // Hàm ánh xạ chức vụ với trang tương ứng
+    function getPageByRole(role) {
+      console.log('🔎 getPageByRole được gọi với role:', role, 'type:', typeof role);
+      
+      if (!role) return 'index.html';
+      
+      const rolePageMap = {
+        // Ánh xạ theo tên chức vụ đầy đủ
+        'Quản lý đối tác': 'QLNV/affiliate-manager.html',
+        'quản lý đối tác': 'QLNV/affiliate-manager.html',
+        'Affiliate Manager': 'QLNV/affiliate-manager.html',
+        'affiliate manager': 'QLNV/affiliate-manager.html',
+        'Kiểm duyệt đặt phòng': 'QLNV/booking-moderator.html',
+        'Tuân thủ pháp lý': 'QLNV/compliance-officer.html',
+        'Quản lý nội dung': 'QLNV/content-admin.html',
+        'Hỗ trợ khách hàng': 'QLNV/customer-support.html',
+        'Phân tích dữ liệu': 'QLNV/data-analyst.html',
+        'Quản lý tài chính': 'QLNV/finance-manager.html',
+        'Nhân viên tài chính': 'QLNV/finance-manager.html',
+        'Marketing & SEO': 'QLNV/marketing-seo.html',
+        'Dashboard nhân viên': 'QLNV/staff-dashboard.html',
+        'Phát triển web': 'QLNV/web-developer.html',
+        'Lễ tân (Front Desk)': 'QLNV/staff-dashboard.html',
+        'Nhân viên lễ tân': 'QLNV/staff-dashboard.html',
+        'nhân viên': 'QLNV/staff-dashboard.html',
+        'trưởng phòng': 'QLNV/staff-dashboard.html',
+        'phó trưởng phòng': 'QLNV/staff-dashboard.html',
+        
+        // Ánh xạ theo code chức vụ từ Firebase (case-insensitive)
+        'LT0001': 'QLNV/staff-dashboard.html', // Nhân viên lễ tân
+        'QL01': 'QLNV/affiliate-manager.html', // Quản lý đối tác
+        'KD01': 'QLNV/booking-moderator.html', // Kiểm duyệt đặt phòng
+        'PL01': 'QLNV/compliance-officer.html', // Tuân thủ pháp lý
+        'PL1': 'QLNV/compliance-officer.html', // Tuân thủ pháp lý (alternative)
+        'Pl1': 'QLNV/compliance-officer.html', // Tuân thủ pháp lý (case variation)
+        'pl1': 'QLNV/compliance-officer.html', // Tuân thủ pháp lý (lowercase)
+        'HT01': 'QLNV/customer-support.html', // Hỗ trợ khách hàng
+        'PT01': 'QLNV/data-analyst.html', // Phân tích dữ liệu
+        'QLTC01': 'QLNV/finance-manager.html', // Quản lý tài chính
+        'NC_TC': 'QLNV/finance-manager.html', // Nhân viên tài chính
+        'MK01': 'QLNV/marketing-seo.html', // Marketing & SEO
+        'NV01': 'QLNV/staff-dashboard.html', // nhân viên
+        'NV1': 'QLNV/staff-dashboard.html', // nhân viên (Thạch Văn Bảo)
+        'PTW01': 'QLNV/web-developer.html', // Phát triển web
+        'QL02': 'QLNV/affiliate-manager.html', // phó trưởng phòng
+        'AFF01': 'QLNV/affiliate-manager.html', // Affiliate Manager
+        
+        // Department codes (fallback)
+        '01': 'QLNV/staff-dashboard.html', // Lễ tân
+        
+        // Ánh xạ theo code chức vụ (legacy)
+        'cskh': 'QLNV/customer-support.html',
+        'manager': 'QLNV/staff-dashboard.html',
+        'marketing': 'QLNV/marketing-seo.html',
+        'kythuat': 'QLNV/web-developer.html',
+        'admin': 'admin-dashboard.html',
+        'receptionist': 'QLNV/staff-dashboard.html',
+        'housekeeping': 'QLNV/staff-dashboard.html',
+        'affiliate': 'QLNV/affiliate-manager.html',
+        'affiliate-manager': 'QLNV/affiliate-manager.html', // Quản lý đối tác
+        'affiliate manager': 'QLNV/affiliate-manager.html', // Quản lý đối tác (có space)
+        'quản lý đối tác': 'QLNV/affiliate-manager.html', // Tiếng Việt
+        'quan ly doi tac': 'QLNV/affiliate-manager.html', // Không dấu
+        'content': 'QLNV/content-admin.html',
+        'finance': 'QLNV/finance-manager.html',
+        'NC_TC': 'QLNV/finance-manager.html', // Nhân viên tài chính
+        'NV_TC': 'QLNV/finance-manager.html', // Nhân viên tài chính (alternative)
+        'analyst': 'QLNV/data-analyst.html',
+        'compliance': 'QLNV/compliance-officer.html',
+        'booking': 'QLNV/booking-moderator.html'
+      };
+      
+      console.log('📋 Danh sách rolePageMap keys:', Object.keys(rolePageMap));
+      
+      // Thử exact match trước
+      console.log('🔍 Kiểm tra exact match cho role:', role);
+      if (rolePageMap[role]) {
+        console.log('✅ Tìm thấy exact match:', role, '→', rolePageMap[role]);
+        return rolePageMap[role];
+      }
+      
+      // Thử case-insensitive match
+      console.log('🔍 Kiểm tra case-insensitive match cho role:', role);
+      const roleKey = Object.keys(rolePageMap).find(key => 
+        key.toLowerCase() === role.toLowerCase()
+      );
+      
+      if (roleKey) {
+        console.log('✅ Tìm thấy case-insensitive match:', role, '→', rolePageMap[roleKey]);
+        return rolePageMap[roleKey];
+      }
+      
+      console.log('❌ Không tìm thấy mapping cho role:', role);
+      
+      return 'index.html';
+    }
+
+    // Hàm lấy role từ redirectPage
+    function getRoleFromPage(redirectPage) {
+      if (redirectPage === 'admin-dashboard.html') {
+        return 'Admin';
+      } else if (redirectPage.includes('affiliate-manager.html')) {
+        return 'Affiliate Manager';
+      } else if (redirectPage.includes('customer-support.html')) {
+        return 'Customer Support';
+      } else if (redirectPage.includes('marketing-seo.html')) {
+        return 'Marketing SEO';
+      } else if (redirectPage.includes('web-developer.html')) {
+        return 'Web Developer';
+      } else if (redirectPage.includes('content-admin.html')) {
+        return 'Content Admin';
+      } else if (redirectPage.includes('finance-manager.html')) {
+        return 'Finance Manager';
+      } else if (redirectPage.includes('data-analyst.html')) {
+        return 'Data Analyst';
+      } else if (redirectPage.includes('compliance-officer.html')) {
+        return 'Compliance Officer';
+      } else if (redirectPage.includes('booking-moderator.html')) {
+        return 'Booking Moderator';
+      } else if (redirectPage.includes('staff-dashboard.html')) {
+        return 'Nhân viên';
+      } else if (redirectPage.includes('QLNV/')) {
+        return 'Nhân viên';
+      }
+      return 'Khách hàng';
+    }
+
+    // Hàm kiểm tra chức vụ từ Firebase và chuyển hướng (trả về cả role và page)
+    function checkUserRoleAndRedirectWithInfo(email) {
+      return checkUserRoleAndRedirect(email).then((redirectPage) => {
+        const role = getRoleFromPage(redirectPage);
+        return {
+          redirectPage: redirectPage,
+          role: role
+        };
+      });
+    }
+
+    // Hàm kiểm tra chức vụ từ Firebase và chuyển hướng
+    function checkUserRoleAndRedirect(email) {
+      // Kiểm tra admin trước
+      if (email === 'quantrikhachsan@gmail.com') {
+        return Promise.resolve('admin-dashboard.html');
+      }
+      
+      // Kiểm tra các email test cho Affiliate Manager
+      const affiliateEmails = [
+        'affiliate@email.com',
+        'affiliate@luxurytravel.vn', 
+        'admin@luxurytravel.vn',
+        'affiliate.manager@luxurytravel.vn'
+      ];
+      
+      // Kiểm tra các email test cho Finance Manager
+      const financeEmails = [
+        'finance@luxurytravel.vn',
+        'tai.chinh@luxurytravel.vn',
+        'nc.tc@luxurytravel.vn',
+        'nv.tc@luxurytravel.vn'
+      ];
+      
+      if (affiliateEmails.includes(email.toLowerCase())) {
+        return Promise.resolve('QLNV/affiliate-manager.html');
+      }
+      
+      // Test cho Finance Manager
+      if (financeEmails.includes(email.toLowerCase())) {
+        console.log('🎯 Test email finance được phát hiện:', email);
+        return Promise.resolve('QLNV/finance-manager.html');
+      }
+
+      // Tìm kiếm trong danh sách nhân viên
+      return Promise.all([
+        firebase.database().ref('staff').once('value'),
+        firebase.database().ref('roles').once('value'),
+        firebase.database().ref('staffAccess').once('value')
+      ])
+        .then(([staffSnapshot, rolesSnapshot, staffAccessSnapshot]) => {
+          const staffData = staffSnapshot.val();
+          const rolesData = rolesSnapshot.val();
+          const staffAccessData = staffAccessSnapshot.val();
+          
+          console.log('🔍 Kiểm tra staffAccess cho email:', email);
+          
+          // Chuyển đổi email thành key format (thay @ và . thành _)
+          const emailKey = email.replace(/[@.]/g, '_');
+          console.log('- Email key:', emailKey);
+          
+          // Kiểm tra trong staffAccess trước
+          if (staffAccessData && staffAccessData[emailKey]) {
+            const role = staffAccessData[emailKey];
+            console.log('✅ Tìm thấy trong staffAccess:', emailKey, '→', role);
+            
+            let page = getPageByRole(role);
+            console.log('- Role mapping:', role, '→', page);
+            
+            // Debug cho NC_TC
+            if (role === 'NC_TC' || role === 'NV_TC') {
+              console.log('🎯 Phát hiện tài khoản tài chính:', role);
+              console.log('📊 Chuyển hướng đến finance-manager.html');
+            }
+            
+            if (page !== 'index.html') {
+              return page;
+            }
+          }
+          
+          if (!staffData) {
+            console.log('Không tìm thấy dữ liệu nhân viên');
+            return 'index.html';
+          }
+
+          // Tạo map role code -> role name
+          const roleCodeToName = {};
+          if (rolesData) {
+            Object.values(rolesData).forEach(role => {
+              if (role.code && role.name) {
+                roleCodeToName[role.code] = role.name;
+              }
+            });
+          }
+
+          // Tìm nhân viên có email khớp
+          for (let staffId in staffData) {
+            const staff = staffData[staffId];
+            // Kiểm tra cả email và êmmail (typo)
+            const staffEmail = staff.email || staff.êmmail || staff['êmmail'];
+            if (staffEmail === email) {
+              console.log('Tìm thấy nhân viên:', staff);
+              
+              let role = staff.role || staff.chucVu;
+              if (role) {
+                console.log('🔍 Debug thông tin role:');
+                console.log('- Original role:', role);
+                console.log('- Type of role:', typeof role);
+                
+                // Nếu role là code, chuyển đổi thành tên đầy đủ
+                const fullRoleName = roleCodeToName[role] || role;
+                console.log('- Role code → Full name:', role, '→', fullRoleName);
+                
+                // Thử mapping trực tiếp với role code trước
+                let page = getPageByRole(role);
+                console.log('- Direct role mapping:', role, '→', page);
+                
+                // Nếu không tìm thấy, thử với full name
+                if (page === 'index.html' && fullRoleName !== role) {
+                  page = getPageByRole(fullRoleName);
+                  console.log('- Full name mapping:', fullRoleName, '→', page);
+                }
+                
+                console.log('✅ Final redirect:', page);
+                return page;
+              }
+              console.log('❌ Không tìm thấy role cho nhân viên');
+              break;
+            }
+          }
+          
+          console.log('Không tìm thấy chức vụ, chuyển về index');
+          return 'index.html';
+        })
+        .catch((error) => {
+          console.error('Lỗi khi kiểm tra chức vụ:', error);
+          return 'index.html';
+        });
+    }
+
+    // Kiểm tra trạng thái đăng nhập
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user && (window.location.pathname.includes('login.html') || window.location.pathname.includes('auth.html'))) {
+        // Nếu đã đăng nhập và đang ở trang login, chuyển hướng
+        const email = user.email;
+        checkUserRoleAndRedirect(email).then((redirectPage) => {
+          window.location.href = redirectPage;
+        });
+      }
+    });
+
+    // Kiểm tra cấu hình Google OAuth và hiển thị thông báo nếu cần
+    function checkGoogleAuthConfig() {
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        // Nếu tạo được provider thì ẩn thông báo
+        const notice = document.getElementById('google-config-notice');
+        if (notice) {
+          notice.style.display = 'none';
+        }
+      } catch (error) {
+        console.log('Google Auth chưa được cấu hình đầy đủ');
+        const notice = document.getElementById('google-config-notice');
+        if (notice) {
+          notice.style.display = 'block';
+        }
+      }
+    }
+
+    // Gọi kiểm tra khi trang load
+    document.addEventListener('DOMContentLoaded', checkGoogleAuthConfig);
+
+    // Function kiểm tra cấu hình Google
+    function testGoogleConfig() {
+      showLoading('Đang kiểm tra cấu hình Google...');
+      
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('email');
+        provider.addScope('profile');
+        
+        // Thử tạo popup (không thực sự đăng nhập)
+        firebase.auth().fetchSignInMethodsForEmail('test@gmail.com')
+          .then(() => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Cấu hình Google OAuth OK!',
+              text: 'Firebase có thể kết nối với Google. Bạn có thể thử đăng nhập Google.',
+              confirmButtonColor: '#1abc9c'
+            }).then(() => {
+              // Ẩn thông báo cấu hình
+              const notice = document.getElementById('google-config-notice');
+              if (notice) {
+                notice.style.display = 'none';
+              }
+            });
+          })
+          .catch((error) => {
+            console.error('Lỗi kiểm tra cấu hình:', error);
+            Swal.fire({
+              icon: 'warning',
+              title: 'Cần cấu hình thêm',
+              html: `
+                <p>Firebase đã kết nối nhưng cần cấu hình domain:</p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                  <strong>Domain hiện tại:</strong> ${window.location.origin}<br>
+                  <strong>Cần thêm vào Firebase:</strong> 127.0.0.1:5500
+                </div>
+              `,
+              confirmButtonColor: '#1abc9c'
+            });
+          });
+      } catch (error) {
+        console.error('Lỗi khởi tạo Google Provider:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi cấu hình Firebase',
+          text: 'Không thể khởi tạo Google Provider. Vui lòng kiểm tra cấu hình Firebase.',
+          confirmButtonColor: '#1abc9c'
+        });
+      }
+    }
+
+    // Chuyển đổi giữa các form với validation
+    function showForm(formToShow) {
+      // Ẩn tất cả form
+      document.getElementById('login-form-container').style.display = 'none';
+      document.getElementById('register-form-container').style.display = 'none';
+      document.getElementById('forgot-form-container').style.display = 'none';
+      
+      // Hiện form được chọn
+      document.getElementById(formToShow).style.display = 'block';
+      
+      // Reset form khi chuyển đổi
+      const forms = document.querySelectorAll('form');
+      forms.forEach(form => form.reset());
+    }
+
+    // Chuyển đổi giữa các form
+    document.getElementById('show-register').addEventListener('click', function(e) {
+      e.preventDefault();
+      showForm('register-form-container');
+    });
+
+    document.getElementById('show-login').addEventListener('click', function(e) {
+      e.preventDefault();
+      showForm('login-form-container');
+    });
+
+    document.getElementById('show-forgot').addEventListener('click', function(e) {
+      e.preventDefault();
+      showForm('forgot-form-container');
+    });
+
+    document.getElementById('back-to-login').addEventListener('click', function(e) {
+      e.preventDefault();
+      showForm('login-form-container');
+    });
+
+    // Hàm validation email
+    function validateEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    // Hàm validation mật khẩu
+    function validatePassword(password) {
+      return password && password.length >= 6;
+    }
+
+    // Hàm xử lý đăng nhập Google
+    function signInWithGoogle() {
+      showLoading('Đang đăng nhập với Google...');
+      
+      // Cấu hình Google Provider với các thông số cần thiết
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.addScope('email');
+      provider.addScope('profile');
+      provider.setCustomParameters({
+        'prompt': 'select_account'
+      });
+      
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          const user = result.user;
+          const isNewUser = result.additionalUserInfo.isNewUser;
+          
+          // Nếu là user mới, lưu thông tin vào database
+          if (isNewUser) {
+            return firebase.database().ref('users/' + user.uid).set({
+              name: user.displayName || 'Google User',
+              email: user.email,
+              photoURL: user.photoURL || '',
+              provider: 'google',
+              loyaltyPoints: 0,
+              memberLevel: 'Đồng',
+              createdAt: firebase.database.ServerValue.TIMESTAMP,
+              updatedAt: firebase.database.ServerValue.TIMESTAMP
+            });
+          } else {
+            // Cập nhật thông tin user hiện tại
+            return firebase.database().ref('users/' + user.uid).update({
+              name: user.displayName || 'Google User',
+              photoURL: user.photoURL || '',
+              updatedAt: firebase.database.ServerValue.TIMESTAMP
+            });
+          }
+        })
+        .then(() => {
+          const user = firebase.auth().currentUser;
+          const email = user.email;
+          
+          // Kiểm tra chức vụ và chuyển hướng
+          checkUserRoleAndRedirectWithInfo(email).then((userInfo) => {
+            // Lưu thông tin user vào localStorage
+            const userData = {
+              email: email,
+              name: user.displayName || user.email.split('@')[0],
+              role: userInfo.role,
+              loginTime: new Date().toISOString(),
+              loginMethod: 'Google'
+            };
+            
+            localStorage.setItem('loggedInUser', JSON.stringify(userData));
+            localStorage.setItem('userRole', userInfo.role);
+            localStorage.setItem('userEmail', email);
+            
+            console.log('✅ Đã lưu thông tin user:', userData);
+            
+            Swal.fire({
+              icon: 'success',
+              title: 'Đăng nhập thành công!',
+              text: `Chào mừng ${user.displayName || user.email}!`,
+              timer: 1500,
+              showConfirmButton: false
+            }).then(() => {
+              window.location.href = userInfo.redirectPage;
+            });
+          });
+        })
+        .catch((error) => {
+          console.error('Lỗi đăng nhập Google:', error);
+          let errorMessage = 'Đã xảy ra lỗi khi đăng nhập với Google';
+          
+          switch (error.code) {
+            case 'auth/popup-closed-by-user':
+              errorMessage = 'Cửa sổ đăng nhập đã bị đóng. Vui lòng thử lại.';
+              break;
+            case 'auth/popup-blocked':
+              errorMessage = 'Popup bị chặn. Vui lòng cho phép popup và thử lại.';
+              break;
+            case 'auth/cancelled-popup-request':
+              errorMessage = 'Yêu cầu đăng nhập đã bị hủy.';
+              break;
+            case 'auth/network-request-failed':
+              errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra internet.';
+              break;
+            case 'auth/account-exists-with-different-credential':
+              errorMessage = 'Tài khoản đã tồn tại với phương thức đăng nhập khác.';
+              break;
+            case 'auth/unauthorized-domain':
+              errorMessage = 'Domain chưa được ủy quyền! Vui lòng thêm 127.0.0.1:5500 vào Firebase Console → Authentication → Settings → Authorized domains';
+              break;
+            case 'auth/operation-not-allowed':
+              errorMessage = 'Đăng nhập Google chưa được kích hoạt trong Firebase Console.';
+              break;
+            case 'auth/invalid-api-key':
+              errorMessage = 'API key không hợp lệ. Vui lòng kiểm tra cấu hình Firebase.';
+              break;
+            case 'auth/app-not-authorized':
+              errorMessage = 'Ứng dụng chưa được ủy quyền. Vui lòng cấu hình Google Cloud Console.';
+              break;
+            default:
+              errorMessage = `Lỗi: ${error.message}`;
+              // Nếu là lỗi domain, hiển thị hướng dẫn cụ thể
+              if (error.message && error.message.includes('domain')) {
+                errorMessage = 'Lỗi domain! Vui lòng thêm 127.0.0.1:5500 vào Firebase Console → Authentication → Authorized domains';
+              }
+          }
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Lỗi đăng nhập Google',
+            html: `
+              <div style="text-align: left;">
+                <p><strong>Lỗi:</strong> ${errorMessage}</p>
+                ${error.code === 'auth/unauthorized-domain' ? `
+                  <hr>
+                  <p><strong>Cách khắc phục:</strong></p>
+                  <ol style="text-align: left; padding-left: 20px;">
+                    <li>Truy cập <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a></li>
+                    <li>Chọn project <strong>websitedatphongkhachsan</strong></li>
+                    <li>Vào <strong>Authentication → Settings → Authorized domains</strong></li>
+                    <li>Thêm domain: <strong>127.0.0.1:5500</strong></li>
+                    <li>Nhấn Save và thử lại</li>
+                  </ol>
+                ` : ''}
+              </div>
+            `,
+            confirmButtonColor: '#1abc9c',
+            confirmButtonText: 'Đã hiểu'
+          });
+        });
+    }
+
+    // Hàm hiển thị loading
+    function showLoading(title = 'Đang xử lý...') {
+      Swal.fire({
+        title: title,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+    }
+
+    // Xử lý form đăng nhập với validation cải thiện
+    document.getElementById('login-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      // Validation cơ bản
+      if (!email || !password) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Vui lòng nhập cả email và mật khẩu',
+          confirmButtonColor: '#1abc9c'
+        });
+        return;
+      }
+
+      // Validation email format
+      if (!validateEmail(email)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Email không đúng định dạng',
+          confirmButtonColor: '#1abc9c'
+        });
+        return;
+      }
+
+      // Hiển thị loading
+      showLoading('Đang đăng nhập...');
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          
+          // Kiểm tra chức vụ và chuyển hướng
+          checkUserRoleAndRedirectWithInfo(email).then((userInfo) => {
+            let userMessage = 'Chào mừng bạn!';
+            
+            if (userInfo.role === 'Admin') {
+              userMessage = 'Chào mừng Quản trị viên!';
+            } else if (userInfo.role === 'Affiliate Manager') {
+              userMessage = 'Chào mừng Affiliate Manager!';
+            } else if (userInfo.role === 'Finance Manager' || userInfo.redirectPage.includes('finance-manager.html')) {
+              userMessage = 'Chào mừng Quản lý tài chính!';
+            } else if (userInfo.role.includes('Nhân viên') || userInfo.redirectPage.includes('QLNV/')) {
+              userMessage = 'Chào mừng Nhân viên!';
+            }
+            
+            // Lưu thông tin user vào localStorage
+            const userData = {
+              email: email,
+              name: user.displayName || email.split('@')[0],
+              role: userInfo.role,
+              loginTime: new Date().toISOString(),
+              loginMethod: 'Email/Password'
+            };
+            
+            localStorage.setItem('loggedInUser', JSON.stringify(userData));
+            localStorage.setItem('userRole', userInfo.role);
+            localStorage.setItem('userEmail', email);
+            
+            console.log('✅ Đã lưu thông tin user:', userData);
+            console.log('🎯 Chuyển hướng đến:', userInfo.redirectPage);
+            console.log('👤 Role được gán:', userInfo.role);
+            
+            Swal.fire({
+              icon: 'success',
+              title: 'Đăng nhập thành công!',
+              text: userMessage,
+              confirmButtonColor: '#1abc9c'
+            }).then(() => {
+              window.location.href = userInfo.redirectPage;
+            });
+          });
+        })
+        .catch((error) => {
+          console.error('Lỗi đăng nhập:', error);
+          let errorMessage = 'Đã xảy ra lỗi trong quá trình đăng nhập';
+          
+          switch (error.code) {
+            case 'auth/user-not-found':
+              errorMessage = 'Không tìm thấy tài khoản với email này';
+              break;
+            case 'auth/wrong-password':
+              errorMessage = 'Mật khẩu không chính xác';
+              break;
+            case 'auth/invalid-email':
+              errorMessage = 'Email không đúng định dạng';
+              break;
+            case 'auth/too-many-requests':
+              errorMessage = 'Quá nhiều yêu cầu. Vui lòng thử lại sau';
+              break;
+            case 'auth/network-request-failed':
+              errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra internet';
+              break;
+            case 'auth/invalid-credential':
+              errorMessage = 'Thông tin đăng nhập không hợp lệ';
+              break;
+          }
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Lỗi đăng nhập',
+            text: errorMessage,
+            confirmButtonColor: '#1abc9c'
+          });
+        });
+    });
+
+    // Xử lý form đăng ký với validation cải thiện
+    document.getElementById('register-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById('register-username').value.trim();
+      const email = document.getElementById('register-email').value.trim();
+      const password = document.getElementById('register-password').value;
+      const termsAccepted = document.getElementById('terms-agree').checked;
+
+      // Validation cơ bản
+      if (!username || !email || !password) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Vui lòng điền đầy đủ thông tin',
+          confirmButtonColor: '#1abc9c'
+        });
+        return;
+      }
+
+      // Validation tên
+      if (username.length < 2) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Họ và tên phải có ít nhất 2 ký tự',
+          confirmButtonColor: '#1abc9c'
+        });
+        return;
+      }
+
+      // Validation email
+      if (!validateEmail(email)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Email không đúng định dạng',
+          confirmButtonColor: '#1abc9c'
+        });
+        return;
+      }
+
+      // Validation mật khẩu
+      if (!validatePassword(password)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Mật khẩu phải có ít nhất 6 ký tự',
+          confirmButtonColor: '#1abc9c'
+        });
+        return;
+      }
+
+      // Validation điều khoản
+      if (!termsAccepted) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Vui lòng đồng ý với điều khoản dịch vụ',
+          confirmButtonColor: '#1abc9c'
+        });
+        return;
+      }
+
+      // Hiển thị loading
+      showLoading('Đang tạo tài khoản...');
+
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          
+          // Cập nhật profile và lưu vào database
+          return Promise.all([
+            user.updateProfile({
+              displayName: username
+            }),
+            firebase.database().ref('users/' + user.uid).set({
+              name: username,
+              email: user.email,
+              loyaltyPoints: 0,
+              memberLevel: 'Đồng',
+              createdAt: firebase.database.ServerValue.TIMESTAMP,
+              updatedAt: firebase.database.ServerValue.TIMESTAMP
+            })
+          ]);
+        })
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Đăng ký thành công!',
+            text: 'Chào mừng bạn đến với LuxuryHavenTravel!',
+            confirmButtonColor: '#1abc9c'
+          }).then(() => {
+            window.location.href = 'index.html';
+          });
+        })
+        .catch((error) => {
+          console.error('Lỗi đăng ký:', error);
+          let errorMessage = 'Đã xảy ra lỗi trong quá trình đăng ký';
+          
+          switch (error.code) {
+            case 'auth/email-already-in-use':
+              errorMessage = 'Email này đã được sử dụng';
+              break;
+            case 'auth/invalid-email':
+              errorMessage = 'Email không đúng định dạng';
+              break;
+            case 'auth/weak-password':
+              errorMessage = 'Mật khẩu quá yếu. Vui lòng chọn mật khẩu mạnh hơn';
+              break;
+            case 'auth/network-request-failed':
+              errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra internet';
+              break;
+            case 'auth/operation-not-allowed':
+              errorMessage = 'Đăng ký bằng email/mật khẩu chưa được kích hoạt';
+              break;
+          }
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Lỗi đăng ký',
+            text: errorMessage,
+            confirmButtonColor: '#1abc9c'
+          });
+        });
+    });
+
+    // Xử lý form quên mật khẩu với validation cải thiện
+    document.getElementById('forgot-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById('forgot-email').value.trim();
+
+      // Validation cơ bản
+      if (!email) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Vui lòng nhập email của bạn',
+          confirmButtonColor: '#1abc9c'
+        });
+        return;
+      }
+
+      // Validation email format
+      if (!validateEmail(email)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Email không đúng định dạng',
+          confirmButtonColor: '#1abc9c'
+        });
+        return;
+      }
+
+      // Hiển thị loading
+      showLoading('Đang gửi email...');
+
+      firebase.auth().sendPasswordResetEmail(email)
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Email đã được gửi!',
+            text: 'Vui lòng kiểm tra email để khôi phục mật khẩu.',
+            confirmButtonColor: '#1abc9c'
+          }).then(() => {
+            // Quay về form đăng nhập
+            showForm('login-form-container');
+          });
+        })
+        .catch((error) => {
+          console.error('Lỗi khôi phục mật khẩu:', error);
+          let errorMessage = 'Đã xảy ra lỗi khi gửi email';
+          
+          switch (error.code) {
+            case 'auth/user-not-found':
+              errorMessage = 'Không tìm thấy tài khoản với email này';
+              break;
+            case 'auth/invalid-email':
+              errorMessage = 'Email không đúng định dạng';
+              break;
+            case 'auth/network-request-failed':
+              errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra internet';
+              break;
+            case 'auth/too-many-requests':
+              errorMessage = 'Quá nhiều yêu cầu. Vui lòng thử lại sau';
+              break;
+          }
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Lỗi!',
+            text: errorMessage,
+            confirmButtonColor: '#1abc9c'
+          });
+        });
+    });
+
+    // Xử lý đăng nhập Google với fallback
+    document.addEventListener('DOMContentLoaded', function() {
+      const googleBtns = document.querySelectorAll('.social-btn.google');
+      googleBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Kiểm tra xem Google Auth có sẵn không
+          if (typeof firebase === 'undefined' || !firebase.auth) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Lỗi!',
+              text: 'Firebase Authentication chưa được tải. Vui lòng tải lại trang.',
+              confirmButtonColor: '#1abc9c'
+            });
+            return;
+          }
+          
+          // Thử đăng nhập với Google
+          try {
+            signInWithGoogle();
+          } catch (error) {
+            console.error('Lỗi khi khởi tạo Google Sign-in:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Không thể đăng nhập',
+              text: 'Tính năng đăng nhập Google hiện không khả dụng. Vui lòng sử dụng email/mật khẩu.',
+              confirmButtonColor: '#1abc9c'
+            });
+          }
+        });
+      });
+    });
+
+    // Xử lý lỗi toàn cục
+    window.addEventListener('error', function(e) {
+      console.error('Lỗi JavaScript:', e.error);
+      // Có thể thêm logging hoặc reporting lỗi ở đây
+    });
+
+    // Xử lý lỗi Firebase
+    window.addEventListener('unhandledrejection', function(e) {
+      console.error('Lỗi Promise:', e.reason);
+      // Có thể thêm logging hoặc reporting lỗi ở đây
+    });
+  </script>
+</body>
+</html>

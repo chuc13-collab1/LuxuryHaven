@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Kết quả thanh toán VNPay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <script type="style" src="js/mobile.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Nautica Script Bold';
+            src: url('fonts/nautica-bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        body {
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+        }
+        .luxury-title {
+            font-family: 'Nautica Script Bold', cursive;
+            font-size: 2.5em;
+            color: #003366;
+            text-align: center;
+            margin-bottom: 0.5em;
+            letter-spacing: 2px;
+        }
+        .result-container {
+            max-width: 600px;
+            margin: 40px auto 0 auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            padding: 32px 28px 24px 28px;
+            position: relative;
+            animation: fadeIn 0.7s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .status-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .card-header {
+            font-weight: bold;
+            font-size: 1.1em;
+            background: linear-gradient(90deg, #003366 0%, #005fa3 100%);
+            color: #fff;
+            border-radius: 12px 12px 0 0 !important;
+            letter-spacing: 1px;
+        }
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            margin-bottom: 18px;
+            border: none;
+        }
+        .info-label {
+            font-weight: 500;
+            color: #003366;
+        }
+        .info-value {
+            margin-bottom: 10px;
+            color: #222;
+        }
+        .fw-bold.text-danger {
+            color: #d7263d !important;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #003366 0%, #005fa3 100%);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1em;
+            padding: 10px 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: background 0.2s;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #005fa3 0%, #003366 100%);
+        }
+        @media (max-width: 700px) {
+            .result-container {
+                padding: 18px 6px 16px 6px;
+            }
+            .luxury-title {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="luxury-title">LuxuryHavenTravel</div>
+    <div class="result-container">
+        <div class="text-center mb-4">
+            <div id="payment-status"></div>
+            <!-- <div id="debug-info" style="margin-top: 20px; text-align: left; padding: 10px; background: #f5f5f5; border-radius: 5px;">
+                <h5>Debug Info:</h5>
+                <pre id="debug-content"></pre>
+            </div> -->
+        </div>
+        <div id="booking-info"></div>
+        <div class="text-center mt-4">
+            <a href="index.html" class="btn btn-primary"><i class="fas fa-home me-2"></i>Về trang chủ</a>
+        </div>
+    </div>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script>
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        var firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.firebasestorage.app",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        const vnp_ResponseCode = getQueryParam('vnp_ResponseCode');
+        const vnp_TxnRef = getQueryParam('vnp_TxnRef');
+        const vnp_Amount = getQueryParam('vnp_Amount');
+        const paymentStatusDiv = document.getElementById('payment-status');
+
+        // Kiểm tra user đăng nhập
+        firebase.auth().onAuthStateChanged(function(user) {
+            const debugContent = document.getElementById('debug-content');
+            if (user) {
+                console.log('User logged in:', {
+                    uid: user.uid,
+                    email: user.email
+                });
+                if (debugContent) debugContent.textContent = JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    isLoggedIn: true
+                }, null, 2);
+            } else {
+                console.log('No user logged in');
+                if (debugContent) debugContent.textContent = JSON.stringify({
+                    isLoggedIn: false,
+                    message: 'Không có user đăng nhập'
+                }, null, 2);
+            }
+        });
+
+        if (!vnp_TxnRef) {
+            paymentStatusDiv.innerHTML = '<div class="alert alert-danger"><i class="fas fa-times-circle status-icon text-danger"></i><br>Không tìm thấy mã đơn hàng.</div>';
+        } else {
+            if (vnp_ResponseCode === '00') {
+                paymentStatusDiv.innerHTML = '<i class="fas fa-check-circle status-icon text-success"></i><div class="alert alert-success mb-0">Thanh toán thành công!</div>';
+                
+                // Kiểm tra xem là booking hay deposit
+                const bookingRef = firebase.database().ref('bookings/' + vnp_TxnRef);
+                const depositRef = firebase.database().ref('deposits/' + vnp_TxnRef);
+                
+                // Thử tìm trong bookings trước
+                bookingRef.once('value').then(bookingSnapshot => {
+                    if (bookingSnapshot.exists()) {
+                        // Đây là booking
+                        const data = bookingSnapshot.val();
+                        updateBookingAndQuantity(vnp_TxnRef);
+                        processPaymentHistory(data, vnp_TxnRef, data.bookingType === 'deposit' ? true : false); // Xử lý cho cả hotel và tour
+                    } else {
+                        // Thử tìm trong deposits
+                        depositRef.once('value').then(depositSnapshot => {
+                            if (depositSnapshot.exists()) {
+                                // Đây là deposit
+                                updateDepositStatus(vnp_TxnRef);
+                                processPaymentHistory(depositSnapshot.val(), vnp_TxnRef, true);
+                            } else {
+                                console.error("Không tìm thấy booking hoặc deposit");
+                            }
+                        });
+                    }
+                });
+            }
+            else {
+                paymentStatusDiv.innerHTML = '<i class="fas fa-exclamation-triangle status-icon text-warning"></i><div class="alert alert-warning mb-0">Thanh toán chưa thành công. Mã lỗi: ' + (vnp_ResponseCode || 'Không xác định') + '</div>';
+            }
+            // Kiểm tra xem là booking hay deposit để hiển thị thông tin
+            const bookingRef = firebase.database().ref('bookings/' + vnp_TxnRef);
+            const depositRef = firebase.database().ref('deposits/' + vnp_TxnRef);
+            
+            bookingRef.once('value').then(bookingSnapshot => {
+                if (bookingSnapshot.exists()) {
+                    // Đây là booking
+                    const data = bookingSnapshot.val();
+                    renderOrderInfo(data, false);
+                } else {
+                    // Thử tìm trong deposits
+                    depositRef.once('value').then(depositSnapshot => {
+                        if (depositSnapshot.exists()) {
+                            // Đây là deposit
+                            const data = depositSnapshot.val();
+                            renderOrderInfo(data, true);
+                        } else {
+                            document.getElementById('booking-info').innerHTML = '<div class="alert alert-danger">Không tìm thấy thông tin đơn hàng.</div>';
+                        }
+                    });
+                }
+            }).catch(error => {
+                document.getElementById('booking-info').innerHTML = '<div class="alert alert-danger">Lỗi tải dữ liệu: ' + error.message + '</div>';
+            });
+
+        function renderOrderInfo(data, isDeposit) {
+                let orderDetailsHtml = '';
+
+                if (isDeposit) {
+                    // Hiển thị thông tin deposit
+                    const checkIn = new Date(data.checkIn).toLocaleDateString('vi-VN');
+                    const checkOut = new Date(data.checkOut).toLocaleDateString('vi-VN');
+                    const timeDiff = new Date(data.checkOut).getTime() - new Date(data.checkIn).getTime();
+                    const nights = Math.max(1, Math.ceil(timeDiff / (1000 * 3600 * 24)));
+                    
+                    orderDetailsHtml = `
+                        <div class="card mb-3">
+                            <div class="card-header"><i class="fas fa-hand-holding-usd me-2"></i>Thông tin đặt cọc</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6 info-label">Khách sạn:</div>
+                                    <div class="col-6 info-value">${data.hotelName || ''}</div>
+                                    <div class="col-6 info-label">Phòng:</div>
+                                    <div class="col-6 info-value">${data.roomId || ''}</div>
+                                    <div class="col-6 info-label">Ngày nhận phòng:</div>
+                                    <div class="col-6 info-value">${checkIn}</div>
+                                    <div class="col-6 info-label">Ngày trả phòng:</div>
+                                    <div class="col-6 info-value">${checkOut}</div>
+                                    <div class="col-6 info-label">Số đêm:</div>
+                                    <div class="col-6 info-value">${nights}</div>
+                                    <div class="col-6 info-label">Số khách:</div>
+                                    <div class="col-6 info-value">${data.guests || ''}</div>
+                                    <div class="col-6 info-label">Tổng giá phòng:</div>
+                                    <div class="col-6 info-value">${(data.totalPrice || 0).toLocaleString()} VNĐ</div>
+                                    <div class="col-6 info-label">Số tiền đặt cọc:</div>
+                                    <div class="col-6 info-value fw-bold text-primary">${(data.depositAmount || 0).toLocaleString()} VNĐ</div>
+                                    <div class="col-6 info-label">Số tiền còn lại:</div>
+                                    <div class="col-6 info-value">${(data.remainingAmount || 0).toLocaleString()} VNĐ</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (data.bookingType === 'tour') {
+                    const tourName = data.tourName || data.hotelName || 'N/A';
+                    const tourLocation = data.tourLocation || 'Không xác định';
+                    const tourDuration = data.tourDuration || 'Không xác định';
+                    const departureDate = new Date(data.checkIn).toLocaleDateString('vi-VN');
+                    const numberOfGuests = data.numberOfGuests || data.guests || 1;
+
+                    orderDetailsHtml = `
+                        <div class="card mb-3">
+                            <div class="card-header"><i class="fas fa-route me-2"></i>Thông tin đặt tour</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6 info-label">Tên tour:</div>
+                                    <div class="col-6 info-value">${tourName}</div>
+                                    <div class="col-6 info-label">Địa điểm:</div>
+                                    <div class="col-6 info-value">${tourLocation}</div>
+                                    <div class="col-6 info-label">Thời gian:</div>
+                                    <div class="col-6 info-value">${tourDuration}</div>
+                                    <div class="col-6 info-label">Ngày khởi hành:</div>
+                                    <div class="col-6 info-value">${departureDate}</div>
+                                    <div class="col-6 info-label">Số khách:</div>
+                                    <div class="col-6 info-value">${numberOfGuests}</div>
+                                    <div class="col-6 info-label">Tổng tiền:</div>
+                                    <div class="col-6 info-value fw-bold text-danger">${(data.totalPrice || 0).toLocaleString()} VNĐ</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const checkIn = new Date(data.checkIn).toLocaleDateString('vi-VN');
+                    const checkOut = new Date(data.checkOut).toLocaleDateString('vi-VN');
+                    orderDetailsHtml = `
+                        <div class="card mb-3">
+                            <div class="card-header"><i class="fas fa-hotel me-2"></i>Thông tin đặt phòng</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6 info-label">Khách sạn:</div>
+                                    <div class="col-6 info-value">${data.hotelName || ''}</div>
+                                    <div class="col-6 info-label">Phòng:</div>
+                                    <div class="col-6 info-value">${data.roomId || ''}</div>
+                                    <div class="col-6 info-label">Ngày nhận phòng:</div>
+                                    <div class="col-6 info-value">${checkIn}</div>
+                                    <div class="col-6 info-label">Ngày trả phòng:</div>
+                                    <div class="col-6 info-value">${checkOut}</div>
+                                    <div class="col-6 info-label">Số đêm:</div>
+                                    <div class="col-6 info-value">${data.nights || ''}</div>
+                                    <div class="col-6 info-label">Số khách:</div>
+                                    <div class="col-6 info-value">${data.guests || ''}</div>
+                                    <div class="col-6 info-label">Tổng tiền:</div>
+                                    <div class="col-6 info-value fw-bold text-danger">${(data.totalPrice || 0).toLocaleString()} VNĐ</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                const customerInfoHtml = `
+                    <div class="card">
+                        <div class="card-header bg-secondary"><i class="fas fa-user me-2"></i>Thông tin khách hàng</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 info-label">Họ tên:</div>
+                                <div class="col-6 info-value">${data.customerName || ''}</div>
+                                <div class="col-6 info-label">Email:</div>
+                                <div class="col-6 info-value">${data.customerEmail || ''}</div>
+                                <div class="col-6 info-label">Số điện thoại:</div>
+                                <div class="col-6 info-value">${data.customerPhone || ''}</div>
+                                <div class="col-6 info-label">Ghi chú:</div>
+                                <div class="col-6 info-value">${data.note || ''}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('booking-info').innerHTML = orderDetailsHtml + customerInfoHtml;
+            }
+        }
+
+        function processPaymentHistory(data, orderId, isDeposit) {
+            const debugContent = document.getElementById('debug-content');
+            const currentContent = debugContent ? JSON.parse(debugContent.textContent || '{}') : {};
+            
+            console.log('Payment data:', data);
+            if (!data) {
+                console.log('Không tìm thấy dữ liệu');
+                if (debugContent) debugContent.textContent = JSON.stringify({
+                    ...currentContent,
+                    data: 'Không tìm thấy',
+                    orderId: orderId
+                }, null, 2);
+                return;
+            }
+            
+            const paymentData = {
+                userId: data.userId || firebase.auth().currentUser?.uid || '',
+                amount: parseInt(vnp_Amount) || 0,
+                date: Date.now(),
+                status: 'success',
+                method: 'VNPAY',
+                transactionId: orderId,
+                detail: isDeposit ? 'Thanh toán đặt cọc qua VNPAY' : 'Thanh toán đặt phòng/đặt tour qua VNPAY'
+            };
+            
+            if (debugContent) debugContent.textContent = JSON.stringify({
+                ...currentContent,
+                data: data,
+                payment: paymentData,
+                amount: {
+                    original: vnp_Amount,
+                    parsed: parseInt(vnp_Amount),
+                    actual: parseInt(vnp_Amount) / 100
+                },
+                points: Math.floor((parseInt(vnp_Amount) / 100) / 100000)
+            }, null, 2);
+
+            firebase.database().ref('payments').push(paymentData)
+                .then((ref) => { // ref là reference tới payment vừa tạo
+                    console.log('Đã lưu payment thành công');
+                    // Sau khi ghi payment thành công, tạo thông báo cho user
+                    if (paymentData.userId) {
+                        firebase.database().ref('notifications/' + paymentData.userId).push({
+                            title: 'Thanh toán thành công',
+                            message: `Bạn đã thanh toán thành công ${isDeposit ? 'đặt cọc' : 'đơn hàng'} ${orderId}.`,
+                            createdAt: Date.now(),
+                            type: isDeposit ? 'deposit' : 'booking',
+                            read: false
+                        });
+                    }
+                    // --- TỰ ĐỘNG CỘNG ĐIỂM THÀNH VIÊN ---
+                    if (paymentData.userId && paymentData.amount) {
+                        // Chia 100 vì VNPay trả về số tiền đã nhân 100
+                        const actualAmount = paymentData.amount / 100;
+                        const points = Math.floor(actualAmount / 100000);
+                        const userRef = firebase.database().ref('users/' + paymentData.userId);
+                        userRef.once('value')
+                            .then(snapshot => {
+                                const userData = snapshot.val();
+                                if (!userData) throw new Error('User not found');
+                                const currentPoints = userData.loyaltyPoints || 0;
+                                const newPoints = currentPoints + points;
+                                let newLevel = 'Đồng';
+                                if (newPoints >= 10000) newLevel = 'Kim cương';
+                                else if (newPoints >= 5000) newLevel = 'Vàng';
+                                else if (newPoints >= 1000) newLevel = 'Bạc';
+                                const updates = {
+                                    loyaltyPoints: newPoints,
+                                    memberLevel: newLevel,
+                                    lastPointsUpdate: {
+                                        amount: actualAmount,
+                                        points: points,
+                                        date: Date.now(),
+                                        transactionId: orderId
+                                    }
+                                };
+                                return userRef.update(updates);
+                            })
+                            .then(() => {
+                                // Sau khi cộng điểm thành công, cập nhật note vào payment
+                                if (points > 0) {
+                                    return ref.update({
+                                        note: `Đã cộng điểm thành viên: +${points} điểm`
+                                    });
+                                } else {
+                                    return ref.update({
+                                        note: 'Thanh toán thành công nhưng số tiền không đủ để cộng điểm thành viên'
+                                    });
+                                }
+                            })
+                            .then(() => {
+                                // Đọc lại dữ liệu sau khi cập nhật
+                                return userRef.once('value');
+                            })
+                            .then(snapshot => {
+                                const updatedUser = snapshot.val();
+                                // Cập nhật debug info
+                                const debugContent = document.getElementById('debug-content');
+                                const currentContent = debugContent ? JSON.parse(debugContent.textContent || '{}') : {};
+                                if (debugContent) debugContent.textContent = JSON.stringify({
+                                    ...currentContent,
+                                    pointsUpdate: {
+                                        success: true,
+                                        newPoints: updatedUser.loyaltyPoints,
+                                        newLevel: updatedUser.memberLevel,
+                                        updateTime: new Date().toISOString()
+                                    }
+                                }, null, 2);
+                            })
+                            .catch(error => {
+                                console.error('Error updating points:', error);
+                                const errorMessage = document.createElement('div');
+                                errorMessage.className = 'alert alert-danger mt-3';
+                                errorMessage.innerHTML = `
+                                    <strong>Lỗi khi cập nhật điểm!</strong><br>
+                                    ${error.message}
+                                `;
+                                document.getElementById('payment-status').appendChild(errorMessage);
+                                const debugContent = document.getElementById('debug-content');
+                                const currentContent = debugContent ? JSON.parse(debugContent.textContent || '{}') : {};
+                                if (debugContent) debugContent.textContent = JSON.stringify({
+                                    ...currentContent,
+                                    pointsUpdateError: {
+                                        message: error.message,
+                                        stack: error.stack,
+                                        time: new Date().toISOString()
+                                    }
+                                }, null, 2);
+                            });
+                    } else {
+                        console.log('Không có userId hoặc amount:', {
+                            userId: paymentData.userId,
+                            amount: paymentData.amount
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('Lỗi khi ghi lịch sử thanh toán:', error);
+                });
+        }
+
+        function updateDepositStatus(depositId) {
+            const depositRef = firebase.database().ref('deposits/' + depositId);
+
+            depositRef.once('value').then(snapshot => {
+                if (!snapshot.exists()) {
+                    console.error("Không tìm thấy deposit để cập nhật.");
+                    return;
+                }
+
+                const depositData = snapshot.val();
+                const updates = {};
+                updates.status = 'confirmed';
+                updates.paymentStatus = 'paid';
+                updates.paymentMethod = 'vnpay';
+                updates.updatedAt = firebase.database.ServerValue.TIMESTAMP;
+                
+                // Cập nhật trạng thái deposit
+                depositRef.update(updates);
+            }).catch(err => console.error("Lỗi khi cập nhật deposit: ", err));
+        }
+
+        function updateBookingAndQuantity(bookingId) {
+            const bookingRef = firebase.database().ref('bookings/' + bookingId);
+
+            bookingRef.once('value').then(snapshot => {
+                if (!snapshot.exists()) {
+                    console.error("Không tìm thấy booking để cập nhật.");
+                    return;
+                }
+
+                const bookingData = snapshot.val();
+                const updates = {};
+                updates.status = 'confirmed'; // hoặc 'paid'
+                updates.paymentStatus = 'paid';
+                updates.paymentMethod = 'vnpay';
+                updates.updatedAt = firebase.database.ServerValue.TIMESTAMP;
+                
+                // 1. Cập nhật trạng thái booking
+                bookingRef.update(updates);
+
+                // 2. Trừ số phòng trống nếu là booking khách sạn
+                if (bookingData.bookingType === 'hotel' && bookingData.hotelId) {
+                    // Kiểm tra user đã đăng nhập
+                    const currentUser = firebase.auth().currentUser;
+                    if (!currentUser) {
+                        console.error('User chưa đăng nhập, không thể trừ số phòng trống');
+                        return;
+                    }
+                    
+                    // Tách hotelId để lấy cityKey và hotelKey
+                    const hotelIdParts = bookingData.hotelId.split('_');
+                    if (hotelIdParts.length === 2) {
+                        const cityKey = hotelIdParts[0];
+                        const hotelKey = hotelIdParts[1];
+                        const roomName = bookingData.roomId;
+                        
+                        console.log('Bắt đầu trừ số phòng trống:', {
+                            cityKey: cityKey,
+                            hotelKey: hotelKey,
+                            roomName: roomName,
+                            userId: currentUser.uid
+                        });
+                        
+                        // Tìm và cập nhật số phòng trống
+                        const hotelRef = firebase.database().ref(`location/${cityKey}/hotels/${hotelKey}/chiTiet/rooms`);
+                        hotelRef.once('value').then(roomsSnapshot => {
+                            if (roomsSnapshot.exists()) {
+                                const rooms = roomsSnapshot.val();
+                                let roomIndex = -1;
+                                let isArray = false;
+                                
+                                // Xác định loại dữ liệu (array hay object)
+                                if (Array.isArray(rooms)) {
+                                    isArray = true;
+                                    roomIndex = rooms.findIndex(room => room && room.name === roomName);
+                                } else if (typeof rooms === 'object' && rooms !== null) {
+                                    roomIndex = Object.keys(rooms).find(key => 
+                                        rooms[key] && rooms[key].name === roomName
+                                    );
+                                }
+                                
+                                console.log('Tìm phòng:', {
+                                    roomIndex: roomIndex,
+                                    isArray: isArray,
+                                    totalRooms: Array.isArray(rooms) ? rooms.length : Object.keys(rooms).length
+                                });
+                                
+                                if (roomIndex !== -1 && roomIndex !== undefined) {
+                                    // Đường dẫn đến availableRooms
+                                    let availableRoomsPath;
+                                    if (isArray) {
+                                        availableRoomsPath = `location/${cityKey}/hotels/${hotelKey}/chiTiet/rooms/${roomIndex}/availableRooms`;
+                                    } else {
+                                        availableRoomsPath = `location/${cityKey}/hotels/${hotelKey}/chiTiet/rooms/${roomIndex}/availableRooms`;
+                                    }
+                                    
+                                    console.log('Đường dẫn availableRooms:', availableRoomsPath);
+                                    
+                                    // Sử dụng transaction để trừ số phòng trống an toàn
+                                    const availableRoomsRef = firebase.database().ref(availableRoomsPath);
+                                    availableRoomsRef.transaction(currentValue => {
+                                        console.log('Transaction - Giá trị hiện tại:', currentValue);
+                                        
+                                        if (typeof currentValue === 'number' && currentValue > 0) {
+                                            const newValue = currentValue - 1;
+                                            console.log('Trừ số phòng trống:', currentValue, '->', newValue);
+                                            return newValue;
+                                        }
+                                        console.log('Không thể trừ số phòng trống - giá trị không hợp lệ:', currentValue);
+                                        return currentValue; // Không thay đổi nếu đã hết hoặc không hợp lệ
+                                    }).then((result) => {
+                                        if (result.committed) {
+                                            console.log('Đã trừ số phòng trống thành công:', {
+                                                roomName: roomName,
+                                                oldValue: result.snapshot.val() + 1,
+                                                newValue: result.snapshot.val()
+                                            });
+                                        } else {
+                                            console.warn('Transaction không được commit khi trừ số phòng trống');
+                                        }
+                                    }).catch(error => {
+                                        console.error('Lỗi khi trừ số phòng trống:', error);
+                                        // Hiển thị lỗi cho user
+                                        const errorDiv = document.createElement('div');
+                                        errorDiv.className = 'alert alert-warning mt-3';
+                                        errorDiv.innerHTML = `
+                                            <strong>Lưu ý:</strong> Đặt phòng thành công nhưng có lỗi khi cập nhật số phòng trống. 
+                                            Vui lòng liên hệ admin để kiểm tra.
+                                        `;
+                                        document.getElementById('payment-status').appendChild(errorDiv);
+                                    });
+                                } else {
+                                    console.warn('Không tìm thấy phòng để trừ số lượng:', {
+                                        roomName: roomName,
+                                        hotelId: bookingData.hotelId,
+                                        availableRooms: Object.keys(rooms).map(key => rooms[key]?.name)
+                                    });
+                                }
+                            } else {
+                                console.error('Không tìm thấy dữ liệu phòng cho khách sạn:', bookingData.hotelId);
+                            }
+                        }).catch(error => {
+                            console.error('Lỗi khi truy cập dữ liệu phòng:', error);
+                        });
+                    } else {
+                        console.error('HotelId không đúng định dạng:', bookingData.hotelId);
+                    }
+                }
+
+                // 3. Trừ số lượng ưu đãi nếu là booking từ trang ưu đãi
+                // Ta dùng hotelId để lưu deal.id
+                const dealId = bookingData.hotelId;
+                if (bookingData.bookingType === 'hotel' && dealId) {
+                     // Tìm deal trong specialOffers
+                    const offersRef = firebase.database().ref('specialOffers');
+                    offersRef.once('value').then(offersSnapshot => {
+                        if (offersSnapshot.exists()) {
+                            let dealKey = null;
+                            offersSnapshot.forEach(childSnapshot => {
+                                if (childSnapshot.val().id === dealId) {
+                                    dealKey = childSnapshot.key;
+                                }
+                            });
+
+                            if(dealKey) {
+                                const dealRef = firebase.database().ref('specialOffers/' + dealKey + '/quantity');
+                                // Dùng transaction để trừ cho an toàn
+                                dealRef.transaction(currentQuantity => {
+                                    if (currentQuantity && currentQuantity > 0) {
+                                        return currentQuantity - 1;
+                                    }
+                                    return currentQuantity; // không thay đổi nếu đã hết hoặc không tồn tại
+                                }).catch(err => console.error("Lỗi khi trừ số lượng: ", err));
+                            }
+                        }
+                    });
+                }
+            }).catch(err => console.error("Lỗi khi lấy booking: ", err));
+        }
+
+    </script>
+</body>
+</html> 
+

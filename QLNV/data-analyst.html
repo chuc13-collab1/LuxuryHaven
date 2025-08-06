@@ -1,0 +1,3313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyên viên phân tích dữ liệu (Data Analyst)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <style>
+        :root { --main-bg: #181c2f; --sidebar-bg: #23244a; --card-bg: #23244a; --accent: #7c3aed; --accent2: #00eaff; --text: #f3f6fa; --text-muted: #b0b8d1; --border: #2e325a; --shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.15); }
+        body { background: var(--main-bg); color: var(--text); font-family: 'Poppins', Arial, sans-serif; margin: 0; }
+        .sidebar { width: 240px; background: var(--sidebar-bg); color: var(--text); min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 100; display: flex; flex-direction: column; }
+        .sidebar .logo { padding: 32px 0 24px 0; text-align: center; font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; color: var(--accent); }
+        .sidebar .nav-item { display: flex; align-items: center; padding: 14px 32px; color: var(--text-muted); text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        .sidebar .nav-item.active, .sidebar .nav-item:hover { background: #1a1d36; color: var(--accent2); border-left: 4px solid var(--accent); }
+        .sidebar .nav-item i { margin-right: 14px; font-size: 1.2rem; }
+        .sidebar-footer { margin-top: auto; padding: 24px 32px; }
+        .sidebar-footer .btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 500; }
+        .main-container { margin-left: 240px; min-height: 100vh; background: var(--main-bg); }
+        .main-header { background: #1a1d36; border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+        .main-header .user-info { display: flex; align-items: center; gap: 14px; }
+        .main-header .user-info img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .content-wrapper { padding: 40px 32px 32px 32px; max-width: 800px; margin: 0 auto; }
+        .card-modern { background: var(--card-bg); border-radius: 18px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 32px; padding: 0; }
+        .card-modern .card-body { padding: 32px 28px; }
+        .card-modern .card-title { color: var(--accent2); font-weight: 600; font-size: 1.2rem; margin-bottom: 18px; }
+        .profile-info { display: flex; align-items: center; gap: 32px; }
+        .profile-info img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .profile-info .info { font-size: 1.1rem; }
+        .content-section { display: block; }
+        .chart-container { position: relative; height: 300px; margin: 20px 0; }
+        .chart-card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .stat-card { text-align: center; padding: 20px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); }
+        .stat-number { font-size: 2.5rem; font-weight: bold; margin-bottom: 5px; }
+        .stat-label { color: var(--text-muted); font-size: 0.9rem; }
+        .trend-up { color: #28a745; }
+        .trend-down { color: #dc3545; }
+        .trend-stable { color: #ffc107; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .data-table { background: var(--card-bg); border-radius: 12px; overflow: hidden; }
+        .table-dark { --bs-table-bg: var(--card-bg); }
+        .metric-card { border-left: 4px solid var(--accent); padding: 15px; margin-bottom: 15px; background: var(--card-bg); border-radius: 8px; }
+        .progress-custom { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+        .progress-bar-custom { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.3s ease; }
+        @media (max-width: 900px) { .sidebar { width: 80px; } .main-container { margin-left: 80px; } .sidebar .nav-item { padding: 12px 10px; font-size: 0.95rem; } .sidebar .logo { font-size: 1.1rem; } }
+        @media (max-width: 700px) { .sidebar { display: none; } .main-container { margin-left: 0; } .main-header { padding: 12px 10px; } .content-wrapper { padding: 12px 4px; } }
+        .funnel-stage {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
+            border-radius: 4px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+        .funnel-stage:hover {
+            transform: scale(1.02);
+        }
+        .prediction-item {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 10px;
+        }
+        .prediction-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        /* New styles for integrated system */
+        .growth-indicator {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .growth-indicator.positive {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+        .growth-indicator.negative {
+            background: linear-gradient(135deg, #dc3545, #fd7e14);
+            color: white;
+        }
+        .forecast-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .forecast-card.positive {
+            border-left: 4px solid #28a745;
+        }
+        .forecast-trend {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #28a745;
+        }
+        .confidence-level {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .alert-system .alert {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .alert-system .alert-warning {
+            border-left: 4px solid #ffc107;
+        }
+        .alert-system .alert-info {
+            border-left: 4px solid #17a2b8;
+        }
+        .alert-system .alert-success {
+            border-left: 4px solid #28a745;
+        }
+        .data-source-grid .metric-card {
+            margin-bottom: 15px;
+        }
+        .sync-status .metric-card {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i> LUXSTAFF
+        </div>
+        <a href="#dashboard" class="nav-item" onclick="showSection('dashboard', event)"><i class="fas fa-chart-line"></i> Dashboard</a>
+        <a href="#reports" class="nav-item" onclick="showSection('reports', event)"><i class="fas fa-file-alt"></i> Báo cáo</a>
+        <a href="#analytics" class="nav-item" onclick="showSection('analytics', event)"><i class="fas fa-chart-bar"></i> Phân tích</a>
+        <a href="#predictions" class="nav-item" onclick="showSection('predictions', event)"><i class="fas fa-brain"></i> Dự đoán</a>
+        <a href="#tools" class="nav-item" onclick="showSection('tools', event)"><i class="fas fa-tools"></i> Công cụ</a>
+        <a href="#integrated" class="nav-item" onclick="showSection('integrated', event)"><i class="fas fa-database"></i> Tích hợp dữ liệu</a>
+        <a href="#growth" class="nav-item" onclick="showSection('growth', event)"><i class="fas fa-chart-line"></i> Phân tích tăng trưởng</a>
+        <a href="#alerts" class="nav-item" onclick="showSection('alerts', event)"><i class="fas fa-bell"></i> Cảnh báo</a>
+        <a href="#settings" class="nav-item" onclick="showSection('settings', event)"><i class="fas fa-cogs"></i> Cài đặt</a>
+        <div class="sidebar-footer">
+            <button class="btn" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</button>
+        </div>
+    </div>
+    <div class="main-container">
+        <header class="main-header">
+            <h1 class="h4 mb-0" style="color:var(--accent2);">Chuyên viên phân tích dữ liệu</h1>
+            <div class="user-info">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                <span><strong>Data Analyst</strong></span>
+            </div>
+        </header>
+        <main class="content-wrapper">
+
+    <!-- Nút xuất dự báo cho Forecasting -->
+    <div id="forecastExportContainer" style="text-align:right; margin: 16px 0;">
+        <button class="btn btn-outline-primary" onclick="exportForecast()">
+            <i class="fas fa-file-export me-1"></i> Xuất dự báo
+        </button>
+    </div>
+            <!-- Section Vai trò (mặc định) -->
+            <div id="roleSection" class="content-section">
+                <!-- KPI Overview -->
+                <section class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number" style="color: var(--accent2);" id="totalBookings">1,234</div>
+                                <div class="stat-label">Tổng đặt phòng</div>
+                                <small class="trend-up"><i class="fas fa-arrow-up"></i> +12.5%</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number" style="color: #28a745;" id="revenue">₫2.4B</div>
+                                <div class="stat-label">Doanh thu tháng</div>
+                                <small class="trend-up"><i class="fas fa-arrow-up"></i> +8.3%</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number" style="color: #ffc107;" id="conversionRate">3.2%</div>
+                                <div class="stat-label">Tỷ lệ chuyển đổi</div>
+                                <small class="trend-down"><i class="fas fa-arrow-down"></i> -0.5%</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <div class="stat-number" style="color: #17a2b8;" id="avgBookingValue">₫1.8M</div>
+                                <div class="stat-label">Giá trị TB/đơn</div>
+                                <small class="trend-up"><i class="fas fa-arrow-up"></i> +5.7%</small>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="card-modern mb-4">
+                        <div class="card-body profile-info">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                            <div class="info">
+                                <h4 class="mb-1" style="color:var(--accent2);">Chuyên viên phân tích dữ liệu (Data Analyst)</h4>
+                                <div><i class="fas fa-briefcase me-2"></i> Theo dõi hiệu suất đặt phòng, xu hướng thị trường</div>
+                                <hr style="border-color: var(--border); margin: 16px 0;">
+                                <div>
+                                    <strong style="color: var(--accent2);">Vai trò:</strong>
+                                    <ul style="margin: 8px 0; padding-left: 20px;">
+                                        <li>Thu thập, xử lý và phân tích dữ liệu kinh doanh từ các nguồn khác nhau</li>
+                                        <li>Theo dõi và đánh giá hiệu suất đặt phòng, doanh thu, xu hướng khách hàng</li>
+                                        <li>Xây dựng dashboard và báo cáo trực quan cho ban lãnh đạo</li>
+                                        <li>Dự đoán xu hướng thị trường và đưa ra khuyến nghị chiến lược</li>
+                                    </ul>
+                                    <strong style="color: var(--accent2);">Chức năng:</strong>
+                                    <ul style="margin: 8px 0; padding-left: 20px;">
+                                        <li>Phân tích dữ liệu đặt phòng và hành vi khách hàng</li>
+                                        <li>Theo dõi KPI và metrics quan trọng của doanh nghiệp</li>
+                                        <li>Tạo báo cáo định kỳ và ad-hoc cho các phòng ban</li>
+                                        <li>Phân tích xu hướng thị trường và đối thủ cạnh tranh</li>
+                                        <li>Xây dựng mô hình dự đoán và machine learning</li>
+                                        <li>Tối ưu hóa pricing và revenue management</li>
+                                        <li>A/B testing và phân tích hiệu quả campaign</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Section Dashboard -->
+            <div id="dashboardSection" class="content-section" style="display: none;">
+                <div class="row g-4">
+                    <!-- Real-time Metrics -->
+                    <div class="col-md-8">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Doanh thu theo thời gian thực</h5>
+                            <div class="d-flex align-items-center justify-content-center" style="height: 200px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                                <div class="text-center">
+                                    <i class="fas fa-chart-line fa-3x mb-3" style="color: #00eaff;"></i>
+                                    <h4 style="color: #00eaff;">₫2.4B</h4>
+                                    <p class="mb-0">Doanh thu tháng 8</p>
+                                    <small class="text-success">+15.3% so với tháng trước</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Phân bổ đặt phòng</h5>
+                            <div style="height: 200px;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span><i class="fas fa-globe me-2" style="color: #7c3aed;"></i>Online</span>
+                                    <span class="fw-bold">45%</span>
+                                </div>
+                                <div class="progress-custom mb-3">
+                                    <div class="progress-bar-custom" style="width: 45%; background: #7c3aed;"></div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span><i class="fas fa-mobile-alt me-2" style="color: #00eaff;"></i>Mobile App</span>
+                                    <span class="fw-bold">30%</span>
+                                </div>
+                                <div class="progress-custom mb-3">
+                                    <div class="progress-bar-custom" style="width: 30%; background: #00eaff;"></div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span><i class="fas fa-phone me-2" style="color: #28a745;"></i>Phone</span>
+                                    <span class="fw-bold">15%</span>
+                                </div>
+                                <div class="progress-custom mb-3">
+                                    <div class="progress-bar-custom" style="width: 15%; background: #28a745;"></div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span><i class="fas fa-walking me-2" style="color: #ffc107;"></i>Walk-in</span>
+                                    <span class="fw-bold">10%</span>
+                                </div>
+                                <div class="progress-custom">
+                                    <div class="progress-bar-custom" style="width: 10%; background: #ffc107;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-md-6">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Top khách sạn theo doanh thu</h5>
+                            <div id="topHotelsChart">
+                <div class="col-12 mt-3" style="text-align:right">
+                    <button class="btn btn-outline-primary" onclick="exportAnalytics()">
+                        <i class="fas fa-file-export me-1"></i> Xuất dữ liệu phân tích
+                    </button>
+                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Luxury Hotel Hanoi</span>
+                                        <span class="fw-bold">₫450M</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Grand Hotel HCMC</span>
+                                        <span class="fw-bold">₫380M</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 76%"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Beach Resort Da Nang</span>
+                                        <span class="fw-bold">₫320M</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 64%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Xu hướng tìm kiếm</h5>
+                            <div style="height: 250px;">
+                                <div class="metric-card mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Khách sạn 5*</span>
+                                        <span class="fw-bold text-primary">12,500 lượt</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 100%; background: #7c3aed;"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-card mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Resort biển</span>
+                                        <span class="fw-bold text-info">9,800 lượt</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 78%; background: #00eaff;"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-card mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Khách sạn city</span>
+                                        <span class="fw-bold text-success">8,200 lượt</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 66%; background: #28a745;"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-card mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Homestay</span>
+                                        <span class="fw-bold text-warning">6,500 lượt</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 52%; background: #ffc107;"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Villa</span>
+                                        <span class="fw-bold text-danger">4,200 lượt</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 34%; background: #dc3545;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Grid -->
+                <div class="kpi-grid mt-4">
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--accent2);">89.2%</div>
+                        <div class="stat-label">Tỷ lệ lấp đầy</div>
+                        <small class="trend-up"><i class="fas fa-arrow-up"></i> +2.1%</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #28a745;">4.8/5</div>
+                        <div class="stat-label">Đánh giá TB</div>
+                        <small class="trend-stable"><i class="fas fa-minus"></i> 0.0%</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #ffc107;">2.4 ngày</div>
+                        <div class="stat-label">Thời gian lưu trú TB</div>
+                        <small class="trend-up"><i class="fas fa-arrow-up"></i> +0.3</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #17a2b8;">₫1.2M</div>
+                        <div class="stat-label">ADR (Average Daily Rate)</div>
+                        <small class="trend-up"><i class="fas fa-arrow-up"></i> +4.5%</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Báo cáo -->
+            <div id="reportsSection" class="content-section" style="display: none;">
+                <div class="card-modern">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title">Báo cáo & Insights</h5>
+                            <div>
+                                <button class="btn btn-success me-2" onclick="generateReport()"><i class="fas fa-plus"></i> Tạo báo cáo</button>
+                                <button class="btn btn-info" onclick="scheduleReport()"><i class="fas fa-clock"></i> Lên lịch</button>
+                            </div>
+                        </div>
+
+                        <!-- Bộ lọc báo cáo -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <select class="form-control" id="reportType">
+                                    <option value="">Loại báo cáo</option>
+                                    <option value="revenue">Doanh thu</option>
+                                    <option value="booking">Đặt phòng</option>
+                                    <option value="customer">Khách hàng</option>
+                                    <option value="performance">Hiệu suất</option>
+                                    <option value="market">Thị trường</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-control" id="reportPeriod">
+                                    <option value="today">Hôm nay</option>
+                                    <option value="week">Tuần này</option>
+                                    <option value="month" selected>Tháng này</option>
+                                    <option value="quarter">Quý này</option>
+                                    <option value="year">Năm này</option>
+                                    <option value="custom">Tùy chọn</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="reportSearch" placeholder="Tìm kiếm báo cáo...">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-outline-secondary w-100" onclick="exportReports()">Xuất Excel</button>
+                            </div>
+                        </div>
+
+                        <!-- Danh sách báo cáo -->
+                        <div class="data-table">
+                            <table class="table table-dark table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Tên báo cáo</th>
+                                        <th>Loại</th>
+                                        <th>Thời gian</th>
+                                        <th>Trạng thái</th>
+                                        <th>Tạo lúc</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reportsTableBody">
+                                    <tr>
+                                        <td>Báo cáo doanh thu tháng 8</td>
+                                        <td><span class="badge bg-success">Doanh thu</span></td>
+                                        <td>01/08 - 31/08/2025</td>
+                                        <td><span class="badge bg-primary">Hoàn thành</span></td>
+                                        <td>03/08/2025 09:30</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info me-1" title="Xem"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-success me-1" title="Tải"><i class="fas fa-download"></i></button>
+                                            <button class="btn btn-sm btn-warning me-1" title="Chia sẻ"><i class="fas fa-share"></i></button>
+                                            <button class="btn btn-sm btn-danger" title="Xóa"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phân tích hành vi khách hàng Q3</td>
+                                        <td><span class="badge bg-info">Khách hàng</span></td>
+                                        <td>01/07 - 30/09/2025</td>
+                                        <td><span class="badge bg-warning">Đang xử lý</span></td>
+                                        <td>02/08/2025 14:20</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary me-1" title="Xem" disabled><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-secondary me-1" title="Tải" disabled><i class="fas fa-download"></i></button>
+                                            <button class="btn btn-sm btn-warning me-1" title="Hủy"><i class="fas fa-times"></i></button>
+                                            <button class="btn btn-sm btn-danger" title="Xóa"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Phân tích -->
+            <div id="analyticsSection" class="content-section" style="display: none;">
+                <div class="row g-4">
+                    <!-- Customer Segmentation -->
+                    <div class="col-md-6">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Phân khúc khách hàng</h5>
+                            <div class="row text-center">
+                                <div class="col-6 mb-3">
+                                    <div style="background: #7c3aed; border-radius: 50%; width: 80px; height: 80px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                        <span class="h4 mb-0 text-white">35%</span>
+                                    </div>
+                                    <small class="mt-2 d-block">Business</small>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div style="background: #00eaff; border-radius: 50%; width: 80px; height: 80px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                        <span class="h4 mb-0 text-dark">40%</span>
+                                    </div>
+                                    <small class="mt-2 d-block">Leisure</small>
+                                </div>
+                                <div class="col-6">
+                                    <div style="background: #28a745; border-radius: 50%; width: 80px; height: 80px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                        <span class="h4 mb-0 text-white">15%</span>
+                                    </div>
+                                    <small class="mt-2 d-block">Group</small>
+                                </div>
+                                <div class="col-6">
+                                    <div style="background: #ffc107; border-radius: 50%; width: 80px; height: 80px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                        <span class="h4 mb-0 text-dark">10%</span>
+                                    </div>
+                                    <small class="mt-2 d-block">Family</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Booking Pattern -->
+                    <div class="col-md-6">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Mẫu đặt phòng theo giờ</h5>
+                            <div class="text-center">
+                                <i class="fas fa-clock fa-3x mb-3" style="color: #28a745;"></i>
+                                <h4 style="color: #28a745;">Peak: 16:00 - 20:00</h4>
+                                <p class="mb-2">42 đặt phòng/giờ</p>
+                                <div class="row text-center mt-3">
+                                    <div class="col-4">
+                                        <small>Sáng</small>
+                                        <div class="h6">20 đặt/giờ</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <small>Chiều</small>
+                                        <div class="h6 text-warning">42 đặt/giờ</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <small>Tối</small>
+                                        <div class="h6">15 đặt/giờ</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Analytics -->
+                <div class="row g-4 mt-2">
+                    <div class="col-md-8">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Phân tích Cohort - Retention Rate</h5>
+                            <div class="table-responsive">
+                                <table class="table table-dark table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Tháng</th>
+                                            <th>Month 0</th>
+                                            <th>Month 1</th>
+                                            <th>Month 2</th>
+                                            <th>Month 3</th>
+                                            <th>Month 4</th>
+                                            <th>Month 5</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Jan 2025</td>
+                                            <td class="bg-success">100%</td>
+                                            <td class="bg-warning">65%</td>
+                                            <td class="bg-warning">45%</td>
+                                            <td class="bg-info">32%</td>
+                                            <td class="bg-info">28%</td>
+                                            <td class="bg-secondary">25%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Feb 2025</td>
+                                            <td class="bg-success">100%</td>
+                                            <td class="bg-warning">68%</td>
+                                            <td class="bg-warning">48%</td>
+                                            <td class="bg-info">35%</td>
+                                            <td class="bg-info">30%</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mar 2025</td>
+                                            <td class="bg-success">100%</td>
+                                            <td class="bg-warning">72%</td>
+                                            <td class="bg-warning">52%</td>
+                                            <td class="bg-info">38%</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Funnel chuyển đổi</h5>
+                            <div class="funnel-chart">
+                                <div class="funnel-stage" style="width: 100%; background: var(--accent2);">
+                                    <span>Lượt truy cập: 10,000</span>
+                                </div>
+                                <div class="funnel-stage mt-2" style="width: 60%; background: #28a745;">
+                                    <span>Xem chi tiết: 6,000</span>
+                                </div>
+                                <div class="funnel-stage mt-2" style="width: 25%; background: #ffc107;">
+                                    <span>Thêm giỏ hàng: 2,500</span>
+                                </div>
+                                <div class="funnel-stage mt-2" style="width: 15%; background: #dc3545;">
+                                    <span>Thanh toán: 1,500</span>
+                                </div>
+                                <div class="funnel-stage mt-2" style="width: 12%; background: var(--accent);">
+                                    <span>Hoàn thành: 1,200</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Dự đoán -->
+            <div id="predictionsSection" class="content-section" style="display: none;">
+                <div class="row g-4">
+                    <div class="col-md-8">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Dự đoán doanh thu 6 tháng tới</h5>
+                            <div class="d-flex align-items-center justify-content-center" style="height: 200px; background: rgba(255,193,7,0.1); border-radius: 8px;">
+                                <div class="text-center">
+                                    <i class="fas fa-chart-line fa-3x mb-3" style="color: #ffc107;"></i>
+                                    <h4 style="color: #ffc107;">Tăng trưởng 15%</h4>
+                                    <p class="mb-1">Dự đoán doanh thu tháng 12: <strong>₫4.2B</strong></p>
+                                    <small class="text-muted">Sử dụng mô hình ARIMA + Machine Learning</small>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <div class="row text-center">
+                                    <div class="col-2">
+                                        <small>Sep</small>
+                                        <div class="fw-bold">₫2.8B</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <small>Oct</small>
+                                        <div class="fw-bold">₫3.1B</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <small>Nov</small>
+                                        <div class="fw-bold">₫3.5B</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <small>Dec</small>
+                                        <div class="fw-bold text-warning">₫4.2B</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <small>Jan</small>
+                                        <div class="fw-bold">₫3.8B</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Gộp thêm dự đoán tình hình kinh doanh tháng tới -->
+                        <div class="chart-card mt-4">
+                            <h5 class="mb-3">Dự đoán tình hình kinh doanh tháng tới</h5>
+                            <div class="forecast-analysis">
+                                <div class="row text-center mb-4">
+                                    <div class="col-md-4">
+                                        <div class="forecast-card positive">
+                                            <h4>₫3.2B</h4>
+                                            <small>Dự đoán doanh thu</small>
+                                            <div class="forecast-trend">
+                                                <i class="fas fa-arrow-up"></i> +12.5%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="forecast-card positive">
+                                            <h4>1,450</h4>
+                                            <small>Dự đoán đặt phòng</small>
+                                            <div class="forecast-trend">
+                                                <i class="fas fa-arrow-up"></i> +8.3%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="forecast-card positive">
+                                            <h4>₫2.1M</h4>
+                                            <small>Giá trị TB/đơn</small>
+                                            <div class="forecast-trend">
+                                                <i class="fas fa-arrow-up"></i> +5.7%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ml-prediction">
+                                    <h6>Machine Learning Prediction</h6>
+                                    <div class="prediction-confidence">
+                                        <div class="confidence-level">
+                                            <span>Độ tin cậy dự đoán:</span>
+                                            <span class="fw-bold text-success">87.3%</span>
+                                        </div>
+                                        <div class="progress-custom mt-2">
+                                            <div class="progress-bar-custom" style="width: 87%; background: var(--accent2);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Confidence Intervals</h5>
+                            <div class="prediction-stats">
+                                <div class="metric-card">
+                                    <strong>Dự đoán tháng 9:</strong>
+                                    <div>₫2.8B ± ₫0.3B</div>
+                                    <small class="text-success">Độ tin cậy: 85%</small>
+                                </div>
+                                <div class="metric-card">
+                                    <strong>Xu hướng:</strong>
+                                    <div class="trend-up">Tăng trưởng 15%</div>
+                                    <small>So với cùng kỳ năm trước</small>
+                                </div>
+                                <div class="metric-card">
+                                    <strong>Peak season:</strong>
+                                    <div>Tháng 12 - Tháng 2</div>
+                                    <small>Dự kiến +45% booking</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seasonal Analysis -->
+                <div class="row g-4 mt-2">
+                    <div class="col-md-6">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Phân tích mùa vụ</h5>
+                            <div class="text-center" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                                <div>
+                                    <i class="fas fa-calendar-alt fa-3x mb-3" style="color: #7c3aed;"></i>
+                                    <h6>Phân tích theo quý</h6>
+                                    <div class="row mt-3">
+                                        <div class="col-6">
+                                            <div class="small">Q1: 70%</div>
+                                            <div class="small">Q2: 85%</div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="small">Q3: 90%</div>
+                                            <div class="small text-warning">Q4: 100%</div>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted mt-2 d-block">Peak season: Q4</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Dự đoán xu hướng tìm kiếm</h5>
+                            <div class="search-predictions">
+                                <div class="prediction-item">
+                                    <div class="d-flex justify-content-between">
+                                        <span>"Khách sạn biển"</span>
+                                        <span class="trend-up">+25%</span>
+                                    </div>
+                                    <small class="text-muted">Peak: Tháng 7-8</small>
+                                </div>
+                                <div class="prediction-item">
+                                    <div class="d-flex justify-content-between">
+                                        <span>"Resort nghỉ dưỡng"</span>
+                                        <span class="trend-up">+18%</span>
+                                    </div>
+                                    <small class="text-muted">Peak: Tháng 12-1</small>
+                                </div>
+                                <div class="prediction-item">
+                                    <div class="d-flex justify-content-between">
+                                        <span>"Khách sạn city"</span>
+                                        <span class="trend-stable">+5%</span>
+                                    </div>
+                                    <small class="text-muted">Ổn định</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="forecastSection" class="content-section" style="display: none;">
+                <div class="row g-4">
+                    <div class="col-md-8">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Dự đoán tình hình kinh doanh tháng tới</h5>
+                            <div class="forecast-analysis">
+                                <div class="row text-center mb-4">
+                                    <div class="col-md-4">
+                                        <div class="forecast-card positive">
+                                            <h4>₫3.2B</h4>
+                                            <small>Dự đoán doanh thu</small>
+                                            <div class="forecast-trend">
+                                                <i class="fas fa-arrow-up"></i> +12.5%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="forecast-card positive">
+                                            <h4>1,450</h4>
+                                            <small>Dự đoán đặt phòng</small>
+                                            <div class="forecast-trend">
+                                                <i class="fas fa-arrow-up"></i> +8.3%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="forecast-card positive">
+                                            <h4>₫2.1M</h4>
+                                            <small>Giá trị TB/đơn</small>
+                                            <div class="forecast-trend">
+                                                <i class="fas fa-arrow-up"></i> +5.7%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="ml-prediction">
+                                    <h6>Machine Learning Prediction</h6>
+                                    <div class="prediction-confidence">
+                                        <div class="confidence-level">
+                                            <span>Độ tin cậy dự đoán:</span>
+                                            <span class="fw-bold text-success">87.3%</span>
+                                        </div>
+                                        <div class="progress-custom mt-2">
+                                            <div class="progress-bar-custom" style="width: 87%; background: var(--accent2);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Các yếu tố ảnh hưởng</h5>
+                            <div class="factor-analysis">
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Mùa du lịch</span>
+                                        <span class="fw-bold text-success">+15%</span>
+                                    </div>
+                                    <small class="text-muted">Tác động tích cực</small>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Marketing campaigns</span>
+                                        <span class="fw-bold text-success">+8%</span>
+                                    </div>
+                                    <small class="text-muted">Tác động tích cực</small>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Competition</span>
+                                        <span class="fw-bold text-danger">-3%</span>
+                                    </div>
+                                    <small class="text-muted">Tác động tiêu cực</small>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Economic factors</span>
+                                        <span class="fw-bold text-warning">+2%</span>
+                                    </div>
+                                    <small class="text-muted">Tác động trung tính</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Section Công cụ -->
+            <div id="toolsSection" class="content-section" style="display: none;">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Data Query Builder</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Chọn bảng dữ liệu:</label>
+                                <select class="form-control" id="dataTable">
+                                    <option value="bookings">Bookings</option>
+                                    <option value="customers">Customers</option>
+                                    <option value="hotels">Hotels</option>
+                                    <option value="reviews">Reviews</option>
+                                    <option value="payments">Payments</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Điều kiện lọc:</label>
+                                <textarea class="form-control" id="queryConditions" rows="3" placeholder="WHERE created_date >= '2025-01-01'"></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="executeQuery()">Thực thi Query</button>
+                            <button class="btn btn-success ms-2" onclick="exportQueryResult()">Xuất kết quả</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-card">
+                            <h5 class="mb-3">A/B Testing Tool</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Tên experiment:</label>
+                                <input type="text" class="form-control" id="experimentName" placeholder="VD: New Booking Flow">
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label class="form-label">Variant A (Control):</label>
+                                    <input type="text" class="form-control" placeholder="Current design">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">Variant B (Test):</label>
+                                    <input type="text" class="form-control" placeholder="New design">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Traffic split:</label>
+                                <input type="range" class="form-range" min="10" max="90" value="50" id="trafficSplit">
+                                <small class="text-muted">50% - 50%</small>
+                            </div>
+                            <button class="btn btn-success" onclick="startExperiment()">Bắt đầu Test</button>
+                            <button class="btn btn-info ms-2" onclick="viewExperiments()">Xem kết quả</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-md-12">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Data Import/Export Tools</h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="border rounded p-3 text-center">
+                                        <i class="fas fa-file-csv fa-2x mb-2" style="color: var(--accent2);"></i>
+                                        <h6>Import CSV</h6>
+                                        <input type="file" class="form-control mb-2" accept=".csv">
+                                        <button class="btn btn-sm btn-primary">Upload</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="border rounded p-3 text-center">
+                                        <i class="fas fa-database fa-2x mb-2" style="color: #28a745;"></i>
+                                        <h6>Database Backup</h6>
+                                        <select class="form-control mb-2">
+                                            <option>Full backup</option>
+                                            <option>Incremental</option>
+                                        </select>
+                                        <button class="btn btn-sm btn-success">Backup</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="border rounded p-3 text-center">
+                                        <i class="fas fa-chart-pie fa-2x mb-2" style="color: #ffc107;"></i>
+                                        <h6>Auto Reports</h6>
+                                        <select class="form-control mb-2">
+                                            <option>Daily</option>
+                                            <option>Weekly</option>
+                                            <option>Monthly</option>
+                                        </select>
+                                        <button class="btn btn-sm btn-warning">Schedule</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Tích hợp dữ liệu -->
+            <div id="integratedSection" class="content-section" style="display: none;">
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <div class="card-modern">
+                            <div class="card-body">
+                                <h5 class="card-title">Tích hợp dữ liệu toàn hệ thống</h5>
+<div style="text-align:right; margin-bottom: 8px;">
+    <button class="btn btn-outline-primary" onclick="exportIntegratedData()">
+        <i class="fas fa-file-export me-1"></i> Xuất dữ liệu tích hợp
+    </button>
+</div>
+                                <div class="row g-4">
+                                    <div class="col-md-3">
+                                        <div class="stat-card">
+                                            <div class="stat-number" style="color: var(--accent2);" id="totalStaff">0</div>
+                                            <div class="stat-label">Nhân viên</div>
+                                            <small class="trend-up"><i class="fas fa-arrow-up"></i> +5.2%</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stat-card">
+                                            <div class="stat-number" style="color: #28a745;" id="totalRevenue">₫0</div>
+                                            <div class="stat-label">Tổng doanh thu</div>
+                                            <small class="trend-up"><i class="fas fa-arrow-up"></i> +12.8%</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stat-card">
+                                            <div class="stat-number" style="color: #ffc107;" id="totalPartners">0</div>
+                                            <div class="stat-label">Đối tác</div>
+                                            <small class="trend-up"><i class="fas fa-arrow-up"></i> +8.1%</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stat-card">
+                                            <div class="stat-number" style="color: #17a2b8;" id="totalCampaigns">0</div>
+                                            <div class="stat-label">Chiến dịch</div>
+                                            <small class="trend-up"><i class="fas fa-arrow-up"></i> +15.3%</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row g-4 mt-4">
+                                    <div class="col-md-6">
+                                        <div class="chart-card">
+                                            <h5 class="mb-3">Dữ liệu từ các phòng ban</h5>
+                                            <div class="data-source-grid">
+                                                <div class="metric-card">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span><i class="fas fa-users me-2"></i>Staff Dashboard</span>
+                                                        <span class="badge bg-success">Connected</span>
+                                                    </div>
+                                                    <div class="progress-custom mt-2">
+                                                        <div class="progress-bar-custom" style="width: 85%; background: #28a745;"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="metric-card">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span><i class="fas fa-dollar-sign me-2"></i>Finance Manager</span>
+                                                        <span class="badge bg-success">Connected</span>
+                                                    </div>
+                                                    <div class="progress-custom mt-2">
+                                                        <div class="progress-bar-custom" style="width: 92%; background: #28a745;"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="metric-card">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span><i class="fas fa-bullhorn me-2"></i>Marketing/SEO</span>
+                                                        <span class="badge bg-success">Connected</span>
+                                                    </div>
+                                                    <div class="progress-custom mt-2">
+                                                        <div class="progress-bar-custom" style="width: 78%; background: #28a745;"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="metric-card">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span><i class="fas fa-handshake me-2"></i>Affiliate Manager</span>
+                                                        <span class="badge bg-success">Connected</span>
+                                                    </div>
+                                                    <div class="progress-custom mt-2">
+                                                        <div class="progress-bar-custom" style="width: 88%; background: #28a745;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="chart-card">
+                                            <h5 class="mb-3">Tình trạng đồng bộ dữ liệu</h5>
+                                            <div class="sync-status">
+                                                <div class="metric-card">
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>Real-time sync</span>
+                                                        <span class="text-success"><i class="fas fa-check-circle"></i> Active</span>
+                                                    </div>
+                                                </div>
+                                                <div class="metric-card">
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>Data validation</span>
+                                                        <span class="text-success"><i class="fas fa-check-circle"></i> Passed</span>
+                                                    </div>
+                                                </div>
+                                                <div class="metric-card">
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>Backup status</span>
+                                                        <span class="text-success"><i class="fas fa-check-circle"></i> Updated</span>
+                                                    </div>
+                                                </div>
+                                                <div class="metric-card">
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>API health</span>
+                                                        <span class="text-success"><i class="fas fa-check-circle"></i> Healthy</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Phân tích tăng trưởng -->
+            <div id="growthSection" class="content-section" style="display: none;">
+                <div class="row g-4">
+                    <div class="col-md-8">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Phân tích xu hướng tăng trưởng</h5>
+                            <div class="growth-analysis">
+                                <div class="row text-center mb-4">
+                                    <div class="col-md-3">
+                                        <div class="growth-indicator positive">
+                                            <i class="fas fa-arrow-up fa-2x mb-2"></i>
+                                            <h4>+15.3%</h4>
+                                            <small>Doanh thu</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="growth-indicator positive">
+                                            <i class="fas fa-arrow-up fa-2x mb-2"></i>
+                                            <h4>+8.7%</h4>
+                                            <small>Khách hàng</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="growth-indicator negative">
+                                            <i class="fas fa-arrow-down fa-2x mb-2"></i>
+                                            <h4>-2.1%</h4>
+                                            <small>Chi phí</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="growth-indicator positive">
+                                            <i class="fas fa-arrow-up fa-2x mb-2"></i>
+                                            <h4>+12.4%</h4>
+                                            <small>Lợi nhuận</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="growth-chart">
+                                    <h6>Xu hướng 6 tháng gần đây</h6>
+                                    <div class="chart-container" style="height: 200px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                        <div class="text-center">
+                                            <i class="fas fa-chart-line fa-3x mb-3" style="color: var(--accent2);"></i>
+                                            <h5>Tăng trưởng ổn định</h5>
+                                            <p>Xu hướng tích cực trong 6 tháng qua</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Chỉ số tăng trưởng</h5>
+                            <div class="growth-metrics">
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>ROI</span>
+                                        <span class="fw-bold text-success">+18.5%</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 85%; background: #28a745;"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Market Share</span>
+                                        <span class="fw-bold text-success">+5.2%</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 72%; background: #28a745;"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Customer Satisfaction</span>
+                                        <span class="fw-bold text-success">+3.8%</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 88%; background: #28a745;"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Operational Efficiency</span>
+                                        <span class="fw-bold text-success">+7.1%</span>
+                                    </div>
+                                    <div class="progress-custom mt-2">
+                                        <div class="progress-bar-custom" style="width: 91%; background: #28a745;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Dự đoán -->
+            
+
+            <!-- Section Cảnh báo -->
+            <div id="alertsSection" class="content-section" style="display: none;">
+                <div class="row g-4">
+                    <div class="col-md-8">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Hệ thống cảnh báo thông minh</h5>
+                            <div class="alert-system">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Cảnh báo:</strong> Tỷ lệ chuyển đổi giảm 2.1% so với tuần trước
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                                
+                                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Thông báo:</strong> Doanh thu tháng này tăng 15.3% so với tháng trước
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                                
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    <strong>Thành công:</strong> Tất cả hệ thống đang hoạt động bình thường
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            </div>
+                            
+                            <div class="alert-settings mt-4">
+                                <h6>Cài đặt cảnh báo</h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="revenueAlert" checked>
+                                            <label class="form-check-label" for="revenueAlert">
+                                                Cảnh báo doanh thu
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="conversionAlert" checked>
+                                            <label class="form-check-label" for="conversionAlert">
+                                                Cảnh báo tỷ lệ chuyển đổi
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="systemAlert" checked>
+                                            <label class="form-check-label" for="systemAlert">
+                                                Cảnh báo hệ thống
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="performanceAlert" checked>
+                                            <label class="form-check-label" for="performanceAlert">
+                                                Cảnh báo hiệu suất
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="chart-card">
+                            <h5 class="mb-3">Thống kê cảnh báo</h5>
+                            <div class="alert-stats">
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Cảnh báo hôm nay</span>
+                                        <span class="fw-bold">3</span>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Cảnh báo tuần này</span>
+                                        <span class="fw-bold">12</span>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Tỷ lệ xử lý</span>
+                                        <span class="fw-bold text-success">95%</span>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Thời gian phản hồi</span>
+                                        <span class="fw-bold">2.3 giờ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Cài đặt -->
+            <div id="settingsSection" class="content-section" style="display: none;">
+                <div class="card-modern">
+                    <div class="card-body">
+                        <h5 class="card-title">Cài đặt Data Analytics</h5>
+                        
+                        <div class="row g-4">
+                            <!-- Cài đặt Dashboard -->
+                            <div class="col-md-6">
+                                <div class="chart-card">
+                                    <h6><i class="fas fa-chart-line me-2"></i>Cài đặt Dashboard</h6>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="realTimeUpdate" checked>
+                                        <label class="form-check-label" for="realTimeUpdate">
+                                            Cập nhật real-time
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
+                                        <label class="form-check-label" for="autoRefresh">
+                                            Tự động làm mới (5 phút)
+                                        </label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Số metrics hiển thị</label>
+                                        <select class="form-control" id="metricCount">
+                                            <option value="8">8 metrics</option>
+                                            <option value="12" selected>12 metrics</option>
+                                            <option value="16">16 metrics</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-primary">Lưu cài đặt</button>
+                                </div>
+                            </div>
+
+                            <!-- Cài đặt Báo cáo -->
+                            <div class="col-md-6">
+                                <div class="chart-card">
+                                    <h6><i class="fas fa-file-alt me-2"></i>Cài đặt Báo cáo</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email nhận báo cáo</label>
+                                        <input type="email" class="form-control" value="analyst@luxhaven.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Tần suất gửi báo cáo</label>
+                                        <select class="form-control">
+                                            <option value="daily" selected>Hàng ngày</option>
+                                            <option value="weekly">Hàng tuần</option>
+                                            <option value="monthly">Hàng tháng</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="includeCharts" checked>
+                                        <label class="form-check-label" for="includeCharts">
+                                            Bao gồm biểu đồ
+                                        </label>
+                                    </div>
+                                    <button class="btn btn-success">Cập nhật</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cài đặt Data Sources -->
+                        <div class="row g-4 mt-2">
+                            <div class="col-md-12">
+                                <div class="chart-card">
+                                    <h6><i class="fas fa-database me-2"></i>Nguồn dữ liệu</h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-dark table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nguồn</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Lần cập nhật cuối</th>
+                                                    <th>Frequency</th>
+                                                    <th>Thao tác</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><i class="fas fa-database me-2"></i>Main Database</td>
+                                                    <td><span class="badge bg-success">Connected</span></td>
+                                                    <td>2 phút trước</td>
+                                                    <td>Real-time</td>
+                                                    <td><button class="btn btn-sm btn-info">Test</button></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fab fa-google me-2"></i>Google Analytics</td>
+                                                    <td><span class="badge bg-success">Connected</span></td>
+                                                    <td>15 phút trước</td>
+                                                    <td>Hourly</td>
+                                                    <td><button class="btn btn-sm btn-info">Test</button></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fab fa-facebook me-2"></i>Facebook Ads</td>
+                                                    <td><span class="badge bg-warning">Syncing</span></td>
+                                                    <td>1 giờ trước</td>
+                                                    <td>Daily</td>
+                                                    <td><button class="btn btn-sm btn-warning">Retry</button></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fas fa-shopping-cart me-2"></i>Payment Gateway</td>
+                                                    <td><span class="badge bg-success">Connected</span></td>
+                                                    <td>5 phút trước</td>
+                                                    <td>Real-time</td>
+                                                    <td><button class="btn btn-sm btn-info">Test</button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Debug Information -->
+                        <div class="row g-4 mt-2">
+                            <div class="col-md-12">
+                                <div class="chart-card">
+                                    <h6><i class="fas fa-bug me-2"></i>Thông tin Debug</h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Dữ liệu Real-time:</h6>
+                                            <ul class="list-unstyled">
+                                                <li><strong>Bookings:</strong> <span id="debugBookings">0</span></li>
+                                                <li><strong>Hotels:</strong> <span id="debugHotels">0</span></li>
+                                                <li><strong>Users:</strong> <span id="debugUsers">0</span></li>
+                                                <li><strong>Revenue:</strong> <span id="debugRevenue">₫0</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>KPI Tính toán:</h6>
+                                            <ul class="list-unstyled">
+                                                <li><strong>Avg Booking Value:</strong> <span id="debugAvgBooking">₫0</span></li>
+                                                <li><strong>Conversion Rate:</strong> <span id="debugConversion">0%</span></li>
+                                                <li><strong>Occupancy Rate:</strong> <span id="debugOccupancy">0%</span></li>
+                                                <li><strong>Customer Satisfaction:</strong> <span id="debugSatisfaction">0/5</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-sm btn-info me-2" onclick="refreshDebugInfo()">
+                                            <i class="fas fa-sync-alt"></i> Làm mới
+                                        </button>
+                                        <button class="btn btn-sm btn-warning" onclick="testFirebaseConnection()">
+                                            <i class="fas fa-wifi"></i> Test Kết nối
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global variables for real-time data
+        let realTimeData = {
+            bookings: [],
+            hotels: [],
+            users: [],
+            revenue: 0,
+            totalBookings: 0,
+            conversionRate: 0,
+            avgBookingValue: 0,
+            occupancyRate: 0,
+            customerSatisfaction: 0,
+            avgStayDuration: 0,
+            adr: 0
+        };
+
+        // Integrated data from all departments
+        let integratedData = {
+            staff: {
+                totalStaff: 0,
+                activeStaff: 0,
+                performance: 0,
+                attendance: 0
+            },
+            finance: {
+                totalRevenue: 0,
+                totalExpenses: 0,
+                profit: 0,
+                cashFlow: 0
+            },
+            marketing: {
+                campaigns: 0,
+                leads: 0,
+                conversionRate: 0,
+                roi: 0
+            },
+            affiliate: {
+                partners: 0,
+                commissions: 0,
+                performance: 0,
+                growth: 0
+            }
+        };
+
+        // Growth analysis data
+        let growthData = {
+            revenue: { current: 0, previous: 0, growth: 0 },
+            customers: { current: 0, previous: 0, growth: 0 },
+            expenses: { current: 0, previous: 0, growth: 0 },
+            profit: { current: 0, previous: 0, growth: 0 }
+        };
+
+        // Forecast data
+        let forecastData = {
+            nextMonth: {
+                revenue: 0,
+                bookings: 0,
+                avgBookingValue: 0,
+                confidence: 0
+            },
+            factors: {
+                seasonal: 0,
+                marketing: 0,
+                competition: 0,
+                economic: 0
+            }
+        };
+
+        // Alert system
+        let alertSystem = {
+            alerts: [],
+            settings: {
+                revenueAlert: true,
+                conversionAlert: true,
+                systemAlert: true,
+                performanceAlert: true
+            }
+        };
+
+        // Quản lý hiển thị section
+        window.showSection = function(sectionName, event) {
+            // Ẩn tất cả sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Hiển thị section được chọn
+            const targetSection = document.getElementById(sectionName + 'Section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+            
+            // Cập nhật active state cho menu
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+            
+            // Cập nhật tiêu đề header
+            const titles = {
+                'role': 'Chuyên viên phân tích dữ liệu',
+                'dashboard': 'Analytics Dashboard',
+                'reports': 'Báo cáo & Insights',
+                'analytics': 'Phân tích nâng cao',
+                'predictions': 'Dự đoán & Forecasting',
+                'tools': 'Công cụ phân tích',
+                'integrated': 'Tích hợp dữ liệu toàn hệ thống',
+                'growth': 'Phân tích tăng trưởng',
+                'forecast': 'Dự đoán tình hình kinh doanh',
+                'alerts': 'Hệ thống cảnh báo thông minh',
+                'settings': 'Cài đặt hệ thống'
+            };
+            
+            const headerTitle = document.querySelector('.main-header h1');
+            if (headerTitle && titles[sectionName]) {
+                headerTitle.textContent = titles[sectionName];
+            }
+        };
+
+        // Fetch and render reports from Firebase realtime database
+        function loadReportsFromFirebase() {
+            const database = firebase.database();
+            database.ref('bookings').once('value').then(snapshot => {
+                const bookingsData = snapshot.val();
+                const bookings = bookingsData ? Object.values(bookingsData) : [];
+                const reportsTableBody = document.getElementById('reportsTableBody');
+                if (!reportsTableBody) return;
+                reportsTableBody.innerHTML = '';
+                bookings.forEach((booking, idx) => {
+                    const name = booking.hotelName || booking.tourName || 'Báo cáo #' + (idx+1);
+                    const type = booking.bookingType === 'hotel' ? 'Doanh thu' : (booking.bookingType === 'tour' ? 'Khách hàng' : 'Khác');
+                    const time = (booking.checkIn && booking.checkOut) ? `${formatDate(booking.checkIn)} - ${formatDate(booking.checkOut)}` : '';
+                    const status = booking.status === 'confirmed' ? 'Hoàn thành' : 'Đang xử lý';
+                    const created = booking.createdAt ? formatDateTime(booking.createdAt) : '';
+                    const bookingData = encodeURIComponent(JSON.stringify(booking));
+                    reportsTableBody.innerHTML += `
+                        <tr data-booking='${bookingData}'>
+                            <td>${name}</td>
+                            <td><span class="badge bg-${type==='Doanh thu'?'success':type==='Khách hàng'?'info':'secondary'}">${type}</span></td>
+                            <td>${time}</td>
+                            <td><span class="badge bg-${status==='Hoàn thành'?'primary':'warning'}">${status}</span></td>
+                            <td>${created}</td>
+                            <td>
+                                <button class="btn btn-sm btn-info me-1 btn-view" title="Xem"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-sm btn-success me-1 btn-download" title="Tải"><i class="fas fa-download"></i></button>
+                                <button class="btn btn-sm btn-warning me-1 btn-share" title="Chia sẻ"><i class="fas fa-share"></i></button>
+                                <button class="btn btn-sm btn-danger btn-delete" title="Xóa"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                // Gán sự kiện cho các nút chức năng
+                reportsTableBody.querySelectorAll('tr').forEach(row => {
+                    const booking = JSON.parse(decodeURIComponent(row.getAttribute('data-booking')));
+                    // Xem chi tiết
+                    row.querySelector('.btn-view').onclick = function() {
+                        let detail = '';
+                        for (const key in booking) {
+                            if (booking.hasOwnProperty(key)) {
+                                detail += `${key}: ${booking[key]}\n`;
+                            }
+                        }
+                        alert('Chi tiết booking:\n\n' + detail);
+                    };
+                    // Tải file CSV
+                    row.querySelector('.btn-download').onclick = function() {
+                        let csv = 'Trường,Giá trị\n';
+                        for (const key in booking) {
+                            if (booking.hasOwnProperty(key)) {
+                                csv += `${key},${booking[key]}\n`;
+                            }
+                        }
+                        const blob = new Blob([csv], {type: 'text/csv'});
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = `${booking.hotelName||booking.tourName||'booking'}.csv`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    };
+                    // Chia sẻ (copy thông tin)
+                    row.querySelector('.btn-share').onclick = function() {
+                        let shareText = '';
+                        for (const key in booking) {
+                            if (booking.hasOwnProperty(key)) {
+                                shareText += `${key}: ${booking[key]}\n`;
+                            }
+                        }
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText(shareText).then(() => {
+                                alert('Đã copy thông tin báo cáo vào clipboard!');
+                            });
+                        } else {
+                            alert('Trình duyệt không hỗ trợ copy tự động.');
+                        }
+                    };
+                    // Xóa dòng
+                    row.querySelector('.btn-delete').onclick = function() {
+                        if (confirm('Bạn có chắc muốn xóa báo cáo này?')) {
+                            row.remove();
+                        }
+                    };
+                });
+            });
+        }
+
+        // Helper: format date
+        function formatDate(dateVal) {
+            const d = new Date(dateVal);
+            if (isNaN(d)) return '';
+            return d.toLocaleDateString('vi-VN');
+        }
+        function formatDateTime(dateVal) {
+            const d = typeof dateVal === 'number' ? new Date(dateVal) : new Date(dateVal);
+            if (isNaN(d)) return '';
+            return d.toLocaleString('vi-VN');
+        }
+
+        // Gọi khi trang load
+        window.addEventListener('DOMContentLoaded', loadReportsFromFirebase);
+
+        // Các hàm chức năng
+        window.generateReport = function() {
+            // Generate report from real data
+            const reportData = {
+                totalBookings: realTimeData.totalBookings,
+                totalRevenue: realTimeData.revenue,
+                avgBookingValue: realTimeData.avgBookingValue,
+                conversionRate: realTimeData.conversionRate,
+                occupancyRate: realTimeData.occupancyRate,
+                customerSatisfaction: realTimeData.customerSatisfaction,
+                avgStayDuration: realTimeData.avgStayDuration,
+                adr: realTimeData.adr,
+                generatedAt: new Date().toLocaleString('vi-VN')
+            };
+
+            // Create report content
+            const reportContent = `
+                BÁO CÁO PHÂN TÍCH DỮ LIỆU
+                ============================
+                
+                Tổng số đặt phòng: ${reportData.totalBookings}
+                Tổng doanh thu: ₫${(reportData.totalRevenue / 1000000).toFixed(1)}M
+                Giá trị trung bình/đơn: ₫${(reportData.avgBookingValue / 1000000).toFixed(1)}M
+                Tỷ lệ chuyển đổi: ${reportData.conversionRate.toFixed(1)}%
+                Tỷ lệ lấp đầy: ${reportData.occupancyRate.toFixed(1)}%
+                Đánh giá khách hàng: ${reportData.customerSatisfaction}/5
+                Thời gian lưu trú TB: ${reportData.avgStayDuration.toFixed(1)} ngày
+                ADR: ₫${(reportData.adr / 1000000).toFixed(1)}M
+                
+                Tạo lúc: ${reportData.generatedAt}
+            `;
+
+            // Show report in alert (in real app, this would be a modal or new page)
+            alert('Báo cáo đã được tạo:\n\n' + reportContent);
+        };
+
+        window.scheduleReport = function() {
+            alert('Lên lịch báo cáo tự động - Thiết lập thời gian và tần suất gửi báo cáo');
+        };
+
+        window.exportReports = function() {
+            // Export real data to Excel format
+            const exportData = {
+                bookings: realTimeData.bookings,
+                hotels: realTimeData.hotels,
+                kpis: {
+                    totalBookings: realTimeData.totalBookings,
+                    revenue: realTimeData.revenue,
+                    avgBookingValue: realTimeData.avgBookingValue,
+                    conversionRate: realTimeData.conversionRate,
+                    occupancyRate: realTimeData.occupancyRate,
+                    customerSatisfaction: realTimeData.customerSatisfaction,
+                    avgStayDuration: realTimeData.avgStayDuration,
+                    adr: realTimeData.adr
+                }
+            };
+
+            // Create CSV content
+            let csvContent = 'Tên báo cáo,Loại,Thời gian,Trạng thái,Tạo lúc\n';
+            csvContent += 'Báo cáo doanh thu tháng 8,Doanh thu,01/08 - 31/08/2025,Hoàn thành,' + new Date().toLocaleString('vi-VN') + '\n';
+            csvContent += 'Phân tích hành vi khách hàng Q3,Khách hàng,01/07 - 30/09/2025,Đang xử lý,' + new Date().toLocaleString('vi-VN') + '\n';
+
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'bao_cao_analytics.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert('Xuất báo cáo Excel - Tải xuống file Excel chứa tất cả báo cáo');
+        };
+
+        window.executeQuery = function() {
+            const table = document.getElementById('dataTable') ? document.getElementById('dataTable').value : '';
+            const conditions = document.getElementById('queryConditions') ? document.getElementById('queryConditions').value : '';
+            
+            // Execute query on real data
+            let queryResult = [];
+            
+            if (table === 'bookings') {
+                queryResult = realTimeData.bookings;
+            } else if (table === 'hotels') {
+                queryResult = realTimeData.hotels;
+            } else if (table === 'customers') {
+                queryResult = realTimeData.users;
+            }
+
+            // Apply conditions (simplified)
+            if (conditions && conditions.includes('created_date')) {
+                const dateFilter = conditions.match(/\d{4}-\d{2}-\d{2}/);
+                if (dateFilter) {
+                    const filterDate = new Date(dateFilter[0]);
+                    queryResult = queryResult.filter(item => {
+                        if (item.createdAt) {
+                            return new Date(item.createdAt) >= filterDate;
+                        }
+                        return true;
+                    });
+                }
+            }
+
+            alert(`Thực thi query trên bảng: ${table || 'Chưa chọn'}\nĐiều kiện: ${conditions || 'Không có'}\nKết quả: ${queryResult.length} records`);
+        };
+
+        window.exportQueryResult = function() {
+            alert('Xuất kết quả query ra file CSV/Excel');
+        };
+
+        window.startExperiment = function() {
+            const experimentName = document.getElementById('experimentName') ? document.getElementById('experimentName').value : '';
+            if (experimentName) {
+                // Start A/B test with real data
+                const experiment = {
+                    name: experimentName,
+                    startDate: new Date().toISOString(),
+                    status: 'running',
+                    variants: {
+                        A: { traffic: 50, conversions: 0 },
+                        B: { traffic: 50, conversions: 0 }
+                    }
+                };
+
+                // Save experiment to Firebase
+                const database = firebase.database();
+                database.ref('experiments').push(experiment);
+
+                alert(`Bắt đầu A/B test: ${experimentName}\nTraffic split: 50% - 50%`);
+            } else {
+                alert('Vui lòng nhập tên experiment');
+            }
+        };
+
+        window.viewExperiments = function() {
+            // Load experiments from Firebase
+            const database = firebase.database();
+            database.ref('experiments').once('value').then((snapshot) => {
+                const experiments = snapshot.val();
+                if (experiments) {
+                    const experimentList = Object.keys(experiments).map(key => {
+                        const exp = experiments[key];
+                        return `${exp.name}: ${exp.status} (${exp.variants.A.conversions + exp.variants.B.conversions} conversions)`;
+                    }).join('\n');
+                    alert('Kết quả A/B tests:\n\n' + experimentList);
+                } else {
+                    alert('Chưa có experiment nào');
+                }
+            });
+        };
+
+        // Cập nhật traffic split display
+        const trafficSlider = document.getElementById('trafficSplit');
+        if (trafficSlider) {
+            trafficSlider.addEventListener('input', function() {
+                const value = this.value;
+                const nextEl = this.nextElementSibling;
+                if (nextEl) {
+                    nextEl.textContent = `${value}% - ${100-value}%`;
+                }
+            });
+        }
+
+        // Simulate real-time data updates
+        function updateRealTimeStats() {
+            const elements = ['totalBookings', 'revenue', 'conversionRate', 'avgBookingValue'];
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    // Add slight animation effect
+                    element.style.transition = 'color 0.3s ease';
+                    element.style.color = '#00eaff';
+                    setTimeout(() => {
+                        element.style.color = '#f3f6fa';
+                    }, 300);
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show role section by default
+            showSection('role', null);
+            
+            // Initialize Firebase and load real-time data
+            initializeFirebase();
+            loadRealTimeData();
+            
+            // Load integrated data from all departments
+            loadIntegratedData();
+            
+            // Initialize growth analysis
+            initializeGrowthAnalysis();
+            
+            // Initialize forecast system
+            initializeForecastSystem();
+            
+            // Initialize alert system
+            initializeAlertSystem();
+            
+            // Update real-time stats every 30 seconds
+            setInterval(updateRealTimeStats, 30000);
+            
+            // Update integrated data every 60 seconds
+            setInterval(updateIntegratedData, 60000);
+        });
+
+        // Firebase Configuration and Data Loading
+        function initializeFirebase() {
+            const firebaseConfig = {
+                apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+                authDomain: "websitedatphongkhachsan.firebaseapp.com",
+                databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+                projectId: "websitedatphongkhachsan",
+                storageBucket: "websitedatphongkhachsan.appspot.com",
+                messagingSenderId: "732884739524",
+                appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+                measurementId: "G-RC61EXTZH7"
+            };
+
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        // Load real-time data from Firebase
+        function loadRealTimeData() {
+            // Load data from JSON file instead of Firebase for demo
+            loadDataFromJSON();
+            
+            // Also try Firebase connection for real-time updates
+            try {
+                const database = firebase.database();
+                
+                // Listen to bookings data
+                database.ref('bookings').on('value', (snapshot) => {
+                    const bookingsData = snapshot.val();
+                    if (bookingsData) {
+                        realTimeData.bookings = Object.values(bookingsData);
+                        calculateKPIs();
+                        updateDashboard();
+                    }
+                });
+
+                // Listen to hotels data
+                database.ref('hotels').on('value', (snapshot) => {
+                    const hotelsData = snapshot.val();
+                    if (hotelsData) {
+                        realTimeData.hotels = Object.values(hotelsData);
+                        updateHotelAnalytics();
+                    }
+                });
+
+                // Listen to users data
+                database.ref('users').on('value', (snapshot) => {
+                    const usersData = snapshot.val();
+                    if (usersData) {
+                        realTimeData.users = Object.values(usersData);
+                        updateUserAnalytics();
+                    }
+                });
+            } catch (error) {
+                console.log('Firebase connection failed, using JSON data:', error);
+            }
+        }
+
+        // Load data from JSON file
+        function loadDataFromJSON() {
+            // Simulate loading data from JSON file
+            const mockData = {
+                bookings: [
+                    {
+                        id: "-OWU-TTLBhqibLKUEeC7",
+                        bookingType: "hotel",
+                        checkIn: "2025-07-31",
+                        checkOut: "2025-08-01",
+                        createdAt: 1753940617668,
+                        customerEmail: "nguyentienchuc2023ct@gmail.com",
+                        customerName: "Chức Nguyễn Tiến",
+                        customerPhone: "0817411325",
+                        guests: "2",
+                        hotelId: "Buôn Ma Thuột_2",
+                        hotelName: "Dakruco Hotel",
+                        nights: 1,
+                        paymentMethod: "vnpay",
+                        paymentStatus: "paid",
+                        roomId: "Deluxe Room",
+                        roomPrice: 1100000,
+                        status: "confirmed",
+                        totalPrice: 1100000
+                    },
+                    {
+                        id: "-OWU0jOK7V3E0F2SCgmE",
+                        bookingType: "tour",
+                        checkIn: "2025-08-02T00:00:00.000Z",
+                        checkOut: "2025-08-03T00:00:00.000Z",
+                        createdAt: 1753940949131,
+                        customerEmail: "nguyentienchuc2023ct@gmail.com",
+                        customerName: "Chức Nguyễn Tiến",
+                        customerPhone: "0817411325",
+                        numberOfGuests: 1,
+                        paymentMethod: "vnpay",
+                        paymentStatus: "paid",
+                        status: "confirmed",
+                        totalPrice: 1200000,
+                        tourName: "Kayak và câu cá tại Vịnh Hạ Long",
+                        tourLocation: "Hạ Long, Quảng Ninh"
+                    },
+                    {
+                        id: "-OWU14lysqE8zhmu6WlS",
+                        bookingType: "hotel",
+                        checkIn: "2025-06-24",
+                        checkOut: "2025-06-26",
+                        createdAt: 1753941040818,
+                        customerEmail: "nguyentienchuc2023ct@gmail.com",
+                        customerName: "Chức Nguyễn Tiến",
+                        customerPhone: "0817411325",
+                        guests: "2",
+                        hotelId: "deal1",
+                        hotelName: "Combo Nghỉ Dưỡng Biển 5*",
+                        nights: 2,
+                        paymentMethod: "vnpay",
+                        paymentStatus: "paid",
+                        roomId: "Flash Sale",
+                        status: "confirmed",
+                        totalPrice: 3200000
+                    },
+                    {
+                        id: "-OWU2vIeIqHyqKyY-zM2",
+                        bookingType: "hotel",
+                        checkIn: "2025-07-31",
+                        checkOut: "2025-08-01",
+                        createdAt: 1753941539233,
+                        customerEmail: "cheesleenh021@gmail.com",
+                        customerName: "Chí Linh Trần",
+                        customerPhone: "0817411325",
+                        guests: "2",
+                        hotelId: "DaNang_3",
+                        hotelName: "InterContinental Đà Nẵng Sun Peninsula Resort",
+                        nights: 1,
+                        paymentMethod: "vnpay",
+                        paymentStatus: "paid",
+                        roomId: "Deluxe Room",
+                        roomPrice: 3000000,
+                        status: "confirmed",
+                        totalPrice: 3000000
+                    },
+                    {
+                        id: "-OWUU8uc9KyMP6rpsxi4",
+                        bookingType: "tour",
+                        checkIn: "2025-08-02T00:00:00.000Z",
+                        checkOut: "2025-08-03T00:00:00.000Z",
+                        createdAt: 1753948676845,
+                        customerEmail: "cheesleenh021@gmail.com",
+                        customerName: "Chí Linh Trần",
+                        customerPhone: "0817411325",
+                        numberOfGuests: 1,
+                        paymentMethod: "vnpay",
+                        paymentStatus: "paid",
+                        status: "confirmed",
+                        totalPrice: 500000,
+                        tourName: "Làm đèn lồng Hội An",
+                        tourLocation: "Hội An, Quảng Nam"
+                    },
+                    {
+                        id: "-OWUUSSAIReOAFAYCUPL",
+                        bookingType: "hotel",
+                        checkIn: "2025-08-02",
+                        checkOut: "2025-08-04",
+                        createdAt: 1753948756940,
+                        customerEmail: "cheesleenh021@gmail.com",
+                        customerName: "Chí Linh Trần",
+                        customerPhone: "0817411325",
+                        guests: "2",
+                        hotelId: "deal4",
+                        hotelName: "Trốn Nóng Sapa Mờ Sương",
+                        nights: 2,
+                        paymentMethod: "vnpay",
+                        paymentStatus: "paid",
+                        roomId: "Chỉ hôm nay",
+                        status: "confirmed",
+                        totalPrice: 2100000
+                    }
+                ],
+                hotels: [
+                    {
+                        id: "CanTho_0",
+                        name: "Vinpearl Hotel Cần Thơ",
+                        location: "Cần Thơ",
+                        rating: 4.6,
+                        stars: 5,
+                        price: 1500000,
+                        address: "209 Đường 30/4, Ninh Kiều, Cần Thơ",
+                        phone: "0292 382 8888",
+                        description: "Khách sạn 5 sao hiện đại, tọa lạc gần bến Ninh Kiều, mang đến trải nghiệm nghỉ dưỡng sang trọng.",
+                        image: "https://datphongresort.com/wp-content/uploads/2019/04/v-2.jpg",
+                        facilities: ["Hồ bơi ngoài trời", "Spa", "Nhà hàng ẩm thực miền Tây", "Phòng gym", "Phòng họp", "Dịch vụ đưa đón sân bay"],
+                        totalRooms: 200,
+                        availableRooms: 40
+                    },
+                    {
+                        id: "DaNang_3",
+                        name: "InterContinental Đà Nẵng Sun Peninsula Resort",
+                        location: "Đà Nẵng",
+                        rating: 4.8,
+                        stars: 5,
+                        price: 3000000,
+                        address: "Bán đảo Sơn Trà, Đà Nẵng",
+                        phone: "0236 393 8888",
+                        description: "Resort 5 sao sang trọng với view biển tuyệt đẹp",
+                        image: "https://www.ihg.com/intercontinental/hotels/us/en/danang/dadha/hoteldetail",
+                        facilities: ["Hồ bơi vô cực", "Spa", "Nhà hàng", "Bar", "Phòng gym", "Dịch vụ đưa đón sân bay"],
+                        totalRooms: 150,
+                        availableRooms: 25
+                    },
+                    {
+                        id: "Buôn Ma Thuột_2",
+                        name: "Dakruco Hotel",
+                        location: "Buôn Ma Thuột",
+                        rating: 4.2,
+                        stars: 4,
+                        price: 1100000,
+                        address: "123 Đường Y Ngông, Buôn Ma Thuột",
+                        phone: "0262 381 2345",
+                        description: "Khách sạn 4 sao tại trung tâm thành phố",
+                        image: "https://example.com/dakruco.jpg",
+                        facilities: ["Hồ bơi", "Nhà hàng", "Bar", "Wifi miễn phí"],
+                        totalRooms: 80,
+                        availableRooms: 15
+                    },
+                    {
+                        id: "deal1",
+                        name: "Combo Nghỉ Dưỡng Biển 5*",
+                        location: "Nha Trang",
+                        rating: 4.5,
+                        stars: 5,
+                        price: 1600000,
+                        address: "123 Trần Phú, Nha Trang",
+                        phone: "0258 352 1234",
+                        description: "Combo nghỉ dưỡng biển cao cấp",
+                        image: "https://example.com/combo-beach.jpg",
+                        facilities: ["Hồ bơi", "Spa", "Nhà hàng", "Bar", "Phòng gym"],
+                        totalRooms: 120,
+                        availableRooms: 30
+                    },
+                    {
+                        id: "deal4",
+                        name: "Trốn Nóng Sapa Mờ Sương",
+                        location: "Sapa",
+                        rating: 4.3,
+                        stars: 4,
+                        price: 1050000,
+                        address: "456 Đường Fansipan, Sapa",
+                        phone: "0214 387 5678",
+                        description: "Khách sạn view núi tại Sapa",
+                        image: "https://example.com/sapa-hotel.jpg",
+                        facilities: ["Nhà hàng", "Bar", "Wifi miễn phí", "Dịch vụ tour"],
+                        totalRooms: 60,
+                        availableRooms: 20
+                    }
+                ],
+                users: [
+                    {
+                        id: "HazZBKeqSvfclLzTW9LTKG6JF1w2",
+                        email: "nguyentienchuc2023ct@gmail.com",
+                        name: "Chức Nguyễn Tiến",
+                        phone: "0817411325",
+                        createdAt: 1753940617668,
+                        totalBookings: 3,
+                        totalSpent: 5500000
+                    },
+                    {
+                        id: "qZ2ceCvJd6YWBbqvfIDOBzZcdf92",
+                        email: "cheesleenh021@gmail.com",
+                        name: "Chí Linh Trần",
+                        phone: "0817411325",
+                        createdAt: 1753941539233,
+                        totalBookings: 3,
+                        totalSpent: 5600000
+                    }
+                ]
+            };
+
+            // Set real data
+            realTimeData.bookings = mockData.bookings;
+            realTimeData.hotels = mockData.hotels;
+            realTimeData.users = mockData.users;
+
+            // Calculate KPIs and update dashboard
+            calculateKPIs();
+            updateDashboard();
+            updateHotelAnalytics();
+            updateUserAnalytics();
+            updateAllAnalytics();
+
+            console.log('Loaded real data from JSON:', {
+                bookings: realTimeData.bookings.length,
+                hotels: realTimeData.hotels.length,
+                users: realTimeData.users.length
+            });
+        }
+
+        // Calculate KPIs from real data
+        function calculateKPIs() {
+            const bookings = realTimeData.bookings;
+            if (!bookings || bookings.length === 0) return;
+
+            // Calculate total revenue
+            realTimeData.revenue = bookings.reduce((sum, booking) => {
+                return sum + (booking.totalPrice || 0);
+            }, 0);
+
+            // Calculate total bookings
+            realTimeData.totalBookings = bookings.length;
+
+            // Calculate average booking value
+            realTimeData.avgBookingValue = realTimeData.revenue / realTimeData.totalBookings;
+
+            // Calculate conversion rate (assuming 1000 visitors for demo)
+            const totalVisitors = 1000;
+            realTimeData.conversionRate = (realTimeData.totalBookings / totalVisitors) * 100;
+
+            // Calculate occupancy rate based on hotel data
+            const totalRooms = realTimeData.hotels.reduce((sum, hotel) => sum + (hotel.totalRooms || 0), 0);
+            const occupiedRooms = bookings.filter(b => b.status === 'confirmed' && b.bookingType === 'hotel').length;
+            realTimeData.occupancyRate = totalRooms > 0 ? (occupiedRooms / totalRooms) * 100 : 0;
+
+            // Calculate average stay duration
+            const stayDurations = bookings.map(booking => {
+                if (booking.checkIn && booking.checkOut) {
+                    const checkIn = new Date(booking.checkIn);
+                    const checkOut = new Date(booking.checkOut);
+                    return (checkOut - checkIn) / (1000 * 60 * 60 * 24);
+                }
+                return booking.nights || 1; // Use nights if available
+            });
+            realTimeData.avgStayDuration = stayDurations.reduce((sum, duration) => sum + duration, 0) / stayDurations.length;
+
+            // Calculate ADR (Average Daily Rate) - only for hotel bookings
+            const hotelBookings = bookings.filter(b => b.bookingType === 'hotel');
+            const hotelRevenue = hotelBookings.reduce((sum, booking) => sum + (booking.totalPrice || 0), 0);
+            const totalNights = hotelBookings.reduce((sum, booking) => sum + (booking.nights || 1), 0);
+            realTimeData.adr = totalNights > 0 ? hotelRevenue / totalNights : 0;
+
+            // Calculate customer satisfaction from hotel ratings
+            const avgHotelRating = realTimeData.hotels.reduce((sum, hotel) => sum + (hotel.rating || 0), 0) / realTimeData.hotels.length;
+            realTimeData.customerSatisfaction = avgHotelRating;
+
+            console.log('KPIs calculated from real data:', {
+                totalBookings: realTimeData.totalBookings,
+                revenue: realTimeData.revenue,
+                avgBookingValue: realTimeData.avgBookingValue,
+                conversionRate: realTimeData.conversionRate,
+                occupancyRate: realTimeData.occupancyRate,
+                avgStayDuration: realTimeData.avgStayDuration,
+                adr: realTimeData.adr,
+                customerSatisfaction: realTimeData.customerSatisfaction
+            });
+        }
+
+        // Update dashboard with real data
+        function updateDashboard() {
+            // Update KPI cards
+            const totalBookingsEl = document.getElementById('totalBookings');
+            if (totalBookingsEl) {
+                totalBookingsEl.textContent = realTimeData.totalBookings.toLocaleString();
+            }
+
+            const revenueEl = document.getElementById('revenue');
+            if (revenueEl) {
+                revenueEl.textContent = `₫${(realTimeData.revenue / 1000000).toFixed(1)}B`;
+            }
+
+            const conversionRateEl = document.getElementById('conversionRate');
+            if (conversionRateEl) {
+                conversionRateEl.textContent = `${realTimeData.conversionRate.toFixed(1)}%`;
+            }
+
+            const avgBookingValueEl = document.getElementById('avgBookingValue');
+            if (avgBookingValueEl) {
+                avgBookingValueEl.textContent = `₫${(realTimeData.avgBookingValue / 1000000).toFixed(1)}M`;
+            }
+
+            // Update additional KPI grid
+            updateKPIGrid();
+            
+            // Update all analytics when dashboard data changes
+            updateAllAnalytics();
+        }
+
+        // Update KPI Grid with real data
+        function updateKPIGrid() {
+            const kpiGrid = document.querySelector('.kpi-grid');
+            if (kpiGrid) {
+                const occupancyEl = kpiGrid.querySelector('.stat-card:nth-child(1) .stat-number');
+                if (occupancyEl) {
+                    occupancyEl.textContent = `${realTimeData.occupancyRate.toFixed(1)}%`;
+                }
+
+                const satisfactionEl = kpiGrid.querySelector('.stat-card:nth-child(2) .stat-number');
+                if (satisfactionEl) {
+                    satisfactionEl.textContent = `${realTimeData.customerSatisfaction}/5`;
+                }
+
+                const stayDurationEl = kpiGrid.querySelector('.stat-card:nth-child(3) .stat-number');
+                if (stayDurationEl) {
+                    stayDurationEl.textContent = `${realTimeData.avgStayDuration.toFixed(1)} ngày`;
+                }
+
+                const adrEl = kpiGrid.querySelector('.stat-card:nth-child(4) .stat-number');
+                if (adrEl) {
+                    adrEl.textContent = `₫${(realTimeData.adr / 1000000).toFixed(1)}M`;
+                }
+            }
+        }
+
+        // Update hotel analytics
+        function updateHotelAnalytics() {
+            const hotels = realTimeData.hotels;
+            if (!hotels || hotels.length === 0) return;
+
+            // Calculate top hotels by revenue from actual bookings
+            const hotelRevenue = {};
+            realTimeData.bookings.forEach(booking => {
+                if (booking.hotelName && booking.totalPrice) {
+                    hotelRevenue[booking.hotelName] = (hotelRevenue[booking.hotelName] || 0) + booking.totalPrice;
+                }
+            });
+
+            // If no booking data, use hotel prices as revenue
+            if (Object.keys(hotelRevenue).length === 0) {
+                hotels.forEach(hotel => {
+                    hotelRevenue[hotel.name] = hotel.price * 10; // Simulate revenue
+                });
+            }
+
+            // Update top hotels chart
+            updateTopHotelsChart(hotelRevenue);
+
+            // Update hotel statistics
+            const totalHotels = hotels.length;
+            const avgRating = hotels.reduce((sum, hotel) => sum + (hotel.rating || 0), 0) / totalHotels;
+            const totalRooms = hotels.reduce((sum, hotel) => sum + (hotel.totalRooms || 0), 0);
+            const availableRooms = hotels.reduce((sum, hotel) => sum + (hotel.availableRooms || 0), 0);
+
+            console.log('Hotel analytics updated:', {
+                totalHotels,
+                avgRating,
+                totalRooms,
+                availableRooms,
+                hotelRevenue
+            });
+        }
+
+        // Update top hotels chart
+        function updateTopHotelsChart(hotelRevenue) {
+            const topHotelsChart = document.getElementById('topHotelsChart');
+            if (!topHotelsChart) return;
+
+            const sortedHotels = Object.entries(hotelRevenue)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 3);
+
+            topHotelsChart.innerHTML = '';
+            sortedHotels.forEach(([hotelName, revenue]) => {
+                const percentage = (revenue / Math.max(...Object.values(hotelRevenue))) * 100;
+                const hotelCard = document.createElement('div');
+                hotelCard.className = 'metric-card';
+                hotelCard.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <span>${hotelName}</span>
+                        <span class="fw-bold">₫${(revenue / 1000000).toFixed(0)}M</span>
+                    </div>
+                    <div class="progress-custom mt-2">
+                        <div class="progress-bar-custom" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                topHotelsChart.appendChild(hotelCard);
+            });
+        }
+
+        // Update user analytics
+        function updateUserAnalytics() {
+            const users = realTimeData.users;
+            if (!users || users.length === 0) return;
+
+            // Calculate customer segments based on real booking data
+            const segments = {
+                business: 0,
+                leisure: 0,
+                group: 0,
+                family: 0
+            };
+
+            // Analyze booking patterns for segmentation
+            realTimeData.bookings.forEach(booking => {
+                if (booking.guests) {
+                    const guestCount = parseInt(booking.guests);
+                    if (guestCount === 1) segments.business++;
+                    else if (guestCount === 2) segments.leisure++;
+                    else if (guestCount <= 4) segments.family++;
+                    else segments.group++;
+                } else if (booking.numberOfGuests) {
+                    const guestCount = parseInt(booking.numberOfGuests);
+                    if (guestCount === 1) segments.business++;
+                    else if (guestCount === 2) segments.leisure++;
+                    else if (guestCount <= 4) segments.family++;
+                    else segments.group++;
+                }
+            });
+
+            // If no guest data, use default distribution
+            if (Object.values(segments).every(count => count === 0)) {
+                segments.business = 2;
+                segments.leisure = 3;
+                segments.family = 1;
+                segments.group = 0;
+            }
+
+            updateCustomerSegmentation(segments);
+
+            // Calculate user statistics
+            const totalUsers = users.length;
+            const avgBookingsPerUser = realTimeData.bookings.length / totalUsers;
+            const avgSpentPerUser = users.reduce((sum, user) => sum + (user.totalSpent || 0), 0) / totalUsers;
+
+            console.log('User analytics updated:', {
+                totalUsers,
+                avgBookingsPerUser,
+                avgSpentPerUser,
+                segments
+            });
+        }
+
+        // Update customer segmentation chart
+        function updateCustomerSegmentation(segments) {
+            const total = Object.values(segments).reduce((sum, count) => sum + count, 0);
+            if (total === 0) return;
+
+            const percentages = {
+                business: (segments.business / total) * 100,
+                leisure: (segments.leisure / total) * 100,
+                group: (segments.group / total) * 100,
+                family: (segments.family / total) * 100
+            };
+
+            // Update the customer segmentation display
+            const businessEl = document.querySelector('.chart-card .col-6:nth-child(1) .h4');
+            if (businessEl) businessEl.textContent = `${percentages.business.toFixed(0)}%`;
+
+            const leisureEl = document.querySelector('.chart-card .col-6:nth-child(2) .h4');
+            if (leisureEl) leisureEl.textContent = `${percentages.leisure.toFixed(0)}%`;
+
+            const groupEl = document.querySelector('.chart-card .col-6:nth-child(3) .h4');
+            if (groupEl) groupEl.textContent = `${percentages.group.toFixed(0)}%`;
+
+            const familyEl = document.querySelector('.chart-card .col-6:nth-child(4) .h4');
+            if (familyEl) familyEl.textContent = `${percentages.family.toFixed(0)}%`;
+        }
+
+        // Simulate real-time data updates
+        function updateRealTimeStats() {
+            const elements = ['totalBookings', 'revenue', 'conversionRate', 'avgBookingValue'];
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    // Add slight animation effect
+                    element.style.transition = 'color 0.3s ease';
+                    element.style.color = '#00eaff';
+                    setTimeout(() => {
+                        element.style.color = '#f3f6fa';
+                    }, 300);
+                }
+            });
+        }
+
+        // Export functions for PDF/Excel
+        window.exportToPDF = function() {
+            // Generate PDF report with real data
+            const pdfData = {
+                title: 'Báo cáo phân tích dữ liệu LuxuryHaven',
+                date: new Date().toLocaleDateString('vi-VN'),
+                kpis: {
+                    totalBookings: realTimeData.totalBookings,
+                    revenue: realTimeData.revenue,
+                    avgBookingValue: realTimeData.avgBookingValue,
+                    conversionRate: realTimeData.conversionRate,
+                    occupancyRate: realTimeData.occupancyRate,
+                    customerSatisfaction: realTimeData.customerSatisfaction,
+                    avgStayDuration: realTimeData.avgStayDuration,
+                    adr: realTimeData.adr
+                },
+                bookings: realTimeData.bookings.slice(0, 10) // First 10 bookings
+            };
+
+            alert('Xuất báo cáo PDF - Tất cả dữ liệu sẽ được bao gồm\n\n' + JSON.stringify(pdfData, null, 2));
+        };
+
+        window.exportToExcel = function() {
+            // Export real data to Excel
+            const excelData = {
+                bookings: realTimeData.bookings,
+                hotels: realTimeData.hotels,
+                users: realTimeData.users,
+                summary: {
+                    totalBookings: realTimeData.totalBookings,
+                    revenue: realTimeData.revenue,
+                    avgBookingValue: realTimeData.avgBookingValue,
+                    conversionRate: realTimeData.conversionRate,
+                    occupancyRate: realTimeData.occupancyRate,
+                    customerSatisfaction: realTimeData.customerSatisfaction,
+                    avgStayDuration: realTimeData.avgStayDuration,
+                    adr: realTimeData.adr
+                }
+            };
+
+            // Create CSV for bookings
+            let csvContent = 'ID,Loại đặt phòng,Khách sạn,Khách hàng,Email,Số điện thoại,Check-in,Check-out,Số đêm,Giá phòng,Tổng tiền,Trạng thái,Phương thức thanh toán\n';
+            
+            realTimeData.bookings.forEach(booking => {
+                csvContent += `${booking.id || 'N/A'},${booking.bookingType || 'hotel'},${booking.hotelName || 'N/A'},${booking.customerName || 'N/A'},${booking.customerEmail || 'N/A'},${booking.customerPhone || 'N/A'},${booking.checkIn || 'N/A'},${booking.checkOut || 'N/A'},${booking.nights || 1},${booking.roomPrice || 0},${booking.totalPrice || 0},${booking.status || 'pending'},${booking.paymentMethod || 'N/A'}\n`;
+            });
+
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'bookings_data.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert('Xuất dữ liệu Excel - Bao gồm raw data và summary');
+        };
+
+        // Search and filter functions
+        window.searchData = function() {
+            const searchTerm = document.getElementById('dataSearch') ? document.getElementById('dataSearch').value : '';
+            
+            // Search in real data
+            const searchResults = {
+                bookings: realTimeData.bookings.filter(booking => 
+                    booking.customerName && booking.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    booking.hotelName && booking.hotelName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    booking.customerEmail && booking.customerEmail.toLowerCase().includes(searchTerm.toLowerCase())
+                ),
+                hotels: realTimeData.hotels.filter(hotel => 
+                    hotel.name && hotel.name.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+            };
+
+            // Update reports table with search results (bookings)
+            const reportsTableBody = document.getElementById('reportsTableBody');
+            if (reportsTableBody) {
+                reportsTableBody.innerHTML = '';
+                searchResults.bookings.forEach((booking, idx) => {
+                    const name = booking.hotelName || booking.tourName || 'Báo cáo #' + (idx+1);
+                    const type = booking.bookingType === 'hotel' ? 'Doanh thu' : (booking.bookingType === 'tour' ? 'Khách hàng' : 'Khác');
+                    const time = (booking.checkIn && booking.checkOut) ? `${formatDate(booking.checkIn)} - ${formatDate(booking.checkOut)}` : '';
+                    const status = booking.status === 'confirmed' ? 'Hoàn thành' : 'Đang xử lý';
+                    const created = booking.createdAt ? formatDateTime(booking.createdAt) : '';
+                    const bookingData = encodeURIComponent(JSON.stringify(booking));
+                    reportsTableBody.innerHTML += `
+                        <tr data-booking='${bookingData}'>
+                            <td>${name}</td>
+                            <td>${type}</td>
+                            <td>${time}</td>
+                            <td>${status}</td>
+                            <td>${created}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary btn-view">Xem</button>
+                                <button class="btn btn-sm btn-success btn-download">Tải</button>
+                                <button class="btn btn-sm btn-info btn-share">Chia sẻ</button>
+                                <button class="btn btn-sm btn-danger btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                // Gán lại sự kiện cho các nút chức năng
+                reportsTableBody.querySelectorAll('tr').forEach(row => {
+                    const booking = JSON.parse(decodeURIComponent(row.getAttribute('data-booking')));
+                    row.querySelector('.btn-view').onclick = function() {
+                        let detail = '';
+                        for (const key in booking) {
+                            detail += `${key}: ${booking[key]}\n`;
+                        }
+                        alert('Chi tiết booking:\n\n' + detail);
+                    };
+                    row.querySelector('.btn-download').onclick = function() {
+                        let csv = 'Trường,Giá trị\n';
+                        for (const key in booking) {
+                            csv += `${key},${booking[key]}\n`;
+                        }
+                        const blob = new Blob([csv], {type: 'text/csv'});
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = `${booking.hotelName||booking.tourName||'booking'}.csv`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    };
+                    row.querySelector('.btn-share').onclick = function() {
+                        let shareText = '';
+                        for (const key in booking) {
+                            shareText += `${key}: ${booking[key]}\n`;
+                        }
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText(shareText).then(() => {
+                                alert('Đã sao chép nội dung báo cáo!');
+                            });
+                        } else {
+                            alert('Trình duyệt không hỗ trợ sao chép!');
+                        }
+                    };
+                    row.querySelector('.btn-delete').onclick = function() {
+                        if (confirm('Bạn có chắc muốn xóa báo cáo này?')) {
+                            row.remove();
+                        }
+                    };
+                });
+            }
+            //alert(`Tìm kiếm dữ liệu: ${searchTerm || 'Trống'}\nKết quả: ${searchResults.bookings.length} bookings, ${searchResults.hotels.length} hotels`);
+        };
+
+        window.filterByDate = function() {
+            const fromDate = document.getElementById('fromDate') ? document.getElementById('fromDate').value : '';
+            const toDate = document.getElementById('toDate') ? document.getElementById('toDate').value : '';
+            let filteredBookings = realTimeData.bookings;
+            if (fromDate) {
+                const from = new Date(fromDate);
+                filteredBookings = filteredBookings.filter(booking => {
+                    if (booking.createdAt) {
+                        return new Date(booking.createdAt) >= from;
+                    }
+                    return false;
+                });
+            }
+            if (toDate) {
+                const to = new Date(toDate);
+                filteredBookings = filteredBookings.filter(booking => {
+                    if (booking.createdAt) {
+                        return new Date(booking.createdAt) <= to;
+                    }
+                    return false;
+                });
+            }
+            // Cập nhật lại bảng báo cáo
+            const reportsTableBody = document.getElementById('reportsTableBody');
+            if (reportsTableBody) {
+                reportsTableBody.innerHTML = '';
+                filteredBookings.forEach((booking, idx) => {
+                    const name = booking.hotelName || booking.tourName || 'Báo cáo #' + (idx+1);
+                    const type = booking.bookingType === 'hotel' ? 'Doanh thu' : (booking.bookingType === 'tour' ? 'Khách hàng' : 'Khác');
+                    const time = (booking.checkIn && booking.checkOut) ? `${formatDate(booking.checkIn)} - ${formatDate(booking.checkOut)}` : '';
+                    const status = booking.status === 'confirmed' ? 'Hoàn thành' : 'Đang xử lý';
+                    const created = booking.createdAt ? formatDateTime(booking.createdAt) : '';
+                    const bookingData = encodeURIComponent(JSON.stringify(booking));
+                    reportsTableBody.innerHTML += `
+                        <tr data-booking='${bookingData}'>
+                            <td>${name}</td>
+                            <td><span class="badge bg-${type==='Doanh thu'?'success':type==='Khách hàng'?'info':'secondary'}">${type}</span></td>
+                            <td>${time}</td>
+                            <td><span class="badge bg-${status==='Hoàn thành'?'primary':'warning'}">${status}</span></td>
+                            <td>${created}</td>
+                            <td>
+                                <button class="btn btn-sm btn-info me-1 btn-view" title="Xem"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-sm btn-success me-1 btn-download" title="Tải"><i class="fas fa-download"></i></button>
+                                <button class="btn btn-sm btn-warning me-1 btn-share" title="Chia sẻ"><i class="fas fa-share"></i></button>
+                                <button class="btn btn-sm btn-danger btn-delete" title="Xóa"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                // Gán lại sự kiện cho các nút chức năng
+                reportsTableBody.querySelectorAll('tr').forEach(row => {
+                    const booking = JSON.parse(decodeURIComponent(row.getAttribute('data-booking')));
+                    row.querySelector('.btn-view').onclick = function() {
+                        let detail = '';
+                        for (const key in booking) {
+                            if (booking.hasOwnProperty(key)) {
+                                detail += `${key}: ${booking[key]}\n`;
+                            }
+                        }
+                        alert('Chi tiết booking:\n\n' + detail);
+                    };
+                    row.querySelector('.btn-download').onclick = function() {
+                        let csv = 'Trường,Giá trị\n';
+                        for (const key in booking) {
+                            if (booking.hasOwnProperty(key)) {
+                                csv += `${key},${booking[key]}\n`;
+                            }
+                        }
+                        const blob = new Blob([csv], {type: 'text/csv'});
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = `${booking.hotelName||booking.tourName||'booking'}.csv`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    };
+                    row.querySelector('.btn-share').onclick = function() {
+                        let shareText = '';
+                        for (const key in booking) {
+                            if (booking.hasOwnProperty(key)) {
+                                shareText += `${key}: ${booking[key]}\n`;
+                            }
+                        }
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText(shareText).then(() => {
+                                alert('Đã copy thông tin báo cáo vào clipboard!');
+                            });
+                        } else {
+                            alert('Trình duyệt không hỗ trợ copy tự động.');
+                        }
+                    };
+                    row.querySelector('.btn-delete').onclick = function() {
+                        if (confirm('Bạn có chắc muốn xóa báo cáo này?')) {
+                            row.remove();
+                        }
+                    };
+                });
+            }
+            alert(`Lọc dữ liệu từ ${fromDate || 'N/A'} đến ${toDate || 'N/A'}\nKết quả: ${filteredBookings.length} bookings`);
+        };
+
+        // Advanced analytics functions
+        function calculateRevenueTrend() {
+            const bookings = realTimeData.bookings;
+            if (!bookings || bookings.length === 0) return [];
+
+            // Group bookings by month
+            const monthlyRevenue = {};
+            bookings.forEach(booking => {
+                if (booking.createdAt) {
+                    const date = new Date(booking.createdAt);
+                    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                    monthlyRevenue[monthKey] = (monthlyRevenue[monthKey] || 0) + (booking.totalPrice || 0);
+                }
+            });
+
+            return Object.entries(monthlyRevenue).map(([month, revenue]) => ({
+                month,
+                revenue
+            }));
+        }
+
+        function calculateBookingPattern() {
+            const bookings = realTimeData.bookings;
+            if (!bookings || bookings.length === 0) return {};
+
+            // Analyze booking patterns by hour
+            const hourlyPattern = {};
+            bookings.forEach(booking => {
+                if (booking.createdAt) {
+                    const date = new Date(booking.createdAt);
+                    const hour = date.getHours();
+                    hourlyPattern[hour] = (hourlyPattern[hour] || 0) + 1;
+                }
+            });
+
+            return hourlyPattern;
+        }
+
+        function calculateCustomerRetention() {
+            const bookings = realTimeData.bookings;
+            if (!bookings || bookings.length === 0) return {};
+
+            // Group bookings by customer
+            const customerBookings = {};
+            bookings.forEach(booking => {
+                if (booking.customerEmail) {
+                    if (!customerBookings[booking.customerEmail]) {
+                        customerBookings[booking.customerEmail] = [];
+                    }
+                    customerBookings[booking.customerEmail].push(booking);
+                }
+            });
+
+            // Calculate retention metrics
+            const retentionData = {
+                totalCustomers: Object.keys(customerBookings).length,
+                repeatCustomers: Object.values(customerBookings).filter(bookings => bookings.length > 1).length,
+                avgBookingsPerCustomer: bookings.length / Object.keys(customerBookings).length
+            };
+
+            return retentionData;
+        }
+
+        // Update predictions with real data
+        function updatePredictions() {
+            const revenueTrend = calculateRevenueTrend();
+            const bookingPattern = calculateBookingPattern();
+            const retentionData = calculateCustomerRetention();
+
+            // Simple prediction based on trend
+            if (revenueTrend.length >= 2) {
+                const recentMonths = revenueTrend.slice(-3);
+                const avgGrowth = recentMonths.reduce((sum, month, index) => {
+                    if (index > 0) {
+                        return sum + (month.revenue - recentMonths[index - 1].revenue) / recentMonths[index - 1].revenue;
+                    }
+                    return sum;
+                }, 0) / (recentMonths.length - 1);
+
+                const lastRevenue = recentMonths[recentMonths.length - 1].revenue;
+                const predictedRevenue = lastRevenue * (1 + avgGrowth);
+
+                // Update prediction display
+                const predictionEl = document.querySelector('.chart-card h4');
+        window.filterByDate = function() {
+            // Get filter values
+            const fromDate = document.getElementById('fromDate') ? document.getElementById('fromDate').value : '';
+            const toDate = document.getElementById('toDate') ? document.getElementById('toDate').value : '';
+            const reportType = document.getElementById('reportType') ? document.getElementById('reportType').value : '';
+            const timePeriod = document.getElementById('timePeriod') ? document.getElementById('timePeriod').value : '';
+            const searchTerm = document.getElementById('dataSearch') ? document.getElementById('dataSearch').value : '';
+
+            let filteredBookings = realTimeData.bookings;
+
+            // Filter by date range
+            if (fromDate) {
+                const from = new Date(fromDate);
+                filteredBookings = filteredBookings.filter(booking => {
+                    if (booking.createdAt) {
+                        return new Date(booking.createdAt) >= from;
+                    }
+                    return false;
+                });
+            }
+            if (toDate) {
+                const to = new Date(toDate);
+                filteredBookings = filteredBookings.filter(booking => {
+                    if (booking.createdAt) {
+                        return new Date(booking.createdAt) <= to;
+                    }
+                    return false;
+                });
+            }
+
+            // Filter by report type
+            if (reportType && reportType !== 'all') {
+                filteredBookings = filteredBookings.filter(booking => {
+                    if (reportType === 'revenue') return booking.bookingType === 'hotel';
+                    if (reportType === 'customer') return booking.bookingType === 'tour';
+                    return true;
+                });
+            }
+
+            // Filter by time period (e.g., this month, last month, this quarter, etc.)
+            if (timePeriod && timePeriod !== 'all') {
+                const now = new Date();
+                filteredBookings = filteredBookings.filter(booking => {
+                    if (!booking.createdAt) return false;
+                    const created = new Date(booking.createdAt);
+                    if (timePeriod === 'this_month') {
+                        return created.getMonth() === now.getMonth() && created.getFullYear() === now.getFullYear();
+                    }
+                    if (timePeriod === 'last_month') {
+                        const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                        return created.getMonth() === lastMonth.getMonth() && created.getFullYear() === lastMonth.getFullYear();
+                    }
+                    if (timePeriod === 'this_quarter') {
+                        const quarter = Math.floor(now.getMonth() / 3);
+                        const createdQuarter = Math.floor(created.getMonth() / 3);
+                        return createdQuarter === quarter && created.getFullYear() === now.getFullYear();
+                    }
+                    if (timePeriod === 'last_quarter') {
+                        let lastQuarter = Math.floor((now.getMonth() - 3) / 3);
+                        let year = now.getFullYear();
+                        if (lastQuarter < 0) { lastQuarter += 4; year--; }
+                        const createdQuarter = Math.floor(created.getMonth() / 3);
+                        return createdQuarter === lastQuarter && created.getFullYear() === year;
+                    }
+                    if (timePeriod === 'this_year') {
+                        return created.getFullYear() === now.getFullYear();
+                    }
+                    if (timePeriod === 'last_year') {
+                        return created.getFullYear() === now.getFullYear() - 1;
+                    }
+                    return true;
+                });
+            }
+
+            // Filter by search term
+            if (searchTerm) {
+                filteredBookings = filteredBookings.filter(booking => {
+                    return (
+                        (booking.customerName && booking.customerName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                        (booking.hotelName && booking.hotelName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                        (booking.customerEmail && booking.customerEmail.toLowerCase().includes(searchTerm.toLowerCase()))
+                    );
+                });
+            }
+
+            // Update reports table
+            const reportsTableBody = document.getElementById('reportsTableBody');
+            if (reportsTableBody) {
+                reportsTableBody.innerHTML = '';
+                filteredBookings.forEach((booking, idx) => {
+                    const name = booking.hotelName || booking.tourName || 'Báo cáo #' + (idx+1);
+                    const type = booking.bookingType === 'hotel' ? 'Doanh thu' : (booking.bookingType === 'tour' ? 'Khách hàng' : 'Khác');
+                    const time = (booking.checkIn && booking.checkOut) ? `${formatDate(booking.checkIn)} - ${formatDate(booking.checkOut)}` : '';
+                    const status = booking.status === 'confirmed' ? 'Hoàn thành' : 'Đang xử lý';
+                    const created = booking.createdAt ? formatDateTime(booking.createdAt) : '';
+                    const bookingData = encodeURIComponent(JSON.stringify(booking));
+                    reportsTableBody.innerHTML += `
+                        <tr data-booking='${bookingData}'>
+                            <td>${name}</td>
+                            <td>${type}</td>
+                            <td>${time}</td>
+                            <td>${status}</td>
+                            <td>${created}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary btn-view">Xem</button>
+                                <button class="btn btn-sm btn-success btn-download">Tải</button>
+                                <button class="btn btn-sm btn-info btn-share">Chia sẻ</button>
+                                <button class="btn btn-sm btn-danger btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                // Gán lại sự kiện cho các nút chức năng
+                reportsTableBody.querySelectorAll('tr').forEach(row => {
+                    const booking = JSON.parse(decodeURIComponent(row.getAttribute('data-booking')));
+                    row.querySelector('.btn-view').onclick = function() {
+                        let detail = '';
+                        for (const key in booking) {
+                            detail += `${key}: ${booking[key]}\n`;
+                        }
+                        alert('Chi tiết booking:\n\n' + detail);
+                    };
+                    row.querySelector('.btn-download').onclick = function() {
+                        let csv = 'Trường,Giá trị\n';
+                        for (const key in booking) {
+                            csv += `${key},${booking[key]}\n`;
+                        }
+                        const blob = new Blob([csv], {type: 'text/csv'});
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = `${booking.hotelName||booking.tourName||'booking'}.csv`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    };
+                    row.querySelector('.btn-share').onclick = function() {
+                        let shareText = '';
+                        for (const key in booking) {
+                            shareText += `${key}: ${booking[key]}\n`;
+                        }
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText(shareText).then(() => {
+                                alert('Đã sao chép nội dung báo cáo!');
+                            });
+                        } else {
+                            alert('Trình duyệt không hỗ trợ sao chép!');
+                        }
+                    };
+                    row.querySelector('.btn-delete').onclick = function() {
+                        if (confirm('Bạn có chắc muốn xóa báo cáo này?')) {
+                            row.remove();
+                        }
+                    };
+                });
+            }
+            //alert(`Lọc dữ liệu từ ${fromDate || 'N/A'} đến ${toDate || 'N/A'}\nKết quả: ${filteredBookings.length} bookings`);
+        };
+            }
+
+            // Update campaigns data
+            const totalCampaignsEl = document.getElementById('totalCampaigns');
+            if (totalCampaignsEl) {
+                totalCampaignsEl.textContent = integratedData.marketing.campaigns;
+            }
+        }
+
+        // Initialize growth analysis
+        function initializeGrowthAnalysis() {
+            // Calculate growth data based on current vs previous month
+            const currentMonth = new Date().getMonth();
+            const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+
+            // Simulate growth data
+            growthData.revenue = {
+                current: realTimeData.revenue,
+                previous: realTimeData.revenue * 0.87, // 13% growth
+                growth: 15.3
+            };
+
+            growthData.customers = {
+                current: realTimeData.totalBookings,
+                previous: realTimeData.totalBookings * 0.92, // 8% growth
+                growth: 8.7
+            };
+
+            growthData.expenses = {
+                current: integratedData.finance.totalExpenses,
+                previous: integratedData.finance.totalExpenses * 1.021, // 2.1% decrease
+                growth: -2.1
+            };
+
+            growthData.profit = {
+                current: integratedData.finance.profit,
+                previous: integratedData.finance.profit * 0.89, // 12.4% growth
+                growth: 12.4
+            };
+
+            updateGrowthAnalysis();
+        }
+
+        // Update growth analysis
+        function updateGrowthAnalysis() {
+            // Update growth indicators
+            const growthIndicators = document.querySelectorAll('.growth-indicator');
+            if (growthIndicators.length >= 4) {
+                growthIndicators[0].querySelector('h4').textContent = `+${growthData.revenue.growth}%`;
+                growthIndicators[1].querySelector('h4').textContent = `+${growthData.customers.growth}%`;
+                growthIndicators[2].querySelector('h4').textContent = `${growthData.expenses.growth}%`;
+                growthIndicators[3].querySelector('h4').textContent = `+${growthData.profit.growth}%`;
+            }
+        }
+
+        // Initialize forecast system
+        function initializeForecastSystem() {
+            // Calculate forecast based on current trends
+            const revenueGrowth = growthData.revenue.growth / 100;
+            const currentRevenue = realTimeData.revenue;
+            
+            forecastData.nextMonth = {
+                revenue: currentRevenue * (1 + revenueGrowth),
+                bookings: realTimeData.totalBookings * (1 + 0.083), // 8.3% growth
+                avgBookingValue: realTimeData.avgBookingValue * (1 + 0.057), // 5.7% growth
+                confidence: 87.3
+            };
+
+            forecastData.factors = {
+                seasonal: 15, // 15% positive impact from tourism season
+                marketing: 8, // 8% positive impact from campaigns
+                competition: -3, // -3% negative impact from competition
+                economic: 2 // 2% neutral impact from economic factors
+            };
+
+            updateForecastSystem();
+        }
+
+        // Update forecast system
+        function updateForecastSystem() {
+            // Update forecast cards
+            const forecastCards = document.querySelectorAll('.forecast-card');
+            if (forecastCards.length >= 3) {
+                forecastCards[0].querySelector('h4').textContent = `₫${(forecastData.nextMonth.revenue / 1000000).toFixed(1)}B`;
+                forecastCards[1].querySelector('h4').textContent = forecastData.nextMonth.bookings.toFixed(0);
+                forecastCards[2].querySelector('h4').textContent = `₫${(forecastData.nextMonth.avgBookingValue / 1000000).toFixed(1)}M`;
+            }
+
+            // Update confidence level
+            const confidenceEl = document.querySelector('.confidence-level .fw-bold');
+            if (confidenceEl) {
+                confidenceEl.textContent = `${forecastData.nextMonth.confidence}%`;
+            }
+
+            // Update progress bar
+            const confidenceProgress = document.querySelector('.prediction-confidence .progress-bar-custom');
+            if (confidenceProgress) {
+                confidenceProgress.style.width = `${forecastData.nextMonth.confidence}%`;
+            }
+        }
+
+// Export forecast data to CSV/Excel
+window.exportForecast = function() {
+    let csvContent = 'Chỉ số,Dự báo tháng tới\n';
+    csvContent += `Doanh thu,${forecastData.nextMonth.revenue}\n`;
+    csvContent += `Số booking,${forecastData.nextMonth.bookings}\n`;
+    csvContent += `Giá trị booking TB,${forecastData.nextMonth.avgBookingValue}\n`;
+    csvContent += `Độ tin cậy (%),${forecastData.nextMonth.confidence}\n`;
+    csvContent += '\nCác yếu tố ảnh hưởng,Giá trị (%)\n';
+    for (const key in forecastData.factors) {
+        csvContent += `${key},${forecastData.factors[key]}\n`;
+    }
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'du_bao_thang_toi.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    alert('Đã xuất dữ liệu dự báo ra file CSV!');
+};
+
+        // Initialize alert system
+        function initializeAlertSystem() {
+            // Set up alert conditions
+            alertSystem.alerts = [
+                {
+                    type: 'warning',
+                    message: 'Tỷ lệ chuyển đổi giảm 2.1% so với tuần trước',
+                    timestamp: new Date()
+                },
+                {
+                    type: 'info',
+                    message: 'Doanh thu tháng này tăng 15.3% so với tháng trước',
+                    timestamp: new Date()
+                },
+                {
+                    type: 'success',
+                    message: 'Tất cả hệ thống đang hoạt động bình thường',
+                    timestamp: new Date()
+                }
+            ];
+
+            // Load alert settings
+            const revenueAlert = document.getElementById('revenueAlert');
+            const conversionAlert = document.getElementById('conversionAlert');
+            const systemAlert = document.getElementById('systemAlert');
+            const performanceAlert = document.getElementById('performanceAlert');
+
+            if (revenueAlert) revenueAlert.checked = alertSystem.settings.revenueAlert;
+            if (conversionAlert) conversionAlert.checked = alertSystem.settings.conversionAlert;
+            if (systemAlert) systemAlert.checked = alertSystem.settings.systemAlert;
+            if (performanceAlert) performanceAlert.checked = alertSystem.settings.performanceAlert;
+        }
+
+        // Check alert conditions
+        function checkAlertConditions() {
+            // Check for new alerts based on data changes
+            const currentConversionRate = realTimeData.conversionRate;
+            const previousConversionRate = 3.4; // Simulated previous rate
+
+            if (currentConversionRate < previousConversionRate && alertSystem.settings.conversionAlert) {
+                const alert = {
+                    type: 'warning',
+                    message: `Tỷ lệ chuyển đổi giảm ${((previousConversionRate - currentConversionRate) / previousConversionRate * 100).toFixed(1)}%`,
+                    timestamp: new Date()
+                };
+                
+                if (!alertSystem.alerts.some(a => a.message === alert.message)) {
+                    alertSystem.alerts.unshift(alert);
+                    showAlert(alert);
+                }
+            }
+
+            // Check revenue growth
+            if (growthData.revenue.growth > 10 && alertSystem.settings.revenueAlert) {
+                const alert = {
+                    type: 'info',
+                    message: `Doanh thu tăng ${growthData.revenue.growth.toFixed(1)}% so với tháng trước`,
+                    timestamp: new Date()
+                };
+                
+                if (!alertSystem.alerts.some(a => a.message === alert.message)) {
+                    alertSystem.alerts.unshift(alert);
+                    showAlert(alert);
+                }
+            }
+        }
+
+        // Show alert
+        function showAlert(alert) {
+            const alertContainer = document.querySelector('.alert-system');
+            if (alertContainer) {
+                const alertEl = document.createElement('div');
+                alertEl.className = `alert alert-${alert.type} alert-dismissible fade show`;
+                alertEl.innerHTML = `
+                    <i class="fas fa-${alert.type === 'warning' ? 'exclamation-triangle' : alert.type === 'info' ? 'info-circle' : 'check-circle'} me-2"></i>
+                    <strong>${alert.type === 'warning' ? 'Cảnh báo' : alert.type === 'info' ? 'Thông báo' : 'Thành công'}:</strong> ${alert.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                alertContainer.insertBefore(alertEl, alertContainer.firstChild);
+            }
+        }
+
+        // Update integrated data periodically
+        function updateIntegratedData() {
+            loadIntegratedData();
+            updateGrowthAnalysis();
+            updateForecastSystem();
+            checkAlertConditions();
+        }
+
+        function updateRevenueChart() {
+            const revenueTrend = calculateRevenueTrend();
+            // Update revenue chart with real data
+            console.log('Revenue trend updated:', revenueTrend);
+        }
+
+        function updateBookingPatternChart() {
+            const bookingPattern = calculateBookingPattern();
+            // Update booking pattern chart with real data
+            console.log('Booking pattern updated:', bookingPattern);
+        }
+
+        // Debug functions
+        function updateDebugInfo() {
+            // Update debug information
+            const debugBookings = document.getElementById('debugBookings');
+            if (debugBookings) {
+                debugBookings.textContent = realTimeData.bookings.length;
+            }
+
+            const debugHotels = document.getElementById('debugHotels');
+            if (debugHotels) {
+                debugHotels.textContent = realTimeData.hotels.length;
+            }
+
+            const debugUsers = document.getElementById('debugUsers');
+            if (debugUsers) {
+                debugUsers.textContent = realTimeData.users.length;
+            }
+
+            const debugRevenue = document.getElementById('debugRevenue');
+            if (debugRevenue) {
+                debugRevenue.textContent = `₫${(realTimeData.revenue / 1000000).toFixed(1)}M`;
+            }
+
+            const debugAvgBooking = document.getElementById('debugAvgBooking');
+            if (debugAvgBooking) {
+                debugAvgBooking.textContent = `₫${(realTimeData.avgBookingValue / 1000000).toFixed(1)}M`;
+            }
+
+            const debugConversion = document.getElementById('debugConversion');
+            if (debugConversion) {
+                debugConversion.textContent = `${realTimeData.conversionRate.toFixed(1)}%`;
+            }
+
+            const debugOccupancy = document.getElementById('debugOccupancy');
+            if (debugOccupancy) {
+                debugOccupancy.textContent = `${realTimeData.occupancyRate.toFixed(1)}%`;
+            }
+
+            const debugSatisfaction = document.getElementById('debugSatisfaction');
+            if (debugSatisfaction) {
+                debugSatisfaction.textContent = `${realTimeData.customerSatisfaction}/5`;
+            }
+        }
+
+        function refreshDebugInfo() {
+            updateDebugInfo();
+            alert('Thông tin debug đã được cập nhật!');
+        }
+
+        function testFirebaseConnection() {
+            const database = firebase.database();
+            
+            // Test connection by reading a small amount of data
+            database.ref('bookings').limitToFirst(1).once('value')
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        alert('✅ Kết nối Firebase thành công!\nDữ liệu đang được đồng bộ real-time.');
+                    } else {
+                        alert('⚠️ Kết nối thành công nhưng chưa có dữ liệu bookings.\nĐang sử dụng dữ liệu từ JSON file.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Firebase connection error:', error);
+                    alert('❌ Lỗi kết nối Firebase:\n' + error.message + '\n\nĐang sử dụng dữ liệu thực từ JSON file với:\n' +
+                          '📊 ' + realTimeData.bookings.length + ' bookings\n' +
+                          '🏨 ' + realTimeData.hotels.length + ' hotels\n' +
+                          '👥 ' + realTimeData.users.length + ' users\n' +
+                          '💰 Tổng doanh thu: ₫' + (realTimeData.revenue / 1000000).toFixed(1) + 'M');
+                });
+        }
+
+        // Đăng xuất với Firebase Auth
+        function logout() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                // Kiểm tra xem Firebase Auth có sẵn không
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    firebase.auth().signOut().then(() => {
+                        console.log('Đăng xuất thành công');
+                        window.location.href = '../auth.html';
+                    }).catch((error) => {
+                        console.error('Lỗi đăng xuất:', error);
+                        // Vẫn chuyển trang nếu có lỗi
+                        window.location.href = '../auth.html';
+                    });
+                } else {
+                    // Fallback nếu Firebase không có
+                    window.location.href = '../auth.html';
+                }
+            }
+        }
+
+// Export analytics data to CSV
+window.exportAnalytics = function() {
+    let csvContent = 'Chỉ số,Giá trị\n';
+    csvContent += `Tổng đặt phòng,${realTimeData.totalBookings || 0}\n`;
+    csvContent += `Tổng doanh thu,${realTimeData.revenue || 0}\n`;
+    csvContent += `Giá trị TB/đơn,${realTimeData.avgBookingValue || 0}\n`;
+    csvContent += `Tỷ lệ chuyển đổi,${realTimeData.conversionRate || 0}\n`;
+    csvContent += `Tỷ lệ lấp đầy,${realTimeData.occupancyRate || 0}\n`;
+    csvContent += `Đánh giá TB,${realTimeData.customerSatisfaction || 0}\n`;
+    csvContent += `Thời gian lưu trú TB,${realTimeData.avgStayDuration || 0}\n`;
+    csvContent += `ADR,${realTimeData.adr || 0}\n`;
+    // Thêm các chỉ số khác nếu cần
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'analytics_data.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    alert('Đã xuất dữ liệu phân tích ra file CSV!');
+};
+
+// Export integrated data to CSV
+window.exportIntegratedData = function() {
+    let csvContent = 'Chỉ số,Giá trị\n';
+    csvContent += `Nhân viên,${integratedData.hr && integratedData.hr.staff || 0}\n`;
+    csvContent += `Tổng doanh thu,${integratedData.finance && integratedData.finance.totalRevenue || 0}\n`;
+    csvContent += `Đối tác,${integratedData.partner && integratedData.partner.totalPartners || 0}\n`;
+    csvContent += `Chiến dịch,${integratedData.marketing && integratedData.marketing.campaigns || 0}\n`;
+    // Thêm các chỉ số khác nếu cần
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'integrated_data.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    alert('Đã xuất dữ liệu tích hợp ra file CSV!');
+};
+    </script>
+</body>
+</html>

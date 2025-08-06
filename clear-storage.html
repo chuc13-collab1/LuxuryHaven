@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear LocalStorage</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        button { padding: 10px 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h2>Xóa dữ liệu LocalStorage để test lại hệ thống</h2>
+    <button onclick="clearStorage()">Xóa dữ liệu</button>
+    <div id="result"></div>
+    
+    <script>
+        function clearStorage() {
+            localStorage.removeItem('leaveRequests');
+            localStorage.removeItem('attendances');
+            localStorage.removeItem('lastLeaveCheck');
+            localStorage.removeItem('adminLastLeaveCheck');
+            
+            document.getElementById('result').innerHTML = 
+                '<h3 style="color: green;">✅ Đã xóa thành công!</h3>' +
+                '<p>Bây giờ bạn có thể test lại hệ thống từ đầu.</p>';
+        }
+    </script>
+</body>
+</html>

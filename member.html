@@ -1,0 +1,2356 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang cá nhân - Luxury Haven Travel</title>
+    <link rel="icon" type="image/x-icon" href="images/LuxuryHavenTravel.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Thêm SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="css/member.css">
+    <link rel="stylesheet" href="css\chatbox.css">
+    <script type="module" src="js/search.js"></script>
+    <script src="js/mobile.js"></script>
+    <link rel="stylesheet" href="css\mobile.css">
+    <link rel="stylesheet" href="css/loading.css">
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+    <script src="js/loading.js"></script>
+    <style>
+    
+    .loyalty-container {
+      max-width: 600px;
+      margin: 40px auto 0 auto;
+      background: #fffbe6;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      padding: 32px 24px 24px 24px;
+    }
+    .loyalty-header {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .loyalty-box {
+      min-width: 160px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 18px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .loyalty-box.point {
+      background: #fff3e0;
+    }
+    .loyalty-box.rank {
+      background: #e3f2fd;
+    }
+    .loyalty-box i {
+      font-size: 2.2em;
+      margin-bottom: 6px;
+    }
+    .loyalty-value {
+      font-size: 2em;
+      font-weight: 700;
+      color: #e67e22;
+    }
+    .loyalty-box.rank .loyalty-value {
+      color: #1a237e;
+    }
+    .loyalty-label {
+      font-size: 1em;
+      color: #888;
+      margin-top: 2px;
+    }
+    .barcode-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 24px 12px 16px 12px;
+      margin-top: 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #user-barcode {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      height: auto;
+    }
+    .barcode-label {
+      font-size: 1em;
+      color: #888;
+      margin-top: 8px;
+    }
+    @media (max-width: 700px) {
+      .loyalty-header {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .loyalty-container {
+        padding: 16px 4px 12px 4px;
+      }
+      .barcode-card {
+        padding: 16px 2px 10px 2px;
+      }
+    }
+    @media (max-width: 768px) {
+      #mobile-tab-menu {
+        display: flex !important;
+        gap: 2px;
+        padding: 0 2px;
+        height: 54px;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      }
+      .mobile-tab-link {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-width: 64px;
+        padding: 0 10px;
+        height: 54px;
+        color: #1a237e;
+        font-size: 0.92em;
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        background: none;
+        transition: color 0.2s, border 0.2s;
+      }
+      .mobile-tab-link.active, .mobile-tab-link:active, .mobile-tab-link:focus {
+        color: #e67e22;
+        border-bottom: 2px solid #e67e22;
+        background: #f9f9f9;
+      }
+      .mobile-tab-link i {
+        font-size: 1.2em;
+        margin-bottom: 2px;
+      }
+      .mobile-tab-link span {
+        font-size: 0.85em;
+        line-height: 1;
+      }
+      /* Ẩn menu dọc sidebar trên mobile */
+      .col-md-3 .list-group { display: none !important; }
+    }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <dotlottie-wc 
+            src="https://lottie.host/22866d75-292a-42dc-ae8a-72f6f903386d/dwhv5hvZ72.lottie" 
+            style="width: 300px; height: 300px" 
+            speed="1" 
+            autoplay 
+            loop>
+        </dotlottie-wc>
+        <div class="loading-text">LuxuryHavenTravel</div>
+        <div class="loading-subtext">Đang tải nội dung...</div>
+    </div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-flex">
+                <!-- Logo -->
+                <a class="navbar-brand" href="#">
+                    <img src="images/LuxuryHavenTravel.png" alt="LuxuryHaven Logo">
+                </a>
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <!-- Search Box -->
+<div class="nav-search">
+    <div class="search-input-group">
+        <input type="text" placeholder="Tìm kiếm..." id="main-search-input" autocomplete="off">
+        <button type="button" id="main-search-btn">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</div>
+                <div class="nav-right">
+                    <ul class="nav-links" id="nav-links">
+                        <li><a href="index.html" class="active">Trang chủ</a></li>
+                        <li><a href="hotel.html">Khách sạn</a></li>
+
+                        <li class="dropdown"><a href="tours.html">Tours</a></li>
+
+                        <li class="dropdown"><a href="prioritize.html">Ưu đãi</a></li>
+                        <li class="dropdown"><a href="travel_guide.html">Cẩm nang du lịch</a></li>
+                        <li class="dropdown"><a href="about_us.html">Về chúng tôi</a></li>
+                        <!-- <li class="dropdown"><a href="vuichoi.html">🌐</a></li> -->
+                        <li>
+                            <div class="d-flex align-items-center">
+                                <div class="dropdown" id="user-dropdown" style="display:none;">
+                                    <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                                        id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-user"></i> <span id="user-name"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="member.html"><i
+                                                    class="fas fa-user-circle"></i> Tài khoản</a></li>
+                                        <li><a class="dropdown-item" href="#" id="logout-btn"><i
+                                                    class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                                    </ul>
+                                </div>
+                                <a href="auth.html" class="btn btn-outline-primary me-2" id="login-btn">
+                                    <i class="fas fa-user"></i> Đăng nhập
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container" style="margin-top: 120px;">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <div class="avatar-wrapper mb-3">
+                                    <img id="sidebar-avatar" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+                                        alt="Avatar" class="rounded-circle"
+                                        style="width: 100px; height: 100px; object-fit: cover;"
+                                        onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'">
+                                    <label for="sidebar-avatar-upload" style="position:absolute;bottom:0;right:0;cursor:pointer;background:#fff;border-radius:50%;padding:4px;">
+                                        <i class="fas fa-camera" style="font-size:18px;color:#1a237e;"></i>
+                                    </label>
+                                    <input type="file" id="sidebar-avatar-upload" accept="image/*" style="display:none;">
+                                </div>
+                                <h5 class="mb-1" id="sidebar-user-name">Tên người dùng</h5>
+                                <p class="text-muted" id="sidebar-user-email">email@example.com</p>
+                                <div id="sidebar-memberLevel" style="font-weight:600;color:#1a237e;"></div>
+                                <div id="sidebar-loyaltyPoints" style="color:#e67e22;"></div>
+                            </div>
+                            <div class="list-group">
+                                <a href="#profile" class="list-group-item list-group-item-action active"
+                                    data-bs-toggle="list">
+                                    <i class="fas fa-user me-2"></i> Thông tin cá nhân
+                                </a>
+                                <a href="#bookings" class="list-group-item list-group-item-action"
+                                    data-bs-toggle="list">
+                                    <i class="fas fa-calendar-alt me-2"></i> Lịch sử
+                                </a>
+                                <a href="#loyalty" class="list-group-item list-group-item-action"
+                                    data-bs-toggle="list">
+                                    <i class="fas fa-star me-2"></i> Điểm thành viên
+                                </a>
+                                <a href="#favorites" class="list-group-item list-group-item-action"
+                                    data-bs-toggle="list">
+                                    <i class="fas fa-heart me-2"></i> Danh sách yêu thích
+                                </a>
+                                <a href="#reviews" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                                    <i class="fas fa-star me-2"></i> Đánh giá của tôi
+                                </a>
+                                <a href="#settings" class="list-group-item list-group-item-action"
+                                    data-bs-toggle="list">
+                                    <i class="fas fa-cog me-2"></i> Cài đặt tài khoản
+                                </a>
+                                <li><a href="#payments" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-file-invoice-dollar me-2"></i> Lịch sử thanh toán</a></li>
+                                <!-- <li><a href="#notifications" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-bell me-2"></i> Thông báo</a></li> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-9">
+                    <div class="tab-content">
+                        <!-- Profile Tab -->
+                        <div class="tab-pane fade show active" id="profile">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Thông tin cá nhân</h4>
+                                    <form id="profile-form">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Họ và tên</label>
+                                                <input type="text" class="form-control" id="profile-name">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="profile-email" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Số điện thoại</label>
+                                                <input type="tel" class="form-control" id="profile-phone">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Ngày sinh</label>
+                                                <input type="date" class="form-control" id="profile-birthday">
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <label class="form-label">Địa chỉ</label>
+                                                <textarea class="form-control" id="profile-address" rows="2"></textarea>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Giới tính</label>
+                                                <select class="form-control" id="profile-gender">
+                                                    <option value="">Chọn giới tính</option>
+                                                    <option value="Nam">Nam</option>
+                                                    <option value="Nữ">Nữ</option>
+                                                    <option value="Khác">Khác</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Quốc tịch</label>
+                                                <input type="text" class="form-control" id="profile-nationality">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Số CMND/CCCD</label>
+                                                <input type="text" class="form-control" id="profile-identityNumber">
+                                            </div>
+                                           
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loyalty Tab (Điểm thành viên) -->
+                        <div class="tab-pane fade" id="loyalty">
+                            <div class="loyalty-container">
+                                <div class="loyalty-header">
+                                    <div class="loyalty-box point">
+                                        <i class="fas fa-star"></i>
+                                        <span class="loyalty-value" id="profile-loyaltyPoints">0</span>
+                                        <div class="loyalty-label">Điểm thành viên</div>
+                                    </div>
+                                    <div class="loyalty-box rank">
+                                        <i class="fas fa-medal"></i>
+                                        <span class="loyalty-value" id="profile-memberLevel"></span>
+                                        <div class="loyalty-label">Hạng thành viên</div>
+                                    </div>
+                                </div>
+                                <div class="barcode-card">
+                                    <svg id="user-barcode"></svg>
+                                    <div class="barcode-label">Mã vạch cá nhân - Quét tại quầy để tích điểm</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bookings Tab -->
+                        <div class="tab-pane fade" id="bookings">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Lịch sử đặt phòng khách sạn</h4>
+                                    <div class="table-responsive">
+                                        <button id="delete-selected-hotel" class="btn btn-danger btn-sm my-2" style="display:none;">Xóa đã chọn</button>
+                                        <table class="table align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th><input type="checkbox" id="select-all-hotel"></th>
+                                                    <th>Khách sạn</th>
+                                                    <th>Thông tin phòng</th>
+                                                    <th>Thời gian</th>
+                                                    <th>Thông tin khách</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Thao tác</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="bookings-table-hotel">
+                                                <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mt-4">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Lịch sử đặt tour</h4>
+                                    <div class="table-responsive">
+                                        <button id="delete-selected-tour" class="btn btn-danger btn-sm my-2" style="display:none;">Xóa đã chọn</button>
+                                        <table class="table align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th><input type="checkbox" id="select-all-tour"></th>
+                                                    <th>Tên tour</th>
+                                                    <th>Ngày khởi hành</th>
+                                                    <th>Số người</th>
+                                                    <th>Tên khách hàng</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Thao tác</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="bookings-table-tour">
+                                                <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Favorites Tab -->
+                        <div class="tab-pane fade" id="favorites">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Danh sách yêu thích</h4>
+                                    <div class="row" id="favorites-list">
+                                        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reviews Tab -->
+                        <div class="tab-pane fade" id="reviews">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Đánh giá của tôi</h4>
+                                    <div id="reviews-list">
+                                        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Settings Tab -->
+                        <div class="tab-pane fade" id="settings">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Cài đặt tài khoản</h4>
+                                    <form id="settings-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Mật khẩu hiện tại</label>
+                                            <input type="password" class="form-control" id="current-password">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Mật khẩu mới</label>
+                                            <input type="password" class="form-control" id="new-password">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Xác nhận mật khẩu mới</label>
+                                            <input type="password" class="form-control" id="confirm-password">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Đổi mật khẩu</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payments Tab -->
+                        <div class="tab-pane fade" id="payments">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Lịch sử thanh toán/giao dịch</h4>
+                                    <div class="table-responsive">
+                                        <table class="table align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Mã giao dịch</th>
+                                                    <th>Ngày</th>
+                                                    <th>Số tiền</th>
+                                                    <th>Phương thức</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Hóa đơn</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="payments-table">
+                                                <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notifications Tab -->
+                        <!-- <div class="tab-pane fade" id="notifications">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Thông báo cá nhân</h4>
+                                    <ul class="list-group" id="notifications-list">
+                                        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                                    <!-- </ul>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- End Contact Section -->
+
+   
+    
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content"
+            style="max-width: 400px; padding: 32px 28px 24px 28px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);">
+            <span class="close" id="close-auth-modal" style="right: 18px; top: 12px; font-size: 32px;">&times;</span>
+
+            <div id="auth-forms">
+                <form id="login-form" class="auth-form" style="text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="email" id="login-email" placeholder="e.g. elon@tesla.com" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="login-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="login-password" placeholder="e.g. ilovemangools123" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Đăng nhập</button>
+                    <div class="login-links">
+                        <a href="#" id="to-register">Không có tài khoản?</a>
+                        <a href="#" id="to-forgot">Quên mật khẩu?</a>
+                    </div>
+                </form>
+
+                <form id="register-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-username" style="font-weight: 500;">Tên người dùng</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="register-username" placeholder="Nhập tên của bạn" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="register-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-password" style="font-weight: 500;">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-password" placeholder="Tối thiểu 6 ký tự" required />
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="register-confirm-password" style="font-weight: 500;">Xác nhận mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu"
+                                required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Đăng ký</button>
+                    <div class="login-links">
+                        <a href="#" id="to-login">Đã có tài khoản? Đăng nhập</a>
+                    </div>
+                </form>
+
+                <form id="forgot-form" class="auth-form" style="display: none; text-align:center;">
+                    <div class="form-group" style="margin-bottom: 18px; text-align:left;">
+                        <label for="forgot-email" style="font-weight: 500;">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="forgot-email" placeholder="Nhập email của bạn" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gradient">Gửi yêu cầu đặt lại mật khẩu</button>
+                    <div class="login-links">
+                        <a href="#" id="back-to-login">Quay lại đăng nhập</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script>
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuX4_RKARM7g0K3BvoZPS8ADxVgrYQKYc",
+            authDomain: "websitedatphongkhachsan.firebaseapp.com",
+            databaseURL: "https://websitedatphongkhachsan-default-rtdb.firebaseio.com",
+            projectId: "websitedatphongkhachsan",
+            storageBucket: "websitedatphongkhachsan.appspot.com",
+            messagingSenderId: "732884739524",
+            appId: "1:732884739524:web:a9c34746f5704a9c3eb091",
+            measurementId: "G-RC61EXTZH7"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Hàm tạo mã vạch cá nhân cho user
+        function updateUserBarcode(user) {
+            if (!user) return;
+            var barcodeEl = document.getElementById('user-barcode');
+            if (barcodeEl) {
+                JsBarcode(barcodeEl, user.uid, {
+                    format: "CODE128",
+                    lineColor: "#1a237e",
+                    width: 2,
+                    height: 60,
+                    displayValue: true,
+                    fontSize: 16
+                });
+            }
+        }
+        // Hàm đồng bộ điểm và hạng thành viên vào tab loyalty
+        function syncLoyaltyToBarcodeBox(userData) {
+            document.getElementById('profile-loyaltyPoints').textContent = userData.loyaltyPoints || 0;
+            document.getElementById('profile-memberLevel').textContent = userData.memberLevel || '';
+        }
+
+        // Theo dõi trạng thái đăng nhập và cập nhật UI
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Kiểm tra và refresh token nếu cần
+            user.getIdToken(true).then(() => {
+                console.log('User authenticated:', user.uid);
+                
+                // Cập nhật UI đăng nhập
+                updateUserUI(user);
+
+                // Lấy và hiển thị dữ liệu
+                loadUserData(user);
+                loadBookings(user);
+                loadFavorites(user);
+                loadReviews(user);
+                loadPayments(user);
+                loadNotifications(user);
+                updateUserBarcode(user); // Gọi updateUserBarcode khi user đăng nhập
+            }).catch(error => {
+                console.error('Authentication error:', error);
+                Swal.fire('Lỗi xác thực', 'Vui lòng đăng nhập lại.', 'error').then(() => {
+                    firebase.auth().signOut().then(() => {
+                        window.location.href = 'index.html';
+                    });
+                });
+            });
+        });
+
+        // Hàm cập nhật UI người dùng
+        function updateUserUI(user) {
+            const loginBtn = document.getElementById('login-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+            const userName = document.getElementById('user-name');
+            const sidebarName = document.getElementById('sidebar-user-name');
+            const sidebarEmail = document.getElementById('sidebar-user-email');
+
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (userDropdown) {
+                userDropdown.style.display = 'block';
+                if (userName) userName.textContent = user.displayName || user.email;
+            }
+
+            if (sidebarName) sidebarName.textContent = user.displayName || 'Chưa cập nhật';
+            if (sidebarEmail) sidebarEmail.textContent = user.email;
+        }
+
+        // Hàm đồng bộ avatar cho tất cả phần tử
+        function syncAllAvatars(avatarUrl) {
+            const defaultAvatar = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+            const src = avatarUrl || defaultAvatar;
+            
+            // Desktop avatar
+            const sidebarAvatar = document.getElementById('sidebar-avatar');
+            if (sidebarAvatar) sidebarAvatar.src = src;
+            
+            // Mobile avatars
+            const mobileAvatarImg = document.getElementById('mobile-avatar-img');
+            if (mobileAvatarImg) mobileAvatarImg.src = src;
+            
+            const mobileSidebarAvatar = document.getElementById('mobile-sidebar-avatar');
+            if (mobileSidebarAvatar) mobileSidebarAvatar.src = src;
+        }
+
+        // Hàm lấy thông tin người dùng
+        function loadUserData(user) {
+            const userRef = firebase.database().ref('users/' + user.uid);
+            userRef.on('value', (snapshot) => {
+                const userData = snapshot.val() || {};
+
+                document.getElementById('profile-name').value = userData.name || user.displayName || '';
+                document.getElementById('profile-email').value = user.email;
+                document.getElementById('profile-phone').value = userData.phone || '';
+                document.getElementById('profile-birthday').value = userData.birthday || '';
+                document.getElementById('profile-address').value = userData.address || '';
+                document.getElementById('profile-gender').value = userData.gender || '';
+                document.getElementById('profile-nationality').value = userData.nationality || '';
+                document.getElementById('profile-identityNumber').value = userData.identityNumber || '';
+                document.getElementById('profile-loyaltyPoints').textContent = userData.loyaltyPoints || 0;
+                document.getElementById('profile-memberLevel').textContent = userData.memberLevel || '';
+
+                // Sidebar
+                document.getElementById('sidebar-user-name').textContent = userData.name || user.displayName || 'Chưa cập nhật';
+                document.getElementById('sidebar-user-email').textContent = user.email;
+                // Thay đổi dòng này để có icon:
+                document.getElementById('sidebar-memberLevel').innerHTML = userData.memberLevel ? getMemberLevelIcon(userData.memberLevel) : '';
+                document.getElementById('sidebar-loyaltyPoints').textContent = userData.loyaltyPoints ? `Điểm: ${userData.loyaltyPoints}` : '';
+                
+                // Đồng bộ avatar cho tất cả phần tử (desktop và mobile)
+                syncAllAvatars(userData.avatar);
+
+                // Gọi phân hạng tự động
+                updateMemberLevel(user);
+                syncLoyaltyToBarcodeBox(userData); // Đồng bộ điểm và hạng thành viên vào barcode box
+                
+                // Đồng bộ avatar cho mobile sidebar
+                syncMobileSidebar(userData);
+            });
+
+            // Xử lý form cập nhật thông tin
+            document.getElementById('profile-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                // Kiểm tra dữ liệu nhập vào
+                const name = document.getElementById('profile-name').value.trim();
+                const phone = document.getElementById('profile-phone').value.trim();
+                const birthday = document.getElementById('profile-birthday').value.trim();
+                const address = document.getElementById('profile-address').value.trim();
+                const gender = document.getElementById('profile-gender').value.trim();
+                const nationality = document.getElementById('profile-nationality').value.trim();
+                const identity = document.getElementById('profile-identityNumber').value.trim();
+
+                // Regex kiểm tra định dạng
+                const phoneRegex = /^(0[3-9][0-9]{8,9})$/;
+                const identityRegex = /^\d{9,12}$/;
+                const nameRegex = /^[a-zA-ZÀ-ỹ\s'.-]{2,}$/u;
+                // Địa chỉ: cho phép nhập tự do, chỉ kiểm tra không rỗng
+                function isValidVietnamAddress(address) {
+                    return !!address && address.length > 0;
+                }
+                const today = new Date();
+                let valid = true;
+                let msg = '';
+
+                if (!name || !nameRegex.test(name)) {
+                    valid = false;
+                    msg = 'Vui lòng nhập họ tên thật, không chứa ký tự đặc biệt và tối thiểu 2 ký tự.';
+                } else if (!phone || !phoneRegex.test(phone)) {
+                    valid = false;
+                    msg = 'Số điện thoại không hợp lệ. Vui lòng nhập số Việt Nam hợp lệ.';
+                } else if (!birthday) {
+                    valid = false;
+                    msg = 'Vui lòng nhập ngày sinh.';
+                } else if (new Date(birthday) > today) {
+                    valid = false;
+                    msg = 'Ngày sinh không hợp lệ.';
+                } else if (!address || !isValidVietnamAddress(address)) {
+                    valid = false;
+                    msg = 'Vui lòng nhập địa chỉ.';
+                } else if (!nationality) {
+                    valid = false;
+                    msg = 'Vui lòng nhập quốc tịch.';
+                } else if (!identity || !identityRegex.test(identity)) {
+                    valid = false;
+                    msg = 'Số CMND/CCCD phải là 9-12 chữ số.';
+                }
+
+                if (!valid) {
+                    Swal.fire({
+                        title: 'Thông tin không hợp lệ!',
+                        text: msg,
+                        icon: 'warning',
+                        confirmButtonColor: '#1a237e'
+                    });
+                    return;
+                }
+                updateProfile(user, userRef);
+            });
+        }
+
+        // Hàm lấy lịch sử đặt phòng
+        function loadBookings(user) {
+            const bookingsRef = firebase.database().ref('bookings');
+            // Tìm kiếm theo userId thay vì customerEmail để đảm bảo quyền truy cập
+            bookingsRef.orderByChild('userId').equalTo(user.uid).on('value', (snapshot) => {
+                const hotelTable = document.getElementById('bookings-table-hotel');
+                const tourTable = document.getElementById('bookings-table-tour');
+                if (!hotelTable || !tourTable) return;
+                hotelTable.innerHTML = '';
+                tourTable.innerHTML = '';
+                if (snapshot.exists()) {
+                    let bookings = [];
+                    snapshot.forEach((bookingSnapshot) => {
+                        bookings.push({
+                            id: bookingSnapshot.key,
+                            ...bookingSnapshot.val()
+                        });
+                    });
+                    // Sắp xếp theo thời gian tạo mới nhất
+                    bookings.sort((a, b) => b.createdAt - a.createdAt);
+                    let hasHotel = false, hasTour = false;
+                    bookings.forEach(booking => {
+                        if (booking.bookingType === 'tour') {
+                            addTourBookingRow(booking, tourTable);
+                            hasTour = true;
+                        } else {
+                            addBookingRow(booking, hotelTable);
+                            hasHotel = true;
+                        }
+                    });
+                    if (!hasHotel) hotelTable.innerHTML = '<tr><td colspan="6" class="text-center py-4">Chưa có lịch sử đặt phòng khách sạn</td></tr>';
+                    if (!hasTour) tourTable.innerHTML = '<tr><td colspan="6" class="text-center py-4">Chưa có lịch sử đặt tour</td></tr>';
+                } else {
+                    hotelTable.innerHTML = '<tr><td colspan="6" class="text-center py-4">Chưa có lịch sử đặt phòng khách sạn</td></tr>';
+                    tourTable.innerHTML = '<tr><td colspan="6" class="text-center py-4">Chưa có lịch sử đặt tour</td></tr>';
+                }
+            });
+        }
+
+        // Hàm thêm hàng đặt phòng vào bảng
+        function addBookingRow(booking, table) {
+            const row = document.createElement('tr');
+            const bookingDate = new Date(booking.createdAt);
+            const today = new Date();
+            const checkInDate = new Date(booking.checkIn);
+
+            // Xác định trạng thái đặt phòng
+            let status = '';
+            let statusClass = '';
+            let refundInfo = '';
+            
+            if (booking.status === 'cancelled') {
+                status = 'Đã hủy';
+                statusClass = 'secondary';
+                
+                // Thêm thông tin hoàn tiền nếu có
+                if (booking.refundStatus) {
+                    const refundAmount = booking.refundAmount || 0;
+                    const totalPrice = booking.totalPrice || booking.roomPrice || 0;
+                    const refundStatus = getRefundStatusText(booking.refundStatus);
+                    
+                    refundInfo = `
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-money-bill-wave me-1"></i>
+                                Hoàn tiền: ${refundAmount.toLocaleString()} VNĐ 
+                                <span class="badge bg-${getRefundStatusClass(booking.refundStatus)} ms-1">${refundStatus}</span>
+                            </small>
+                        </div>
+                    `;
+                }
+            } else if (checkInDate < today) {
+                status = 'Đã hoàn thành';
+                statusClass = 'success';
+            } else if (checkInDate > today) {
+                status = 'Sắp tới';
+                statusClass = 'warning';
+            } else {
+                status = 'Đang diễn ra';
+                statusClass = 'primary';
+            }
+
+            let actionButtons = `
+                <button class="btn btn-sm btn-outline-primary" onclick="viewBookingDetails('${booking.id}')">
+                    <i class="fas fa-info-circle me-1"></i> Chi tiết
+                </button>
+                <button class="btn btn-sm btn-outline-warning ms-1" onclick="editBooking('${booking.id}', 'hotel')">
+                    <i class="fas fa-edit me-1"></i> Sửa
+                </button>
+            `;
+            // Nút Hủy: chỉ hiển thị nếu chưa bị hủy và chưa hoàn thành
+            if (booking.status !== 'cancelled' && checkInDate > today) {
+                actionButtons += `
+                    <button class="btn btn-sm btn-outline-danger cancel-btn ms-1" onclick="cancelBooking('${booking.id}', 'hotel')">
+                        <i class="fas fa-times-circle me-1"></i> Hủy
+                    </button>
+                `;
+            }
+
+            row.innerHTML = `
+                <td><input type="checkbox" class="select-booking-hotel" value="${booking.id}"></td>
+                <td><div class="fw-semibold">${booking.hotelName || booking.hotelId}</div></td>
+                <td><div class="mb-1">${booking.roomId}</div></td>
+                <td><div class="mb-1">Check-in: ${formatDate(booking.checkIn)}</div><div>Check-out: ${formatDate(booking.checkOut)}</div><small class="text-muted">Đặt ngày: ${formatDateTime(booking.createdAt)}</small></td>
+                <td><div class="mb-1">Khách: ${booking.guests} người</div><div class="mb-1">Tên: ${booking.customerName}</div><div>SĐT: ${booking.customerPhone}</div></td>
+                <td>
+                    <span class="badge bg-${statusClass}">${status}</span>
+                    ${refundInfo}
+                </td>
+                <td>${actionButtons}</td>
+            `;
+            table.appendChild(row);
+        }
+
+        // Hàm thêm hàng đặt tour vào bảng
+        function addTourBookingRow(booking, table) {
+            const row = document.createElement('tr');
+            const departureDate = new Date(booking.checkIn);
+            const today = new Date();
+            let status = '';
+            let statusClass = '';
+            let refundInfo = '';
+            
+            if (booking.status === 'cancelled') {
+                status = 'Đã hủy';
+                statusClass = 'secondary';
+                
+                // Thêm thông tin hoàn tiền nếu có
+                if (booking.refundStatus) {
+                    const refundAmount = booking.refundAmount || 0;
+                    const totalPrice = booking.totalPrice || booking.tourPrice || 0;
+                    const refundStatus = getRefundStatusText(booking.refundStatus);
+                    
+                    refundInfo = `
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-money-bill-wave me-1"></i>
+                                Hoàn tiền: ${refundAmount.toLocaleString()} VNĐ 
+                                <span class="badge bg-${getRefundStatusClass(booking.refundStatus)} ms-1">${refundStatus}</span>
+                            </small>
+                        </div>
+                    `;
+                }
+            } else if (departureDate < today) {
+                status = 'Đã hoàn thành';
+                statusClass = 'success';
+            } else if (departureDate.toDateString() === today.toDateString()) {
+                status = 'Đang diễn ra';
+                statusClass = 'primary';
+            } else {
+                status = 'Sắp tới';
+                statusClass = 'warning';
+            }
+
+            let actionButtons = `
+                <button class="btn btn-sm btn-outline-primary" onclick="viewBookingDetails('${booking.id}')">
+                    <i class="fas fa-info-circle me-1"></i> Chi tiết
+                </button>
+                <button class="btn btn-sm btn-outline-warning ms-1" onclick="editBooking('${booking.id}', 'tour')">
+                    <i class="fas fa-edit me-1"></i> Sửa
+                </button>
+            `;
+            // Nút Hủy: chỉ hiển thị nếu chưa bị hủy và chưa hoàn thành
+            if (booking.status !== 'cancelled' && departureDate > today) {
+                actionButtons += `
+                    <button class="btn btn-sm btn-outline-danger cancel-btn ms-1" onclick="cancelBooking('${booking.id}', 'tour')">
+                        <i class="fas fa-times-circle me-1"></i> Hủy
+                    </button>
+                `;
+            }
+
+            row.innerHTML = `
+                <td><input type="checkbox" class="select-booking-tour" value="${booking.id}"></td>
+                <td><div class="fw-semibold">${booking.tourName || booking.hotelName || 'N/A'}</div><small class="text-muted">${booking.tourLocation || ''}</small></td>
+                <td><div>${formatDate(booking.checkIn)}</div><small class="text-muted">Đặt ngày: ${formatDateTime(booking.createdAt)}</small></td>
+                <td>${booking.numberOfGuests || booking.guests || 1}</td>
+                <td>${booking.customerName || 'N/A'}</td>
+                <td>
+                    <span class="badge bg-${statusClass}">${status}</span>
+                    ${refundInfo}
+                </td>
+                <td>${actionButtons}</td>
+            `;
+            table.appendChild(row);
+        }
+
+        // Hàm hỗ trợ format ngày tháng
+        function formatDate(dateString) {
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            };
+            return new Date(dateString).toLocaleDateString('vi-VN', options);
+        }
+
+        function formatDateTime(timestamp) {
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(timestamp).toLocaleDateString('vi-VN', options);
+        }
+
+        // Hàm helper cho trạng thái hoàn tiền
+        function getRefundStatusText(status) {
+            const statusMap = {
+                'pending': 'Chờ xử lý',
+                'processing': 'Đang xử lý',
+                'completed': 'Đã hoàn tiền',
+                'failed': 'Thất bại'
+            };
+            return statusMap[status] || 'Không xác định';
+        }
+
+        function getRefundStatusClass(status) {
+            const classMap = {
+                'pending': 'warning',
+                'processing': 'info',
+                'completed': 'success',
+                'failed': 'danger'
+            };
+            return classMap[status] || 'secondary';
+        }
+
+        // Hàm lấy danh sách yêu thích
+        function loadFavorites(user) {
+    const favoritesRef = firebase.database().ref('users/' + user.uid + '/favorites');
+    favoritesRef.on('value', (snapshot) => {
+                const favoritesList = document.getElementById('favorites-list');
+                if (!favoritesList) return;
+
+                favoritesList.innerHTML = '';
+
+                if (snapshot.exists()) {
+                    snapshot.forEach((favoriteSnapshot) => {
+                        const favorite = favoriteSnapshot.val();
+                        addFavoriteItem(favorite, favoritesList);
+                    });
+                        } else {
+            favoritesList.innerHTML = '<div class="col-12 text-center">Chưa có khách sạn hoặc cẩm nang yêu thích</div>';
+        }
+            });
+        }
+
+        // Hàm thêm item yêu thích
+        function addFavoriteItem(favorite, container) {
+            const col = document.createElement('div');
+            col.className = 'col-md-4';
+            
+            // Kiểm tra xem có phải cẩm nang yêu thích không
+            if (favorite.guideSlug) {
+                // Đây là cẩm nang yêu thích
+                col.innerHTML = `
+                    <div class="favorite-item">
+                        <img src="https://placehold.co/300x200?text=Travel+Guide" 
+                             alt="Cẩm nang du lịch" 
+                             onerror="this.src='https://placehold.co/300x200?text=Travel+Guide'">
+                        <div class="overlay">
+                            <h5>Cẩm nang du lịch</h5>
+                            <p>Đã thêm vào yêu thích</p>
+                            <a href="destination_detail.html?slug=${favorite.guideSlug}" class="btn btn-sm btn-primary">Xem chi tiết</a>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Đây là khách sạn yêu thích (cấu trúc cũ)
+                col.innerHTML = `
+                    <div class="favorite-item">
+                        <img src="${favorite.image || 'https://placehold.co/300x200?text=Hotel+Image'}" 
+                             alt="${favorite.name}" 
+                             onerror="this.src='https://placehold.co/300x200?text=Hotel+Image'">
+                        <div class="overlay">
+                            <h5>${favorite.name || 'Không có tên'}</h5>
+                            <p>${favorite.location || 'Không có địa chỉ'}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            container.appendChild(col);
+        }
+
+        // Hàm lấy đánh giá
+        function loadReviews(user) {
+            const reviewsRef = firebase.database().ref('reviews');
+            const bookingsRef = firebase.database().ref('bookings');
+            const reviewsList = document.getElementById('reviews-list');
+            if (!reviewsList) return;
+            reviewsList.innerHTML = '';
+            // Lấy tất cả review của user
+            reviewsRef.orderByChild('userId').equalTo(user.uid).once('value', (reviewSnap) => {
+                let reviewedBookingIds = [];
+                let reviewsArr = [];
+                if (reviewSnap.exists()) {
+                    reviewSnap.forEach((reviewSnapshot) => {
+                        const review = reviewSnapshot.val();
+                        reviewedBookingIds.push(reviewSnapshot.key);
+                        reviewsArr.push(review);
+                    });
+                }
+                // Hiển thị các review đã có
+                if (reviewsArr.length > 0) {
+                    reviewsArr.forEach(review => addReviewItem(review, reviewsList));
+                }
+                // Lấy các booking đã hoàn thành nhưng chưa đánh giá
+                bookingsRef.orderByChild('customerEmail').equalTo(user.email).once('value', (bookingSnap) => {
+                    let hasPending = false;
+                    if (bookingSnap.exists()) {
+                        bookingSnap.forEach((bookingSnapshot) => {
+                            const booking = bookingSnapshot.val();
+                            const bookingId = bookingSnapshot.key;
+                            const checkInDate = new Date(booking.checkIn);
+                            const today = new Date();
+                            if (checkInDate < today && !reviewedBookingIds.includes(bookingId)) {
+                                // Chỉ lấy booking khách sạn (không phải tour)
+                                if (!booking.bookingType || booking.bookingType === 'hotel') {
+                                    hasPending = true;
+                                    // Thêm vào danh sách chờ đánh giá với form đánh giá trực tiếp
+                                    const div = document.createElement('div');
+                                    div.className = 'review-item';
+                                    div.innerHTML = `
+                                        <div><strong>${booking.hotelName || booking.hotelId}</strong></div>
+                                        <div>Check-in: ${formatDate(booking.checkIn)}</div>
+                                        <div>Check-out: ${formatDate(booking.checkOut)}</div>
+                                        <div class="inline-review-form" id="review-form-${bookingId}">
+                                            <div class="star-rating" style="font-size:2em; color:#ccc; cursor:pointer; margin-bottom:8px;">
+                                                <span data-value="1">&#9733;</span>
+                                                <span data-value="2">&#9733;</span>
+                                                <span data-value="3">&#9733;</span>
+                                                <span data-value="4">&#9733;</span>
+                                                <span data-value="5">&#9733;</span>
+                                            </div>
+                                            <textarea class="form-control mb-2" rows="3" placeholder="Nhận xét của bạn..."></textarea>
+                                            <button class="btn btn-primary btn-sm submit-inline-review">Gửi đánh giá</button>
+                                        </div>
+                                    `;
+                                    reviewsList.appendChild(div);
+                                    // Gắn sự kiện chọn sao và gửi đánh giá
+                                    setTimeout(() => {
+                                        let selected = 0;
+                                        const formDiv = document.getElementById(`review-form-${bookingId}`);
+                                        const stars = formDiv.querySelectorAll('.star-rating span');
+                                        const textarea = formDiv.querySelector('textarea');
+                                        const submitBtn = formDiv.querySelector('.submit-inline-review');
+                                        stars.forEach(star => {
+                                            star.addEventListener('click', function() {
+                                                selected = this.dataset.value;
+                                                stars.forEach(s => {
+                                                    s.style.color = s.dataset.value <= selected ? 'gold' : '#ccc';
+                                                });
+                                            });
+                                        });
+                                        submitBtn.addEventListener('click', function() {
+                                            if (selected == 0) {
+                                                Swal.fire('Vui lòng chọn số sao!');
+                                                return;
+                                            }
+                                            const comment = textarea.value;
+                                            if (!comment.trim()) {
+                                                Swal.fire('Vui lòng nhập nhận xét!');
+                                                return;
+                                            }
+                                            // Lấy userId từ user.uid để đúng rule Firebase
+                                            const userId = user.uid;
+                                            const reviewData = {
+                                                userId: userId,
+                                                hotelId: booking.hotelId,
+                                                rating: Number(selected),
+                                                comment: comment,
+                                                date: firebase.database.ServerValue.TIMESTAMP,
+                                                userName: user.displayName || user.email
+                                            };
+                                            // Log dữ liệu gửi lên để debug
+                                            console.log('Review gửi lên:', reviewData);
+                                            firebase.database().ref('reviews/' + bookingId).set(reviewData)
+                                                .then(() => {
+                                                    Swal.fire('Đánh giá thành công!');
+                                                    loadReviews(user);
+                                                })
+                                                .catch(err => {
+                                                    Swal.fire('Lỗi: ' + err.message);
+                                                });
+                                        });
+                                    }, 0);
+                                }
+                            }
+                        });
+                    }
+                    if (!hasPending && reviewsArr.length === 0) {
+                        reviewsList.innerHTML = '<div class="text-center">Chưa có đánh giá nào</div>';
+                    }
+                });
+            });
+        }
+
+        // Hàm thêm item đánh giá
+        function addReviewItem(review, container) {
+            const div = document.createElement('div');
+            div.className = 'review-item';
+            div.innerHTML = `
+            <div class="rating">
+                ${'★'.repeat(review.rating || 0)}${'☆'.repeat(5 - (review.rating || 0))}
+            </div>
+            <h5>${review.hotelName || 'Không có tên khách sạn'}</h5>
+            <p>${review.comment || 'Không có nội dung'}</p>
+            <span class="date">${new Date(review.date).toLocaleDateString('vi-VN')}</span>
+        `;
+            container.appendChild(div);
+        }
+
+        // Hàm cập nhật thông tin cá nhân
+        function updateProfile(user, userRef) {
+            const updates = {
+                name: document.getElementById('profile-name').value,
+                phone: document.getElementById('profile-phone').value,
+                birthday: document.getElementById('profile-birthday').value,
+                address: document.getElementById('profile-address').value,
+                gender: document.getElementById('profile-gender').value,
+                nationality: document.getElementById('profile-nationality').value,
+                identityNumber: document.getElementById('profile-identityNumber').value,
+                updatedAt: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            Swal.fire({
+                title: 'Đang cập nhật...',
+                text: 'Vui lòng đợi trong giây lát',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            user.updateProfile({
+                displayName: updates.name,
+                photoURL: updates.avatar
+            }).then(() => {
+                return userRef.update(updates);
+            }).then(() => {
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: 'Thông tin cá nhân đã được cập nhật.',
+                    icon: 'success',
+                    confirmButtonColor: '#1a237e'
+                });
+
+                document.getElementById('sidebar-user-name').textContent = updates.name;
+                document.getElementById('user-name').textContent = updates.name;
+                
+                // Cập nhật mobile sidebar với tên mới  
+                document.getElementById('mobile-sidebar-user-name').textContent = updates.name;
+                
+                // Đồng bộ avatar nếu có
+                if (updates.avatar) {
+                    syncAllAvatars(updates.avatar);
+                }
+                
+                updateUserBarcode(user); // Cập nhật barcode khi cập nhật thông tin
+            }).catch((error) => {
+                console.error('Lỗi cập nhật:', error);
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể cập nhật thông tin. Vui lòng thử lại sau.',
+                    icon: 'error',
+                    confirmButtonColor: '#1a237e'
+                });
+            });
+        }
+
+        // Hàm xem chi tiết đặt phòng
+        function viewBookingDetails(bookingId) {
+            const bookingRef = firebase.database().ref('bookings/' + bookingId);
+            bookingRef.once('value').then((snapshot) => {
+                const booking = snapshot.val();
+                if (booking) {
+                    // This function now correctly handles both tour and hotel bookings
+                    const isTour = booking.bookingType === 'tour';
+                    const title = isTour ? 'Chi tiết đặt tour' : 'Chi tiết đặt phòng';
+
+                    let detailsHtml = '';
+
+                    if (isTour) {
+                        detailsHtml = `
+                            <div class="mb-3">
+                                <h5 class="mb-2">Thông tin tour</h5>
+                                <p class="mb-1"><strong>Tên tour:</strong> ${booking.tourName || booking.hotelName || ''}</p>
+                                <p class="mb-1"><strong>Địa điểm:</strong> ${booking.tourLocation || 'Không xác định'}</p>
+                                <p class="mb-1"><strong>Thời gian:</strong> ${booking.tourDuration || 'Không xác định'}</p>
+                            </div>
+                            <div class="mb-3">
+                                <h5 class="mb-2">Lịch trình</h5>
+                                <p class="mb-1"><strong>Ngày khởi hành:</strong> ${formatDate(booking.checkIn)}</p>
+                                <p class="mb-1"><strong>Ngày đặt:</strong> ${formatDateTime(booking.createdAt)}</p>
+                            </div>
+                        `;
+                    } else {
+                        detailsHtml = `
+                            <div class="mb-3">
+                                <h5 class="mb-2">Thông tin khách sạn</h5>
+                                <p class="mb-1"><strong>Khách sạn:</strong> ${booking.hotelName || booking.hotelId}</p>
+                                <p class="mb-1"><strong>Loại phòng:</strong> ${booking.roomId}</p>
+                            </div>
+                            <div class="mb-3">
+                                <h5 class="mb-2">Thời gian</h5>
+                                <p class="mb-1"><strong>Nhận phòng:</strong> ${formatDate(booking.checkIn)}</p>
+                                <p class="mb-1"><strong>Trả phòng:</strong> ${formatDate(booking.checkOut)}</p>
+                                <p class="mb-1"><strong>Ngày đặt:</strong> ${formatDateTime(booking.createdAt)}</p>
+                            </div>
+                        `;
+                    }
+
+                    detailsHtml += `
+                        <div class="mb-3">
+                            <h5 class="mb-2">Thông tin khách hàng</h5>
+                            <p class="mb-1"><strong>Họ tên:</strong> ${booking.customerName || ''}</p>
+                            <p class="mb-1"><strong>Email:</strong> ${booking.customerEmail || ''}</p>
+                            <p class="mb-1"><strong>Số điện thoại:</strong> ${booking.customerPhone || ''}</p>
+                            <p class="mb-1"><strong>Số khách:</strong> ${booking.numberOfGuests || booking.guests || 1} người</p>
+                            <p class="mb-1"><strong>Ghi chú:</strong> ${booking.note || 'Không có'}</p>
+                        </div>
+                    `;
+
+                    // Thêm thông tin hủy đặt phòng và hoàn tiền nếu có
+                    if (booking.status === 'cancelled') {
+                        const cancelledDate = booking.cancelledAt ? new Date(booking.cancelledAt).toLocaleString('vi-VN') : 'Không xác định';
+                        const totalPrice = booking.totalPrice || booking.roomPrice || booking.tourPrice || 0;
+                        
+                        detailsHtml += `
+                            <div class="mb-3">
+                                <h5 class="mb-2 text-danger">Thông tin hủy đặt phòng</h5>
+                                <p class="mb-1"><strong>Trạng thái:</strong> <span class="badge bg-secondary">Đã hủy</span></p>
+                                <p class="mb-1"><strong>Ngày hủy:</strong> ${cancelledDate}</p>
+                                <p class="mb-1"><strong>Người hủy:</strong> ${booking.cancelledBy === 'customer' ? 'Khách hàng' : 'Hệ thống'}</p>
+                        `;
+                        
+                        // Thêm thông tin hoàn tiền nếu có
+                        if (booking.refundStatus) {
+                            const refundAmount = booking.refundAmount || 0;
+                            const refundPercentage = booking.refundPercentage || 0;
+                            const refundStatus = getRefundStatusText(booking.refundStatus);
+                            const refundStatusClass = getRefundStatusClass(booking.refundStatus);
+                            const completedDate = booking.refundCompletedAt ? new Date(booking.refundCompletedAt).toLocaleString('vi-VN') : 'Chưa hoàn tiền';
+                            
+                            detailsHtml += `
+                                <hr>
+                                <h5 class="mb-2 text-primary">Thông tin hoàn tiền</h5>
+                                <p class="mb-1"><strong>Tổng tiền:</strong> ${totalPrice.toLocaleString()} VNĐ</p>
+                                <p class="mb-1"><strong>Số tiền hoàn:</strong> ${refundAmount.toLocaleString()} VNĐ</p>
+                                <p class="mb-1"><strong>Phần trăm hoàn:</strong> ${refundPercentage}%</p>
+                                <p class="mb-1"><strong>Trạng thái hoàn tiền:</strong> <span class="badge bg-${refundStatusClass}">${refundStatus}</span></p>
+                                <p class="mb-1"><strong>Phương thức hoàn:</strong> ${booking.refundMethod || 'Chuyển khoản'}</p>
+                                <p class="mb-1"><strong>Ngày hoàn tiền:</strong> ${completedDate}</p>
+                                <p class="mb-1"><strong>Ghi chú:</strong> ${booking.refundNote || 'Không có'}</p>
+                            `;
+                        }
+                        
+                        detailsHtml += `</div>`;
+                    }
+
+                    Swal.fire({
+                        title: title,
+                        html: `<div class="text-start">${detailsHtml}</div>`,
+                        confirmButtonColor: '#1a237e',
+                        confirmButtonText: 'Đóng',
+                        customClass: {
+                            container: 'booking-detail-modal'
+                        }
+                    });
+                }
+            });
+        }
+
+        // Xử lý đăng xuất
+        document.getElementById('logout-btn').addEventListener('click', function (e) {
+            e.preventDefault();
+            firebase.auth().signOut().then(() => {
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                console.error('Lỗi đăng xuất:', error);
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể đăng xuất. Vui lòng thử lại sau.',
+                    icon: 'error',
+                    confirmButtonColor: '#1a237e'
+                });
+            });
+        });
+
+        function viewTourBookingDetails(bookingId) {
+            // This function is now merged into viewBookingDetails
+            viewBookingDetails(bookingId);
+        }
+
+        // Hàm lấy lịch sử thanh toán
+        function loadPayments(user) {
+            const paymentsRef = firebase.database().ref('payments');
+            paymentsRef.orderByChild('userId').equalTo(user.uid).on('value', (snapshot) => {
+                const paymentsTable = document.getElementById('payments-table');
+                if (!paymentsTable) return;
+                paymentsTable.innerHTML = '';
+                if (snapshot.exists()) {
+                    let payments = [];
+                    snapshot.forEach((paymentSnapshot) => {
+                        payments.push({
+                            id: paymentSnapshot.key,
+                            ...paymentSnapshot.val()
+                        });
+                    });
+                    // Sắp xếp theo ngày mới nhất
+                    payments.sort((a, b) => b.date - a.date);
+                    payments.forEach(payment => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${payment.transactionId || payment.id}</td>
+                            <td>${payment.date ? new Date(payment.date).toLocaleString('vi-VN') : ''}</td>
+                            <td>${payment.amount ? payment.amount.toLocaleString('vi-VN') + ' đ' : ''}</td>
+                            <td>${payment.method || ''}</td>
+                            <td><span class="badge bg-${payment.status === 'success' ? 'success' : 'danger'}">${payment.status === 'success' ? 'Thành công' : 'Thất bại'}</span></td>
+                            <td>${payment.note || ''}</td>
+                        `;
+                        paymentsTable.appendChild(row);
+                    });
+                } else {
+                    paymentsTable.innerHTML = '<tr><td colspan="6" class="text-center py-4">Chưa có lịch sử thanh toán</td></tr>';
+                }
+            });
+        }
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function () {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Close mobile menu when clicking on links
+            navLinks.addEventListener('click', function (e) {
+                if (e.target.tagName === 'A') {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
+
+        const sidebarAvatarUpload = document.getElementById('sidebar-avatar-upload');
+        if (sidebarAvatarUpload) {
+            sidebarAvatarUpload.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const user = firebase.auth().currentUser;
+                if (!user) return;
+
+                // Hiển thị ảnh ngay lập tức
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    document.getElementById('sidebar-avatar').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                // Upload lên Cloudinary
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', 'nguyentienchuc'); // preset unsigned
+
+                Swal.fire({
+                    title: 'Đang tải ảnh lên Cloudinary...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                fetch('https://api.cloudinary.com/v1_1/dwrc3ig9e/image/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.secure_url) {
+                        // Đồng bộ avatar cho tất cả phần tử
+                        syncAllAvatars(data.secure_url);
+                        
+                        return firebase.database().ref('users/' + user.uid).update({
+                            avatar: data.secure_url,
+                            updatedAt: firebase.database.ServerValue.TIMESTAMP
+                        });
+                    } else {
+                        throw new Error('Upload thất bại');
+                    }
+                })
+                .then(() => {
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Ảnh đại diện đã được cập nhật.',
+                        icon: 'success',
+                        confirmButtonColor: '#1a237e'
+                    });
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Không thể tải ảnh lên Cloudinary. Vui lòng thử lại.',
+                        icon: 'error',
+                        confirmButtonColor: '#1a237e'
+                    });
+                    console.error('Upload avatar error:', error);
+                });
+            });
+        }
+
+        function viewInvoice(paymentId) {
+            const paymentRef = firebase.database().ref('payments/' + paymentId);
+            paymentRef.once('value').then(snapshot => {
+                const payment = snapshot.val();
+                if (payment) {
+                    Swal.fire({
+                        title: 'Chi tiết hóa đơn',
+                        html: `
+                            <div class="text-start">
+                                <p><strong>Mã giao dịch:</strong> ${payment.transactionId || ''}</p>
+                                <p><strong>Ngày:</strong> ${payment.date ? new Date(payment.date).toLocaleDateString('vi-VN') : ''}</p>
+                                <p><strong>Số tiền:</strong> ${payment.amount ? payment.amount.toLocaleString('vi-VN') + '₫' : ''}</p>
+                                <p><strong>Phương thức:</strong> ${payment.method || ''}</p>
+                                <p><strong>Trạng thái:</strong> ${payment.status === 'success' ? 'Thành công' : 'Thất bại'}</p>
+                                <p><strong>Chi tiết:</strong> ${payment.detail || ''}</p>
+                            </div>
+                        `,
+                        confirmButtonColor: '#1a237e'
+                    });
+                }
+            });
+        }
+
+        function loadNotifications(user) {
+            const notificationsRef = firebase.database().ref('notifications/' + user.uid);
+            notificationsRef.on('value', (snapshot) => {
+                const list = document.getElementById('notifications-list');
+                if (!list) return;
+                list.innerHTML = '';
+                if (snapshot.exists()) {
+                    snapshot.forEach((notiSnapshot) => {
+                        const noti = notiSnapshot.val();
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.innerHTML = `
+                            <div>
+                                <strong>${noti.title || 'Thông báo'}</strong>
+                                <span class="badge bg-${noti.read ? 'secondary' : 'warning'} float-end">${noti.read ? 'Đã đọc' : 'Mới'}</span>
+                            </div>
+                            <div>${noti.content || ''}</div>
+                            <small class="text-muted">${noti.date ? new Date(noti.date).toLocaleString('vi-VN') : ''}</small>
+                        `;
+                        list.appendChild(li);
+                    });
+                } else {
+                    list.innerHTML = '<li class="list-group-item text-center">Chưa có thông báo nào</li>';
+                }
+            });
+        }
+
+        function editBooking(bookingId, type) {
+            const bookingRef = firebase.database().ref('bookings/' + bookingId);
+            bookingRef.once('value').then(snapshot => {
+                const booking = snapshot.val();
+                if (!booking) return;
+                let html = '';
+                if (type === 'hotel') {
+                    html = `
+                        <input id="edit-hotelName" class="swal2-input" placeholder="Tên khách sạn" value="${booking.hotelName || ''}">
+                        <input id="edit-roomId" class="swal2-input" placeholder="Loại phòng" value="${booking.roomId || ''}">
+                        <input id="edit-checkIn" class="swal2-input" type="date" value="${booking.checkIn ? booking.checkIn.split('T')[0] : ''}">
+                        <input id="edit-checkOut" class="swal2-input" type="date" value="${booking.checkOut ? booking.checkOut.split('T')[0] : ''}">
+                        <input id="edit-guests" class="swal2-input" type="number" placeholder="Số khách" value="${booking.guests || 1}">
+                        <input id="edit-customerName" class="swal2-input" placeholder="Tên khách" value="${booking.customerName || ''}">
+                        <input id="edit-customerPhone" class="swal2-input" placeholder="SĐT" value="${booking.customerPhone || ''}">
+                    `;
+                } else {
+                    html = `
+                        <input id="edit-tourName" class="swal2-input" placeholder="Tên tour" value="${booking.tourName || ''}">
+                        <input id="edit-tourLocation" class="swal2-input" placeholder="Địa điểm" value="${booking.tourLocation || ''}">
+                        <input id="edit-checkIn" class="swal2-input" type="date" value="${booking.checkIn ? booking.checkIn.split('T')[0] : ''}">
+                        <input id="edit-numberOfGuests" class="swal2-input" type="number" placeholder="Số khách" value="${booking.numberOfGuests || 1}">
+                        <input id="edit-customerName" class="swal2-input" placeholder="Tên khách" value="${booking.customerName || ''}">
+                        <input id="edit-customerPhone" class="swal2-input" placeholder="SĐT" value="${booking.customerPhone || ''}">
+                    `;
+                }
+                Swal.fire({
+                    title: 'Sửa thông tin',
+                    html: html,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Lưu',
+                    cancelButtonText: 'Hủy',
+                    preConfirm: () => {
+                        if (type === 'hotel') {
+                            return {
+                                hotelName: document.getElementById('edit-hotelName').value,
+                                roomId: document.getElementById('edit-roomId').value,
+                                checkIn: document.getElementById('edit-checkIn').value,
+                                checkOut: document.getElementById('edit-checkOut').value,
+                                guests: parseInt(document.getElementById('edit-guests').value),
+                                customerName: document.getElementById('edit-customerName').value,
+                                customerPhone: document.getElementById('edit-customerPhone').value
+                            };
+                        } else {
+                            return {
+                                tourName: document.getElementById('edit-tourName').value,
+                                tourLocation: document.getElementById('edit-tourLocation').value,
+                                checkIn: document.getElementById('edit-checkIn').value,
+                                numberOfGuests: parseInt(document.getElementById('edit-numberOfGuests').value),
+                                customerName: document.getElementById('edit-customerName').value,
+                                customerPhone: document.getElementById('edit-customerPhone').value
+                            };
+                        }
+                    }
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        bookingRef.update(result.value).then(() => {
+                            Swal.fire('Thành công', 'Đã cập nhật thông tin!', 'success');
+                        });
+                    }
+                });
+            });
+        }
+
+        function cancelBooking(bookingId, type) {
+            // Kiểm tra xác thực trước
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                Swal.fire('Lỗi!', 'Vui lòng đăng nhập để thực hiện thao tác này.', 'error');
+                return;
+            }
+
+            console.log('User UID:', user.uid);
+            console.log('Booking ID:', bookingId);
+
+            const bookingRef = firebase.database().ref('bookings/' + bookingId);
+            bookingRef.once('value').then((snapshot) => {
+                const booking = snapshot.val();
+                if (!booking) {
+                    Swal.fire('Lỗi!', 'Không tìm thấy thông tin đặt phòng.', 'error');
+                    return;
+                }
+
+                console.log('Booking data:', booking);
+                console.log('Booking userId:', booking.userId);
+                console.log('Current user UID:', user.uid);
+                console.log('Booking status:', booking.status || 'undefined');
+                console.log('Booking has status field:', booking.hasOwnProperty('status'));
+
+                // Kiểm tra xem booking có thuộc về người dùng hiện tại không
+                if (booking.userId !== user.uid) {
+                    Swal.fire('Lỗi!', 'Bạn không có quyền hủy đặt phòng này.', 'error');
+                    return;
+                }
+
+                // Kiểm tra xem booking đã bị hủy chưa
+                if (booking.status === 'cancelled') {
+                    Swal.fire('Đã hủy!', 'Đặt phòng này đã được hủy trước đó.', 'info');
+                    return;
+                }
+
+                // Nếu booking không có trạng thái, đặt mặc định là 'pending'
+                if (!booking.status) {
+                    console.log('Booking không có trạng thái, đặt mặc định là pending');
+                }
+
+                const checkInDate = new Date(booking.checkIn);
+                const today = new Date();
+                const timeDiff = checkInDate.getTime() - today.getTime();
+                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+                // Kiểm tra xem có thể hủy không
+                if (checkInDate < today) {
+                    Swal.fire('Không thể hủy!', 'Đặt phòng đã hoàn thành, không thể hủy.', 'warning');
+                    return;
+                }
+
+                // Tính toán thông tin hoàn tiền
+                const totalPrice = booking.totalPrice || booking.roomPrice || 0;
+                let cancelMessage = '';
+                let refundInfo = '';
+                let refundPercentage = 100;
+                let refundAmount = totalPrice;
+
+                if (type === 'hotel') {
+                    if (daysDiff <= 1) {
+                        cancelMessage = 'Hủy trong vòng 24h trước check-in: Phí hủy 50% giá phòng';
+                        refundInfo = 'Bạn sẽ được hoàn lại 50% số tiền đã thanh toán.';
+                        refundPercentage = 50;
+                    } else if (daysDiff <= 3) {
+                        cancelMessage = 'Hủy trong vòng 3 ngày trước check-in: Phí hủy 30% giá phòng';
+                        refundInfo = 'Bạn sẽ được hoàn lại 70% số tiền đã thanh toán.';
+                        refundPercentage = 70;
+                    } else {
+                        cancelMessage = 'Hủy trước 3 ngày: Hoàn tiền 100%';
+                        refundInfo = 'Bạn sẽ được hoàn lại toàn bộ số tiền đã thanh toán.';
+                        refundPercentage = 100;
+                    }
+                } else {
+                    if (daysDiff <= 1) {
+                        cancelMessage = 'Hủy trong vòng 24h trước khởi hành: Phí hủy 50% giá tour';
+                        refundInfo = 'Bạn sẽ được hoàn lại 50% số tiền đã thanh toán.';
+                        refundPercentage = 50;
+                    } else if (daysDiff <= 7) {
+                        cancelMessage = 'Hủy trong vòng 7 ngày trước khởi hành: Phí hủy 30% giá tour';
+                        refundInfo = 'Bạn sẽ được hoàn lại 70% số tiền đã thanh toán.';
+                        refundPercentage = 70;
+                    } else {
+                        cancelMessage = 'Hủy trước 7 ngày: Hoàn tiền 100%';
+                        refundInfo = 'Bạn sẽ được hoàn lại toàn bộ số tiền đã thanh toán.';
+                        refundPercentage = 100;
+                    }
+                }
+
+                // Tính số tiền hoàn lại
+                refundAmount = Math.round(totalPrice * refundPercentage / 100);
+
+                Swal.fire({
+                    title: 'Xác nhận hủy đặt phòng',
+                    html: `
+                        <div class="text-start">
+                            <p><strong>Thông tin đặt phòng:</strong></p>
+                            <p>• ${type === 'hotel' ? 'Khách sạn' : 'Tour'}: ${booking.hotelName || booking.tourName || 'N/A'}</p>
+                            <p>• Ngày ${type === 'hotel' ? 'check-in' : 'khởi hành'}: ${formatDate(booking.checkIn)}</p>
+                            <p>• Còn lại: ${daysDiff} ngày</p>
+                            <p>• Tổng tiền: ${totalPrice.toLocaleString()} VNĐ</p>
+                            <hr>
+                            <p><strong>Chính sách hủy:</strong></p>
+                            <p>${cancelMessage}</p>
+                            <p><strong>${refundInfo}</strong></p>
+                            <p><strong>Số tiền hoàn lại: ${refundAmount.toLocaleString()} VNĐ</strong></p>
+                        </div>
+                    `,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác nhận hủy',
+                    cancelButtonText: 'Không hủy',
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        // Cập nhật trạng thái đặt phòng thành "Đã hủy" và thông tin hoàn tiền
+                        const updateData = {
+                            status: 'cancelled',
+                            cancelledAt: Date.now(),
+                            cancelledBy: 'customer',
+                            updatedAt: Date.now(),
+                            refundAmount: refundAmount,
+                            refundPercentage: refundPercentage,
+                            refundStatus: 'pending', // pending, processing, completed, failed
+                            refundMethod: 'bank_transfer', // bank_transfer, vnpay_refund, etc.
+                            refundNote: refundInfo
+                        };
+                        
+                        // Trừ điểm thành viên nếu đã được cộng điểm khi thanh toán
+                        const userRef = firebase.database().ref('users/' + user.uid);
+                        userRef.once('value').then((userSnapshot) => {
+                            const userData = userSnapshot.val();
+                            const currentPoints = userData.loyaltyPoints || 0;
+                            
+                            // Tính điểm cần trừ (dựa trên tổng tiền booking)
+                            const pointsToDeduct = Math.floor(totalPrice / 1000); // 1 điểm cho mỗi 1000 VNĐ
+                            const newPoints = Math.max(0, currentPoints - pointsToDeduct);
+                            
+                            // Cập nhật điểm thành viên
+                            userRef.update({
+                                loyaltyPoints: newPoints
+                            }).then(() => {
+                                // Sau đó cập nhật trạng thái booking
+                                return bookingRef.update(updateData);
+                            }).then(() => {
+                                Swal.fire({
+                                    title: 'Đã hủy thành công!',
+                                    html: `
+                                        <div class="text-start">
+                                            <p>Đặt phòng đã được hủy thành công.</p>
+                                            <p><strong>Thông tin hoàn tiền:</strong></p>
+                                            <p>${refundInfo}</p>
+                                            <p><strong>Số tiền hoàn lại: ${refundAmount.toLocaleString()} VNĐ</strong></p>
+                                            <p><small>Chúng tôi sẽ xử lý hoàn tiền trong vòng 3-5 ngày làm việc.</small></p>
+                                            <p><small>Trạng thái: Đang chờ xử lý</small></p>
+                                            <hr>
+                                            <p><strong>Điểm thành viên:</strong></p>
+                                            <p>• Điểm đã trừ: ${pointsToDeduct} điểm</p>
+                                            <p>• Điểm hiện tại: ${newPoints} điểm</p>
+                                        </div>
+                                    `,
+                                    icon: 'success',
+                                    confirmButtonText: 'Đóng'
+                                });
+                                
+                                // Cập nhật hiển thị điểm thành viên trên giao diện
+                                updateLoyaltyDisplay(newPoints);
+                            });
+                        }).catch(error => {
+                            console.error('Lỗi khi hủy đặt phòng:', error);
+                            let errorMessage = 'Không thể hủy đặt phòng. Vui lòng thử lại sau.';
+                            
+                            if (error.code === 'PERMISSION_DENIED') {
+                                errorMessage = 'Bạn không có quyền thực hiện thao tác này. Vui lòng đăng nhập lại.';
+                            } else if (error.message) {
+                                errorMessage = `Lỗi: ${error.message}`;
+                            }
+                            
+                            Swal.fire('Lỗi!', errorMessage, 'error');
+                        });
+                    }
+                });
+            });
+        }
+
+        // Hàm cập nhật hiển thị điểm thành viên
+        function updateLoyaltyDisplay(newPoints) {
+            // Cập nhật điểm trong sidebar
+            const sidebarPoints = document.getElementById('sidebar-loyaltyPoints');
+            if (sidebarPoints) {
+                sidebarPoints.textContent = `Điểm: ${newPoints}`;
+            }
+            
+            // Cập nhật điểm trong tab loyalty
+            const profilePoints = document.getElementById('profile-loyaltyPoints');
+            if (profilePoints) {
+                profilePoints.textContent = newPoints;
+            }
+        }
+
+        function deleteBooking(bookingId) {
+            // Kiểm tra xác thực trước
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                Swal.fire('Lỗi!', 'Vui lòng đăng nhập để thực hiện thao tác này.', 'error');
+                return;
+            }
+
+            // Kiểm tra quyền sở hữu trước khi xóa
+            firebase.database().ref('bookings/' + bookingId).once('value').then((snapshot) => {
+                const booking = snapshot.val();
+                if (!booking) {
+                    Swal.fire('Lỗi!', 'Không tìm thấy thông tin đặt phòng.', 'error');
+                    return;
+                }
+
+                if (booking.userId !== user.uid) {
+                    Swal.fire('Lỗi!', 'Bạn không có quyền xóa đặt phòng này.', 'error');
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Xóa đặt phòng?',
+                    text: 'Bạn chắc chắn muốn xóa lịch sử này? Hành động này không thể hoàn tác!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        firebase.database().ref('bookings/' + bookingId).remove().then(() => {
+                            Swal.fire('Đã xóa!', 'Lịch sử đã được xóa.', 'success');
+                        }).catch(error => {
+                            console.error('Lỗi khi xóa đặt phòng:', error);
+                            Swal.fire('Lỗi!', 'Không thể xóa đặt phòng. Vui lòng thử lại sau.', 'error');
+                        });
+                    }
+                });
+            }).catch(error => {
+                console.error('Lỗi khi kiểm tra quyền:', error);
+                Swal.fire('Lỗi!', 'Không thể kiểm tra quyền. Vui lòng thử lại sau.', 'error');
+            });
+        }
+
+        // Hàm trả về icon + tên hạng thành viên
+function getMemberLevelIcon(level) {
+    switch(level) {
+        case 'Đồng':
+            return '<i class="fas fa-medal" style="color:#b87333"></i> Đồng';
+        case 'Bạc':
+            return '<i class="fas fa-medal" style="color:#b0c4de"></i> Bạc';
+        case 'Vàng':
+            return '<i class="fas fa-medal" style="color:#ffd700"></i> Vàng';
+        case 'Kim cương':
+            return '<i class="fas fa-gem" style="color:#00bcd4"></i> Kim cương';
+        case 'Lưu ly':
+            return '<i class="fas fa-crown" style="color:#8e24aa"></i> Lưu ly';
+        default:
+            return level || '';
+    }
+}
+
+// Thêm hàm phân hạng và cập nhật memberLevel
+function updateMemberLevel() {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+    const userRef = firebase.database().ref('users/' + user.uid);
+    userRef.once('value').then(snapshot => {
+        const data = snapshot.val() || {};
+        const points = data.loyaltyPoints || 0;
+        let level = 'Đồng';
+        if (points >= 10000) level = 'Kim cương';
+        else if (points >= 5000) level = 'Vàng';
+        else if (points >= 1000) level = 'Bạc';
+        if (data.memberLevel !== level) {
+            userRef.update({ memberLevel: level });
+        }
+        // Hiển thị quyền lợi khi hover
+        const sidebarLevel = document.getElementById('sidebar-memberLevel');
+        if (sidebarLevel) {
+            sidebarLevel.title =
+                'Đồng: Cơ bản\n' +
+                'Bạc: Giảm giá 5%\n' +
+                'Vàng: Giảm giá 10%, ưu tiên hỗ trợ\n' +
+                'Kim cương: Giảm giá 15%, quà tặng đặc biệt';
+        }
+    });
+}
+
+// Hàm reset lại điểm thành viên dựa trên các payment thành công
+function resetLoyaltyPoints(user) {
+    Swal.fire({
+        title: 'Xác nhận',
+        text: 'Bạn có chắc muốn reset và tính lại điểm thành viên? Điểm sẽ được tính lại theo các giao dịch thành công!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+        // Reset điểm về 0
+        const userRef = firebase.database().ref('users/' + user.uid);
+        userRef.update({ loyaltyPoints: 0 }).then(() => {
+            // Lấy tất cả payment thành công
+            firebase.database().ref('payments').orderByChild('userId').equalTo(user.uid).once('value', (snapshot) => {
+                let totalPoints = 0;
+                let updates = {};
+                snapshot.forEach((paymentSnapshot) => {
+                    const payment = paymentSnapshot.val();
+                    if (payment.status === 'success') {
+                        // 100.000đ = 10 điểm
+                        const points = Math.floor((payment.amount || 0) / 100000) * 10;
+                        if (points > 0) {
+                            totalPoints += points;
+                        }
+                        // Đánh dấu đã cộng điểm
+                        if (!payment.loyaltyAdded) {
+                            updates[paymentSnapshot.key + '/loyaltyAdded'] = true;
+                        }
+                    }
+                });
+                // Cập nhật điểm và loyaltyAdded
+                const updatesObj = {};
+                updatesObj['users/' + user.uid + '/loyaltyPoints'] = totalPoints;
+                Object.keys(updates).forEach(k => {
+                    updatesObj['payments/' + k] = true;
+                });
+                firebase.database().ref().update(updatesObj).then(() => {
+                    // Cập nhật phân hạng
+                    updateMemberLevelCustom(user, totalPoints);
+                    Swal.fire('Thành công!', 'Điểm thành viên đã được reset và tính lại: ' + totalPoints + ' điểm.', 'success');
+                });
+            });
+        });
+    });
+}
+
+// Hàm phân hạng mới (có thêm Lưu ly)
+function updateMemberLevelCustom(user, points) {
+    let level = 'Đồng';
+    if (points >= 20000) level = 'Lưu ly';
+    else if (points >= 10000) level = 'Kim cương';
+    else if (points >= 5000) level = 'Vàng';
+    else if (points >= 1000) level = 'Bạc';
+    firebase.database().ref('users/' + user.uid + '/memberLevel').set(level);
+}
+
+    </script>
+    <!-- <script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/684e312c6b65fa190ea6f4dd/1iton06be';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+End of Tawk.to Script -->
+
+    <script>
+        // Hiển thị ảnh vừa chọn lên avatar ngay lập tức
+        document.addEventListener('DOMContentLoaded', function() {
+            var avatarInput = document.getElementById('sidebar-avatar-upload');
+            var avatarImg = document.getElementById('sidebar-avatar');
+            if (avatarInput && avatarImg) {
+                avatarInput.addEventListener('change', function(event) {
+                    var file = event.target.files[0];
+                    if (file) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            avatarImg.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
+   
+    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" style="max-width:700px; min-width:500px;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="reviewModalLabel">Đánh giá khách sạn</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body">
+            <div id="star-rating" style="font-size:2.8em; color:#ccc; cursor:pointer; margin-bottom:18px; text-align:center;">
+              <span data-value="1">&#9733;</span>
+              <span data-value="2">&#9733;</span>
+              <span data-value="3">&#9733;</span>
+              <span data-value="4">&#9733;</span>
+              <span data-value="5">&#9733;</span>
+            </div>
+            <textarea id="reviewComment" class="form-control mb-3" rows="4" style="font-size:1.1em;" placeholder="Nhận xét của bạn..."></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-primary" id="submitReview">Gửi đánh giá</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+        let selectedRating = 0;
+        let currentBookingId = '';
+        let currentHotelId = '';
+        let currentHotelName = '';
+        
+        function openReviewModal(bookingId, hotelId, hotelName) {
+  currentBookingId = bookingId;
+  currentHotelId = hotelId;
+  currentHotelName = hotelName;
+  selectedRating = 0;
+  document.getElementById('reviewComment').value = '';
+  document.querySelectorAll('#star-rating span').forEach(s => s.style.color = '#ccc');
+  // Kiểm tra đã đánh giá chưa
+  firebase.database().ref('reviews/' + bookingId).once('value').then(snap => {
+    if (snap.exists()) {
+      Swal.fire('Bạn đã đánh giá đơn này!');
+      return;
+    }
+    // Đóng SweetAlert2 nếu đang mở
+    if (Swal.isVisible()) Swal.close();
+    // Mở modal Bootstrap
+    var reviewModal = new bootstrap.Modal(document.getElementById('reviewModal'));
+    reviewModal.show();
+  });
+}
+        
+        document.addEventListener('DOMContentLoaded', function() {
+          // Gắn sự kiện chọn sao
+          document.querySelectorAll('#star-rating span').forEach(star => {
+            star.addEventListener('click', function() {
+              selectedRating = this.dataset.value;
+              document.querySelectorAll('#star-rating span').forEach(s => {
+                s.style.color = s.dataset.value <= selectedRating ? 'gold' : '#ccc';
+              });
+            });
+          });
+          // Gắn sự kiện submitReview qua delegation để tránh lỗi null
+          document.body.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'submitReview') {
+              const comment = document.getElementById('reviewComment').value;
+              if (selectedRating == 0) {
+                Swal.fire('Vui lòng chọn số sao!');
+                return;
+              }
+              const user = firebase.auth().currentUser;
+              if (!user) {
+                Swal.fire('Bạn cần đăng nhập để đánh giá!');
+                return;
+              }
+              // Lưu đánh giá vào reviews/bookingId
+              const reviewData = {
+                userId: user.uid,
+                hotelId: currentHotelId,
+                hotelName: currentHotelName,
+                rating: Number(selectedRating),
+                comment: comment,
+                date: firebase.database.ServerValue.TIMESTAMP,
+                userName: user.displayName || user.email
+              };
+              firebase.database().ref('reviews/' + currentBookingId).set(reviewData)
+                .then(() => {
+                  Swal.fire('Đánh giá thành công!');
+                  var reviewModal = bootstrap.Modal.getInstance(document.getElementById('reviewModal'));
+                  if (reviewModal) reviewModal.hide();
+                  if (typeof loadBookings === 'function') loadBookings(user);
+                })
+                .catch(err => {
+                  Swal.fire('Lỗi: ' + err.message);
+                });
+            }
+          });
+        });
+        </script>
+
+    <script>
+        // Thêm script xử lý chọn/xóa nhiều booking
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hotel
+            const hotelTable = document.getElementById('bookings-table-hotel');
+            const selectAllHotel = document.getElementById('select-all-hotel');
+            const deleteSelectedHotel = document.getElementById('delete-selected-hotel');
+            hotelTable && hotelTable.addEventListener('change', function() {
+                const checked = document.querySelectorAll('.select-booking-hotel:checked');
+                if (deleteSelectedHotel) deleteSelectedHotel.style.display = checked.length > 0 ? 'inline-block' : 'none';
+            });
+            selectAllHotel && selectAllHotel.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.select-booking-hotel');
+                checkboxes.forEach(cb => cb.checked = selectAllHotel.checked);
+                const checked = document.querySelectorAll('.select-booking-hotel:checked');
+                if (deleteSelectedHotel) deleteSelectedHotel.style.display = checked.length > 0 ? 'inline-block' : 'none';
+            });
+            deleteSelectedHotel && deleteSelectedHotel.addEventListener('click', function() {
+                const checked = document.querySelectorAll('.select-booking-hotel:checked');
+                if (checked.length === 0) return;
+                Swal.fire({
+                    title: 'Xóa các đặt phòng đã chọn?',
+                    text: `Bạn chắc chắn muốn xóa ${checked.length} đặt phòng đã chọn?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        checked.forEach(cb => {
+                            firebase.database().ref('bookings/' + cb.value).remove();
+                        });
+                        Swal.fire('Đã xóa!', 'Các đặt phòng đã được xóa.', 'success');
+                    }
+                });
+            });
+            // Tour
+            const tourTable = document.getElementById('bookings-table-tour');
+            const selectAllTour = document.getElementById('select-all-tour');
+            const deleteSelectedTour = document.getElementById('delete-selected-tour');
+            tourTable && tourTable.addEventListener('change', function() {
+                const checked = document.querySelectorAll('.select-booking-tour:checked');
+                if (deleteSelectedTour) deleteSelectedTour.style.display = checked.length > 0 ? 'inline-block' : 'none';
+            });
+            selectAllTour && selectAllTour.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.select-booking-tour');
+                checkboxes.forEach(cb => cb.checked = selectAllTour.checked);
+                const checked = document.querySelectorAll('.select-booking-tour:checked');
+                if (deleteSelectedTour) deleteSelectedTour.style.display = checked.length > 0 ? 'inline-block' : 'none';
+            });
+            deleteSelectedTour && deleteSelectedTour.addEventListener('click', function() {
+                const checked = document.querySelectorAll('.select-booking-tour:checked');
+                if (checked.length === 0) return;
+                Swal.fire({
+                    title: 'Xóa các đặt tour đã chọn?',
+                    text: `Bạn chắc chắn muốn xóa ${checked.length} đặt tour đã chọn?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        checked.forEach(cb => {
+                            firebase.database().ref('bookings/' + cb.value).remove();
+                        });
+                        Swal.fire('Đã xóa!', 'Các đặt tour đã được xóa.', 'success');
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- Bottom Navigation Bar for Mobile -->
+    <nav class="bottom-nav d-md-none d-lg-none">
+        <a href="index.html" class="bottom-nav-item ">
+            <i class="fas fa-home"></i>
+            <span>Trang chủ</span>
+        </a>
+        <a href="hotel.html" class="bottom-nav-item">
+            <i class="fas fa-hotel"></i>
+            <span>Khách sạn</span>
+        </a>
+        <a href="tours.html" class="bottom-nav-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Tours</span>
+        </a>
+        <a href="prioritize.html" class="bottom-nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Ưu đãi</span>
+        </a>
+        <a href="travel_guide.html" class="bottom-nav-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Cẩm nang</span>
+        <a href="about_us.html" class="bottom-nav-item">
+            <i class="fas fa-phone"></i>
+            <span>Liên hệ</span>
+        </a>
+        <a href="member.html" class="bottom-nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Tài khoản</span>
+        </a>
+        
+        </a>
+    </nav>
+
+    <!-- Avatar button for mobile (hiện ở góc trên bên phải trên mobile) -->
+    <div id="mobile-avatar-btn" style="display:none; position:fixed; top:16px; right:16px; z-index:1201;">
+      <img id="mobile-avatar-img" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" alt="Avatar" style="width:42px; height:42px; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,0.15); border:2px solid #fff; cursor:pointer; transition: transform 0.2s ease;">
+    </div>
+    <!-- Off-canvas sidebar cho mobile -->
+    <div id="mobile-sidebar-offcanvas" style="display:none; position:fixed; top:0; left:0; width:80vw; max-width:320px; height:100vh; background:#fff; z-index:1300; box-shadow:2px 0 16px rgba(0,0,0,0.18); overflow-y:auto; transition:transform 0.3s; transform:translateX(-100%);">
+      <div style="padding:24px 16px 12px 16px; text-align:center; border-bottom:1px solid #eee;">
+        <img id="mobile-sidebar-avatar" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" alt="Avatar" style="width:72px; height:72px; border-radius:50%; margin-bottom:8px;">
+        <h5 id="mobile-sidebar-user-name" style="margin-bottom:4px; font-size:1.1em;"></h5>
+        <div id="mobile-sidebar-user-email" style="font-size:0.95em; color:#888; margin-bottom:6px;"></div>
+        <div id="mobile-sidebar-memberLevel" style="font-weight:600; color:#1a237e; margin-bottom:2px;"></div>
+        <div id="mobile-sidebar-loyaltyPoints" style="color:#e67e22; font-size:0.98em;"></div>
+        <button id="mobile-sidebar-close" style="position:absolute; top:12px; right:12px; background:none; border:none; font-size:1.8em; color:#888;">&times;</button>
+      </div>
+      <div style="padding:12px 0;">
+        <a href="#profile" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-user me-2"></i> Thông tin cá nhân</a>
+        <a href="#bookings" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-calendar-alt me-2"></i> Lịch sử</a>
+        <a href="#loyalty" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-star me-2"></i> Điểm thành viên</a>
+        <a href="#favorites" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-heart me-2"></i> Yêu thích</a>
+        <a href="#reviews" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-star me-2"></i> Đánh giá</a>
+        <a href="#settings" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-cog me-2"></i> Cài đặt</a>
+        <a href="#payments" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="fas fa-file-invoice-dollar me-2"></i> Thanh toán</a>
+      </div>
+    </div>
+    <div id="mobile-sidebar-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.25); z-index:1299;"></div>
+
+    <script>
+    // ... existing code ...
+    // Mobile sidebar logic
+    function showMobileSidebar() {
+      document.getElementById('mobile-sidebar-offcanvas').style.display = 'block';
+      document.getElementById('mobile-sidebar-overlay').style.display = 'block';
+      setTimeout(()=>{
+        document.getElementById('mobile-sidebar-offcanvas').style.transform = 'translateX(0)';
+      }, 10);
+    }
+    function hideMobileSidebar() {
+      document.getElementById('mobile-sidebar-offcanvas').style.transform = 'translateX(-100%)';
+      setTimeout(()=>{
+        document.getElementById('mobile-sidebar-offcanvas').style.display = 'none';
+        document.getElementById('mobile-sidebar-overlay').style.display = 'none';
+      }, 300);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Hiện nút avatar trên mobile, ẩn sidebar gốc
+      function handleMobileSidebarDisplay() {
+        if(window.innerWidth <= 768) {
+          document.getElementById('mobile-avatar-btn').style.display = 'block';
+          var sidebar = document.querySelector('.col-md-3');
+          if(sidebar) sidebar.style.display = 'none';
+        } else {
+          document.getElementById('mobile-avatar-btn').style.display = 'none';
+          var sidebar = document.querySelector('.col-md-3');
+          if(sidebar) sidebar.style.display = '';
+          hideMobileSidebar();
+        }
+      }
+      handleMobileSidebarDisplay();
+      window.addEventListener('resize', handleMobileSidebarDisplay);
+      // Gắn sự kiện mở/đóng
+      document.getElementById('mobile-avatar-btn').onclick = showMobileSidebar;
+      document.getElementById('mobile-sidebar-close').onclick = hideMobileSidebar;
+      document.getElementById('mobile-sidebar-overlay').onclick = hideMobileSidebar;
+      
+      // Thêm hiệu ứng hover cho mobile avatar button
+      const mobileAvatarBtn = document.getElementById('mobile-avatar-btn');
+      const mobileAvatarImg = document.getElementById('mobile-avatar-img');
+      
+      mobileAvatarBtn.addEventListener('touchstart', function() {
+        mobileAvatarImg.style.transform = 'scale(0.95)';
+      });
+      
+      mobileAvatarBtn.addEventListener('touchend', function() {
+        mobileAvatarImg.style.transform = 'scale(1)';
+      });
+      
+      // Đồng bộ thông tin user vào mobile sidebar
+      function syncMobileSidebar(userData) {
+        // Đồng bộ avatar cho tất cả phần tử
+        syncAllAvatars(userData.avatar);
+        
+        // Cập nhật thông tin user khác
+        document.getElementById('mobile-sidebar-user-name').textContent = userData.name || userData.displayName || '';
+        document.getElementById('mobile-sidebar-user-email').textContent = userData.email || firebase.auth().currentUser?.email || '';
+        document.getElementById('mobile-sidebar-memberLevel').innerHTML = userData.memberLevel ? getMemberLevelIcon(userData.memberLevel) : '';
+        document.getElementById('mobile-sidebar-loyaltyPoints').textContent = userData.loyaltyPoints ? `Điểm: ${userData.loyaltyPoints}` : '';
+      }
+      // Gọi hàm này sau khi loadUserData
+      // Ví dụ: trong loadUserData(user) => syncMobileSidebar(userData)
+      // ...
+    });
+    // ... existing code ...
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      function handleMobileTabMenu() {
+        if(window.innerWidth <= 768) {
+          document.getElementById('mobile-tab-menu').style.display = 'flex';
+        } else {
+          document.getElementById('mobile-tab-menu').style.display = 'none';
+        }
+      }
+      handleMobileTabMenu();
+      window.addEventListener('resize', handleMobileTabMenu);
+      // Active tab highlight
+      document.querySelectorAll('.mobile-tab-link').forEach(link => {
+        link.addEventListener('click', function() {
+          document.querySelectorAll('.mobile-tab-link').forEach(l=>l.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+    </script>
+
+    <script>
+    // ... existing code ...
+    document.addEventListener('DOMContentLoaded', function() {
+      // ... existing code ...
+      // Xử lý click menu trong mobile sidebar để chuyển tab (dùng Bootstrap Tab API)
+      document.querySelectorAll('#mobile-sidebar-offcanvas [data-bs-toggle="list"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          var target = this.getAttribute('href');
+          var tabTrigger = document.querySelector('.list-group-item-action[data-bs-toggle="list"][href="' + target + '"]')
+            || document.querySelector('.mobile-tab-link[href="' + target + '"]');
+          if(tabTrigger) {
+            if (typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+              var tab = new bootstrap.Tab(tabTrigger);
+              tab.show();
+            } else {
+              tabTrigger.click();
+            }
+          }
+          hideMobileSidebar();
+        });
+      });
+    });
+    // ... existing code ...
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1285 @@
+{
+  "rules": {
+    ".read": true,
+    "bookings": {
+      ".indexOn": [
+        "customerEmail",
+        "userId",
+        "status",
+        "paymentStatus",
+        "checkIn",
+        "createdAt"
+      ],
+      "$bookingId": {
+        ".write": "auth != null && ((!data.exists() && newData.child('userId').val() === auth.uid) || (data.exists() && data.child('userId').val() === auth.uid) || auth.token.email === 'quantrikhachsan@gmail.com')",
+        ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || data.child('userId').val() === auth.uid)",
+        ".validate": "(!data.exists() && newData.hasChildren(['userId'])) || (data.exists() && (newData.child('userId').val() === data.child('userId').val() || auth.token.email === 'quantrikhachsan@gmail.com'))",
+        "userId": {
+          ".validate": "newData.isString() && ((!data.exists() && newData.val() === auth.uid) || (data.exists() && newData.val() === data.val()) || newData.val() === 'admin-created' || auth.token.email === 'quantrikhachsan@gmail.com')"
+        },
+        "bookingType": {
+          ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'hotel' || newData.val() === 'tour' || newData.val() === 'deposit'))"
+        },
+        "type": {
+          ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'hotel' || newData.val() === 'tour' || newData.val() === 'deposit'))"
+        },
+        "createdAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "email": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "hotelId": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "hotelName": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "roomId": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "roomPrice": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "checkIn": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "checkOut": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "guests": {
+          ".validate": "!newData.exists() || newData.isString() || newData.isNumber()"
+        },
+        "userEmail": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "userName": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tourId": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tourName": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tourCategory": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tourLocation": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tourDuration": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tourImage": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tourType": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tourPrice": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "totalPrice": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "numberOfGuests": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "tourDescription": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tourIncludes": {
+          ".validate": "!newData.exists() || newData.hasChildren()"
+        },
+        "tourExcludes": {
+          ".validate": "!newData.exists() || newData.hasChildren()"
+        },
+        "tourRating": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tourReviewsCount": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "customerName": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "customerEmail": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "customerPhone": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "note": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "nights": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "paymentMethod": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "status": {
+          ".validate": "!newData.exists() || newData.val() === 'pending' || newData.val() === 'confirmed' || newData.val() === 'cancelled' || newData.val() === 'completed'"
+        },
+        "paymentStatus": {
+          ".validate": "!newData.exists() || newData.val() === 'unpaid' || newData.val() === 'paid' || newData.val() === 'refunded'"
+        },
+        "updatedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "cancelledAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "cancelledBy": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "refundAmount": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "refundPercentage": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "refundStatus": {
+          ".validate": "!newData.exists() || newData.val() === 'pending' || newData.val() === 'processing' || newData.val() === 'completed' || newData.val() === 'failed'"
+        },
+        "refundMethod": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "refundNote": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "refundCompletedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "refundProcessingAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "refundTransactionId": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "refundErrorMessage": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "refundFailedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "deposits": {
+      ".indexOn": [
+        "userId",
+        "status",
+        "createdAt",
+        "hotelId"
+      ],
+      "$depositId": {
+        ".write": "auth != null",
+        ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || data.child('userId').val() === auth.uid)",
+        ".validate": "newData.hasChildren(['userId', 'bookingType', 'hotelId', 'hotelName', 'roomId', 'roomPrice', 'checkIn', 'checkOut', 'guests', 'depositAmount', 'totalPrice', 'remainingAmount', 'status', 'createdAt'])",
+        "userId": {
+          ".validate": "newData.isString() && ((!data.exists() && newData.val() === auth.uid) || (data.exists() && newData.val() === data.val()))"
+        },
+        "bookingType": {
+          ".validate": "newData.isString() && newData.val() === 'deposit'"
+        },
+        "email": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "hotelId": {
+          ".validate": "newData.isString()"
+        },
+        "hotelName": {
+          ".validate": "newData.isString()"
+        },
+        "roomId": {
+          ".validate": "newData.isString()"
+        },
+        "roomPrice": {
+          ".validate": "newData.isNumber() && newData.val() > 0"
+        },
+        "checkIn": {
+          ".validate": "newData.isString()"
+        },
+        "checkOut": {
+          ".validate": "newData.isString()"
+        },
+        "guests": {
+          ".validate": "newData.isString() || newData.isNumber()"
+        },
+        "depositAmount": {
+          ".validate": "newData.isNumber() && newData.val() > 0"
+        },
+        "totalPrice": {
+          ".validate": "newData.isNumber() && newData.val() > 0"
+        },
+        "remainingAmount": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "note": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'confirmed' || newData.val() === 'cancelled' || newData.val() === 'completed')"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "updatedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "customerName": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "customerEmail": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "customerPhone": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "paymentMethod": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "paymentStatus": {
+          ".validate": "!newData.exists() || newData.val() === 'unpaid' || newData.val() === 'paid' || newData.val() === 'refunded'"
+        },
+        "type": {
+          ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'hotel' || newData.val() === 'tour' || newData.val() === 'deposit'))"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "payments": {
+      ".indexOn": [
+        "userId",
+        "status",
+        "date"
+      ],
+      "$paymentId": {
+        ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || (!data.exists() && newData.child('userId').val() === auth.uid) || (data.exists() && data.child('userId').val() === auth.uid))",
+        ".validate": "(!data.exists() && newData.hasChildren(['userId', 'amount', 'date', 'status', 'method'])) || (data.exists())",
+        "userId": {
+          ".validate": "newData.isString()"
+        },
+        "amount": {
+          ".validate": "newData.isNumber() && newData.val() > 0"
+        },
+        "date": {
+          ".validate": "newData.isNumber()"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'success' || newData.val() === 'failed')"
+        },
+        "method": {
+          ".validate": "newData.isString()"
+        },
+        "transactionId": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "detail": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "loyaltyAdded": {
+          ".validate": "!newData.exists() || newData.isBoolean()"
+        },
+        "note": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "users": {
+      "$userId": {
+        ".read": "auth != null && auth.uid === $userId",
+        ".write": "auth != null && auth.uid === $userId",
+        "favorites": {
+          "$guideSlug": {
+            ".validate": "newData.hasChildren(['timestamp', 'guideSlug'])",
+            "timestamp": {
+              ".validate": "newData.isNumber()"
+            },
+            "guideSlug": {
+              ".validate": "newData.isString()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        }
+      }
+    },
+    "usernames": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      "$username": {
+        ".validate": "!data.exists() || data.val() === auth.uid"
+      }
+    },
+    "favorites": {
+      "$uid": {
+        ".read": "auth != null && $uid === auth.uid",
+        ".write": "auth != null && $uid === auth.uid",
+        "$hotelId": {
+          ".validate": "newData.hasChildren(['name', 'image', 'location'])",
+          "name": {
+            ".validate": "newData.isString()"
+          },
+          "image": {
+            ".validate": "newData.isString()"
+          },
+          "location": {
+            ".validate": "newData.isString()"
+          },
+          "addedAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "favorites_tours": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        "$tourId": {
+          ".validate": "newData.hasChildren(['id', 'name', 'image', 'location', 'timestamp'])",
+          "id": {
+            ".validate": "newData.isString()"
+          },
+          "name": {
+            ".validate": "newData.isString()"
+          },
+          "image": {
+            ".validate": "newData.isString()"
+          },
+          "location": {
+            ".validate": "newData.isString()"
+          },
+          "timestamp": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "reviews": {
+      ".read": true,
+      ".indexOn": [
+        "userId",
+        "hotelId",
+        "rating",
+        "date"
+      ],
+      "$reviewId": {
+        ".write": "auth != null && ((!data.exists() && newData.child('userId').val() === auth.uid) || (data.exists() && data.child('userId').val() === auth.uid) || auth.token.email === 'quantrikhachsan@gmail.com' || root.child('staffAccess').child(auth.token.email.replace(/[@.]/g, '_')).exists())",
+        ".validate": "newData.hasChildren(['userId', 'hotelId', 'rating', 'comment', 'date', 'userName'])",
+        "userId": {
+          ".validate": "newData.val() === auth.uid"
+        },
+        "hotelId": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "rating": {
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 5"
+        },
+        "comment": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+        },
+        "date": {
+          ".validate": "newData.isNumber() && newData.val() <= now"
+        },
+        "userName": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "notifications": {
+      ".indexOn": [
+        "userId",
+        "timestamp",
+        "type",
+        "read"
+      ],
+      "$userId": {
+        ".read": "auth != null && auth.uid === $userId",
+        ".write": "auth != null && auth.uid === $userId"
+      }
+    },
+    "specialOffers": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'"
+    },
+    "specialTours": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'"
+    },
+    "tourCategories": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      "$categoryId": {
+        ".validate": "newData.hasChildren(['title', 'description'])",
+        "title": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "description": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "location": {
+      ".read": true,
+      "$city": {
+        "hotels": {
+          ".read": true,
+          ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+          "$hotelIndex": {
+            ".validate": "newData.hasChildren(['tenKhachSan', 'diaChi', 'phone', 'serviceFee', 'chiTiet', 'moTa', 'xepHangSao'])",
+            "tenKhachSan": {
+              ".validate": "newData.isString()"
+            },
+            "diaChi": {
+              ".validate": "newData.isString()"
+            },
+            "phone": {
+              ".validate": "newData.isString()"
+            },
+            "serviceFee": {
+              ".validate": "newData.isNumber()"
+            },
+            "moTa": {
+              ".validate": "newData.isString()"
+            },
+            "xepHangSao": {
+              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 5"
+            },
+            "chiTiet": {
+              "facilities": {
+                ".validate": "newData.hasChildren()"
+              },
+              "image": {
+                ".validate": "newData.isString()"
+              },
+              "rooms": {
+                "$roomIndex": {
+                  ".validate": "newData.hasChildren(['name', 'price', 'size', 'bed', 'view', 'room_facilities'])",
+                  "name": {
+                    ".validate": "newData.isString()"
+                  },
+                  "price": {
+                    ".validate": "newData.isNumber() && newData.val() > 0"
+                  },
+                  "size": {
+                    ".validate": "newData.isString()"
+                  },
+                  "bed": {
+                    ".validate": "newData.isString()"
+                  },
+                  "view": {
+                    ".validate": "newData.isString()"
+                  },
+                  "room_facilities": {
+                    ".validate": "newData.hasChildren()"
+                  },
+                  "img": {
+                    ".validate": "newData.isString()"
+                  },
+                  "availableRooms": {
+                    ".write": "auth != null",
+                    ".validate": "newData.isNumber() && newData.val() >= 0"
+                  },
+                  "$other": {
+                    ".validate": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "vouchers": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      ".indexOn": [
+        "code",
+        "startDate",
+        "endDate",
+        "isActive"
+      ],
+      "$voucherId": {
+        ".validate": "newData.hasChildren(['code', 'discount', 'minSpend', 'maxDiscount', 'startDate', 'endDate', 'description', 'createdAt'])",
+        "code": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "discount": {
+          ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 100"
+        },
+        "minSpend": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "maxDiscount": {
+          ".validate": "newData.isNumber() && newData.val() > 0"
+        },
+        "startDate": {
+          ".validate": "newData.isNumber() && newData.val() > 0"
+        },
+        "endDate": {
+          ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() >= newData.parent().child('startDate').val()"
+        },
+        "description": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber() && newData.val() <= now"
+        },
+        "isActive": {
+          ".validate": "!newData.exists() || newData.isBoolean()"
+        },
+        "usedBy": {
+          "$uid": {
+            ".validate": "newData.isBoolean()"
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "travelGuides": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      "$guideId": {
+        ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+        "likes": {
+          "$userId": {
+            ".write": "auth != null && $userId === auth.uid",
+            ".validate": "newData.hasChildren(['timestamp', 'userName'])",
+            "timestamp": { ".validate": "newData.isNumber()" },
+            "userName": { ".validate": "newData.isString()" }
+          }
+        },
+        "likeCount": {
+          ".write": "auth != null",
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || newData.hasChildren(['author', 'id', 'last_updated', 'main_image', 'overview'])",
+        "author": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || newData.isString()" },
+        "id": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || newData.isString()" },
+        "is_featured_on_homepage": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.isBoolean()" },
+        "last_updated": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || newData.isString()" },
+        "main_image": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || (newData.isString() && newData.val().length > 0)" },
+        "overview": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || (newData.isString() && newData.val().length > 0)" },
+        "title": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.isString()" },
+        "category": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.isString()" },
+        "location": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.isString()" },
+        "duration": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.isString()" },
+        "budget": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.isString()" },
+        "season": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.isString()" },
+        "slug": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.isString()" },
+        "hotelRecommendations": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.hasChildren()" },
+        "originalContributionId": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.isString()" },
+        "related_destinations": {
+          ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.hasChildren()",
+          "$relDestId": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || newData.isString()" }
+        },
+        "sections": {
+          ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.hasChildren()",
+          "$sectionIndex": {
+            ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || newData.hasChild('heading')",
+            "heading": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || newData.isString()" },
+            "content": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.isString()" },
+            "list_type": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || !newData.exists() || newData.isString()" },
+            "items": {
+              "$itemIndex": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || newData.isString() || newData.hasChildren()" }
+            },
+            "$other": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || false" }
+          }
+        },
+        "$other": { ".validate": "auth.token.email === 'quantrikhachsan@gmail.com' || false" }
+      }
+    },
+    "settings": {
+      ".read": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'"
+    },
+    "roomInventory": {
+      ".read": true,
+      ".write": "auth != null",
+      "$hotelId": {
+        "$roomId": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+    "guideRatings": {
+      "$guideId": {
+        ".read": true,
+        ".write": "auth != null || auth.token.email === 'quantrikhachsan@gmail.com' || root.child('staffAccess').child(auth.token.email.replace(/[@.]/g, '_')).exists()",
+        "$userId": {
+          ".validate": "newData.hasChildren(['rating', 'comment', 'timestamp', 'userName'])",
+          "rating": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 5"
+          },
+          "comment": {
+            ".validate": "newData.isString()"
+          },
+          "timestamp": {
+            ".validate": "newData.isNumber()"
+          },
+          "userName": {
+            ".validate": "newData.isString()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "guideComments": {
+      ".read": true,
+      ".indexOn": ["timestamp"],
+      "$guideSlug": {
+        ".read": true,
+        "$commentId": {
+          ".write": "auth != null && ((!data.exists() && newData.child('userId').val() === auth.uid) || (data.exists() && data.child('userId').val() === auth.uid) || auth.token.email === 'quantrikhachsan@gmail.com' || root.child('staffAccess').child(auth.token.email.replace(/[@.]/g, '_')).exists())",
+          ".validate": "newData.hasChildren(['text', 'userName', 'userId', 'timestamp'])",
+          "text": {
+            ".validate": "newData.isString() && newData.val().length >= 0 && newData.val().length <= 1000"
+          },
+          "userName": {
+            ".validate": "newData.isString() && newData.val().length > 0"
+          },
+          "userId": {
+            ".validate": "newData.isString() && newData.val() === auth.uid"
+          },
+          "timestamp": {
+            ".validate": "newData.isNumber()"
+          },
+          "image": {
+            ".validate": "!newData.exists() || (newData.isString() && newData.val().length > 0)"
+          },
+          "likes": {
+            "$userId": {
+              ".write": "auth != null && $userId === auth.uid",
+              ".validate": "newData.hasChildren(['timestamp', 'userName'])",
+              "timestamp": {
+                ".validate": "newData.isNumber()"
+              },
+              "userName": {
+                ".validate": "newData.isString()"
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
+          },
+          "dislikes": {
+            "$userId": {
+              ".write": "auth != null && $userId === auth.uid",
+              ".validate": "newData.hasChildren(['timestamp', 'userName'])",
+              "timestamp": {
+                ".validate": "newData.isNumber()"
+              },
+              "userName": {
+                ".validate": "newData.isString()"
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
+          },
+          "replies": {
+            "$replyId": {
+              ".write": "auth != null && newData.child('userId').val() === auth.uid",
+              ".validate": "newData.hasChildren(['text', 'userName', 'userId', 'timestamp'])",
+              "text": {
+                ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 500"
+              },
+              "userName": {
+                ".validate": "newData.isString() && newData.val().length > 0"
+              },
+              "userId": {
+                ".validate": "newData.isString() && newData.val() === auth.uid"
+              },
+              "timestamp": {
+                ".validate": "newData.isNumber()"
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "userContributions": {
+      ".indexOn": ["status", "authorId", "submittedAt"],
+      "$contributionId": {
+        ".write": "auth != null && ((!data.exists() && newData.child('authorId').val() === auth.uid) || auth.token.email === 'quantrikhachsan@gmail.com')",
+        ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || data.child('authorId').val() === auth.uid)",
+        "authorId": {
+          ".validate": "newData.isString() && newData.val() === auth.uid"
+        },
+        "title": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "category": {
+          ".validate": "newData.isString() && newData.val().matches(/^(mountain|beach|city|culture|food|adventure|budget|luxury)$/)"
+        },
+        "location": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "summary": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "content": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "status": {
+          ".validate": "newData.isString() && newData.val().matches(/^(pending|approved|rejected)$/)"
+        },
+        "submittedAt": {
+          ".validate": "newData.isNumber() || newData.val() === '.sv'"
+        },
+        "authorName": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "authorEmail": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "duration": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "budget": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "season": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "main_image": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "slug": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "approvedAt": {
+          ".validate": "!newData.exists() || newData.isNumber() || newData.val() === '.sv'"
+        },
+        "rejectedAt": {
+          ".validate": "!newData.exists() || newData.isNumber() || newData.val() === '.sv'"
+        },
+        "rejectionReason": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "publishedGuideId": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "hotelRecommendations": {
+          "$hotelIndex": {
+            "name": {
+              ".validate": "!newData.exists() || newData.isString()"
+            },
+            "rating": {
+              ".validate": "!newData.exists() || (newData.isString() && newData.val().matches(/^[1-5]$/))"
+            },
+            "price": {
+              ".validate": "!newData.exists() || newData.isString()"
+            },
+            "location": {
+              ".validate": "!newData.exists() || newData.isString()"
+            },
+            "review": {
+              ".validate": "!newData.exists() || newData.isString()"
+            },
+            "recommendation": {
+              ".validate": "!newData.exists() || (newData.isString() && newData.val().matches(/^(highly-recommended|recommended|okay|not-recommended)$/))"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "adminNotifications": {
+      ".indexOn": ["timestamp", "isRead", "type"],
+      ".write": "auth != null",
+      ".read": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'"
+    },
+    "guideLikes": {
+      ".indexOn": ["timestamp"],
+      "$guideSlug": {
+        "$userId": {
+          ".write": "auth != null && auth.uid === $userId",
+          ".read": true,
+          "timestamp": {
+            ".validate": "newData.isNumber() || newData.val() === '.sv'"
+          },
+          "userName": {
+            ".validate": "newData.isString()"
+          },
+          "source": {
+            ".validate": "!newData.exists() || newData.isString()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "roles": {
+      ".read": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      "$roleId": {
+        ".validate": "newData.hasChildren(['name'])",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "code": {
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().length > 0)"
+        },
+        "description": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "salary": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "allowance": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "permissions": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "department": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "location": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "requirements": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "updatedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        }
+      }
+    },
+    "staff": {
+      ".read": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      "$staffId": {
+        ".validate": "newData.hasChildren(['name', 'email', 'phone', 'idCard', 'role'])",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "email": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "phone": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "idCard": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "role": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "birthDate": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "gender": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "idCardDate": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "idCardPlace": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "nationality": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "ethnicity": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "religion": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "personalPhone": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "address": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "tempAddress": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "emergencyContact": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "emergencyPhone": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "relationship": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "education": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "major": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "school": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "experience": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "skills": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "certificates": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "department": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "startDate": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "employmentType": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "basicSalary": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "bankAccount": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "bankName": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "note": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "joinedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "createdAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "status": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "employeeId": {
+          ".validate": "!newData.exists() || newData.isString()"
+        }
+      }
+    },
+    "departments": {
+      ".read": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      "$departmentId": {
+        ".validate": "newData.hasChildren(['name', 'code', 'status'])",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "code": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "description": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "manager": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "budget": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "location": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "email": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "phone": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'active' || newData.val() === 'inactive')"
+        },
+        "staffCount": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "createdAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "updatedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        }
+      }
+    },
+    "affiliatePartners": {
+      ".indexOn": [
+        "status",
+        "name",
+        "createdAt"
+      ],
+      ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      "$partnerId": {
+        "name": {
+          ".validate": "newData.isString()"
+        },
+        "website": {
+          ".validate": "newData.isString()"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'Đang hợp tác' || newData.val() === 'Tạm dừng' || newData.val() === 'Kết thúc')"
+        },
+        "commission": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+        },
+        "revenue": {
+          ".validate": "newData.isString()"
+        },
+        "contactEmail": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "contactPhone": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+    "affiliateCampaigns": {
+      ".indexOn": [
+        "status",
+        "partner",
+        "createdAt",
+        "startDate",
+        "endDate"
+      ],
+      ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      "$campaignId": {
+        "name": {
+          ".validate": "newData.isString()"
+        },
+        "partner": {
+          ".validate": "newData.isString()"
+        },
+        "startDate": {
+          ".validate": "newData.isString()"
+        },
+        "endDate": {
+          ".validate": "newData.isString()"
+        },
+        "commission": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+        },
+        "target": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "clicks": {
+          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0)"
+        },
+        "bookings": {
+          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0)"
+        },
+        "revenue": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'Đang chạy' || newData.val() === 'Tạm dừng' || newData.val() === 'Kết thúc')"
+        },
+        "description": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+    "affiliateCommissions": {
+      ".indexOn": [
+        "status",
+        "partner",
+        "month",
+        "createdAt"
+      ],
+      ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      "$commissionId": {
+        "partner": {
+          ".validate": "newData.isString()"
+        },
+        "month": {
+          ".validate": "newData.isString()"
+        },
+        "revenue": {
+          ".validate": "newData.isString()"
+        },
+        "commission": {
+          ".validate": "newData.isString()"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'Chờ thanh toán' || newData.val() === 'Đã thanh toán')"
+        },
+        "paymentDate": {
+          ".validate": "!newData.exists() || newData.isString() || newData.val() === null"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+        "updatedAt": {
+          ".validate": "!newData.exists() || newData.isString()"
+        }
+      }
+    },
+    "affiliateSupport": {
+      ".indexOn": [
+        "status",
+        "partner",
+        "type",
+        "priority",
+        "createdAt"
+      ],
+      ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || auth.token.email === 'giameocte@gmail.com')",
+      "$supportId": {
+        "partner": {
+          ".validate": "newData.isString()"
+        },
+        "type": {
+          ".validate": "newData.isString() && (newData.val() === 'API' || newData.val() === 'Tracking' || newData.val() === 'Payment' || newData.val() === 'Technical' || newData.val() === 'Other')"
+        },
+        "title": {
+          ".validate": "newData.isString()"
+        },
+        "content": {
+          ".validate": "newData.isString()"
+        },
+        "priority": {
+          ".validate": "newData.isString() && (newData.val() === 'Low' || newData.val() === 'Medium' || newData.val() === 'High' || newData.val() === 'Urgent')"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'Chờ xử lý' || newData.val() === 'Đang xử lý' || newData.val() === 'Đã phản hồi' || newData.val() === 'Đã đóng')"
+        },
+        "email": {
+          ".validate": "newData.isString()"
+        },
+        "response": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+    "staffAccess": {
+      ".write": "auth != null && auth.token.email === 'quantrikhachsan@gmail.com'",
+      ".read": "auth != null",
+      "$email": {
+        ".validate": "newData.isString() && (newData.val() === 'affiliate-manager' || newData.val() === 'booking-moderator' || newData.val() === 'content-admin' || newData.val() === 'customer-support' || newData.val() === 'data-analyst' || newData.val() === 'finance-manager' || newData.val() === 'marketing-seo' || newData.val() === 'web-developer')"
+      }
+    },
+    "leaveRequests": {
+      ".indexOn": ["employeeId"],
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$requestId": {
+        ".validate": "newData.hasChildren(['employeeId', 'startDate', 'endDate', 'reason', 'status', 'createdAt'])",
+        "employeeId": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "startDate": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "endDate": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "reason": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'approved' || newData.val() === 'rejected')"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "note": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "type": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "employeeName": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "approver": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "approvedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "rejectedAt": {
+          ".validate": "!newData.exists() || newData.isNumber()"
+        },
+        "rejectionReason": {
+          ".validate": "!newData.exists() || newData.isString()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "attendance": {
+      ".indexOn": ["employeeId", "date"],
+      "$staffId": {
+        "$date": {
+          ".write": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || root.child('staff').child($staffId).child('email').val() === auth.token.email)",
+          ".read": "auth != null && (auth.token.email === 'quantrikhachsan@gmail.com' || root.child('staff').child($staffId).child('email').val() === auth.token.email)",
+          ".validate": "newData.hasChildren(['checkIn', 'date', 'employeeId', 'employeeName']) || (data.exists() && newData.hasChildren(['checkOut', 'workHours']))"
+        }
+      }
+    }
+  }
+}
