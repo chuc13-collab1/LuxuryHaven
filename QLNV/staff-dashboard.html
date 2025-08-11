@@ -933,6 +933,22 @@
     <!-- Firebase Database -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script>
+// Kiểm tra quyền truy cập trước khi hiển thị nội dung
+const allowedRoles = ['staff dashboard', 'admin', 'quản lý nhân viên'];
+const loggedInUser = localStorage.getItem('loggedInUser');
+let accessGranted = false;
+if (loggedInUser) {
+    try {
+        const userData = JSON.parse(loggedInUser);
+        const userRole = userData.role?.toLowerCase() || '';
+        accessGranted = allowedRoles.some(role => userRole.includes(role));
+    } catch (e) {
+        accessGranted = false;
+    }
+}
+
+</script>
+    <script>
         // Phân quyền mẫu
         // Các giá trị: 'receptionist', 'manager', 'housekeeping', 'marketing', ...
         const userRole = 'receptionist'; // Đổi giá trị này để test các vai trò khác nhau
@@ -1116,15 +1132,15 @@
                 if (typeof firebase !== 'undefined' && firebase.auth) {
                     firebase.auth().signOut().then(() => {
                         console.log('Đăng xuất thành công');
-                        window.location.href = '../auth.html';
+                        window.location.href = '../index.html';
                     }).catch((error) => {
                         console.error('Lỗi đăng xuất:', error);
                         // Vẫn chuyển trang nếu có lỗi
-                        window.location.href = '../auth.html';
+                        window.location.href = '../index.html';
                     });
                 } else {
                     // Fallback nếu Firebase không có
-                    window.location.href = '../auth.html';
+                    window.location.href = '../index.html';
                 }
             }
         }
